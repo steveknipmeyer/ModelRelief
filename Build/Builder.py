@@ -14,8 +14,11 @@
 """
 import argparse
 import ast
+import shlex
 import os
+import pprint
 import shutil
+import subprocess
 import sys
 from enum import Enum
 
@@ -178,7 +181,7 @@ class Builder:
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
         environment = RuntimeEnvironment.production.value if self.publish else RuntimeEnvironment.development.value
         os.chdir(self.solution_path)
-        Tools.exec(f". BuildReliefPythonExtensions.sh {environment}")
+        Tools.exec(f"BuildReliefPythonExtensions.sh {environment}")
 
         # database initialization and user store
         if self.arguments.initialize:
@@ -308,9 +311,6 @@ class Builder:
         self.environment.push()
 
         self.initialize(self.source_wwwroot_path, self.source_store_path, self.publish_path)
-
-        Tools.exec(f"BuildReliefPythonExtensions.sh Production")
-        return
 
         # build
         self.build()
