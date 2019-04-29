@@ -1,6 +1,5 @@
 ﻿### Tasks
 #### Commit Notes
-Resolve folder location of ModelRelief.log
 
 #### Alpha
 
@@ -8,35 +7,22 @@ Resolve folder location of ModelRelief.log
 
 #### Today
     publish
-        Investigate 'conda activate'
-            Python C++ extensions
-            Activating Production Python environment
-
-            CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-            To initialize your shell, run
-
-                $ conda init <SHELL_NAME>
-
-            Currently supported shells are:
-            - bash
-            - fish
-            - tcsh
-            - xonsh
-            - zsh
-            - powershell
-
-            See 'conda init --help' for more information and options.
-
-            IMPORTANT: You may need to close and restart your shell after running 'conda init'.
-
-
-            running build
-            running build_ext
-            Building configuration : Release
-
+        Elevated permissions are required in Builder deploy to delete /var/www.
 
     nginx
         Create a new sudo account ('admin') from which to manage nginx.
+            sudo adduser nginxadmin
+            sudo usermod -a -G sudo nginxadmin
+
+            .bashrc
+                PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ ''
+                echo "Nginx Administrator"
+                cd ~
+
+        How are environment variables set?
+            Should this be done in the nginx 'admin' .bashrc?
+                <environmentVariable name="PATH" value=".\mrenv" />
+                <environmentVariable name="PYTHONPATH" value=".\Tools; .\Solver" />
 
     How can Python binary extensions be resolved (e.g. sys, time)?
 
@@ -109,6 +95,7 @@ Resolve folder location of ModelRelief.log
                 setxkbmap -option 'numpad:microsoft'
 
         .bashrc
+            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ ''
             cd ~
             cd ModelRelief
             . Tools/ModelReliefShell.sh

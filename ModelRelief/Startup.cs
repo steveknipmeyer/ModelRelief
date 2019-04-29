@@ -18,6 +18,7 @@ namespace ModelRelief
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.HttpOverrides;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -176,6 +177,11 @@ namespace ModelRelief
             app.ConfigureStaticFiles();
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseCookiePolicy();
+            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-2.2
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+            });
             app.UseAuthentication();
             app.UseSwagger();
 
