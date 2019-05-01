@@ -6,32 +6,16 @@
 #### Vector
 
 #### Today
-    Should stephen and nginxadmin be members of the same group?
-        When a mesh is created in store it cannot be deleted by stephen.
-
-    userdel -r nginxadmin
 
     publish
         Elevated permissions are required in Builder deploy to delete /var/www.
-
-    Create an nginx configuration folder in the solution.
-        NginxEnvironment.sh
-        /etc/nginx/sites-available/default
 
     nginx
         Create a new sudo account ('admin') from which to manage nginx.
             sudo adduser nginxadmin
             sudo usermod -a -G sudo nginxadmin
+            sudo userdel -r nginxadmin
 
-            .bashrc
-                PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ ''
-                echo "Nginx Administrator"
-                cd ~
-
-        How are environment variables set?
-            Should this be done in the nginx 'admin' .bashrc?
-                <environmentVariable name="PATH" value=".\mrenv" />
-                <environmentVariable name="PYTHONPATH" value=".\Tools; .\Solver" />
 
     How can Python binary extensions be resolved (e.g. sys, time)?
 
