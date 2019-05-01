@@ -4,6 +4,7 @@
 # platform: linux-64
 ca-certificates=2019.3.9=hecc5488_0
 certifi=2019.3.9=py36_0
+cmake=3.14.0=hf94ab9c_0
 cycler=0.10.0=py_1
 dbus=1.13.2=h714fa37_1
 expat=2.2.5=hf484d3e_1002

@@ -6,8 +6,17 @@
 #### Vector
 
 #### Today
+    Should stephen and nginxadmin be members of the same group?
+        When a mesh is created in store it cannot be deleted by stephen.
+
+    userdel -r nginxadmin
+
     publish
         Elevated permissions are required in Builder deploy to delete /var/www.
+
+    Create an nginx configuration folder in the solution.
+        NginxEnvironment.sh
+        /etc/nginx/sites-available/default
 
     nginx
         Create a new sudo account ('admin') from which to manage nginx.
