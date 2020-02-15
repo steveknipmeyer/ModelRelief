@@ -1,4 +1,15 @@
-﻿### Tasks
+﻿### Execution
+Start MobaXterm so that VSCode can run in WSL using an Xterminal.
+Start a ConEmu shell.
+    source ./linux/ModelReliefShell.sh
+    code .
+
+    source ./linux/NginxEnvironment.sh
+
+[Windows]
+    Start Chrome using https://localhost:5001.
+
+### Tasks
 #### Commit Notes
 
 #### Alpha
