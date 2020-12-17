@@ -3,9 +3,6 @@
     // ---------------------------------
     // Editor
     // ---------------------------------
-    "editor.fontFamily": "Monospace",
-    "editor.fontWeight": "normal",
-    "editor.fontSize": 13,
 
     // ---------------------------------
     // Files
