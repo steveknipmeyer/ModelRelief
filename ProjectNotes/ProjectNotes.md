@@ -1,13 +1,18 @@
 ﻿### ASP.NETCore Migration
 
-Gulp
+Python
+    Why does the 1st mayavi install fail with a vtk module error?
+        pip3 install mayavi
+
+Document VcXsrv
+
 Build
 
-
-Remove solution file.
-Remove all Windows references.
-Change backslashes to forward slashes.
-Remove IIS references and files (e.g. web.config)
+Remove References
+    Windows
+    backslashes
+    IIS
+    conda
 
 Open Source
     Replace copyright headers with MIT license notice.
@@ -31,6 +36,7 @@ ModelRelief
 
 ### Tasks
 #### Commit Notes
+Remove solution file.
 
 #### Today
 
@@ -88,13 +94,6 @@ ModelRelief
                 Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
 
     Linux Setup
-        .bashrc
-            cd ~
-            cd ModelRelief
-            . Tools/ModelReliefShell.sh
-
-            eval "$(dircolors ~/.dircolors)";
-
         git
             sudo apt install git
             git config --global user.name "Steve Knipmeyer"
@@ -108,6 +107,11 @@ ModelRelief
             Pull Pybind11 and Catch2 repos.
                 git submodule init
                 git submodule update
+
+        Python (3.8.5)
+            sudo apt install python3-pip
+            sudo apt-get install python3-venv
+            pip3 install wheel
 
         Node
             sudo apt install nodejs
