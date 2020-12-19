@@ -10,19 +10,6 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
-        "MRDatabaseProvider": "SQLServer",
-
-        "MRUpdateSeedData": "False",
-        "MRInitializeDatabase": "True",
-        "MRSeedDatabase": "True",
-        "MRExitAfterInitialization": "False"
-      }
-    },
     "ModelRelief Production": {
       "commandName": "Project",
       "launchBrowser": false,
@@ -43,6 +30,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MRDatabaseProvider": "SQLite",
+
         "MRUpdateSeedData": "False",
         "MRInitializeDatabase": "True",
         "MRSeedDatabase": "True",

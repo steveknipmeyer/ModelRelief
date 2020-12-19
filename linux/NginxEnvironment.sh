@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 # Nginx runtime environment
 
 # ModelRelief Folder Locations

@@ -1,12 +1,20 @@
 ﻿### ASP.NETCore Migration
 
-Construct the Azure secrets JSON file.
+Gulp
+Build
+
+
 Remove solution file.
 Remove all Windows references.
+Change backslashes to forward slashes.
+Remove IIS references and files (e.g. web.config)
+
+Open Source
+    Replace copyright headers with MIT license notice.
+    Structure GitHub repo using recommended best practices.
+    AzureKeyVault?
 
 ModelRelief
-    Startup.cs(195,13): error MVC1005: Using 'UseMvc' to configure MVC is not supported while using Endpoint Routing. To continue using 'UseMvc', please set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices'. [/home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj]
-
     GlobalSuppression.cs
         [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
         [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]
@@ -15,26 +23,14 @@ ModelRelief
         /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
         /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
 
-### Execution
-Start MobaXterm so that VSCode can run in WSL using an Xterminal.
-Start a ConEmu shell.
-    source ./linux/ModelReliefShell.sh
-    code .
-
+### Linux Execution
     source ./linux/NginxEnvironment.sh
 
-[Windows]
-    Start Chrome using https://localhost:5001.
+    (Windows)
+        Start Chrome using https://localhost:5001.
 
 ### Tasks
 #### Commit Notes
-Change .NET Core references from 2.2 to 3.1
-Update ModelRelief package references to new SDK
-Clean up project (.csproj, .pyproj) files.
-
-#### Alpha
-
-#### Vector
 
 #### Today
 
@@ -72,6 +68,7 @@ Clean up project (.csproj, .pyproj) files.
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
+
 #####  Linux Development
     Issues
         Vector has OpenGL issues.
@@ -134,8 +131,7 @@ Clean up project (.csproj, .pyproj) files.
 
         SQLite
             sudo apt-get install sqlite3 (if required)
-                sqlite3 -version
-            (sudo apt-get install sqlitebrowser)
+            sudo apt-get install sqlitebrowser
 
         Build
             Build/BuildPythonEnvironment.sh Development
@@ -145,12 +141,6 @@ Clean up project (.csproj, .pyproj) files.
             https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
 
             sudo service nginx start
-
-        MobaXTerm
-            Add export DISPLAY=localhost:0.0 to ~/bashrc
-            Settings->XTerminal
-                Clipboard: disable on Select
-                Disable 'unix-compatible keyboard'
 
 #### New Windows Computer Setup
     Graphics Tools

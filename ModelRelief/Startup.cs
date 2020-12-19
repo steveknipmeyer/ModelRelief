@@ -23,6 +23,7 @@ namespace ModelRelief
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services;
@@ -33,15 +34,18 @@ namespace ModelRelief
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
+        public IWebHostEnvironment Env { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// Constructor
         /// </summary>
-        /// <param name="configuration">Configuration service</param>
-        public Startup(IConfiguration configuration)
+        /// <param name="configuration">DI Configuration service</param>
+        /// <param name="env">DI IWebHostEnvironment</param>
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
         /// <summary>
@@ -107,8 +111,7 @@ namespace ModelRelief
         /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         /// </summary>
         /// <param name="services">DI Service collection.</param>
-        /// <param name="env">DI IWebHostEnvironment</param>
-        public IServiceProvider ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // var env = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
 
@@ -121,25 +124,30 @@ namespace ModelRelief
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddModelReliefServices(Configuration);
-            services.AddDatabaseServices(env);
+            services.AddDatabaseServices(Env);
             services.AddAutoMapper(typeof(Startup));
+
+            // https://stackoverflow.com/questions/56234504/migrating-to-swashbuckle-aspnetcore-version-5
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "ModelRelief API",
                     Version = "v1",
                     Description = "Low relief generation from 3D models",
-                    Contact = new Contact
+                    Contact = new OpenApiContact
                     {
                         Name = "Steve Knipmeyer",
                         Email = string.Empty,
                     },
                 });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+
+                //First we define the security scheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    { "Bearer", Enumerable.Empty<string>() },
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Type = SecuritySchemeType.Http,         // set the scheme type to http since we're using bearer authentication
+                    Scheme = "bearer",                      // name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
                 });
             });
 
