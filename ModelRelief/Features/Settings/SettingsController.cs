@@ -20,7 +20,7 @@ namespace ModelRelief.Features.Home
     public class SettingsController : Controller
     {
         public ILogger Logger { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 
         /// <summary>
@@ -28,9 +28,9 @@ namespace ModelRelief.Features.Home
         /// Constructor
         /// </summary>
         /// <param name="loggerFactory">ILoggerFactor.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment</param>
         /// <param name="configurationProvider">IConfigurationProvider</param>
-        public SettingsController(ILoggerFactory loggerFactory, IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        public SettingsController(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
         {
             Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger<SettingsController>();
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));

@@ -143,7 +143,7 @@ namespace ModelRelief.Services
                 .AddFeatureFolders()
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         /// <summary>
@@ -165,8 +165,8 @@ namespace ModelRelief.Services
         /// Extension method to add the database services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        /// <param name="env">IIHostingEnvironment</param>
-        public static void AddDatabaseServices(this IServiceCollection services, IHostingEnvironment env)
+        /// <param name="env">IWebHostEnvironment</param>
+        public static void AddDatabaseServices(this IServiceCollection services, IWebHostEnvironment env)
         {
             // build the intermediate service provider
             var serviceProvider = services.BuildServiceProvider();

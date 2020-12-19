@@ -13,15 +13,15 @@ namespace ModelRelief.Features.Home
 
     public class AboutController : Controller
         {
-        private IHostingEnvironment HostingEnvironment { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutController"/> class.
         /// </summary>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public AboutController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        public AboutController(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));

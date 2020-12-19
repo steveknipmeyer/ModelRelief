@@ -14,7 +14,7 @@ namespace ModelRelief.Database
     public class Initializer
     {
         private IServiceProvider Services { get; set; }
-        private IHostingEnvironment HostingEnvironment { get; set; }
+        private IWebHostEnvironment HostingEnvironment { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider { get; set; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace ModelRelief.Database
             Services = services;
             if (services == null)
                 throw new ArgumentNullException(nameof(IServiceScope));
-            HostingEnvironment = Services.GetRequiredService<IHostingEnvironment>();
+            HostingEnvironment = Services.GetRequiredService<IWebHostEnvironment>();
             if (HostingEnvironment == null)
                 throw new ArgumentNullException(nameof(HostingEnvironment));
 

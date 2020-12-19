@@ -1,4 +1,21 @@
-﻿### Execution
+﻿### ASP.NETCore Migration
+
+Construct the Azure secrets JSON file.
+Remove solution file.
+Remove all Windows references.
+
+ModelRelief
+    Startup.cs(195,13): error MVC1005: Using 'UseMvc' to configure MVC is not supported while using Endpoint Routing. To continue using 'UseMvc', please set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices'. [/home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj]
+
+    GlobalSuppression.cs
+        [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
+        [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]
+
+    Microsoft.CodeAnalysis
+        /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+        /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+
+### Execution
 Start MobaXterm so that VSCode can run in WSL using an Xterminal.
 Start a ConEmu shell.
     source ./linux/ModelReliefShell.sh
@@ -11,6 +28,9 @@ Start a ConEmu shell.
 
 ### Tasks
 #### Commit Notes
+Change .NET Core references from 2.2 to 3.1
+Update ModelRelief package references to new SDK
+Clean up project (.csproj, .pyproj) files.
 
 #### Alpha
 
@@ -71,43 +91,10 @@ Start a ConEmu shell.
                 Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
 
     Linux Setup
-        VirtualBox Guest Additions
-            sudo apt update
-            sudo apt upgrade
-            VirtualBox
-                sudo apt install build-essential dkms linux-headers-$(uname -r)
-            WSL
-                sudo apt install build-essential (WSL)
-        WSL
-            https://shunsvineyard.info/2019/01/27/using-visual-studio-code-with-windows-subsystem-for-linux/
-            MobaXTerm
-                Add export DISPLAY=localhost:0.0 to ~/bashrc
-                Settings->XTerminal
-                    Clipboard: disable on Select
-                    Disable 'unix-compatible keyboard'77888111117
-
-
-        Windows Keyboard
-            VirtualBox
-                sudo apt install gnome-tweak-tool
-                    Keyboard and Mouse
-                        Additional Layout Options
-                            Miscellaneous Compatibility Options
-                                NumLock
-            WSL
-                https://askubuntu.com/questions/57079/xubuntu-make-shiftnumpad-work-like-windows
-                setxkbmap -option 'numpad:microsoft'
-
         .bashrc
-            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ ''
             cd ~
             cd ModelRelief
             . Tools/ModelReliefShell.sh
-
-            #MobaXTerm
-            export DISPLAY=localhost:0.0
-            #Windows numpad keyboard
-            setxkbmap -option 'numpad:microsoft'
 
             eval "$(dircolors ~/.dircolors)";
 
@@ -125,20 +112,7 @@ Start a ConEmu shell.
                 git submodule init
                 git submodule update
 
-        VSCode
-            Ubuntu
-                https://code.visualstudio.com/docs/setup/linux
-                sudo snap install --classic code
-            WSL
-                N.B. 'sudo apt install firefox' resolves VSCode dependency issues.
-                https://shunsvineyard.info/2019/01/27/using-visual-studio-code-with-windows-subsystem-for-linux/
-                https://nickjanetakis.com/blog/using-wsl-and-mobaxterm-to-create-a-linux-dev-environment-on-windows
-
-            Install VSCode Setting Sync.
-                Download settings using the Gist Token and Gist Id contained in this file.
-
         Node
-            https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/
             sudo apt install nodejs
 
         NPM
@@ -148,30 +122,12 @@ Start a ConEmu shell.
         Gulp
             sudo npm install --global gulp-cli
 
-
         Madge (TypeScript circular dependency tool)
             sudo npm install --global madge
 
         .NET Core
-            https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
-            Permission issues: https://github.com/dotnet/cli/issues/10357
-
+            https://docs.microsoft.com/en-us/dotnet/core/install/linux
             Test command line build: 'dotnet build ModelRelief'
-
-        Anaconda
-            https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/
-                If you'd prefer that conda's base environment not be activated on startup, set the auto_activate_base parameter to false:
-                    conda config --set auto_activate_base false
-            conda config --add channels conda-forge
-            conda update conda
-            conda update anaconda
-
-
-        Postman
-            Ubuntu
-                snap install postman
-                sudo snap switch --channel=candidate postman
-                sudo snap refresh postman
 
         Runtime
             Add azurekeyvault.json to ModelRelief project folder.
@@ -179,162 +135,23 @@ Start a ConEmu shell.
         SQLite
             sudo apt-get install sqlite3 (if required)
                 sqlite3 -version
-            sudo apt-get install sqlitebrowser
+            (sudo apt-get install sqlitebrowser)
 
         Build
             Build/BuildPythonEnvironment.sh Development
             python Build/Builder.py --target local
 
         nginx
-            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04\
+            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
 
-            VirtualBox
-                Configure the VirtualBox VM to use <Bridged Networking>.
-                Find VM IP address using ifconfig.
-                If on an external network:
-                    Add an entry to the hosts file.
-                        C:\Windows\System32\drivers\etc\hosts
-                        10.1.10.70 mrvm.com
+            sudo service nginx start
 
-                Use Firewall on the VM to open port 80.
-            WSL
-                sudo service nginx start
+        MobaXTerm
+            Add export DISPLAY=localhost:0.0 to ~/bashrc
+            Settings->XTerminal
+                Clipboard: disable on Select
+                Disable 'unix-compatible keyboard'
 
-        3D Graphics
-            Firefox
-                https://www.omgubuntu.co.uk/2017/04/small-tweak-makes-firefox-linux-run-much-faster
-            Benchmark with glmark2-es2.
-                sudo apt install mesa-utils
-                sudo apr install glmark2-es2
-                glmark2-es2
-            Alpha
-                =======================================================
-                    glmark2 2014.03+git20150611.fa71af2d
-                =======================================================
-                    OpenGL Information
-                    GL_VENDOR:     VMware, Inc.
-                    GL_RENDERER:   llvmpipe (LLVM 7.0, 256 bits)
-                    GL_VERSION:    OpenGL ES 3.0 Mesa 18.2.8
-                =======================================================
-                [build] use-vbo=false: FPS: 111 FrameTime: 9.009 ms
-                [build] use-vbo=true: FPS: 115 FrameTime: 8.696 ms
-                [texture] texture-filter=nearest: FPS: 140 FrameTime: 7.143 ms
-                [texture] texture-filter=linear: FPS: 216 FrameTime: 4.630 ms
-                [texture] texture-filter=mipmap: FPS: 178 FrameTime: 5.618 ms
-                [shading] shading=gouraud: FPS: 123 FrameTime: 8.130 ms
-                [shading] shading=blinn-phong-inf: FPS: 62 FrameTime: 16.129 ms
-                [shading] shading=phong: FPS: 54 FrameTime: 18.519 ms
-                [shading] shading=cel: FPS: 55 FrameTime: 18.182 ms
-                [bump] bump-render=high-poly: FPS: 35 FrameTime: 28.571 ms
-                [bump] bump-render=normals: FPS: 128 FrameTime: 7.812 ms
-                [bump] bump-render=height: FPS: 121 FrameTime: 8.264 ms
-                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 70 FrameTime: 14.286 ms
-                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 41 FrameTime: 24.390 ms
-                [pulsar] light=false:quads=5:texture=false: FPS: 102 FrameTime: 9.804 ms
-                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 0 FrameTime: inf ms
-                =======================================================
-                                                glmark2 Score: 96
-                =======================================================
-            Ubuntu Native
-                =======================================================
-                    glmark2 2014.03+git20150611.fa71af2d
-                =======================================================
-                    OpenGL Information
-                    GL_VENDOR:     NVIDIA Corporation
-                    GL_RENDERER:   GeForce GTX 780/PCIe/SSE2
-                    GL_VERSION:    OpenGL ES 3.1 340.107
-                =======================================================
-                [build] use-vbo=false: FPS: 60 FrameTime: 16.667 ms
-                [build] use-vbo=true: FPS: 60 FrameTime: 16.667 ms
-                [texture] texture-filter=nearest: FPS: 60 FrameTime: 16.667 ms
-                [texture] texture-filter=linear: FPS: 60 FrameTime: 16.667 ms
-                [texture] texture-filter=mipmap: FPS: 60 FrameTime: 16.667 ms
-                [shading] shading=gouraud: FPS: 60 FrameTime: 16.667 ms
-                [shading] shading=blinn-phong-inf: FPS: 60 FrameTime: 16.667 ms
-                [shading] shading=phong: FPS: 60 FrameTime: 16.667 ms
-                [shading] shading=cel: FPS: 60 FrameTime: 16.667 ms
-                [bump] bump-render=high-poly: FPS: 60 FrameTime: 16.667 ms
-                [bump] bump-render=normals: FPS: 60 FrameTime: 16.667 ms
-                [bump] bump-render=height: FPS: 60 FrameTime: 16.667 ms
-                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 60 FrameTime: 16.667 ms
-                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 60 FrameTime: 16.667 ms
-                [pulsar] light=false:quads=5:texture=false: FPS: 60 FrameTime: 16.667 ms
-                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 60 FrameTime: 16.667 ms
-                [desktop] effect=shadow:windows=4: FPS: 60 FrameTime: 16.667 ms
-                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 60 FrameTime: 16.667 ms
-                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 60 FrameTime: 16.667 ms
-                [buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 60 FrameTime: 16.667 ms
-                [ideas] speed=duration: FPS: 60 FrameTime: 16.667 ms
-                [jellyfish] <default>: FPS: 59 FrameTime: 16.949 ms
-                [terrain] <default>: FPS: 60 FrameTime: 16.667 ms
-                [shadow] <default>: FPS: 60 FrameTime: 16.667 ms
-                [refract] <default>: FPS: 60 FrameTime: 16.667 ms
-                =======================================================
-                                                glmark2 Score: 59
-                =======================================================
-                =======================================================
-                    glmark2 2014.03+git20150611.fa71af2d
-                =======================================================
-                    OpenGL Information
-                    GL_VENDOR:     NVIDIA Corporation
-                    GL_RENDERER:   GeForce GTX 780/PCIe/SSE2
-                    GL_VERSION:    4.4.0 NVIDIA 340.107
-                =======================================================
-                [build] use-vbo=false: FPS: 9758 FrameTime: 0.102 ms
-                [build] use-vbo=true: FPS: 17183 FrameTime: 0.058 ms
-                [texture] texture-filter=nearest: FPS: 15725 FrameTime: 0.064 ms
-                [texture] texture-filter=linear: FPS: 15668 FrameTime: 0.064 ms
-                [texture] texture-filter=mipmap: FPS: 15696 FrameTime: 0.064 ms
-                [shading] shading=gouraud: FPS: 15764 FrameTime: 0.063 ms
-                [shading] shading=blinn-phong-inf: FPS: 15691 FrameTime: 0.064 ms
-                [shading] shading=phong: FPS: 15469 FrameTime: 0.065 ms
-                [shading] shading=cel: FPS: 15483 FrameTime: 0.065 ms
-                =======================================================
-                                                glmark2 Score: 15159
-                =======================================================
-
-            Vector
-                =======================================================
-                    glmark2 2014.03+git20150611.fa71af2d
-                =======================================================
-                    OpenGL Information
-                    GL_VENDOR:     VMware, Inc.
-                    GL_RENDERER:   llvmpipe (LLVM 7.0, 256 bits)
-                    GL_VERSION:    OpenGL ES 3.0 Mesa 18.2.8
-                =======================================================
-                [build] use-vbo=false: FPS: 67 FrameTime: 14.925 ms
-                [build] use-vbo=true: FPS: 86 FrameTime: 11.628 ms
-                [texture] texture-filter=nearest: FPS: 116 FrameTime: 8.621 ms
-                [texture] texture-filter=linear: FPS: 107 FrameTime: 9.346 ms
-                [texture] texture-filter=mipmap: FPS: 95 FrameTime: 10.526 ms
-                [shading] shading=gouraud: FPS: 74 FrameTime: 13.514 ms
-                [shading] shading=blinn-phong-inf: FPS: 68 FrameTime: 14.706 ms
-                [shading] shading=phong: FPS: 64 FrameTime: 15.625 ms
-                [shading] shading=cel: FPS: 66 FrameTime: 15.152 ms
-                [bump] bump-render=high-poly: FPS: 45 FrameTime: 22.222 ms
-                [bump] bump-render=normals: FPS: 120 FrameTime: 8.333 ms
-                [bump] bump-render=height: FPS: 112 FrameTime: 8.929 ms
-                [effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 72 FrameTime: 13.889 ms
-                [effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 52 FrameTime: 19.231 ms
-                [pulsar] light=false:quads=5:texture=false: FPS: 93 FrameTime: 10.753 ms
-                [desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 27 FrameTime: 37.037 ms
-                [desktop] effect=shadow:windows=4: FPS: 46 FrameTime: 21.739 ms
-                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 52 FrameTime: 19.231 ms
-                [buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 42 FrameTime: 23.810 ms
-                [buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 40 FrameTime: 25.000 ms
-                [ideas] speed=duration: FPS: 58 FrameTime: 17.241 ms
-                [jellyfish] <default>: FPS: 39 FrameTime: 25.641 ms
-                [terrain] <default>: FPS: 3 FrameTime: 333.333 ms
-                [shadow] <default>: FPS: 39 FrameTime: 25.641 ms
-                [refract] <default>: FPS: 7 FrameTime: 142.857 ms
-                [conditionals] fragment-steps=0:vertex-steps=0: FPS: 75 FrameTime: 13.333 ms
-                [conditionals] fragment-steps=5:vertex-steps=0: FPS: 69 FrameTime: 14.493 ms
-                [conditionals] fragment-steps=0:vertex-steps=5: FPS: 76 FrameTime: 13.158 ms
-                [function] fragment-complexity=low:fragment-steps=5: FPS: 74 FrameTime: 13.514 ms
-                [function] fragment-complexity=medium:fragment-steps=5: FPS: 61 FrameTime: 16.393 ms
-                =======================================================
-                                                glmark2 Score: 64
-                =======================================================
 #### New Windows Computer Setup
     Graphics Tools
         Rhino3D

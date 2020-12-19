@@ -32,13 +32,13 @@ namespace ModelRelief.Services.Jobs
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="storageManager">Services for file system storage.</param>
         public Dispatcher(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             IConfigurationProvider configurationProvider,
             IStorageManager storageManager)
         {
@@ -51,7 +51,7 @@ namespace ModelRelief.Services.Jobs
 
         public ModelReliefDbContext DbContext { get; }
         public ILogger Logger { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
         public IStorageManager StorageManager { get; }
 

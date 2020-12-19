@@ -22,6 +22,7 @@ namespace ModelRelief
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services;
@@ -106,9 +107,10 @@ namespace ModelRelief
         /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         /// </summary>
         /// <param name="services">DI Service collection.</param>
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        /// <param name="env">DI IWebHostEnvironment</param>
+        public IServiceProvider ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
-            var env = services.BuildServiceProvider().GetService<IHostingEnvironment>();
+            // var env = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
 
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -117,6 +119,7 @@ namespace ModelRelief
             services.AddAuth0Authentication(Configuration);
             services.AddCustomMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddModelReliefServices(Configuration);
             services.AddDatabaseServices(env);
             services.AddAutoMapper(typeof(Startup));
@@ -154,9 +157,9 @@ namespace ModelRelief
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app">DI IApplicationBuilder</param>
-        /// <param name="env">DI IHostingEnvironment</param>
+        /// <param name="env">DI IWebHostEnvironment</param>
         /// <param name="configurationProvider">Configuration provider.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Services.IConfigurationProvider configurationProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Services.IConfigurationProvider configurationProvider)
         {
             if (env.IsDevelopment())
             {

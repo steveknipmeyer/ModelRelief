@@ -35,7 +35,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="storageManager">Services for file system storage.</param>
@@ -43,7 +43,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
             IStorageManager storageManager)

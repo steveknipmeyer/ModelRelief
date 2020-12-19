@@ -16,10 +16,10 @@ namespace ModelRelief.Services
     /// </summary>
     public class StorageManager : IStorageManager
     {
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
 
-        public StorageManager(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
+        public StorageManager(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider  configurationProvider)
         {
             HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;

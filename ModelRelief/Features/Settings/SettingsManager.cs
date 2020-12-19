@@ -21,10 +21,10 @@ namespace ModelRelief.Features.Settings
         public const string CameraType = "camera";
         public const string SystemType = "system";
 
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public IConfigurationProvider ConfigurationProvider { get; }
 
-        public SettingsManager(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        public SettingsManager(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
         {
             HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;

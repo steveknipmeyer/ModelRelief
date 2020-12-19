@@ -8,6 +8,7 @@ namespace ModelRelief.Database
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.SqlClient;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -31,7 +32,7 @@ namespace ModelRelief.Database
     {
         private bool ExitAfterInitialization { get; set; }
         private IServiceProvider Services { get; set; }
-        private IHostingEnvironment HostingEnvironment { get; set; }
+        private IWebHostEnvironment HostingEnvironment { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider { get; set; }
         private ModelReliefDbContext DbContext { get; set; }
         private ILogger<DbInitializer> Logger { get; set; }
@@ -75,7 +76,7 @@ namespace ModelRelief.Database
             if (services == null)
                 throw new ArgumentNullException(nameof(IServiceProvider));
 
-            HostingEnvironment = Services.GetRequiredService<IHostingEnvironment>();
+            HostingEnvironment = Services.GetRequiredService<IWebHostEnvironment>();
             if (HostingEnvironment == null)
                 throw new ArgumentNullException(nameof(HostingEnvironment));
 
@@ -213,7 +214,7 @@ namespace ModelRelief.Database
         private bool StopSQLServer()
         {
             Logger.LogWarning("Shutting down SQLServer to copy database ...");
-            var result = DbContext.Database.ExecuteSqlCommand("SHUTDOWN");
+            var result = DbContext.Database.ExecuteSqlRaw("SHUTDOWN");
             Logger.LogWarning($"SQLServer shutdown complete.");
 
             return true;

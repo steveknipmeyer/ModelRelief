@@ -10,6 +10,7 @@ namespace ModelRelief.Features.Errors
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
 
@@ -20,15 +21,15 @@ namespace ModelRelief.Features.Errors
     public class GlobalExceptionFilter : ExceptionFilterAttribute
     {
         private readonly ILogger _logger;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalExceptionFilter"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="loggerFactory">Logger factory.</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment from DI.</param>
-        public GlobalExceptionFilter(ILoggerFactory loggerFactory, IHostingEnvironment hostingEnvironment)
+        /// <param name="hostingEnvironment">IWebHostEnvironment from DI.</param>
+        public GlobalExceptionFilter(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment)
         {
             _logger = loggerFactory.CreateLogger<GlobalExceptionFilter>();
             _hostingEnvironment = hostingEnvironment;

@@ -16,7 +16,7 @@ namespace ModelRelief.Services
     public interface IStorageManager
     {
         IConfigurationProvider ConfigurationProvider { get; }
-        IHostingEnvironment HostingEnvironment { get; }
+        IWebHostEnvironment HostingEnvironment { get; }
 
         string GetAbsolutePath(string path);
         string GetRelativePath(string path);

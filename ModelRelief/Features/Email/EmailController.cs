@@ -22,7 +22,7 @@ namespace ModelRelief.Features.Email
 
     public class EmailController : Controller
     {
-        private IHostingEnvironment HostingEnvironment { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
         private Services.IConfigurationProvider ConfigurationProvider { get; }
         private ILogger Logger { get; }
         private ReCAPTCHASettings ReCAPTCHASettings { get; }
@@ -31,12 +31,12 @@ namespace ModelRelief.Features.Email
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailController"/> class.
         /// </summary>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="loggerFactory">Logger factory.</param>
         /// <param name="reCAPTCHASettings">reCAPTCHA settings from a configuration store (Azure key vault).</param>
         /// <param name="emailService">Email service.</param>
-        public EmailController(IHostingEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ILoggerFactory loggerFactory, IOptions<ReCAPTCHASettings> reCAPTCHASettings, IEmailService emailService)
+        public EmailController(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ILoggerFactory loggerFactory, IOptions<ReCAPTCHASettings> reCAPTCHASettings, IEmailService emailService)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));

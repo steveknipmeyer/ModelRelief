@@ -37,7 +37,7 @@ namespace ModelRelief.Api.V1.Shared
         public ModelReliefDbContext             DbContext { get; }
         public ILogger                          Logger { get; }
         public IMapper                          Mapper { get; }
-        public IHostingEnvironment              HostingEnvironment { get; }
+        public IWebHostEnvironment              HostingEnvironment { get; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; }
         public IDependencyManager               DependencyManager { get; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
@@ -49,7 +49,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="dbContext">Database context.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
-        /// <param name="hostingEnvironment">IHostingEnvironment.</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
@@ -57,7 +57,7 @@ namespace ModelRelief.Api.V1.Shared
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<TRequest>> validators)
