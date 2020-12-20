@@ -8,7 +8,6 @@
 
 #### Build
     Build.py
-    BuildPythonEnvironment
 
     Python
         Why does venv not add the Python 3.8 include files?
@@ -16,7 +15,8 @@
             pip3 install mayavi
 
     Update TypeScript version
-    Prove with clean Ubuntu installation.
+
+    Prove with clean Ubuntu installation!
 
     ModelRelief
         GlobalSuppression.cs

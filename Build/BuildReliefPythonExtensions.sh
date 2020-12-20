@@ -24,9 +24,7 @@ cd $MRSolution
 # set up Production Python environement
 if [ $EnvironmentName = "mrenv" ]; then
     echo "Activating production (mrenv) Python environment"
-    # https://github.com/conda/conda/issues/7980
-    source ~/anaconda3/etc/profile.d/conda.sh
-    conda activate Publish/mrenv
+    source Publish/mrenv/bin/activate
  fi
 
 cd Relief
@@ -35,8 +33,5 @@ python setup.py build $BuildOptions install
 # restore Development environment
 cd ..
 if [ $EnvironmentName = "mrenv" ]; then
-    echo "Restoring development (devenv) Python environment"
-    # https://github.com/conda/conda/issues/7980
-    source ~/anaconda3/etc/profile.d/conda.sh
-    conda activate ./devenv
+    source devenv/bin/activate
  fi
