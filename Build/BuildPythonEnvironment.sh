@@ -6,19 +6,21 @@ if [ $# -eq 0 ]; then
     exit
 fi
 
-if [ $1 = 'Development' ]; then
-echo "Building development environment into devenv"
-rm -r devenv
-python3 -m venv devenv
-source devenv/bin/activate
-pip3 install -r requirements.development.txt
+function create_environment() {
+    # $1 = virtual environment folder (devenv | mrenv)
+    # $2 = configuration (development | production)
+    echo "Building $2 environment into $1"
+    python3 -m venv --clear $1
+    source $1/bin/activate
+    pip3 install -r requirements.$2.txt
+}
 
+if [ $1 = 'Development' ]; then
+    create_environment devenv development
+    # The virtual environment does not include the headers so copy them. [Why?]
+    cp -r /usr/include/python3.8/ devenv/include
 elif [ $1 = 'Production' ]; then
-echo "Building production environment into mrenv"
-rm -r mrenv
-python3 -m venv mrenv
-source mrenv/bin/activate
-pip3 install -r requirements.production.txt
+    create_environment mrenv production
 else
     echo "unknown environment: $1"
     exit

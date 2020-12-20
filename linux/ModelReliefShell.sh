@@ -7,7 +7,7 @@ cd $scriptFolder/..
 # ModelRelief Folder Locations
 export MRSolution=$(pwd)/
 export MR=${MRSolution}ModelRelief/
-export MRPublish=${MRSolution}Publish/s
+export MRPublish=${MRSolution}Publish/
 
 # ModelRelief Settings
 # Settings are <overridden> by these configuration providers in order:
@@ -43,7 +43,7 @@ export "PYTHONPATH=${MRSolution}Tools:${MRSolution}Solver:${MRSolution}Explorer:
 export "MYPYPATH=${MRSolution}Tools/"
 
 # activate the ModelRelief Python environment.
-conda activate ./devenv
+source devenv/bin/activate
 #PS1='(devenv) ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # ASPNET CORE Configuration

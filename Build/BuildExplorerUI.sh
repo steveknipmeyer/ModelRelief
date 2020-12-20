@@ -1,4 +1,4 @@
-# Compiles the QtDesigner XML form description to a Python source file.
+G# Compiles the QtDesigner XML form description to a Python source file.
 echo Compiling QtDesigner layout to Python
 python -m PyQt5.uic.pyuic Explorer/explorer.ui -o Explorer/explorer_ui.py
 

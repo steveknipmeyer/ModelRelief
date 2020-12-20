@@ -1,42 +1,68 @@
-﻿### ASP.NETCore Migration
+﻿# ASP.NETCore Migration
 
-Python
-    Why does the 1st mayavi install fail with a vtk module error?
-        pip3 install mayavi
+## Tasks
+## Commit Notes
 
-Document VcXsrv
+#### Configuration
+    What is the purpose of Python projects files (e.g. pyproj)
 
-Build
+#### Build
+    Build.py
+    BuildPythonEnvironment
 
-Remove References
-    Windows
-    backslashes
-    IIS
-    conda
+    Python
+        Why does venv not add the Python 3.8 include files?
+        Why does the 1st mayavi install fail with a vtk module error?
+            pip3 install mayavi
 
-Open Source
-    Replace copyright headers with MIT license notice.
+    Update TypeScript version
+    Prove with clean Ubuntu installation.
+
+    ModelRelief
+        GlobalSuppression.cs
+            [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
+            [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]
+
+        Microsoft.CodeAnalysis
+            /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+            /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+
+#### Runtime
+
+#### Refactoring
+    Refactor BuildPythonEnvironment to use common bash function.
+    Review single equal string comparisons in shell scripts.
+    Review all casing of files and directories.
+        images
+
+#### Test
+    Explorer
+    Unit tests
+    Swagger API documentation
+    Postman
+
+#### Project
+    Clean up git branches.
     Structure GitHub repo using recommended best practices.
-    AzureKeyVault?
+    Documentation
+        Document VcXsrv
+        AzureKeyVault
+    Change all Windows file types (as reported by VSCode) to linux
+    Remove References
+        Windows
+        backslashes
+        IIS
+        conda
+        SQLServer?
 
-ModelRelief
-    GlobalSuppression.cs
-        [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
-        [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]
-
-    Microsoft.CodeAnalysis
-        /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
-        /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+#### License
+    Replace copyright headers with MIT license notice.
 
 ### Linux Execution
     source ./linux/NginxEnvironment.sh
 
     (Windows)
         Start Chrome using https://localhost:5001.
-
-### Tasks
-#### Commit Notes
-Remove solution file.
 
 #### Today
 
@@ -76,24 +102,9 @@ Remove solution file.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #####  Linux Development
-    Issues
-        Vector has OpenGL issues.
-            https://askubuntu.com/questions/1127011/win10-linux-subsystem-libgl-error-no-matching-fbconfigs-or-visuals-found-libgl
-
-        Review all casing of files and directories.
-            images
-
-        Remove SQLServer references?
-
-        Database
-            MySQL/MariaDB
-            https://www.youtube.com/watch?v=N10QW_AIOnI
-            https://vitux.com/how-to-install-wine-on-ubuntu/
-
-            Python
-                Why are the development headers in lib/Python3.6m rather than lib/Python3.6?
-
     Linux Setup
+        sudo apt install cmake
+
         git
             sudo apt install git
             git config --global user.name "Steve Knipmeyer"
@@ -109,8 +120,8 @@ Remove solution file.
                 git submodule update
 
         Python (3.8.5)
-            sudo apt install python3-pip
             sudo apt-get install python3-venv
+            sudo apt install python3-pip
             pip3 install wheel
 
         Node
