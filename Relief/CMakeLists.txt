@@ -13,8 +13,7 @@ set(SOURCE_DIR "src")
 
 # headers are also in SOURCE_DIR
 include_directories(${SOURCE_DIR})
-# WIP: How can python3.6m be mapped to python3.6?
-include_directories(../devenv/include/python3.6m)
+include_directories(../devenv/include/python3.8)
 
 set(SOURCES
     "${SOURCE_DIR}/ModelRelief.cpp"

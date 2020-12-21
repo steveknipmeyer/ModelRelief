@@ -305,7 +305,11 @@ gulp.task('buildStaticContent', function () {
     // FILES
     sourceFolder      = sourceConfig.htmlRoot;
     destinationFolder = siteConfig.wwwRoot;
-    gulp.src([sourceFolder + 'helloworld.html']).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder +  'workbench.html']).pipe(gulp.dest(destinationFolder ));
+
+    console.log(sourceFolder + '**/*')
+    console.log(destinationFolder)
+
 });
 
 /// <summary>
@@ -448,9 +452,6 @@ gulp.task ('reload', function() {
 gulp.task('serve', function () {
 
   browserSync({
-//  browser: 'google chrome canary'
-//  Canary
-//  browser: "C:/Users/Steve Knipmeyer/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
 
     notify: true,
 
@@ -464,7 +465,7 @@ gulp.task('serve', function () {
         baseDir: 'ModelRelief/wwwroot',
         directory: true
     },
-    startPath: 'Workbench.html'
+    startPath: 'workbench.html'
     // ----------------------------------------------
   });
 

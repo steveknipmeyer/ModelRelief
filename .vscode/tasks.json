@@ -3,6 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // ------------------------------------------------ Build -----------------------------------------------------//
         {
             "label": "gulp",
             "type": "shell",
@@ -16,14 +17,12 @@
                 "panel": "dedicated"
             },
             "problemMatcher": []
+
         },
+
         {
             "label": "Compile TypeScript",
             "type": "shell",
-            "command": "tsc --pretty -p ModelRelief",
-            "windows": {
-                "command": "node ${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "
-            },
             "linux": {
                 "command": "${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "
             },
@@ -36,11 +35,12 @@
                 "$tsc"
             ]
         },
+
         {
             "label": "ASPNET .Core Build",
+            "type": "shell",
             "command": "dotnet build --no-restore ModelRelief",
             "dependsOn": "Compile TypeScript",
-            "type": "shell",
             "group": "build",
             "presentation": {
                 "reveal": "always",
@@ -65,9 +65,9 @@
         },
 
         {
-            "label": "TMR Local",
+            "label": "Builder local",
             "type": "shell",
-            "command": "python Build/builder.py --target local",
+            "command": "python Build/Builder.py --target local",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -80,9 +80,9 @@
         },
 
         {
-            "label": "TMR IIS",
+            "label": "Builder nginx",
             "type": "shell",
-            "command": "python Build/builder.py --target IIS --deploy True",
+            "command": "python Build/Builder.py --target nginx --deploy True",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -94,20 +94,7 @@
             "problemMatcher": []
         },
 
-        {
-            "label": "gulp serve",
-            "type": "shell",
-            "command": "gulp serve",
-            "options": {
-                "cwd": "${workspaceFolder}/ModelRelief"
-            },
-            "group": "none",
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated"
-            },
-            "problemMatcher": []
-        },
+        // ------------------------------------------------ Run  -----------------------------------------------------//
         {
             "label": "dotnet run",
             "type": "shell",
@@ -125,6 +112,23 @@
                 "$msCompile"
             ]
         },
+
+        // ------------------------------------------------ Utility -----------------------------------------------------//
+        {
+            "label": "gulp serve",
+            "type": "shell",
+            "command": "gulp serve",
+            "options": {
+                "cwd": "${workspaceFolder}/ModelRelief"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+
         {
             "label": "dotnet ProcessID",
             "type": "shell",

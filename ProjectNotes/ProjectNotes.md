@@ -7,6 +7,8 @@
 
 #### Build
     nginx
+        Host ASP.NET Core on Linux with Nginx | Microsoft Docs
+        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-5.0
 
     Python
         Why does venv not add the Python 3.8 include files?
@@ -36,15 +38,15 @@
         A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it.
 
 #### Refactoring
-    Review single equal string comparisons in shell scripts.
     Review all casing of files and directories.
-        images
     Organize User and Workspace settings.json.
-    Organize launch.json.
+    Organize tasks.json.
+
     Resolve ToDo markers.
 
 #### Test
-    Unit tests
+    How can the debugger be attached to a running process?
+    Unit tests (debugging?)
     Swagger API documentation
     Postman
 
@@ -68,6 +70,8 @@
         IIS
         conda
         SQLServer?
+        Docker
+        NuGet.config
 
 #### License
     Replace copyright headers with MIT license notice.

@@ -7,8 +7,8 @@ if [ $# -eq 0 ]; then
 fi
 
 function create_environment() {
-    # $1 = virtual environment folder (devenv | mrenv)
-    # $2 = configuration (development | production)
+    # $1 : virtual environment folder (devenv | mrenv)
+    # $2 : configuration (development | production)
     echo "Building $2 environment into $1"
     python3 -m venv --clear $1
     source $1/bin/activate
@@ -16,7 +16,7 @@ function create_environment() {
 }
 
 if [ $1 = 'Development' ]; then
-    create_environment devenv development
+     create_environment devenv development
     # The virtual environment does not include the headers so copy them. [Why?]
     cp -r /usr/include/python3.8/ devenv/include
 elif [ $1 = 'Production' ]; then
