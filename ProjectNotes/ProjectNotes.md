@@ -4,7 +4,6 @@
 ## Commit Notes
 
 #### Configuration
-    What is the purpose of Python projects files (e.g. pyproj)
 
 #### Build
     nginx
@@ -45,7 +44,6 @@
     Resolve ToDo markers.
 
 #### Test
-    Explorer
     Unit tests
     Swagger API documentation
     Postman
