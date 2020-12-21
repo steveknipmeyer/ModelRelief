@@ -38,7 +38,7 @@
         },
         {
             "label": "ASPNET .Core Build",
-            "command": "dotnet build",
+            "command": "dotnet build --no-restore ModelRelief",
             "dependsOn": "Compile TypeScript",
             "type": "shell",
             "group": "build",

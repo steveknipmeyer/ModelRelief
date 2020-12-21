@@ -12,9 +12,6 @@ namespace ModelRelief.Utility
     using System.Threading;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
-    using SixLabors.ImageSharp.Processing;
 
     public class Files
     {
@@ -23,7 +20,7 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="stream">Stream to read</param>
         /// <returns>Byte array</returns>
-        public static byte[] ReadToEnd(System.IO.Stream stream)
+        public static async Task<byte[]> ReadToEnd(System.IO.Stream stream)
         {
             // https://stackoverflow.com/questions/1080442/how-to-convert-an-stream-into-a-byte-in-c
             long originalPosition = 0;
@@ -37,17 +34,20 @@ namespace ModelRelief.Utility
             try
             {
                 byte[] readBuffer = new byte[4096];
+                byte[] probeBuffer = new byte[1];
 
                 int totalBytesRead = 0;
                 int bytesRead;
 
-                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
+                while ((bytesRead = await stream.ReadAsync(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
                 {
                     totalBytesRead += bytesRead;
 
                     if (totalBytesRead == readBuffer.Length)
                     {
-                        int nextByte = stream.ReadByte();
+                        // double read buffer every time if end of stream not reached
+                        // int nextByte = stream.ReadByte();
+                        int nextByte = await stream.ReadAsync(probeBuffer, 0, 1);
                         if (nextByte != -1)
                         {
                             byte[] temp = new byte[readBuffer.Length * 2];
@@ -59,6 +59,7 @@ namespace ModelRelief.Utility
                     }
                 }
 
+                // trim final buffer to actual size
                 byte[] buffer = readBuffer;
                 if (readBuffer.Length != totalBytesRead)
                 {
@@ -82,7 +83,7 @@ namespace ModelRelief.Utility
         /// <param name="stream">Stream to read</param>
         public static async Task WriteRawFileFromStream(string fileName, System.IO.Stream stream)
         {
-            byte[] byteArray = Files.ReadToEnd(stream);
+            byte[] byteArray = await Files.ReadToEnd(stream);
             await WriteRawFileFromByteArray(fileName, byteArray);
         }
 

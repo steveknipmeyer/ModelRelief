@@ -51,6 +51,7 @@ namespace ModelRelief.Features.Composer
 
                 // query by Name
                 var model = DbContext.Set<Domain.Mesh>()
+                                                .AsEnumerable()
                                                 .Where(m => (m.UserId == applicationUser.Id))
                                                 .Where(m => m.Name.StartsWith(name, true, CultureInfo.CurrentCulture))
                                                 .FirstOrDefault();

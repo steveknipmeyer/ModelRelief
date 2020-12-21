@@ -135,7 +135,7 @@ namespace ModelRelief.Api.V1.Shared
             // construct from request body
             var postFile = new PostFile
             {
-                Raw = Files.ReadToEnd(Request.Body),
+                Raw = await Files.ReadToEnd(Request.Body),
             };
 
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>

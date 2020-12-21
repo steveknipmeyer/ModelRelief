@@ -1,7 +1,8 @@
 {
-   // Use IntelliSense to find out which attributes exist for C# debugging
+   // Use IntelliSense to find out which attributes exist
    // Use hover for the description of the existing attributes
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+
    "version": "0.2.0",
    "compounds": [
     {
@@ -12,15 +13,26 @@
         ]
     }],
    "configurations": [
-        {
-           "type": "chrome",
+       {
+           "name": ".NET Core Launch (console)",
+           "type": "coreclr",
            "request": "launch",
-           "name": "Launch Chrome",
-           "url": "http://localhost:5000/models/viewer/1",
-           "webRoot": "${workspaceRoot}/ModelRelief/wwwroot",
-           "sourceMaps": true
-           // N.B. outFiles, outDir are not recognized by Intellisense.
-           // "outDir": "${workspaceRoot}/ModelRelief/wwwroot/js"
+           "preLaunchTask": "build",
+           "program": "${workspaceFolder}/bin/Debug/<target-framework>/<project-name.dll>",
+           "args": [],
+           "cwd": "${workspaceFolder}",
+           "stopAtEntry": false,
+           "console": "internalConsole"
+       },
+        {
+            "name": "Launch Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5000/models/viewer/1",
+            "webRoot": "${workspaceFolder}/ModelRelief/wwwroot",
+            "sourceMaps": true
+            // N.B. outFiles, outDir are not recognized by Intellisense.
+            // "outDir": "${workspaceFolder}/ModelRelief/wwwroot/js"
         },
         {
             "name": ".NET Core Launch",
@@ -35,9 +47,9 @@
 
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/ModelRelief/bin/Debug/netcoreapp3.1/ModelRelief.dll",
+            "program": "${workspaceFolder}/ModelRelief/bin/Debug/netcoreapp3.1/ModelRelief.dll",
             "args": [],
-            "cwd": "${workspaceRoot}/ModelRelief",
+            "cwd": "${workspaceFolder}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
 
@@ -77,10 +89,12 @@
                 "MRExitAfterInitialization":"False",
             },
             "sourceFileMap": {
-                "/Views": "${workspaceRoot}/Views"
+                // ToDo
+                "/Views": "${workspaceFolder}/Views"
             },
             "requireExactSource": true
         },
+
         {
             "name": ".NET Core Attach",
             "type": "coreclr",
@@ -106,42 +120,42 @@
             "console": "integratedTerminal",
 
         //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
-        //  "cwd": "${workspaceRoot}/Relief",
+        //  "cwd": "${workspaceFolder}/Relief",
 
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "env": {
                 "name": "value"
             },
 
         //  ----- Tools
-        //  "program": "${workspaceRoot}/Tools/testrunner.py",
-        //  "program": "${workspaceRoot}/Tools/linecount.py",
-        //  "program": "${workspaceRoot}/Tools/pngwriter.py",
-        //  "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb", "--format", "grayscale"]
-        //  "args":["--file", "${workspaceRoot}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
+        //  "program": "${workspaceFolder}/Tools/testrunner.py",
+        //  "program": "${workspaceFolder}/Tools/linecount.py",
+        //  "program": "${workspaceFolder}/Tools/pngwriter.py",
+        //  "args":["--file", "${workspaceFolder}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb", "--format", "grayscale"]
+        //  "args":["--file", "${workspaceFolder}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
 
         //  ----- Build
-       "program": "${workspaceRoot}/Build/Builder.py",
+       "program": "${workspaceFolder}/Build/Builder.py",
        "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        // "program": "${workspaceRoot}/Explorer/explorer.py",
+        // "program": "${workspaceFolder}/Explorer/explorer.py",
         // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
-        //  "program": "${workspaceRoot}/Solver/solver.py",
+        //  "program": "${workspaceFolder}/Solver/solver.py",
         //  "args":["--s", "../Solver/Test/House.json", "--w", "../Solver/Test/Working"],
 
         //  ----- Relief C++ Extensions
-        //  "program": "${workspaceRoot}/Relief/tests/python/benchmark.py",
-        //  "program": "${workspaceRoot}/Relief/tests/python/relieftest.py",
-        //  "program": "${workspaceRoot}/Relief/setup.py",
+        //  "program": "${workspaceFolder}/Relief/tests/python/benchmark.py",
+        //  "program": "${workspaceFolder}/Relief/tests/python/relieftest.py",
+        //  "program": "${workspaceFolder}/Relief/setup.py",
         //  "args":["build", "install"]
 
         //  ----- Experiments
-        //  "program": "${workspaceRoot}/Solver/Experiments/pybind11test.py",
-        //  "program": "${workspaceRoot}/Solver/Experiments/workbench.py",
-        //  "program": "${workspaceRoot}/Solver/Experiments/mayavitest.py",
+        //  "program": "${workspaceFolder}/Solver/Experiments/pybind11test.py",
+        //  "program": "${workspaceFolder}/Solver/Experiments/workbench.py",
+        //  "program": "${workspaceFolder}/Solver/Experiments/mayavitest.py",
 
         // "args":[]
         },
@@ -153,7 +167,7 @@
             "stopOnEntry": false,
             "console": "integratedTerminal",
             "program": "${file}",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceFolder}",
             "env": {
                 "name": "value"
             },
@@ -172,9 +186,9 @@
             "name": "gulp Debug",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/ModelRelief/node_modules/gulp/bin/gulp.js",
+            "program": "${workspaceFolder}/ModelRelief/node_modules/gulp/bin/gulp.js",
             "args" : ["default"],
-            "cwd": "${workspaceRoot}/ModelRelief",
+            "cwd": "${workspaceFolder}/ModelRelief",
 //          "stopOnEntry": true
         }
     ]

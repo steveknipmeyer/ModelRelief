@@ -7,7 +7,9 @@
     What is the purpose of Python projects files (e.g. pyproj)
 
 #### Build
-    Build.py
+    Disable restore in Core build task.
+
+    nginx
 
     Python
         Why does venv not add the Python 3.8 include files?
@@ -28,9 +30,18 @@
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
 
 #### Runtime
+    EF Core
+    https://docs.microsoft.com/en-us/ef/core/querying/client-eval
 
+    Explorer
+        The UI layout has changed. The Process button is not visible.
+
+        /home/stephen/projects/ModelRelief/Explorer/widgets.py:286: MatplotlibDeprecationWarning: Passing non-integers as three-element position specification is deprecated since 3.3 and will be removed two minor releases later.
+        subplot = figure.add_subplot(rows, columns, n + 1)
+
+        exit
+            Segmentation fault
 #### Refactoring
-    Refactor BuildPythonEnvironment to use common bash function.
     Review single equal string comparisons in shell scripts.
     Review all casing of files and directories.
         images
