@@ -13,27 +13,6 @@
         ]
     }],
    "configurations": [
-       {
-           "name": ".NET Core Launch (console)",
-           "type": "coreclr",
-           "request": "launch",
-           "preLaunchTask": "build",
-           "program": "${workspaceFolder}/bin/Debug/<target-framework>/<project-name.dll>",
-           "args": [],
-           "cwd": "${workspaceFolder}",
-           "stopAtEntry": false,
-           "console": "internalConsole"
-       },
-        {
-            "name": "Launch Chrome",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:5000/models/viewer/1",
-            "webRoot": "${workspaceFolder}/ModelRelief/wwwroot",
-            "sourceMaps": true
-            // N.B. outFiles, outDir are not recognized by Intellisense.
-            // "outDir": "${workspaceFolder}/ModelRelief/wwwroot/js"
-        },
         {
             "name": ".NET Core Launch",
             "type": "coreclr",
@@ -44,7 +23,6 @@
                 "exceptions": false,
                 "browserStdOut": false,
             },
-
             "preLaunchTask": "ASPNET .Core Build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ModelRelief/bin/Debug/netcoreapp3.1/ModelRelief.dll",
@@ -52,24 +30,20 @@
             "cwd": "${workspaceFolder}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
-
             // The external console will not launch the browser. It is necessary to manually start the browser.
             // The internal console does not support Console.ReadLine so user verification steps are not possible.
             "console": "integratedTerminal",
-
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
-
                 // <---------------------------------------------------------------->
                 // N.B. Set to true when using independently of the compound profiles.
                 "enabled": false,
                 // <---------------------------------------------------------------->
-
                 "args": "${auto-detect-url}",
                 "windows": {
-                   "command": "cmd.exe",
-                // "args": "/C start ${auto-detect-url}",
-                   "args": "/C start https://localhost:5001/"
+                    "command": "cmd.exe",
+                    // "args": "/C start ${auto-detect-url}",
+                    "args": "/C start https://localhost:5001/"
                 },
                 "osx": {
                     "command": "open"
@@ -82,11 +56,10 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 // "MRDatabaseProvider": "SQLServer",
                 "MRDatabaseProvider": "SQLite",
-
-                "MRUpdateSeedData":"False",
-                "MRInitializeDatabase":"True",
-                "MRSeedDatabase":"True",
-                "MRExitAfterInitialization":"False",
+                "MRUpdateSeedData": "False",
+                "MRInitializeDatabase": "True",
+                "MRSeedDatabase": "True",
+                "MRExitAfterInitialization": "False",
             },
             "sourceFileMap": {
                 // ToDo
@@ -101,9 +74,21 @@
             "request": "attach",
             // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
             // wmic process where "Name='dotnet.exe'" get Name, ProcessId, CommandLine
-//          "processId": "${command:pickProcess}",
+            //          "processId": "${command:pickProcess}",
             "processId": "23564"
         },
+
+        {
+            "name": "Launch Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5000/models/viewer/1",
+            "webRoot": "${workspaceFolder}/ModelRelief/wwwroot",
+            "sourceMaps": true
+            // N.B. outFiles, outDir are not recognized by Intellisense.
+            // "outDir": "${workspaceFolder}/ModelRelief/wwwroot/js"
+        },
+
         {
             "name": "Python Attach",
             "type": "coreclr",
@@ -114,13 +99,10 @@
         {
             "name": "Python",
             "type": "python",
-            "python": "${command:python.interpreterPath}",
             "request": "launch",
+            "python": "${command:python.interpreterPath}",
             "stopOnEntry": false,
             "console": "integratedTerminal",
-
-        //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
-        //  "cwd": "${workspaceFolder}/Relief",
 
             "cwd": "${workspaceFolder}",
             "env": {
@@ -130,17 +112,18 @@
         //  ----- Tools
         //  "program": "${workspaceFolder}/Tools/testrunner.py",
         //  "program": "${workspaceFolder}/Tools/linecount.py",
+
         //  "program": "${workspaceFolder}/Tools/pngwriter.py",
         //  "args":["--file", "${workspaceFolder}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers/1/armadillo.sdb", "--format", "grayscale"]
         //  "args":["--file", "${workspaceFolder}/ModelRelief/store/development/users/auth05bedab58aa237e078600530b/normalmaps/3/bunny.nmap", "--format", "rgba"]
 
         //  ----- Build
-       "program": "${workspaceFolder}/Build/Builder.py",
-       "args":["--target", "Nginx", "--publish", "True"]
+        // "program": "${workspaceFolder}/Build/Builder.py",
+        // "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        // "program": "${workspaceFolder}/Explorer/explorer.py",
-        // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
+        "program": "${workspaceFolder}/Explorer/explorer.py",
+        "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceFolder}/Solver/solver.py",
@@ -149,6 +132,9 @@
         //  ----- Relief C++ Extensions
         //  "program": "${workspaceFolder}/Relief/tests/python/benchmark.py",
         //  "program": "${workspaceFolder}/Relief/tests/python/relieftest.py",
+
+        //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
+        //  "cwd": "${workspaceFolder}/Relief",
         //  "program": "${workspaceFolder}/Relief/setup.py",
         //  "args":["build", "install"]
 
@@ -162,8 +148,8 @@
         {
             "name": "Python (Active File)",
             "type": "python",
-            "python": "${command:python.interpreterPath}",
             "request": "launch",
+            "python": "${command:python.interpreterPath}",
             "stopOnEntry": false,
             "console": "integratedTerminal",
             "program": "${file}",

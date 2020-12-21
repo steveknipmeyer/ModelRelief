@@ -7,8 +7,6 @@
     What is the purpose of Python projects files (e.g. pyproj)
 
 #### Build
-    Disable restore in Core build task.
-
     nginx
 
     Python
@@ -36,15 +34,15 @@
     Explorer
         The UI layout has changed. The Process button is not visible.
 
-        /home/stephen/projects/ModelRelief/Explorer/widgets.py:286: MatplotlibDeprecationWarning: Passing non-integers as three-element position specification is deprecated since 3.3 and will be removed two minor releases later.
-        subplot = figure.add_subplot(rows, columns, n + 1)
+        A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it.
 
-        exit
-            Segmentation fault
 #### Refactoring
     Review single equal string comparisons in shell scripts.
     Review all casing of files and directories.
         images
+    Organize User and Workspace settings.json.
+    Organize launch.json.
+    Resolve ToDo markers.
 
 #### Test
     Explorer
@@ -55,9 +53,16 @@
 #### Project
     Clean up git branches.
     Structure GitHub repo using recommended best practices.
+    Add OneNote ModelRelief notebook.
     Documentation
         Document VcXsrv
         AzureKeyVault
+        Solver
+        Explorer
+        pyamg warning
+            pyamg/gallery/stencil.py:110: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+            diags[s] = 0
+
     Change all Windows file types (as reported by VSCode) to linux
     Remove References
         Windows

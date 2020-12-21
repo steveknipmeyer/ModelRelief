@@ -49,6 +49,6 @@
             "**/wwwroot/**/*": true
         },
         "debug.console.fontFamily": "Consolas",
-        "debug.console.fontSize": 14,
+        "debug.console.fontSize": 11,
         "python.formatting.autopep8Path": "",
 }

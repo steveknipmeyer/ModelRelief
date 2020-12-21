@@ -280,7 +280,7 @@ class ImageTab():
 
         figure = plt.figure(facecolor='black')
 
-        columns = np.ceil(n_subplots/float(rows))
+        columns = int(np.ceil(n_subplots/float(rows)))
         for n, (data_array, title, cmap) in enumerate(zip(data, titles, cmaps)):
             # make a subplot active
             subplot = figure.add_subplot(rows, columns, n + 1)
