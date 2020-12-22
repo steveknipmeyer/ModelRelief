@@ -72,10 +72,7 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",
-            // https: //github.com/OmniSharp/omnisharp-vscode/issues/897
-            // wmic process where "Name='dotnet.exe'" get Name, ProcessId, CommandLine
-            //          "processId": "${command:pickProcess}",
-            "processId": "23564"
+            "processId": "${command:pickProcess}"
         },
 
         {
