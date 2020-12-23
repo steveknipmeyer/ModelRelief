@@ -110,8 +110,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
                         // https://stackoverflow.com/questions/19811583/invalid-cast-from-system-double-to-system-nullable
                         System.Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
                  }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    var conversionException = ex;
                     var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
                     throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }

@@ -23,7 +23,7 @@
                 "exceptions": false,
                 "browserStdOut": false,
             },
-            "preLaunchTask": "ASPNET .Core Build",
+            "preLaunchTask": "Build ModelRelief",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ModelRelief/bin/Debug/netcoreapp3.1/ModelRelief.dll",
             "args": [],
@@ -69,10 +69,16 @@
         },
 
         {
-            "name": ".NET Core Attach",
+            "name": ".NET Core Attach to Process",
             "type": "coreclr",
             "request": "attach",
-            "processId": "${command:pickProcess}"
+            "processId": "${command:pickProcess}",
+            "logging": {
+                "engineLogging": false,
+                "moduleLoad": false,
+                "exceptions": false,
+                "browserStdOut": false,
+            },
         },
 
         {

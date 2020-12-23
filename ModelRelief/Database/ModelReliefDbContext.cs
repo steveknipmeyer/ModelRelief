@@ -50,6 +50,10 @@ namespace ModelRelief.Database
 
             base.OnModelCreating(modelbuilder);
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
 
 #region Dynamic DbSet<T>
 // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically

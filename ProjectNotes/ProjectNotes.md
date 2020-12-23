@@ -2,11 +2,13 @@
 
 ## Tasks
 ## Commit Notes
-Refactor DbInitialzer to use DbContext.AddRange (not Add) to preserve collection order for XUnit tests
+
 
 #### Configuration
 
 #### Build
+    Is there a .NET Standard 2.1 reference in the project>
+
     nginx
         Host ASP.NET Core on Linux with Nginx | Microsoft Docs
         https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-5.0
@@ -30,6 +32,8 @@ Refactor DbInitialzer to use DbContext.AddRange (not Add) to preserve collection
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
 
 #### Runtime
+    HttpsRedirection?
+
     EF Core
     https://docs.microsoft.com/en-us/ef/core/querying/client-eval
 
@@ -38,12 +42,18 @@ Refactor DbInitialzer to use DbContext.AddRange (not Add) to preserve collection
 
         A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it.
 
+    Newtonsoft.Json -> System.Text.Json
+            https://stackoverflow.com/questions/57700678/how-do-you-read-a-simple-value-out-of-some-json-using-system-text-json#57700761
+            https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
+            https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
+
+
 #### Refactoring
     Review all casing of files and directories.
     Resolve ToDo markers.
+    Tools -> bin
 
 #### Test
-    Unit tests
     Swagger API documentation
     Postman
 
@@ -96,8 +106,6 @@ Refactor DbInitialzer to use DbContext.AddRange (not Add) to preserve collection
 
 
     How can Python binary extensions be resolved (e.g. sys, time)?
-
-    How can xUnit tests be debugged?
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
 
@@ -974,9 +982,6 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
 
     Log ApiErrorResult?
 
-    XUnit TestRunner Output
-    https://github.com/marhoily/serilog-sinks-xunittestoutput
-
     Review the ILogger interface. How should this work with a Controller?
 ```c#
     namespace Microsoft.Extensions.Logging
@@ -1021,8 +1026,6 @@ An ApplicationUser could have a storage folder property that is used by the Stor
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception
 
 #### Testing
-    xUnit Async
-        https://github.com/xunit/xunit/issues/1066
 
     Integration Tests
         If all integration and unit tests are non-destructive, is it necessary to refresh the Test database from the Baseline?

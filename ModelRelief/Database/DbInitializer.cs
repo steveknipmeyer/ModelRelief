@@ -431,8 +431,11 @@ namespace ModelRelief.Database
                 new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", UserId = user.Id },
             };
 
-            DbContext.AddRange(projects);
-            DbContext.SaveChanges();
+            foreach (var project in projects)
+            {
+                DbContext.Add(project);
+                DbContext.SaveChanges();
+            }
 
             QualifyDescription<Project>(user);
         }
@@ -453,8 +456,11 @@ namespace ModelRelief.Database
                 camera.ProjectId = camera.Project.Id;
             }
 
-            DbContext.AddRange(cameraList);
-            DbContext.SaveChanges();
+            foreach (var camera in cameraList)
+            {
+                DbContext.Add(camera);
+                DbContext.SaveChanges();
+            }
 
             QualifyDescription<Camera>(user);
         }
@@ -539,8 +545,11 @@ namespace ModelRelief.Database
                 },
             };
 
-            DbContext.AddRange(models);
-            DbContext.SaveChanges();
+            foreach (var model in models)
+            {
+                DbContext.Add(model);
+                DbContext.SaveChanges();
+            }
 
             SetFileProperties(models);
             QualifyDescription<Model3d>(user);
@@ -562,8 +571,11 @@ namespace ModelRelief.Database
                 meshtransform.ProjectId = meshtransform.Project.Id;
             }
 
-            DbContext.AddRange(meshTransformList);
-            DbContext.SaveChanges();
+            foreach (var mesh in meshTransformList)
+            {
+                DbContext.Add(mesh);
+                DbContext.SaveChanges();
+            }
 
             QualifyDescription<MeshTransform>(user);
         }
@@ -690,8 +702,11 @@ namespace ModelRelief.Database
                 },
             };
 
-            DbContext.AddRange(depthBuffers);
-            DbContext.SaveChanges();
+            foreach (var depthBuffer in depthBuffers)
+            {
+                DbContext.Add(depthBuffer);
+                DbContext.SaveChanges();
+            }
 
             SetFileProperties(depthBuffers);
             QualifyDescription<DepthBuffer>(user);
@@ -791,8 +806,11 @@ namespace ModelRelief.Database
                 },
             };
 
-            DbContext.AddRange(meshes);
-            DbContext.SaveChanges();
+            foreach (var mesh in meshes)
+            {
+                DbContext.Add(mesh);
+                DbContext.SaveChanges();
+            }
 
             SetFileProperties(meshes);
             QualifyDescription<Mesh>(user);
@@ -920,8 +938,11 @@ namespace ModelRelief.Database
                 },
             };
 
-            DbContext.AddRange(normalMaps);
-            DbContext.SaveChanges();
+            foreach (var normalMap in normalMaps)
+            {
+                DbContext.Add(normalMap);
+                DbContext.SaveChanges();
+            }
 
             SetFileProperties(normalMaps);
             QualifyDescription<NormalMap>(user);

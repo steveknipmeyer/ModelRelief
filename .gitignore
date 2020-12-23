@@ -21,6 +21,7 @@ x64/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
+[Rr]esult*/
 [Bb]uild[Ll]og.*
 
 *_i.c

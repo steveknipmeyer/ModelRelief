@@ -113,16 +113,15 @@ namespace ModelRelief
         /// <param name="services">DI Service collection.</param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // var env = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
-
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
             services.ConfigureCookies();
             services.AddConfigurationTypes(Configuration);
             services.AddAuth0Authentication(Configuration);
-            services.AddCustomMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc().AddNewtonsoftJson();                                          // disable Core 3.1 System.Text.Json in middleware
+            services.AddCustomMvc();
             services.AddModelReliefServices(Configuration);
             services.AddDatabaseServices(Env);
             services.AddAutoMapper(typeof(Startup));

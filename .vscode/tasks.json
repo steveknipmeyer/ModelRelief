@@ -37,7 +37,7 @@
         },
 
         {
-            "label": "ASPNET .Core Build",
+            "label": "Build ModelRelief",
             "type": "shell",
             "command": "dotnet build --no-restore ModelRelief",
             "dependsOn": "Compile TypeScript",
@@ -49,6 +49,18 @@
             "problemMatcher": "$msCompile"
         },
 
+        {
+            "label": "Build ModelRelief.Test",
+            "type": "shell",
+            "command": "dotnet build --no-restore ModelRelief.Test",
+            "dependsOn": "Compile TypeScript",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": "$msCompile"
+        },
         {
             "label": "Python Extensions",
             "type": "shell",

@@ -73,7 +73,7 @@ class TestRunner:
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
         os.environ[EnvironmentNames.MRDatabaseProvider] = database
-        subprocess.call (["dotnet", "test", "--results-directory", "Results", "--logger", "trx;LogFileName={}TestResults.trx".format(database), "ModelRelief.Test"])
+        subprocess.call (["dotnet", "test", "--results-directory", "ModelRelief.Test/TestResults", "--logger", "trx;LogFileName={}TestResults.trx".format(database), "ModelRelief.Test"])
 
         self.logger.logInformation("End test execution for {}".format(database), Colors.BrightGreen)
 
