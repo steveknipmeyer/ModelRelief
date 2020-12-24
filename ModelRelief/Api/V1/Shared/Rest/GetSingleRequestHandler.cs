@@ -59,9 +59,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
 
-            // stop tracking to avoid conflicting tracking with updatedModel
-            DbContext.Entry(targetModel).State = EntityState.Detached;
-
             // fully populate return model
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                             .Where(m => (m.Id == message.Id));

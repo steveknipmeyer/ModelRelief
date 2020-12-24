@@ -34,9 +34,6 @@
 #### Runtime
     HttpsRedirection?
 
-    EF Core
-    https://docs.microsoft.com/en-us/ef/core/querying/client-eval
-
     Explorer
         The UI layout has changed. The Process button is not visible.
 
@@ -2097,6 +2094,9 @@ Lumx : http://ui.lumapps.com
 Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwinel/426a0f76f113643fa285
 
 #### Entity Framework Core
-    Tracking
+##### Tracking
     https://stackoverflow.com/questions/27423059/how-do-i-clear-tracked-entities-in-entity-framework
     context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+##### Client Server Queries
+    https://docs.microsoft.com/en-us/ef/core/querying/client-eval
