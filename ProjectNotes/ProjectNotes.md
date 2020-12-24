@@ -18,7 +18,10 @@
         Why does the 1st mayavi install fail with a vtk module error?
             pip3 install mayavi
 
-    Update TypeScript version
+    Update
+        TypeScript
+        NET Core 5.1
+        three.js
 
     Prove with clean Ubuntu installation!
 
@@ -51,9 +54,13 @@
     Resolve ToDo markers.
     Tools -> bin
 
+### Security
+    Remove phone numnber: special/1
+    Remove all secure secrets.
+        public static string DevelopmentUserId
+    Should the password grant (https://modelrelief.auth0.com/oauth/token) be disabled?
+
 #### Test
-    Swagger API documentation
-    Postman
 
 #### Project
     Clean up git branches.
