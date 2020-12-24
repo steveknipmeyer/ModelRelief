@@ -66,28 +66,25 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
 
-            // stop tracking to avoid conflicting tracking with updatedModel
-            DbContext.Entry(targetModel).State = EntityState.Detached;
-
             // update domain model
-            var updatedModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
+            targetModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
 
             // validate all references are owned
-            await ValidateReferences<TEntity>(updatedModel, message.User);
+            await ValidateReferences<TEntity>(targetModel, message.User);
 
             // ensure Id is set; PutModel may not have included the Id but it is always present in the PutRequest.
-            updatedModel.Id = message.Id;
+            targetModel.Id = message.Id;
 
             // set ownership
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);
-            updatedModel.UserId = applicationUser.Id;
+            targetModel.UserId = applicationUser.Id;
 
-            DbContext.Set<TEntity>().Update(updatedModel);
-            await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
+            DbContext.Set<TEntity>().Update(targetModel);
+            await DependencyManager.PersistChangesAsync(targetModel, cancellationToken);
 
             // fully populate return model
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
-                                            .Where(m => (m.Id == updatedModel.Id));
+                                            .Where(m => (m.Id == targetModel.Id));
             var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
             return projectedModel;

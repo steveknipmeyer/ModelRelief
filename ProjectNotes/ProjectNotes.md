@@ -47,6 +47,7 @@
             https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
             https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
 
+    Refactore empty <returns></returns> in *.cs.
 
 #### Refactoring
     Review all casing of files and directories.
@@ -2094,3 +2095,8 @@ Lumx : http://ui.lumapps.com
 
 #### CSS
 Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwinel/426a0f76f113643fa285
+
+#### Entity Framework Core
+    Tracking
+    https://stackoverflow.com/questions/27423059/how-do-i-clear-tracked-entities-in-entity-framework
+    context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;

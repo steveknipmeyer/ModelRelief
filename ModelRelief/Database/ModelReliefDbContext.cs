@@ -7,13 +7,15 @@
 namespace ModelRelief.Database
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using ModelRelief.Domain;
 
     public class ModelReliefDbContext : DbContext
-        {
+    {
         public ModelReliefDbContext(DbContextOptions options)
             : base(options)
         {
@@ -35,7 +37,7 @@ namespace ModelRelief.Database
             { get; set; }
 
         public DbSet<NormalMap> NormalMaps
-        { get; set; }
+            { get; set; }
 
         public DbSet<Project> Projects
             { get; set; }
@@ -54,21 +56,47 @@ namespace ModelRelief.Database
         {
             optionsBuilder.EnableSensitiveDataLogging();
         }
+        /// <summary>
+        /// Returns a collection of all ChangeTracker entities.
+        /// </summary>
+        public List<EntityEntry> GetTrackedEntities()
+        {
+            var trackedEntriesCopy = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added ||
+                            e.State == EntityState.Modified ||
+                            e.State == EntityState.Deleted ||
+                            e.State == EntityState.Unchanged)
+                .ToList();
+            return trackedEntriesCopy;
+        }
 
-#region Dynamic DbSet<T>
-// https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
+        /// <summary>
+        /// Detaches any unchanged entities so they are no longer tracked.
+        /// </summary>
+        public void DetachUnchangedTrackedEntities()
+        {
+            var unchangedEntriesCopy = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Unchanged)
+                .ToList();
+
+            foreach (var entry in unchangedEntriesCopy)
+                entry.State = EntityState.Detached;
+        }
+
+        #region Dynamic DbSet<T>
+        // https://stackoverflow.com/questions/33940507/find-a-generic-dbset-in-a-dbcontext-dynamically
 
         public dynamic GetDbSetByModelName(string name)
+        {
+            switch (name)
             {
-                switch (name)
-                {
-                    case "Model3d":
-                        return Models;
+                case "Model3d":
+                    return Models;
 
-                    default:
-                        return null;
-                }
+                default:
+                    return null;
             }
+        }
 
         public dynamic GetDbSetByReflection(string fullname)
         {
@@ -88,5 +116,5 @@ namespace ModelRelief.Database
             return null;
         }
 #endregion
-        }
-   }
+     }
+}
