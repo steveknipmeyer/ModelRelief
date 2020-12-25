@@ -19,9 +19,10 @@ Upgrade to Typescript 3.9.
             pip3 install mayavi
 
     Update
-        TypeScript
         NET Core 5.1
         three.js
+            98 -> 124
+            https://github.com/mrdoob/three.js/wiki/Migration-Guide
 
     Prove with clean Ubuntu installation!
 
