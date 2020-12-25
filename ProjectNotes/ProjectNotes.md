@@ -2,7 +2,7 @@
 
 ## Tasks
 ## Commit Notes
-
+Upgrade to Typescript 3.9.
 
 #### Configuration
 
