@@ -150,7 +150,7 @@ export class Graphics {
         objectClone.updateMatrixWorld(true);
 
         // transform
-        objectClone.applyMatrix(matrix);
+        objectClone.applyMatrix4(matrix);
         Services.timer.logElapsedTime(transformTag);
 
         Services.timer.logElapsedTime(methodTag);
@@ -169,13 +169,13 @@ export class Graphics {
         const methodTag: string = Services.timer.mark("getTransformedBoundingBox");
 
         object.updateMatrixWorld(true);
-        object.applyMatrix(matrix);
+        object.applyMatrix4(matrix);
         const boundingBox: THREE.Box3 = Graphics.getBoundingBoxFromObject(object);
 
         // restore object
-        const matrixIdentity = new THREE.Matrix4();
-        const matrixInverse = matrixIdentity.getInverse(matrix, true);
-        object.applyMatrix(matrixInverse);
+        const matrixInverse = new THREE.Matrix4();
+        matrixInverse.copy(matrix).invert();
+        object.applyMatrix4(matrixInverse);
 
         Services.timer.logElapsedTime(methodTag);
         return boundingBox;
@@ -776,7 +776,7 @@ export class Graphics {
 
         // https://github.com/stackgl/gl-reset/blob/master/state.js
         // https://stackoverflow.com/questions/12427880/is-it-important-to-call-gldisablevertexattribarray
-        const gl = renderer.context;
+        const gl = renderer.getContext();
 
         const numberAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
         const temporaryBuffer = gl.createBuffer();

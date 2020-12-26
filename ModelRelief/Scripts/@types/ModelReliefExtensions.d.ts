@@ -111,9 +111,3 @@ declare class OBJLoader {
     setMaterials(materials: any) : void;
     _createParserState() : any;
 }
-
-declare class WEBGL {
-
-    static isWebGLAvailable() : boolean;
-    static getWebGLErrorMessage(): HTMLDivElement;
-}

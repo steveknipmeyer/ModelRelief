@@ -4,6 +4,7 @@
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
+import {WebGLDetector} from "Scripts/Graphics/WebGLDetector";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {ElementIds} from "Scripts/System/Html";
 import {ContentType, HttpLibrary, MethodType} from "Scripts/System/Http";
@@ -40,8 +41,9 @@ export class Initializer  {
     public static async initialize(): Promise<boolean> {
 
         // verify WebGL
-        if (!WEBGL.isWebGLAvailable()) {
-            const warning = WEBGL.getWebGLErrorMessage();
+        const detector = new WebGLDetector();
+        if (!detector.isWebGLAvailable()) {
+            const warning = detector.getWebGLErrorMessage();
             document.getElementById(ElementIds.Root).appendChild(warning);
             return false;
         }

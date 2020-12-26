@@ -200,7 +200,7 @@ export class ImageFactory {
         // 2D plane scene
         this._postTarget = this.constructPostRenderTarget();
 
-        this.verifyWebGLExtensions();
+        // this.verifyWebGLExtensions();
     }
 
     /**
@@ -394,7 +394,9 @@ export class ImageFactory {
         if (material)
             this._scene.overrideMaterial = material;
 
-        this._renderer.render(this._scene, this._camera.viewCamera, this._target, true);
+        this._renderer.setRenderTarget(this._target);
+        this._renderer.clear();
+        this._renderer.render(this._scene, this._camera.viewCamera);
 
         // restore default materials
         this._scene.overrideMaterial = null;
@@ -412,7 +414,9 @@ export class ImageFactory {
         this._renderer.render(this._postScene, this._postCamera);
 
         // generate final image into render target
-        this._renderer.render(this._postScene, this._postCamera, this._postTarget, true);
+        this._renderer.setRenderTarget(this._postTarget);
+        this._renderer.clear();
+        this._renderer.render(this._postScene, this._postCamera);
     }
 
     /**

@@ -359,7 +359,7 @@ gulp.task('copyNPM', function () {
     subFolder         = 'threejs/';
     sourceFolder      = sourceConfig.nodeModulesRoot + 'three/examples/js/';
     destinationFolder = siteConfig.libRoot + subFolder;
-    fileList = ['WebGL.js', 'libs/' + 'dat.gui.min.js'];
+    fileList = ['libs/' + 'dat.gui.min.js'];
     fileList.forEach(function (file) {
         gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
     });
