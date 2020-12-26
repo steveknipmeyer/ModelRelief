@@ -397,6 +397,7 @@ export class ImageFactory {
         this._renderer.setRenderTarget(this._target);
         this._renderer.clear();
         this._renderer.render(this._scene, this._camera.viewCamera);
+        this._renderer.setRenderTarget(null);
 
         // restore default materials
         this._scene.overrideMaterial = null;
@@ -417,6 +418,7 @@ export class ImageFactory {
         this._renderer.setRenderTarget(this._postTarget);
         this._renderer.clear();
         this._renderer.render(this._postScene, this._postCamera);
+        this._renderer.setRenderTarget(null);
     }
 
     /**

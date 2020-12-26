@@ -2,26 +2,29 @@
 
 ## Tasks
 ## Commit Notes
-Fold three library WebGL detector into WebGLDetector class.
+Remove extension check for WEBGL_depth_texture
+WebGL supports WEBGL_depth_texture functionality by default.
 
 #### Configuration
 
 #### Build
     Add a test account.
         Prove Build.
-        Prove that the new three version leads to the WebGl feedback loop errors.
-    Alternatively, git stash changes to prove threee library issues.
+
 
     WebGL2 Support
-        ImageFactory.verifyWebGLExtensions fails.
-        shaders?
+        WebGL Feedback Loop
+            WebGL warning: drawArraysInstanced: Texture level 0 would be read by TEXTURE_2D unit 0, but written by framebuffer attachment DEPTH_ATTACHMENT, which would be illegal feedback. three.js:11548:7
+            https://stackoverflowcom/questions/62074822/webgl-feedback-loop-formed-between-framebuffer-and-active-texture)
+            https://stackoverflow.com/questions/57508011/feedback-loop-three-js
+
+        https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
+        shaders
+            GLSL 300 es
+            https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 
     "experimentalDecorators": true,
 
-    WebGL Feedback Loop
-        WebGL warning: drawArraysInstanced: Texture level 0 would be read by TEXTURE_2D unit 0, but written by framebuffer attachment DEPTH_ATTACHMENT, which would be illegal feedback. three.js:11548:7
-        https://stackoverflowcom/questions/62074822/webgl-feedback-loop-formed-between-framebuffer-and-active-texture)
-        https://stackoverflow.com/questions/57508011/feedback-loop-three-js
 
     Catalog images are different sizes when page is reduced.Fimport
 
