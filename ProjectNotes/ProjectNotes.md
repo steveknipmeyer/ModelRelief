@@ -33,6 +33,17 @@ Remove references to deprecated features (IIS, conda).
         Host ASP.NET Core on Linux with Nginx | Microsoft Docs
         https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-5.0
 
+        Administration
+            Create a new sudo account ('admin') from which to manage nginx.
+                sudo adduser nginxadmin
+                sudo usermod -a -G sudo nginxadmin
+
+        Debugging
+            What is the best practice to debug a production instance?
+                Add additional logging output.
+
+        Elevated permissions are required in Builder to deploy to delete /var/www.
+
     Python
         Why does venv not add the Python 3.8 include files?
         Why does the 1st mayavi install fail with a vtk module error?
@@ -54,7 +65,7 @@ Remove references to deprecated features (IIS, conda).
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
 
 #### Runtime
-    HttpsRedirection??
+    HttpsRedirection?
 
     Configuration
         Why does the Debug Console <in Development environment> show:
@@ -78,12 +89,11 @@ Remove references to deprecated features (IIS, conda).
             https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
             https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
 
-    Refactor empty <returns></returns> in *.cs.
-
 #### Refactoring
     Review all casing of files and directories.
     Resolve WIP markers.
     Tools -> bin
+    Refactor empty <returns></returns> in *.cs.
 
 ### Security
     Remove all secure secrets.
@@ -110,13 +120,10 @@ Remove references to deprecated features (IIS, conda).
         (Hidden) DepthBufferView and NormalMapView
 
     Remove References
-        Windows
-        backslashes
         SQLServer?
         Docker
-        NuGet.config
-        Properties folders?
-            PublishProfiles
+        backslashes
+        ModelRelief.dgml (Linux?)
         Jupyter notebooks?
 
 #### License
@@ -129,19 +136,6 @@ Remove references to deprecated features (IIS, conda).
         Start browser using https://localhost:5001.
 
 #### Today
-
-    publish
-        Elevated permissions are required in Builder to deploy to delete /var/www.
-
-    nginx
-        Administration
-            Create a new sudo account ('admin') from which to manage nginx.
-                sudo adduser nginxadmin
-                sudo usermod -a -G sudo nginxadmin
-
-        Debugging
-            What is the best practice to debug a production instance?
-                Add additional logging output.
 
     How can Python binary extensions be resolved (e.g. sys, time)?
 

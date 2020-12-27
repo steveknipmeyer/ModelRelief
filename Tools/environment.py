@@ -42,8 +42,8 @@ class EnvironmentNames:
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
 
     # debug
-    # working folder in Windows file system for access by graphical applications (e.g. MeshLab)
-    WindowsTemp = "WindowsTemp"
+    # working folder in file system for access by graphical applications (e.g. MeshLab)
+    MRTemp = "MRTemp"
 
 class RuntimeEnvironment(Enum):
     """ ASPNETCORE_ENVIRONMENT """

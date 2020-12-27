@@ -359,7 +359,7 @@ def main():
     """
     Main entry point.
     """
-    # This hook is used in Windows to allow an external debugger to be attached.
+    # This hook is used to allow an external debugger to be attached.
     # input("Attach debugger and press <Enter>:")
 
     os.chdir(os.path.dirname(__file__))

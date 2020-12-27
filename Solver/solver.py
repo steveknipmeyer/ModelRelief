@@ -310,9 +310,9 @@ class Solver:
             filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
             filewriter.write()
 
-            # copy to Windows file system for access by graphical applications outside WSL (e.g. MeshLab)
-            windows_temp = os.getenv(EnvironmentNames.WindowsTemp)
-            if (windows_temp is None):
+            # copy to  file system for access by graphical applications outside WSL (e.g. MeshLab)
+            mr_temp = os.getenv(EnvironmentNames.MRTemp)
+            if (mr_temp is None):
                 return
 
             file_temp_path = os.path.join(windows_temp, filename + ".obj")
