@@ -2,31 +2,30 @@
 
 ## Tasks
 ## Commit Notes
-Remove extension check for WEBGL_depth_texture
-WebGL supports WEBGL_depth_texture functionality by default.
+TypeScript emits ES6 (from ES5),
+Remove references to deprecated features (IIS, conda).
 
 #### Configuration
 
 #### Build
-    Add a test account.
-        Prove Build.
-
+    Prove with clean Ubuntu installation!
+        Add a test account.
 
     WebGL2 Support
+        https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
+
         WebGL Feedback Loop
             WebGL warning: drawArraysInstanced: Texture level 0 would be read by TEXTURE_2D unit 0, but written by framebuffer attachment DEPTH_ATTACHMENT, which would be illegal feedback. three.js:11548:7
             https://stackoverflowcom/questions/62074822/webgl-feedback-loop-formed-between-framebuffer-and-active-texture)
             https://stackoverflow.com/questions/57508011/feedback-loop-three-js
 
-        https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 
     "experimentalDecorators": true,
 
-
-    Catalog images are different sizes when page is reduced.Fimport
+    Gallery images are different sizes when page is reduced.
 
     Is there a .NET Standard 2.1 reference in the project>
 
@@ -41,11 +40,9 @@ WebGL supports WEBGL_depth_texture functionality by default.
 
     Update
         NET Core 5.1
-        three.js
-            98 -> 124
-            https://github.com/mrdoob/three.js/wiki/Migration-Guide
-
-    Prove with clean Ubuntu installation!
+            Endpoint routing
+        TypeScript
+            ES6 modules
 
     ModelRelief
         GlobalSuppression.cs
@@ -57,7 +54,19 @@ WebGL supports WEBGL_depth_texture functionality by default.
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
 
 #### Runtime
-    HttpsRedirection?
+    HttpsRedirection??
+
+    Configuration
+        Why does the Debug Console <in Development environment> show:
+            -------------------------------------------------------------------
+            You may only use the Microsoft .NET Core Debugger (vsdbg) with
+            Visual Studio Code, Visual Studio or Visual Studio for Mac software
+            to help you develop and test your applications.
+            -------------------------------------------------------------------
+            Using launch settings from '/home/stephen/projects/ModelRelief/ModelRelief/Properties/launchSettings.json' [Profile 'ModelRelief Production']...
+
+    Solver
+        Runtime error does not propagate back to UI.
 
     Explorer
         The UI layout has changed. The Process button is not visible.
@@ -69,17 +78,17 @@ WebGL supports WEBGL_depth_texture functionality by default.
             https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
             https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
 
-    Refactore empty <returns></returns> in *.cs.
+    Refactor empty <returns></returns> in *.cs.
 
 #### Refactoring
     Review all casing of files and directories.
-    Resolve ToDo markers.
+    Resolve WIP markers.
     Tools -> bin
 
 ### Security
-    Remove phone numnber: special/1
     Remove all secure secrets.
         public static string DevelopmentUserId
+
     Should the password grant (https://modelrelief.auth0.com/oauth/token) be disabled?
 
 #### Test
@@ -98,18 +107,17 @@ WebGL supports WEBGL_depth_texture functionality by default.
         pyamg warning
             pyamg/gallery/stencil.py:110: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
             diags[s] = 0
+        (Hidden) DepthBufferView and NormalMapView
 
     Remove References
         Windows
         backslashes
-        IIS
-        conda
         SQLServer?
         Docker
         NuGet.config
         Properties folders?
             PublishProfiles
-        Migrations
+        Jupyter notebooks?
 
 #### License
     Replace copyright headers with MIT license notice.
@@ -118,38 +126,26 @@ WebGL supports WEBGL_depth_texture functionality by default.
     source ./linux/NginxEnvironment.sh
 
     (Windows)
-        Start Chrome using https://localhost:5001.
+        Start browser using https://localhost:5001.
 
 #### Today
 
     publish
-        Elevated permissions are required in Builder deploy to delete /var/www.
+        Elevated permissions are required in Builder to deploy to delete /var/www.
 
     nginx
-        Create a new sudo account ('admin') from which to manage nginx.
-            sudo adduser nginxadmin
-            sudo usermod -a -G sudo nginxadmin
-            sudo userdel -r nginxadmin
+        Administration
+            Create a new sudo account ('admin') from which to manage nginx.
+                sudo adduser nginxadmin
+                sudo usermod -a -G sudo nginxadmin
 
+        Debugging
+            What is the best practice to debug a production instance?
+                Add additional logging output.
 
     How can Python binary extensions be resolved (e.g. sys, time)?
 
     Add a cookie policy to _CookieConsentPartial.cshtml.
-
-    IIS localHOST
-        N.B. Are these actually <Production> configuration issues?
-
-        Cookies
-            Permission cannot be dismissed. It is always displayed.
-        Login
-            Login may require deletion of local cookies.
-            After login, there is an endless loop with Auth0.
-                Is this an issue with localhost?
-                It may be related to SSL. The same behavior can be seen in VSCode when the port is 5000 (rather than 5001).
-                    launch.json: "args": "/C start http://localhost:5001/"
-        Debugging
-            What is the best practice to debug a production IIS instance?
-                Add additional logging output.
 
     Review all mesh generation settings for delivered models.
         Attenuation Decay.
@@ -208,6 +204,9 @@ WebGL supports WEBGL_depth_texture functionality by default.
         Build
             Build/BuildPythonEnvironment.sh Development
             python Build/Builder.py --target local
+
+        Test
+            python Tools/testrunner.py
 
         nginx
             https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
@@ -318,20 +317,8 @@ WebGL supports WEBGL_depth_texture functionality by default.
 ### Short Term
 
 #### Database
-    Does the database "unable to connect" message always appear at startup?
-        It is also seen in the local IIS instance.
-        Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
 
     Update database schema diagram.
-
-#### IIS
-    Local
-        Why can't cookies be set? The cookie consent dialog continues to open.
-
-    Alpha
-        Why does the IIS build fail on Alpha with privilege errors deleting the Publish folder?
-        Why were there intermittent runtime errors at startup?
-            Could these be Azure service errors accessing the key-value vault?
 
 #### NormalMaps
     It appears that NormalMap gradients lose some high frequency detail.
@@ -508,12 +495,10 @@ WebGL supports WEBGL_depth_texture functionality by default.
 
 ### Test Checklist
     Test Checklist
-        Visual Studio
-            IIS Express launch
         testrunner (XUnit)          python Tools\testrunner.py
         Builder
             Development             python.exe Build\Builder.py --target local
-             IIS                    python.exe Build\builder.py --target IIS --deploy True
+             Nginx                  python.exe Build\builder.py --target nginx --deploy True
             Docker                  python.exe Build\builder.py --target Docker
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
@@ -1240,9 +1225,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Optimize BoundingBox procesing.
 
-    Profiling
-        Install additional IIS components?
-
     Memory management!
         https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 
@@ -1889,32 +1871,17 @@ https://semver.npmjs.com/
         N.B. Database access is provided through the 'modelrelief' login (not SA).
             The ModelReliefProduction database has a 'modelrelief' user which has read/write privileges to the database.
 
-#### IIS Configuration
-    https://stackify.com/how-to-deploy-asp-net-core-to-iis/
-
-    Build Site
-        python Build\Builder.py --deploy --target IIS
-
-    Install .NET Core 2.2 Runtime & Hosting Bundle for Windows (v2.2.1) [or whatever .NET Core version is required].
-        https://dotnet.microsoft.com/download/dotnet-core/2.2
-
-    Modify C:\Windows\System32\inetsrv\Config\ApplicationHost.config to allow modules and handlers to be modified in web.config.
-
-    See OneNote notebook on IIS and A2 Hosting.
-
 #### Publish and Deploy
-    Environment variables must be set in web.config.
-        web.config.production is the seed file that is copied to the IIS folder.
-        https://www.andrecarlucci.com/en/setting-environment-variables-for-asp-net-core-when-publishing-on-iis/
+    Environment variables must be set.
         (?) ASPNETCORE_ENVIRONMENT      Production
         PATH                            C:\modelrelief\mrenv
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
 
-        The secure (HTTPS, MRPortSecure) and insecure (HTTP, MRPort) ports must be configured.
-            These are set in appSettings.ProductionIIS.json as the settings URLS and HTTPS_PORT.
-            https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#require-https
-            The secure port where the client is redirected (typically, 443 in production and 5001 in development).
-            The insecure port (typically, 80 in production and 5000 in development).
+        The insecure and secure  ports must be configured.
+                (insecure) HTTP, MRPort
+                    The insecure port (typically, 80 in production and 5000 in development).
+                (secure):  MRPortSecure
+                    The secure port where the client is redirected (typically, 443 in production and 5001 in development).
 
     azurekeyvault.json must be copied to the root folder.
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
@@ -1946,53 +1913,6 @@ https://semver.npmjs.com/
             The users folder is used to hold the user file system.
             When SQLite is configured, the database file is stored in store/<environment>/database.
             Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
-
-        SQLServer Notes
-            Local IIS
-                The database is located here: C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
-                Using SQL Server Management Studio (sa account):
-                    1) Delete the existing database.
-                    2) Copy the updated database from the User folder (e.g. C:\Users\Steve Knipmeyer) into C:\Program Files\Microsoft SQL Server\MSSQL14.SQLEXPRESS\MSSQL\DATA.
-                    3) Attach the updated ModelReliefProduction.db.
-
-            A2 Hosting
-                1) Using SSMS log in using the 'sa' account and Delete the database.
-                   It is imperative to use the 'sa' account as neither 'modelrelief' nor 'modelrel_sa' have sufficient privileges to delete the database.
-                2) From the Plesk Control Panel, create a new ModelReliefProduction database.
-                3) A2 Hosting uses SQL Server 2016 (not SQL Server 2017) so the database must be imported using Import Dump from the Plesk Control Panel.
-                   SQL Server LocalDb (2016), the development SQL Server, is used to export the database to a backup file, ModelReliefProduction.bak.
-                   Then the database is "restored" using Import Dump from the Plesk control panel.
-                   See the steps in One Note:ModelRelief:A2 Hosting:Import Dump.
-
-            Local IIS Only(?)
-                1) Security->Logins add a UserMapping for the modelrelief login to the ModelReliefProduction database.
-                2) From Databases->ModelReliefProduction->Security->Users give the modelrelief user the necessary privileges:
-                    db_backupoperator
-                    db_datareader
-                    db_datawriter
-                    db_ddladmin
-
-    Updating the mrenv requirements.production.txt
-        conda list --export > <requirements.production.txt>
-
-    N.B. The Windows Universal C runtime <debug> library (ucrtbased.dll) is required by the Python C++ extension module relief.
-        relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd
-            Why does the relief build include the debug DLL as a dependency? The build output from builder.py shows Release.
-            The Dependencies tool https://github.com/lucasg/Dependencies was used to determine that ucrtbased.dll was not found.
-                DependenciesGui "C:\Inetpub\vhosts\modelrelief.com\httpdocs\mrenv\Lib\site-packages\relief-0.1-py3.6-win-amd64.egg\relief.cp36-win_amd64.pyd"
-            To test set up a context similar to how IIS will run:
-                cd C:\Inetpub\vhosts\modelrelief.com\httpdocs
-                set path=%path%;.\mrenv
-                python.exe
-                    import relief
-
-        To resolve the ucrtbase.dll must be in the path so Windows can load the DLL.
-        Possible solutions:
-            Manually copy ucrtbased.dll (from the build computer) into C:\Inetpub\vhosts\modelrelief.com\httpdocs\mrenv.
-            Package ucrtbased.dll into the ModelRelief Publish distribution by copying from C:\Windowws\System32.
-            Determine why the python build process is creating a debug DLL dependency.
-            Determine why the build computer has ucrtbased.dll in C:\windows\system32 but the production server does not.
-                Is this related to how Visual Studio was installed on the development machine?
 
 #### Jupyter
     Notebook confguration
@@ -2042,13 +1962,10 @@ np_fill, relief_fill
 
 #### HTTPSRedirection
     HttpsRedirection
-        It does not work on IIS Production and Development.
-        It does work for IIS Express and Production.
         app.UseHttpsRedirection leads to Xunit test failure.
             Development disables HttpsRedirection to support XUnit.
 
 #### HTTP/HTTPS
-    IIS Production does not respond on HTTP 6000.
     Development cannot set a cookie on HTTP 5000.
 
 #### Auth0
@@ -2091,7 +2008,7 @@ np_fill, relief_fill
 
 #### Pyamg
     https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
-    This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed through Conda.
+    This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed.
     D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
         diag[s] = 0
 

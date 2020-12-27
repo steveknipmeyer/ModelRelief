@@ -14,7 +14,7 @@ export "PYTHONPATH=${MRPublish}Tools:${MRPublish}Solver:$PYTHONPATH"
 
 # Python environment
 echo "Activating Production Python environment"
-conda activate ${MRPublish}mrenv
+source activate ${MRPublish}mrenv
 
 # start Nginx web server as reverse proxy
 echo "Starting Nginx server"

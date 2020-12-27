@@ -65,10 +65,8 @@ namespace ModelRelief.Services.Jobs
             switch (machineName)
             {
                 default:
-                case "Lambda":
-                case "Vector":
                     // N.B. The path to the python executable is found through the system PATH.
-                    // Therefore, it is imperative that the path include the ModelRelief Python environment before any other python runtimes such as the base Anaconda path.
+                    // Therefore, it is imperative that the path include the ModelRelief Python environment before any other python runtimes.
                     return @"python";
             }
         }

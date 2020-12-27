@@ -47,9 +47,9 @@ namespace ModelRelief.Features.Home
         /// </summary>
         [Route("special/{id?}")]
         [HttpGet]
-        public IActionResult Phone()
+        public IActionResult Description()
         {
-            return Content("571 730 7138");
+            return Content("ModelRelief is a powerful tool to create a bas-relief (sculptural low relief) from a 3D model.");
         }
     }
 }

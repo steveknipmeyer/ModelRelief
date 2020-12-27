@@ -74,7 +74,6 @@ class Builder:
         self.settings_production = "appsettings.Production.json"
         self.settings_production_docker = "appsettings.ProductionDocker.json"
         self.settings_production_deploy = "appsettings.ProductionDeploy.json"
-        self.web_config = "web.config"
 
     def delete_folder (self, folder: str, confirm=False)->None:
         """
@@ -225,13 +224,6 @@ class Builder:
         """
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
         os.chdir(self.solution_path)
-
-        # ASP.NET Core Publish
-        self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_path)
-        Tools.exec("dotnet publish -c Release -o {}".format(self.publish_path))
-        self.logger.logInformation("\nUpdating web.config", Colors.Cyan)
-        Tools.copy_file(os.path.join(self.solution_path, self.web_config) + ".production", os.path.join(self.publish_path, self.web_config))
 
         # file exclusions
         self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)

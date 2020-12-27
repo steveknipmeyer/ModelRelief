@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     // Compiler
-    "target": "es5",
-    "lib": [ "es5", "es2015", "dom" ], // assume availability of these libraries
+    "target": "es6",
+    "lib": [ "es6", "es2015", "dom" ], // assume availability of these libraries
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
