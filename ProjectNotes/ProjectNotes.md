@@ -22,11 +22,6 @@ Move tslint.json to resolve configuration issue
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 
-    Refactor the assignment of composerMeshModel
-    "experimentalDecorators": true,
-
-    Gallery images are different sizes when page is reduced.
-
     Is there a .NET Standard 2.1 reference in the project>
 
     nginx
