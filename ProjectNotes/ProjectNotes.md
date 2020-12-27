@@ -2,8 +2,7 @@
 
 ## Tasks
 ## Commit Notes
-TypeScript emits ES6 (from ES5),
-Remove references to deprecated features (IIS, conda).
+Move tslint.json to resolve configuration issue
 
 #### Configuration
 
@@ -23,6 +22,7 @@ Remove references to deprecated features (IIS, conda).
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 
+    Refactor the assignment of composerMeshModel
     "experimentalDecorators": true,
 
     Gallery images are different sizes when page is reduced.
@@ -49,13 +49,9 @@ Remove references to deprecated features (IIS, conda).
         Why does the 1st mayavi install fail with a vtk module error?
             pip3 install mayavi
 
-    Update
-        NET Core 5.1
-            Endpoint routing
-        TypeScript
-            ES6 modules
+    NET Core 5.1
+        Endpoint routing
 
-    ModelRelief
         GlobalSuppression.cs
             [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
             [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]

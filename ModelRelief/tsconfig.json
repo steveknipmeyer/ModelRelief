@@ -13,6 +13,7 @@
 
     // Modules
     "module": "amd",                    // generate AMD (Asynchronous Module Definition code for modules
+                                        // N.B. Only AMD and System are supported alongside outfile.
     "moduleResolution": "node",         // include node_modules in search paths
     "traceResolution": false,           // show search paths when resolving modules
 
