@@ -69,8 +69,9 @@ namespace ModelRelief.Utility
                     NullValueHandling = NullValueHandling.Ignore,
                 };
 
-                // no quotes around object names
-                jsonWriter.QuoteName = false;
+                // quote object names for JSON.parse
+                jsonWriter.QuoteName = true;
+
                 serializer.Serialize(jsonWriter, value);
 
                 return new HtmlString(stringWriter.ToString());

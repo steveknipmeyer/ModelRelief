@@ -305,6 +305,11 @@
 
         </div>
     </div>
+
+    <div >
+        <!-- Mesh object for composer         -->
+        <span id="dtoMesh" hidden>@DataConversion.SerializeObject(Model)</span>
+    </div>
 </main>
 
 @section scripts {
@@ -317,7 +322,7 @@
     <!--                                    ModelRelief                                           -->
     <!--******************************************************************************************-->
     <script type="text/javascript">
-        var composerMeshModel = @DataConversion.SerializeObject(Model);
+        var composerMeshModel = JSON.parse(document.getElementById("dtoMesh").innerHTML);
     </script>
     <environment names="Development, Test">
         <script src="~/js/shaders.js"></script>
