@@ -164,15 +164,14 @@ class Builder:
 
         # Python virtual environment
         if self.arguments.python:
+            os.chdir(self.solution_path)
             if self.publish:
                 self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
                 os.makedirs(self.publish_path)
-                os.chdir(self.publish_path)
-                Tools.exec("BuildPythonEnvironment.sh Production")
+                Tools.exec(f"BuildPythonEnvironment.sh Production {os.path.join(self.publish_path, 'mrenv')}")
             else:
-                os.chdir(self.solution_path)
                 if not os.path.exists("devenv"):
-                    Tools.exec("BuildPythonEnvironment.sh Development")
+                    Tools.exec("BuildPythonEnvironment.sh Development devenv")
 
         # Python C++ extensions
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)
@@ -216,6 +215,11 @@ class Builder:
         """
         self.logger.logInformation("\n<Publish>", Colors.BrightCyan)
         os.chdir(self.solution_path)
+
+        # ASP.NET Core Publish
+        self.logger.logInformation("\nASP.NET Core Publish", Colors.BrightMagenta)
+        os.chdir(self.modelrelief_path)
+        Tools.exec("dotnet publish -c Release -o {}".format(self.publish_path))
 
         # file exclusions
         self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)

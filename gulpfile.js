@@ -20,7 +20,7 @@ var exec         = require('child_process').exec;
 var rename       = require('gulp-rename');
 var sourcemaps   = require('gulp-sourcemaps');
 var ts           = require('gulp-typescript');
-var uglify       = require('gulp-uglify');
+var uglify       = require('gulp-uglify-es').default;
 var pump         = require('pump');
 
 // Node.js
@@ -277,7 +277,10 @@ gulp.task('compressJS', function (callBack) {
             `${siteConfig.libRoot}chai/chai.js`
         ],
         {base: siteConfig.wwwRoot}),
-        uglify(),
+        uglify({
+            mangle: false,
+            ecma: 6
+        }),
         rename({ suffix: '.min' }),
         gulp.dest(siteConfig.wwwRoot)
       ],

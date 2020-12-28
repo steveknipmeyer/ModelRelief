@@ -1,11 +1,10 @@
 ﻿# ASP.NETCore Migration
 
-## Tasks
 ## Commit Notes
 
-#### Configuration
+Move to gulp-uglify-es for ES6 support
 
-#### Build
+### Build
     Prove with clean Ubuntu installation!
         Add a test account.
 
@@ -15,8 +14,6 @@
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
-
-    Is there a .NET Standard 2.1 reference in the project>
 
     nginx
         Host ASP.NET Core on Linux with Nginx | Microsoft Docs
@@ -38,23 +35,8 @@
         Why does the 1st mayavi install fail with a vtk module error?
             pip3 install mayavi
 
-    NET Core 5.1
-        Newtonsoft.Json -> System.Text.Json
-                https://stackoverflow.com/questions/57700678/how-do-you-read-a-simple-value-out-of-some-json-using-system-text-json#57700761
-                https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
-                https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
-
-#### Runtime
+### Runtime
     HttpsRedirection?
-
-    Configuration
-        Why does the Debug Console <in Development environment> show:
-            -------------------------------------------------------------------
-            You may only use the Microsoft .NET Core Debugger (vsdbg) with
-            Visual Studio Code, Visual Studio or Visual Studio for Mac software
-            to help you develop and test your applications.
-            -------------------------------------------------------------------
-            Using launch settings from '/home/stephen/projects/ModelRelief/ModelRelief/Properties/launchSettings.json' [Profile 'ModelRelief Production']...
 
     Solver
         Runtime error does not propagate back to UI.
@@ -62,9 +44,13 @@
     Explorer
         The UI layout has changed. The Process button is not visible.
 
+        qdarkstyle introduced several issues in a recent update.
+            There is clipping in the labels.
+            The font size of the image tabs is small.
+
         A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it
 
-#### Refactoring
+### Refactoring
     Review all casing of files and directories.
     Resolve WIP markers.
     Tools -> bin
@@ -78,9 +64,23 @@
             Move to a new settings file?
             How should the contact e-mail address be defined?
 
-#### Test
+### UI
+    Add landing page video.
 
-#### Project
+### Publishing
+    Host on Digital Ocean.
+    Notices:
+        3D CAD Jewelry
+            https://matrixusergroup.com/
+        CNC
+        ArtCAM
+        Vectrix
+        3D Printing
+        HackerNews
+
+### Test
+
+### Project
     Clean up git branches.
         https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
         master->Windows
@@ -106,15 +106,10 @@
         ModelRelief.dgml (Linux?)
         Jupyter notebooks?
         Matlab
+        *.bat files
 
-#### License
+### License
     Replace copyright headers with MIT license notice.
-
-### Linux Execution
-    source ./linux/NginxEnvironment.sh
-
-    (Windows)
-        Start browser using https://localhost:5001.
 
 #### Today
 
@@ -126,10 +121,12 @@
 
 #####  Linux Development
     Linux Setup
-        Install .Net Core 3.1 SDK
-        dotnet tool install --global dotnet-ef
+        .NET Core
+            Install .Net Core 3.1 SDK
+            dotnet tool install --global dotnet-ef
 
-        sudo apt install cmake
+        CMake
+            sudo apt install cmake
 
         git
             sudo apt install git
@@ -156,23 +153,21 @@
         NPM
             sudo apt install npm
             npm install
-
-        Gulp
             sudo npm install --global gulp-cli
-
-        Madge (TypeScript circular dependency tool)
             sudo npm install --global madge
 
         .NET Core
             https://docs.microsoft.com/en-us/dotnet/core/install/linux
-            Test command line build: 'dotnet build ModelRelief'
-
-        Runtime
-            Add azurekeyvault.json to ModelRelief project folder.
+            dotnet restore
+            dotnet build ModelRelief
 
         SQLite
             sudo apt-get install sqlite3 (if required)
             sudo apt-get install sqlitebrowser
+
+        Runtime
+            Add azurekeyvault.json to ModelRelief project folder.
+
 
         Build
             Build/BuildPythonEnvironment.sh Development
@@ -184,55 +179,15 @@
         nginx
             https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
 
+            source ./linux/NginxEnvironment.sh
             sudo service nginx start
 
-#### New Windows Computer Setup
-    Graphics Tools
-        Rhino3D
-        MeshLab
-    Set up a shortcut for ModelReliefShell.bat.
-    KeyTweak (Right Ctrl -> Context Menu)
-    Postman
-    Git
-    Notepad++
-    Sqlite 64-bit
-    SQLite Expert Personal
-    clink (Marin Rodgers) command shell extensions
-    Macrium Reflect
-    Visual Studio
-        Anaconda 64-bit
-        synchronize settings
-    VSCode
-       synchronize User Settings (Extensions, ketboard mapping, settings)
-    Node.js
-    NPM
-        npm install --global gulp-cli
-        npm install --global madge
-    Install .NET Core 2.2 SDK.
-    Add azurekeyvault.json to ModelRelief project folder.
-
-    From the solution root:
-        conda config --add channels conda-forge
-        npm install
-            Modify  C:\Program Files (x86)\Microsoft Visual Studio\Shared\Anaconda3_64\Library\bin\pyrcc5.bat  to wrap Python path in quotations.
-                @"C:/Program Files (x86)/Microsoft Visual Studio/Shared/Anaconda3_64\python.exe" -m PyQt5.pyrcc_main %1 %2 %3 %4 %5 %6 %7 %8 %9
-        BuildPythonEnvironment Development
-        dotnet restore
-        git submodule init
-        git submodule update
-
-        python.exe Build\Builder.py --target local
-
-#### General
-
-#### Composer
+            Start browser using https://localhost:5001.
 
 #### Privacy Page
     Add a Privacy page.
         The page exists populate it.
         https://auth0.com/docs/compliance/gdpr
-
-#### Credits Page
 
 #### Workflow Page
     Illustrate with images from Explorer!
@@ -244,14 +199,7 @@
         API
 
 #### Landing Page
-    Create thumbnail images of the test models.
-	    These will be delivered from the Delivery\images folder.
-
     Create a video or an animation?
-
-#### Auth0
-
-#### UI
 
 #### Models
         Lucy
@@ -277,14 +225,6 @@
             David
             https://archive3d.net/?category=31
 
-#### Publication
-    3D CAD Jewelry
-        https://matrixusergroup.com/
-    CNC
-    ArtCAM
-    Vectrix
-    3D Printing
-    HackerNews
 
 ### Short Term
 
@@ -771,14 +711,6 @@ Replace DateTime with a type that has more resolution.
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request.
 
-#### Python Build
-    https://developer.microsoft.com/en-us/windows/downloads/sdk-archive
-        10.0.15063.0
-    Python-3.6.6 source
-    Change Solution Configuration to Debug x64.
-    Change target architecture to Windows SDK 10.0.15063.0.
-    build -p x64 -e
-
 ###### Queues
 ```<language>
 FileRequest places a message in a work queue.
@@ -1197,8 +1129,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Memory management!
         https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec
 
-#### ASPNET Core
-
 #### VSCode Issues
     How can the C# style checker be manually run in VSCode?
         https://github.com/OmniSharp/omnisharp-vscode/issues/43
@@ -1208,9 +1138,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         Adding .env to the workspace root resolves the issue.
             PYTHONPATH=.
                 The causes the entire OS env PYTHONPATH to be added to the search path.
-
-    Why is the Python refactoring so slow?
-        "Refactoring library rope is not installed. Install?"
 
     Investigate workspaces in VSCode.
         Why is the second workspace unnamed?
@@ -1592,10 +1519,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         It binds a database <model> looked up from the incoming Id.
 
 #### ASPNET Core Environment Variables
-Environment variables set in the Visual Studio launchSettings.json **override** environment variables set in the shell.
-The Visual Studio Debug project settings for Environment variables **writes through** to launchSettings.json. They are *identical*.
-
-The XUnit tests cannot be run withany required prompts for user verification because *the console is not displayed*.
+The XUnit tests cannot be run with any required prompts for user verification because *the console is not displayed*.
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
 
 #### C#
@@ -1608,6 +1532,12 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
         // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
         var method = typeof(ValidatedHandler<TRequest, TResponse>).GetMethod(nameof(ModelExistsAsync)).MakeGenericMethod(referenceType);
         var modelExists = await (Task<bool>)method.Invoke(this, new object[] {claimsPrincipal, (int) propertyValue});
+
+#### NET Core 5.1
+    Newtonsoft.Json -> System.Text.Json
+            https://stackoverflow.com/questions/57700678/how-do-you-read-a-simple-value-out-of-some-json-using-system-text-json#57700761
+            https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
+            https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
 
 #### NPM Package Manager
 https://semver.npmjs.com/
@@ -1799,11 +1729,6 @@ np_fill, relief_fill
         Move ModelRelief\Test.
             Add Postman tests to source code control.
 
-#### Explorer
-    qdarkstyle introduced several issues in a recent update.
-        There is clipping in the labels.
-        The font size of the image tabs is small.
-
 #### Swagger
     API authentication must include  the type "Bearer":
 
@@ -1818,14 +1743,6 @@ np_fill, relief_fill
     This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed.
     devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
         diag[s] = 0
-
-#### NPM
-    https://github.com/felixrieseberg/npm-windows-upgrade
-
-#### VSCode Settings Synchronization
-GitHub Token: d242687a4ed2e25c95fc479f1b06a0a72a021c39
-GitHub Gist: 4f93e06d28b5712f01903d42aba07a41
-GitHub Gist Type: Secret
 
 #### Browser-Sync
 https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943

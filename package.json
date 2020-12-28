@@ -7,7 +7,6 @@
     "url": "https://github.com/steveknipmeyer/ModelRelief.git"
   },
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/dat.gui": "^0.7.2",
@@ -34,7 +33,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-typescript": "^3.2.1",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify-es": "^2.0.0",
     "inherits": "^2.0.3",
     "is-fullwidth-code-point": "^1.0.0",
     "jquery": "3.2.1",
@@ -71,5 +70,6 @@
     "tsc": "tsc"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }

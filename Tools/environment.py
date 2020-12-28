@@ -48,7 +48,6 @@ class EnvironmentNames:
 class RuntimeEnvironment(Enum):
     """ ASPNETCORE_ENVIRONMENT """
     development = 'Development'
-    test = 'Test'
     production = 'Production'
 
     def __str__(self):
