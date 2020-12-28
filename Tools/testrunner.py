@@ -41,7 +41,7 @@ class TestRunner:
         Parameters
         ----------
         database
-            The database provider (SQLServer | SQLite)
+            The database provider (SQLite | TBD)
         """
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
 
@@ -56,7 +56,7 @@ class TestRunner:
         Parameters
         ----------
         database
-            The database provider (SQLServer | SQLite)
+            The database provider (SQLite | TBD)
         """
         baseline = BaseLine(self.logger, database)
         baseline.create_baseline_database()
@@ -68,7 +68,7 @@ class TestRunner:
         Parameters
         ----------
         database
-            The database provider (SQLServer | SQLite)
+            The database provider (SQLite | TBD)
         """
         self.logger.logInformation("\nBegin test execution for {}".format(database), Colors.BrightGreen)
 
@@ -102,7 +102,6 @@ class TestRunner:
         self.environment.push()
 
         # database
-        # databases = ["SQLite", "SQLServer"]
         databases = ["SQLite"]
         for database in databases:
 

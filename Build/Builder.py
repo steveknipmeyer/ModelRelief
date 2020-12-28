@@ -201,12 +201,6 @@ class Builder:
             database_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlite.value)
             database_files = ['ModelReliefProduction.db']
             database_path = self.environment.sqlite_path
-        # SQLServer
-        elif database == DatabaseProvider.sqlserver.value:
-            self.logger.logInformation("\nSQLServer database", Colors.BrightMagenta)
-            database_publish_path = self.environment.database_relative_path(DatabaseProvider.sqlserver.value)
-            database_files = ['ModelReliefProduction.mdf', 'ModelReliefProduction_log.ldf']
-            database_path = self.environment.sqlserver_path
         else:
             self.logger.logError("Invalid MRDatabaseProvider", Colors.Red)
             return

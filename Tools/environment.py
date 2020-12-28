@@ -56,7 +56,6 @@ class RuntimeEnvironment(Enum):
 
 class DatabaseProvider(Enum):
     """ Database providers. """
-    sqlserver = 'SQLServer'
     sqlite = 'SQLite'
 
     def __str__(self):
@@ -95,13 +94,6 @@ class Environment:
         """
         return os.path.join(os.environ[EnvironmentNames.MR], self.database_relative_path(DatabaseProvider.sqlite.value))
 
-    @property
-    def sqlserver_path(self):
-        """
-        Returns the path of the SQLServer folder.
-        """
-        return '/var/opt/mssql/data'
-
     def show (self, color=Colors.Magenta):
         """
         Displays the environment table.
@@ -135,7 +127,7 @@ class Environment:
         Parameters
         ----------
         provider
-            The database provider (SQLServer, SQLite)
+            The database provider (SQLite | TBD)
         """
         provider = provider if provider else os.environ[EnvironmentNames.MRDatabaseProvider]
 

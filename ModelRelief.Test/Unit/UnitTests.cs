@@ -44,14 +44,9 @@ namespace ModelRelief.Test.Unit
             switch (database)
             {
                 case RelationalDatabaseProvider.SQLite:
+                default:
                     optionsBuilder = new DbContextOptionsBuilder()
                                             .UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite));
-                    break;
-
-                default:
-                case RelationalDatabaseProvider.SQLServer:
-                    optionsBuilder = new DbContextOptionsBuilder()
-                                            .UseSqlServer(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer));
                     break;
             }
             DbContext = new ModelReliefDbContext(optionsBuilder.Options);

@@ -175,18 +175,8 @@ namespace ModelRelief.Services
             switch (configurationProvider.Database)
             {
                 case RelationalDatabaseProvider.SQLite:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
-                    break;
-
-                case RelationalDatabaseProvider.SQLServer:
                 default:
-                    var connectionString = configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
-
-                    // replace credentionals if production placeholder 'Credentials:SQLServer' present; NOT Trusted_Connection=True
-                    var credentialSetting = ConfigurationSettings.CredentialsSQLServer;
-                    connectionString = connectionString.Replace(credentialSetting, configurationProvider.GetSetting(credentialSetting));
-
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlServer(connectionString));
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
                     break;
             }
         }

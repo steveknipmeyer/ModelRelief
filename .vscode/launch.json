@@ -54,7 +54,6 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                // "MRDatabaseProvider": "SQLServer",
                 "MRDatabaseProvider": "SQLite",
                 "MRUpdateSeedData": "False",
                 "MRInitializeDatabase": "True",

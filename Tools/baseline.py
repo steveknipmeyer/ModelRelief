@@ -44,10 +44,9 @@ class BaseLine:
         """
         print (Colors.Magenta)
         print("SQLite path = %s" % self.environment.sqlite_path)
-        print("SQLServer path = %s" % self.environment.sqlserver_path)
         print (Colors.Reset)
 
-    def create_baseline_database (self): 
+    def create_baseline_database (self):
         """
             Creates the baseline test database by copying the primary test database.
         """
@@ -60,13 +59,6 @@ class BaseLine:
             file_list = [
                 ("ModelReliefDevelopment.db", "ModelReliefBaseline.db")
             ]
-        elif self.database == "SQLServer":
-            database_folder = self.environment.sqlserver_path
-            file_list = [
-                ("ModelReliefDevelopment.mdf",     "ModelReliefBaseline.mdf"),
-                ("ModelReliefDevelopment_log.ldf", "ModelReliefBaseline_log.ldf")
-            ]
-            time.sleep(5)
         else:
             self.logger.logError("invalid database: %s" % self.database)
             return
@@ -78,5 +70,5 @@ class BaseLine:
                 Tools.copy_file(source_file, destination_file)
             except IOError as ex:
                 self.logger.logError("Error copying {} to {}: {}".format(source_file, destination_file, ex))
-        
+
         self.logger.logInformation ("Baseline created for %s." % self.database, Colors.BrightBlue)

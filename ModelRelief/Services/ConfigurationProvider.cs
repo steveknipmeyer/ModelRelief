@@ -93,12 +93,12 @@ namespace ModelRelief.Services
         /// <returns></returns>
         public static RelationalDatabaseProvider DatabaseFromSetting(string databaseProvider)
         {
-            var provider = (databaseProvider ?? ConfigurationSettings.SQLServer).ToLower();
+            var provider = (databaseProvider ?? ConfigurationSettings.SQLite).ToLower();
 
             if (string.Equals(provider, ConfigurationSettings.SQLite.ToLower()))
                 return RelationalDatabaseProvider.SQLite;
 
-            return RelationalDatabaseProvider.SQLServer;
+            return RelationalDatabaseProvider.SQLite;
         }
     }
 
@@ -119,11 +119,7 @@ namespace ModelRelief.Services
         public const string MRExitAferInitialization    = "MRExitAfterInitialization";
 
         // database providers
-        public const string SQLServer = "SQLServer";
-        public const string SQLite    = "SQLite";
-
-        // Credentials
-        public const string CredentialsSQLServer = "Credentials:SQLServer";
+        public const string SQLite = "SQLite";
     }
 
     /// <summary>
@@ -145,7 +141,6 @@ namespace ModelRelief.Services
     public enum RelationalDatabaseProvider
     {
         None,
-        SQLServer,
         SQLite,
     }
 }

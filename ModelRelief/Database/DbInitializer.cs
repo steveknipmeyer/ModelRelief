@@ -112,50 +112,13 @@ namespace ModelRelief.Database
         /// </summary>
         private bool EnsureServerInitialized()
         {
-            string connectionString;
             switch (ConfigurationProvider.Database)
             {
+                default:
                 case RelationalDatabaseProvider.SQLite:
                     Directory.CreateDirectory(SqlitePath);
                     return true;
-
-                default:
-                case RelationalDatabaseProvider.SQLServer:
-                    connectionString = ConfigurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLServer);
-                    // N.B. The database may not have been created yet.
-                    // Here we are only trying to establish the server is running so remove the Database setting.
-                    var regex = new Regex(@";Database=[\w+]*");
-                    connectionString = regex.Replace(connectionString, string.Empty);
-                    break;
             }
-
-            var maximumAttempts = 10;
-            var secondsBetweenAttempts = 2;
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            for (int attempt = 0; attempt < maximumAttempts; attempt++)
-            {
-                try
-                {
-                    using (var connection = new System.Data.SqlClient.SqlConnection(connectionString))
-                    {
-                        connection.Open();
-                        connection.Close();
-                        Logger.LogInformation($"EnsureServerRunning: The SQLServer is now available.");
-                        return true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    {
-                        Logger.LogWarning($"EnsureServerInitialized: server connection failed: {ex.Message}.");
-                    }
-                }
-                Thread.Sleep(secondsBetweenAttempts * 1000);
-            }
-            // WIP: What handling is needed if the server cannot be reached?
-            Logger.LogError($"The database connection could not be opened after {maximumAttempts} attempts to reach the server.");
-            return false;
         }
 
         /// <summary>
@@ -208,19 +171,6 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Shuts down SQL Server
-        /// </summary>
-        /// <returns>True if successful.</returns>
-        private bool StopSQLServer()
-        {
-            Logger.LogWarning("Shutting down SQLServer to copy database ...");
-            var result = DbContext.Database.ExecuteSqlRaw("SHUTDOWN");
-            Logger.LogWarning($"SQLServer shutdown complete.");
-
-            return true;
-        }
-
-        /// <summary>
         /// Synchronizes the test database with the baseline copy.
         /// </summary>
         /// <param name="restore">Restore from baseline (versus create baseline).</param>
@@ -232,22 +182,13 @@ namespace ModelRelief.Database
             Logger.LogInformation($"SynchronizeDatabase {ConfigurationProvider.Database} : restore = {restore}");
             switch (ConfigurationProvider.Database)
             {
+                default:
                 case RelationalDatabaseProvider.SQLite:
                     databaseFolder = SqlitePath;
                     Directory.CreateDirectory(databaseFolder);
                     fileList = new Dictionary<string, string>
                     {
                         { "ModelReliefBaseline.db",     "ModelReliefDevelopment.db" },
-                    };
-                    break;
-
-                case RelationalDatabaseProvider.SQLServer:
-                default:
-                    databaseFolder = Environment.ExpandEnvironmentVariables("%USERPROFILE%");
-                    fileList = new Dictionary<string, string>
-                    {
-                        { "ModelReliefBaseline.mdf",     "ModelReliefDevelopment.mdf" },
-                        { "ModelReliefBaseline_log.ldf", "ModelReliefDevelopment_log.ldf" },
                     };
                     break;
             }
@@ -360,11 +301,6 @@ namespace ModelRelief.Database
                 DbContext.SaveChanges();
                 switch (ConfigurationProvider.Database)
                 {
-                    case RelationalDatabaseProvider.SQLServer:
-                        // N.B. SQLServer holds a lock on the files. Shut it down to allow coping the physical files.
-                        StopSQLServer();
-                        break;
-
                     default:
                     case RelationalDatabaseProvider.SQLite:
                         break;
