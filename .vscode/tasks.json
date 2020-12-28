@@ -125,6 +125,24 @@
             ]
         },
 
+        // ------------------------------------------------ Test  -----------------------------------------------------//
+        {
+            // Output panel (XUnit Test Explorer UI)
+            // https://github.com/microsoft/vscode-go/issues/2003
+            "label": "testrunner",
+            "type": "shell",
+            "command": "python Tools/testrunner.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+
         // ------------------------------------------------ Utility -----------------------------------------------------//
         {
             "label": "gulp serve",

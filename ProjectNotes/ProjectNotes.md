@@ -2,7 +2,6 @@
 
 ## Tasks
 ## Commit Notes
-Move tslint.json to resolve configuration issue
 
 #### Configuration
 
@@ -12,11 +11,6 @@ Move tslint.json to resolve configuration issue
 
     WebGL2 Support
         https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
-
-        WebGL Feedback Loop
-            WebGL warning: drawArraysInstanced: Texture level 0 would be read by TEXTURE_2D unit 0, but written by framebuffer attachment DEPTH_ATTACHMENT, which would be illegal feedback. three.js:11548:7
-            https://stackoverflowcom/questions/62074822/webgl-feedback-loop-formed-between-framebuffer-and-active-texture)
-            https://stackoverflow.com/questions/57508011/feedback-loop-three-js
 
         shaders
             GLSL 300 es
@@ -45,8 +39,6 @@ Move tslint.json to resolve configuration issue
             pip3 install mayavi
 
     NET Core 5.1
-        Endpoint routing
-
         GlobalSuppression.cs
             [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1629:Documentation text should end with a period.", Justification = "<Reviewed>")]
             [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1636:File header copyright text must match.", Justification = "<Reviewed>")]
@@ -54,6 +46,11 @@ Move tslint.json to resolve configuration issue
         Microsoft.CodeAnalysis
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
             /home/stephen/projects/ModelRelief/ModelRelief/ModelRelief.csproj : error NU1608: Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Workspaces.Common 2.8.0 requires Microsoft.CodeAnalysis.Common (= 2.8.0) but version Microsoft.CodeAnalysis.Common 3.8.0 was resolved.
+
+        Newtonsoft.Json -> System.Text.Json
+                https://stackoverflow.com/questions/57700678/how-do-you-read-a-simple-value-out-of-some-json-using-system-text-json#57700761
+                https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
+                https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
 
 #### Runtime
     HttpsRedirection?
@@ -73,24 +70,20 @@ Move tslint.json to resolve configuration issue
     Explorer
         The UI layout has changed. The Process button is not visible.
 
-        A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it.
-
-    Newtonsoft.Json -> System.Text.Json
-            https://stackoverflow.com/questions/57700678/how-do-you-read-a-simple-value-out-of-some-json-using-system-text-json#57700761
-            https://josef.codes/custom-dictionary-string-object-jsonconverter-for-system-text-json/
-            https://dotnetcoretutorials.com/2019/12/19/using-newtonsoft-json-in-net-core-3-projects/
+        A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it
 
 #### Refactoring
     Review all casing of files and directories.
     Resolve WIP markers.
     Tools -> bin
     Refactor empty <returns></returns> in *.cs.
+    <return> vs <returns>
 
 ### Security
-    Remove all secure secrets.
-        public static string DevelopmentUserId
-
-    Should the password grant (https://modelrelief.auth0.com/oauth/token) be disabled?
+    Azure Key Secrets
+        Review settings in AzureKeyVault.
+        Mock azurekeysecrets.json.
+            How should the contact e-mail address be defined?
 
 #### Test
 

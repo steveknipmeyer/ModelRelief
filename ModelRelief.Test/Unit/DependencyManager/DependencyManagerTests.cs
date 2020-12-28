@@ -14,8 +14,10 @@ namespace ModelRelief.Test.Unit.DependencyManager
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using ModelRelief.Domain;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Settings;
     using ModelRelief.Utility;
     using Xunit;
 
@@ -44,12 +46,15 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// <returns></returns>
         private async Task<List<DomainModel>> FindDependentModels(Type rootType, int rootPrimaryKey)
         {
+            var accounts = this.ClassFixture.ServerFramework.Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+            var developmentAccount = new ApplicationUser(accounts.Development.NameIdentifier, accounts.Development.Name);
+
             var rootModel = DbContext.Models
                             .Where(m => (m.Id == rootPrimaryKey))
                             .FirstOrDefault();
 
             var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
-            var dependentModels = await Manager.FindDependentModels(IdentityUtility.DevelopmentUserId, rootType, rootPrimaryKey, dependentTypes);
+            var dependentModels = await Manager.FindDependentModels(developmentAccount.Id, rootType, rootPrimaryKey, dependentTypes);
 
             return dependentModels;
         }

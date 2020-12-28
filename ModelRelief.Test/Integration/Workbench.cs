@@ -32,7 +32,7 @@ namespace ModelRelief.Test.Integration
             await Task.CompletedTask;
 
             // Assert
-            Assert.True(1 == 1);
+            Assert.True(true);
         }
     }
 }
