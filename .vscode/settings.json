@@ -42,6 +42,9 @@
             "**/node_modules": true,
             "**/Publish": true,
             "**/[Ww]ork*/**/*": true,
-            "**/wwwroot/**/*": true
+            "**/wwwroot/**/*": true,
+            "**/lib/**/*": true,
+            "**/Notebooks/**/*": true,
+            "**/MATLAB/**/*": true,
         },
 }

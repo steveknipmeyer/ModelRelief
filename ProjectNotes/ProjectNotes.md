@@ -86,6 +86,7 @@
     Add OneNote ModelRelief notebook.
     Review ProjectNotes
         Check lists ([])
+        Remove backslashes.
     Documentation
         Document VcXsrv
         AzureKeyVault
@@ -99,7 +100,6 @@
     Remove References
         SQLServer?
         Docker
-        backslashes
         ModelRelief.dgml (Linux?)
         Jupyter notebooks?
         Matlab
@@ -1223,12 +1223,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             dotnet run
             gulp serve (automatic TypeScript/reload)
             VSCode Profile: .NET Core Attach
-                Edit launch.json to set processId!
-
-                https://github.com/OmniSharp/omnisharp-vscode/issues/897
-                An error happens running the command below. It should open a UI to pick the process.
-                    D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief>wmic process get Name,ProcessId,CommandLine
-                    Invalid XML content.
 
     VSCode Profile: .Net Core With FE Debugging in VSCode
         FE: VSCode   BE: VSCode  TypeScript: DNW  Reload: DNW
@@ -1329,46 +1323,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 |user|~/.config/git/config|
 |project|.git/config||.git\config
 
-    Investigate Git large file storage.
-        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief>git push
-        Counting objects: 82, done.
-        Delta compression using up to 12 threads.
-        Compressing objects: 100% (61/61), done.
-        Writing objects: 100% (82/82), 45.99 MiB | 1.78 MiB/s, done.
-        Total 82 (delta 34), reused 0 (delta 0)
-        remote: Resolving deltas: 100% (34/34), completed with 12 local objects.
-        remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
-        remote: warning: See http://git.io/iEPt8g for more information.
-        remote: warning: File ModelRelief/Test/Data/Users/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-        remote: warning: File ModelRelief/Test/Data/Users/models/statue/statue.obj is 89.36 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-        To https://github.com/steveknipmeyer/ModelRelief.git
-        effd8c2..a3274da  master -> master
-
-###### git submodules
-    http://www.vogella.com/tutorials/GitSubmodules/article.html
-    https://git-scm.com/book/en/v2/Git-Tools-Submodules
-
-    (Development) D:\ModelRelief\Relief\lib>git submodule add -b master https://github.com/pybind/pybind11.git
-    Cloning into 'D:/ModelRelief/Relief/lib/pybind11'...
-    remote: Counting objects: 10102, done.
-    remote: Total 10102 (delta 0), reused 0 (delta 0), pack-reused 10102
-    Receiving objects: 100% (10102/10102), 3.67 MiB | 6.00 MiB/s, done.
-    Resolving deltas: 100% (6820/6820), done.
-    warning: LF will be replaced by CRLF in .gitmodules.
-    The file will have its original line endings in your working directory.
-
-    git submodule init
-    git submodule update
-        stephen@alpha-VirtualBox:~/ModelRelief$ git submodule init
-        Submodule 'Relief/lib/Catch2' (https://github.com/catchorg/Catch2.git) registered for path 'Relief/lib/Catch2'
-        Submodule 'Relief/lib/pybind11' (https://github.com/pybind/pybind11.git) registered for path 'Relief/lib/pybind11'
-        stephen@alpha-VirtualBox:~/ModelRelief$ git submodule update
-        Cloning into '/home/stephen/ModelRelief/Relief/lib/Catch2'...
-        Cloning into '/home/stephen/ModelRelief/Relief/lib/pybind11'...
-        Submodule path 'Relief/lib/Catch2': checked out '60b05b20413afe4ad9980e627862474a9b8ba4cd'
-        Submodule path 'Relief/lib/pybind11': checked out '435dbdd114d135712a8a3b68eb9e640756ffe73b'
-
-###### git branch
 
 #### TypeScript
     TypeScript Installations
@@ -1682,10 +1636,8 @@ https://semver.npmjs.com/
     npm install --global --production npm-windows-upgrade
 
 #### Adding a New Test Model
-    Add the 3D model to D:\Users\Steve Knipmeyer\Documents\Development\ModelRelief\Models.
-
     Create a new folder in the source location for test models.
-        D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\Test\Data\Users\models
+        ModelRelief/Test/Data/Users/models
     Add the .OBJ and the material file .mtl.
 
     Update DbInitializer:
@@ -1933,7 +1885,7 @@ np_fill, relief_fill
 #### Pyamg
     https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
     This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed.
-    D:\ModelRelief\devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+    devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
         diag[s] = 0
 
 #### NPM

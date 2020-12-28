@@ -16,7 +16,7 @@ namespace ModelRelief.Test
     public class Utility
     {
         /// <summary>
-        /// Returns a byte array from a file. The file must exist in Test\Data\Files.
+        /// Returns a byte array from a file. The file must exist in Test/Data/Files.
         /// </summary>
         /// <param name="fileName">File to read.</param>
         /// <returns></returns>
@@ -32,7 +32,7 @@ namespace ModelRelief.Test
         }
 
         /// <summary>
-        /// Returns a float list from a file. The file must exist in Test\Data\Files.
+        /// Returns a float list from a file. The file must exist in Test/Data/Files.
         /// </summary>
         /// <param name="fileName">File to read.</param>
         public static List<float> FloatListFromFile(string fileName)

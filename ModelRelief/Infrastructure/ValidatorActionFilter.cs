@@ -39,7 +39,7 @@ namespace ModelRelief.Infrastructure
             switch (filterContext.HttpContext.Request.Method)
             {
                 // The model-binding validation failed on GET request such as Details.Query.
-                // Example: The id parameter is null (e.g. meshes\details)
+                // Example: The id parameter is null (e.g. meshes/details)
                 case "GET":
                 {
                     var result = new BadRequestResult();
@@ -60,7 +60,7 @@ namespace ModelRelief.Infrastructure
 #if true
                     filterContext.Result = new ViewResult();
 #else
-                    // This is the case where the request did not originate from a View - misdirected API request?    
+                    // This is the case where the request did not originate from a View - misdirected API request?
                     var result = new ContentResult();
                     string content = JsonConvert.SerializeObject(filterContext.ModelState,
                         new JsonSerializerSettings

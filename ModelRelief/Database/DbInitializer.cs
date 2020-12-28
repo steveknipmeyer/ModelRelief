@@ -1001,10 +1001,10 @@ namespace ModelRelief.Database
             // Test user provides the source of the data files
             var developmentUser = GetDevelopmentUser();
 
-            // Source = D:\ModelRelief\ModelRelief\store\test\users\7ab4676b-563b-4c42-b6f9-27c11208f33f\depthbuffers
+            // Source: e.g. ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers
             var rootSourceFolderPath = Path.GetFullPath($"{StoreUsersPath}{developmentUser.Id}/{ConfigurationProvider.GetSetting(folderType)}");
 
-            // Destination = D:\ModelRelief\ModelRelief\Test\Data\Users\depthbuffers
+            // Destination: ModelRelief/Test/Data/Users/depthbuffers
             var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
             var rootDestinationFolderPath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
 
@@ -1135,7 +1135,7 @@ namespace ModelRelief.Database
         private void ExportEntityJSON<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
-            // N.B. There is currently no way at the current time (EntityFramework Core 2.1) to include <all> referenced entities.
+            // N.B. There is currently no way at the current time (EntityFramework Core 3.1) to include <all> referenced entities.
             //      The property Project is required so the Name can be used to find and assign the correct Project for each User.
             //      The Id alone is not sufficient because the exported JSON is always based on the Test user so the Ids would not match other users.
             //      Consequently, the query is specialized by entity type so the Include clause can be included.
