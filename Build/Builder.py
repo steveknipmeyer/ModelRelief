@@ -30,7 +30,6 @@ class Target(Enum):
     """ Target runtime environments. """
     local = 'local'
     nginx = 'Nginx'
-    docker = 'Docker'
 
     def __str__(self):
         return self.value
@@ -72,7 +71,6 @@ class Builder:
         self.build_explorer = "BuildExplorerUI.sh"
         self.file_exclusions = ["js/modelrelief.js", "js/modelrelief.js.map", "js/shaders.js"]
         self.settings_production = "appsettings.Production.json"
-        self.settings_production_docker = "appsettings.ProductionDocker.json"
         self.settings_production_deploy = "appsettings.ProductionDeploy.json"
 
     def delete_folder (self, folder: str, confirm=False)->None:
@@ -256,21 +254,6 @@ class Builder:
 
         # Seed Database
         self.publish_seed_database()
-
-        # Docker
-        if self.arguments.target == Target.docker:
-            self.logger.logInformation("\nDocker-specific publishing steps", Colors.BrightMagenta)
-            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_docker), os.path.join(self.publish_path, self.settings_production))
-
-            self.logger.logInformation("Docker ModelRelief image", Colors.Cyan)
-            os.chdir(self.solution_path)
-            port_http = os.environ[EnvironmentNames.MRPort]
-            port_https = os.environ[EnvironmentNames.MRPortSecure]
-            Tools.exec(f"docker build -t modelrelief --build-arg MRPORT={port_http} --build-arg MRPORTSecure={port_https} -f Build\\DockerFile.modelrelief .")
-
-            self.logger.logInformation("\nDocker ModelRelief Database image", Colors.Cyan)
-            Tools.exec(f"docker build -t modelreliefdatabase -f Build\\DockerFile.modelreliefdatabase .")
 
         self.logger.logInformation("\n</Publish>", Colors.BrightYellow)
 

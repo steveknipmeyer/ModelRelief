@@ -18,6 +18,5 @@ namespace ModelRelief.Test.Unit
 
     public class ModelsUnitTests
     {
-
     }
 }

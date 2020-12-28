@@ -82,6 +82,11 @@
 
 #### Project
     Clean up git branches.
+        https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
+        master->Windows
+            SQLServer
+            Docker
+        linux->master
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Review ProjectNotes
@@ -99,7 +104,6 @@
 
     Remove References
         SQLServer?
-        Docker
         ModelRelief.dgml (Linux?)
         Jupyter notebooks?
         Matlab
@@ -469,11 +473,9 @@
         Builder
             Development             python.exe Build\Builder.py --target local
              Nginx                  python.exe Build\builder.py --target nginx --deploy True
-            Docker                  python.exe Build\builder.py --target Docker
         Postman
         Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
-        Docker                      DockerStart
 
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -1696,46 +1698,6 @@ https://semver.npmjs.com/
         Therefore, the ComposerView instances of DepthBuffer, Mesh do not accurately reflect the state of FileIsSynchronized in the database.
         So, ComposerController explicitly sets FileIsSynchronized before a GeneratedFileModel update (PUT) to express the intent.
 
-#### Docker
-    Issues
-        Docker container cannot configure HTTPS.
-            The certification must be made available in the container.
-            https://github.com/aspnet/Docs/issues/6199
-            https://github.com/dotnet/dotnet-docker/issues/630
-            https://github.com/dotnet/dotnet-docker/blob/master/samples/aspnetapp/aspnetcore-docker-https-development.md
-
-        Chrome
-            Composer
-                There is a require timeout loading the modelrelief module.
-        Edge
-            Composer
-                The fetch of the DepthBuffer file from wwwroot leads to a redirect back to the Login page.
-                Is the anti-forgery token not recognized in the request?
-
-        Firefox
-            mr-service | [13:36:30 ERR] A Microsoft.AspNetCore.Server.Kestrel.Core.BadHttpRequestException exception happened in ModelRelief.
-
-    Remove unused resources.
-        docker image prune
-        docker container prune
-
-    Run a Docker container in the background.
-        docker run -d -p 8080:5000 modelrelief
-    Run a Docker container interactively.
-        docker run -it -p 8080:5000 modelrelief
-
-    Run a Docker container but override the default entrypoint with the command shell.
-        docker run -it --entrypoint "cmd" -p 8080:5000 modelrelief
-    Start a command shell in a running container.
-        docker exec <container> cmd
-
-    These commands can be used to start the SQLServer Express service as an <independent> container. ModelRelief running normally can access the container.
-        docker run -d --name mrsql -p 1433:1433 -e sa_password=<> -e ACCEPT_EULA=Y microsoft/mssql-server-windows-express
-        docker inspect mrsql
-
-    Start the Docker services defined in docker-composer.yml in the current directory.
-        docker-compose up
-
 #### SQLServer
         In a new intallation, perform the following steps:
         SQLServer Management Studio
@@ -1788,7 +1750,6 @@ https://semver.npmjs.com/
         'store' Notes
             The users folder is used to hold the user file system.
             When SQLite is configured, the database file is stored in store/<environment>/database.
-            Also, the database folder is used to transfer the SQLServer seed database to the Docker database container during a build.
 
 #### Jupyter
     Notebook confguration
