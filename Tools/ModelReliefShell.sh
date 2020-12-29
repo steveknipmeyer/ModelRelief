@@ -54,7 +54,7 @@ export ASPNETCORE_ENVIRONMENT=Development
 #  VSCode                    : launch.json
 # https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?tabs=aspnetcore2x#useurls-limitations
 export "ASPNETCORE_URLS=https://localhost:$MRPortSecure/:http://localhost:$MRPort/"
-export "ASPNETCORE_HTTPS_PORT=$MRPortSecure"
+export "ASPNETCORE_ANCM_HTTPS_PORT=$MRPortSecure"
 
 MRHome () {
   cd $MRSolution

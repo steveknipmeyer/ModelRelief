@@ -1,8 +1,10 @@
 ﻿# ASP.NETCore Migration
 
 ## Commit Notes
-
-Move to gulp-uglify-es for ES6 support
+Publish now supports only Production hosting environment
+Display key configuration settings at startup.
+Clean up Publish content to remove unneeded files.
+StartModelRelief.sh starts the Production server.
 
 ### Build
     Prove with clean Ubuntu installation!
@@ -64,6 +66,26 @@ Move to gulp-uglify-es for ES6 support
             Move to a new settings file?
             How should the contact e-mail address be defined?
 
+### Publish
+    The application URLs are not being set properly.
+        <---- ModelRelief Configuration Settings ---->
+        ASPNETCORE_ENVIRONMENT = Production
+        ASPNETCORE_URLS = http://localhost:80/
+        ASPNETCORE_ANCM_HTTPS_PORT = 443
+
+        MRDatabaseProvider = SQLite
+        MRUpdateSeedData = False
+        MRInitializeDatabase = False
+        MRSeedDatabase = False
+        MRExitAfterInitialization = False
+        <-------------------------------------------->
+
+        Hosting environment: Production
+        Content root path: /home/stephen/projects/ModelRelief/Publish
+        Now listening on: http://localhost:5000
+        Now listening on: https://localhost:5001
+        Application started. Press Ctrl+C to shut down.
+
 ### UI
     Add landing page video.
 
@@ -107,6 +129,9 @@ Move to gulp-uglify-es for ES6 support
         Jupyter notebooks?
         Matlab
         *.bat files
+### SSL
+    https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
+    https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
 ### License
     Replace copyright headers with MIT license notice.
@@ -1698,12 +1723,8 @@ np_fill, relief_fill
 |MRExitAfterInitialization|Perform initialization and then exits without starting the server.|
 
 #### HTTPSRedirection
-    HttpsRedirection
-        app.UseHttpsRedirection leads to Xunit test failure.
-            Development disables HttpsRedirection to support XUnit.
-
-#### HTTP/HTTPS
-    Development cannot set a cookie on HTTP 5000.
+    app.UseHttpsRedirection leads to Xunit test failure.
+        Development hosting environment disables HttpsRedirection to support XUnit.
 
 #### Auth0
     My Auth0 login uses my Microsoft (steve@knipmeyer.org) credentials.

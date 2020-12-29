@@ -38,7 +38,7 @@ namespace ModelRelief.Features.Home
                 StatusCode = (int)HttpStatusCode.OK,
                 Content = $"Environment = {HostingEnvironment.EnvironmentName}<br>" +
                 $"ASPNETCORE_URLS = {ConfigurationProvider.GetSetting(ConfigurationSettings.URLS)}<br>" +
-                $"ASPNETCORE_HTTPS_PORT = {ConfigurationProvider.GetSetting(ConfigurationSettings.HTTPSPORT)}",
+                $"ASPNETCORE_ANCM_HTTPS_PORT = {ConfigurationProvider.GetSetting(ConfigurationSettings.HTTPSPORT)}",
                 };
         }
 

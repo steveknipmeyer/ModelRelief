@@ -136,10 +136,19 @@ class Tools:
     @staticmethod
     def copy_folder (source_folder, destination_folder):
         """
-        Copy a single folder. Not recursive.
+        Copy a folder. Recursive.
         """
         print ("%s -> %s" % (source_folder, destination_folder))
         copy_tree(source_folder, destination_folder)
+
+    @staticmethod
+    def copy_folder_root (source_folder, destination_folder):
+        """
+        Copy a folder. Not Recursive.
+        """
+        print ("%s -> %s" % (source_folder, destination_folder))
+        command = f"mkdir -p {destination_folder} && cp {source_folder}/* {destination_folder}"
+        Tools.exec(command)
 
     @staticmethod
     def delete_files(files: List[str])->None:

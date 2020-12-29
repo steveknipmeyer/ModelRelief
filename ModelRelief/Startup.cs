@@ -177,9 +177,8 @@ namespace ModelRelief
                 app.UseHsts();
             }
             // HttpsRedirection: XUnit TestServer not compatible
-            // Further, disabled for A2 Hosting deployment because there is no SSL certificate.
-            //if (!env.IsDevelopment())
-            //    app.UseHttpsRedirection();
+            if (!env.IsDevelopment())
+               app.UseHttpsRedirection();
 
             // https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
             app.UseStatusCodePagesWithReExecute("/Errors/Error", "?statusCode={0}");

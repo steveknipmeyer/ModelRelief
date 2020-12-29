@@ -69,9 +69,12 @@ class Builder:
 
         # files
         self.build_explorer = "BuildExplorerUI.sh"
-        self.file_exclusions = ["js/modelrelief.js", "js/modelrelief.js.map", "js/shaders.js"]
         self.settings_production = "appsettings.Production.json"
-        self.settings_production_deploy = "appsettings.ProductionDeploy.json"
+        self.file_exclusions = [
+            "wwwroot/js/modelrelief.js", "wwwroot/js/modelrelief.js.map", "wwwroot/js/shaders.js",
+            "appsettings.Development.json",
+            "tsconfig.json","js.config", "stylecop.json"
+        ]
 
     def delete_folder (self, folder: str, confirm=False)->None:
         """
@@ -224,20 +227,15 @@ class Builder:
         # file exclusions
         self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)
         for file in self.file_exclusions:
-            file_path = os.path.join(self.publish_wwwroot_path, file)
+            file_path = os.path.join(self.publish_path, file)
             self.logger.logInformation(f"Deleting {file_path}", Colors.BrightWhite)
             os.remove(file_path)
 
         # Python source
         self.logger.logInformation("\nPython source", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.copy_folder(os.path.join(self.solution_path, self.solver_folder), os.path.join(self.publish_path, self.solver_folder))
-        Tools.copy_folder(os.path.join(self.solution_path, self.tools_folder), os.path.join(self.publish_path, self.tools_folder))
-
-        # test models
-        self.logger.logInformation("\nTest models", Colors.BrightMagenta)
-        os.chdir(self.modelrelief_path)
-        Tools.copy_folder(os.path.join(self.modelrelief_path, self.test_folder), os.path.join(self.publish_path, self.test_folder))
+        Tools.copy_folder_root(os.path.join(self.solution_path, self.solver_folder), os.path.join(self.publish_path, self.solver_folder))
+        Tools.copy_folder_root(os.path.join(self.solution_path, self.tools_folder), os.path.join(self.publish_path, self.tools_folder))
 
         # create logs folder
         self.logger.logInformation("\nCreating logs folder", Colors.BrightMagenta)
@@ -264,14 +262,9 @@ class Builder:
 
         # Nginx
         if self.arguments.target == Target.nginx:
-            self.logger.logInformation("\nNginx-specific publishing steps", Colors.BrightMagenta)
-            self.logger.logInformation(f"\nUpdating {self.settings_production}", Colors.Cyan)
-            Tools.copy_file(os.path.join(self.modelrelief_path, self.settings_production_deploy), os.path.join(self.publish_path, self.settings_production))
-
-            if self.arguments.deploy:
-                self.logger.logInformation("\nDeploying to local Nginx server", Colors.BrightMagenta)
-                self.delete_folder(self.nginx_deploy_path)
-                Tools.copy_folder(self.publish_path, self.nginx_deploy_path)
+            self.logger.logInformation("\nDeploying to local Nginx server", Colors.BrightMagenta)
+            self.delete_folder(self.nginx_deploy_path)
+            Tools.copy_folder(self.publish_path, self.nginx_deploy_path)
 
         self.logger.logInformation("\n</Deploy>", Colors.BrightYellow)
 

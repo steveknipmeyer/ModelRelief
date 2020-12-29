@@ -32,18 +32,40 @@ namespace ModelRelief.Services
         }
 
         /// <summary>
+        /// Log a configuration setting.
+        /// </summary>
+        /// <param name="message">Message to display</param>
+        /// <param name="alsoConsole">Display the message on the console</param>
+        public void LogConfigurationSetting(string message, bool alsoConsole = true)
+        {
+            Logger.LogInformation(message);
+            if (alsoConsole)
+                Console.WriteLine(message);
+        }
+
+        /// <summary>
         /// Logs the primary configuration settings.
         /// </summary>
         public void LogConfigurationSettings()
         {
-            Logger.LogInformation($"{ConfigurationSettings.URLS} = {GetSetting(ConfigurationSettings.URLS)}");
-            Logger.LogInformation($"{ConfigurationSettings.HTTPSPORT} = {GetSetting(ConfigurationSettings.HTTPSPORT)}");
+            LogConfigurationSetting(string.Empty);
+            LogConfigurationSetting("<---- ModelRelief Configuration Settings ---->");
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
-            Logger.LogInformation($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRUpdateSeedData} = {GetSetting(ConfigurationSettings.MRUpdateSeedData)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRSeedDatabase} = {GetSetting(ConfigurationSettings.MRSeedDatabase)}");
-            Logger.LogInformation($"{ConfigurationSettings.MRExitAferInitialization} = {GetSetting(ConfigurationSettings.MRExitAferInitialization)}");
+            LogConfigurationSetting($"{ConfigurationSettings.ENVIRONMENT} = {GetSetting(ConfigurationSettings.ENVIRONMENT)}");
+            LogConfigurationSetting($"{ConfigurationSettings.URLS} = {GetSetting(ConfigurationSettings.URLS)}");
+            LogConfigurationSetting($"{ConfigurationSettings.HTTPSPORT} = {GetSetting(ConfigurationSettings.HTTPSPORT)}");
+            LogConfigurationSetting(string.Empty);
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            LogConfigurationSetting($"{ConfigurationSettings.MRDatabaseProvider} = {GetSetting(ConfigurationSettings.MRDatabaseProvider)}");
+            LogConfigurationSetting($"{ConfigurationSettings.MRUpdateSeedData} = {GetSetting(ConfigurationSettings.MRUpdateSeedData)}");
+            LogConfigurationSetting($"{ConfigurationSettings.MRInitializeDatabase} = {GetSetting(ConfigurationSettings.MRInitializeDatabase)}");
+            LogConfigurationSetting($"{ConfigurationSettings.MRSeedDatabase} = {GetSetting(ConfigurationSettings.MRSeedDatabase)}");
+            LogConfigurationSetting($"{ConfigurationSettings.MRExitAferInitialization} = {GetSetting(ConfigurationSettings.MRExitAferInitialization)}");
+            Console.ForegroundColor = ConsoleColor.White;
+            LogConfigurationSetting("<-------------------------------------------->");
+            LogConfigurationSetting(string.Empty);
         }
 
         /// <summary>
@@ -108,8 +130,9 @@ namespace ModelRelief.Services
     public class ConfigurationSettings
     {
         // configuration settings
-        public const string URLS                        = "URLS";                           // ASPNETCORE_URLS
-        public const string HTTPSPORT                   = "HTTPS_PORT";                     // ASPNETCORE_HTTPS_PORT
+        public const string ENVIRONMENT                 = "ASPNETCORE_ENVIRONMENT";
+        public const string URLS                        = "ASPNETCORE_URLS";
+        public const string HTTPSPORT                   = "ASPNETCORE_ANCM_HTTPS_PORT";
 
         public const string MRDatabaseProvider          = "MRDatabaseProvider";
 
