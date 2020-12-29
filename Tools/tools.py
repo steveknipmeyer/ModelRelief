@@ -147,7 +147,7 @@ class Tools:
         Copy a folder. Not Recursive.
         """
         print ("%s -> %s" % (source_folder, destination_folder))
-        command = f"mkdir -p {destination_folder} && cp {source_folder}/* {destination_folder}"
+        command = f"mkdir -p {destination_folder} && cp {source_folder}/* {destination_folder} >/dev/null 2>&1"
         Tools.exec(command)
 
     @staticmethod

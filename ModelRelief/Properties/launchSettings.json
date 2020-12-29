@@ -12,7 +12,6 @@
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
     "ModelRelief Development": {
       "commandName": "Project",
@@ -26,7 +25,6 @@
         "MRSeedDatabase": "True",
         "MRExitAfterInitialization": "False"
       },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

@@ -101,20 +101,21 @@ namespace ModelRelief.Infrastructure
                 var webHostBuilder = WebHost.CreateDefaultBuilder(args)
                                      .ConfigureAppConfiguration((builderContext, config) =>
                                      {
-                                         var env = builderContext.HostingEnvironment;
-                                         Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
+                                        var env = builderContext.HostingEnvironment;
+                                        Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
 
-                                         config.AddJsonFile("azurekeyvault.json", optional: false);
-                                         var builtConfig = config.Build();
+                                        config.AddJsonFile("azurekeyvault.json", optional: false);
+                                        var builtConfig = config.Build();
 
-                                         config.AddAzureKeyVault(
+                                        config.AddAzureKeyVault(
                                              $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
                                              builtConfig["AzureKeyVault:ApplicationId"],
                                              builtConfig["AzureKeyVault:ModelReliefKVKey"]);
                                      })
                                      .UseStartup<Startup>()
+                                     // configure ports using private environment variable: ASPNETCORE_URLS implementation obscure
+                                     .UseUrls(Environment.GetEnvironmentVariable("MRUrls"))
                                      .UseSerilog();
-
                 return webHostBuilder;
             }
             catch (Exception ex)

@@ -36,10 +36,9 @@ class EnvironmentNames:
     MRExitAfterInitialization = "MRExitAfterInitialization"
 
     # runtime
-    MRPort = "MRPort"
-    MRPortSecure = "MRPortSecure"
-    MRDatabaseProvider = "MRDatabaseProvider"
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
+    MRUrls = "MRUrls"
+    MRDatabaseProvider = "MRDatabaseProvider"
 
     # debug
     # working folder in file system for access by graphical applications (e.g. MeshLab)
@@ -78,8 +77,7 @@ class Environment:
             EnvironmentNames.MRExitAfterInitialization : os.environ[EnvironmentNames.MRExitAfterInitialization],
 
             # runtime
-            EnvironmentNames.MRPort : os.environ[EnvironmentNames.MRPort],
-            EnvironmentNames.MRPortSecure : os.environ[EnvironmentNames.MRPortSecure],
+            EnvironmentNames.MRUrls : os.environ[EnvironmentNames.MRUrls],
             EnvironmentNames.MRDatabaseProvider : os.environ[EnvironmentNames.MRDatabaseProvider],
             EnvironmentNames.ASPNETCORE_ENVIRONMENT : os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT],
         }

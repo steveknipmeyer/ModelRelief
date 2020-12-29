@@ -84,7 +84,7 @@
             "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5000/models/viewer/1",
+            "url": "http://localhost:5000/",
             "webRoot": "${workspaceFolder}/ModelRelief/wwwroot",
             "sourceMaps": true
             // N.B. outFiles, outDir are not recognized by Intellisense.

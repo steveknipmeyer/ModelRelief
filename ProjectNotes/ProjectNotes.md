@@ -1,10 +1,6 @@
 ﻿# ASP.NETCore Migration
 
 ## Commit Notes
-Publish now supports only Production hosting environment
-Display key configuration settings at startup.
-Clean up Publish content to remove unneeded files.
-StartModelRelief.sh starts the Production server.
 
 ### Build
     Prove with clean Ubuntu installation!
@@ -67,24 +63,7 @@ StartModelRelief.sh starts the Production server.
             How should the contact e-mail address be defined?
 
 ### Publish
-    The application URLs are not being set properly.
-        <---- ModelRelief Configuration Settings ---->
-        ASPNETCORE_ENVIRONMENT = Production
-        ASPNETCORE_URLS = http://localhost:80/
-        ASPNETCORE_ANCM_HTTPS_PORT = 443
-
-        MRDatabaseProvider = SQLite
-        MRUpdateSeedData = False
-        MRInitializeDatabase = False
-        MRSeedDatabase = False
-        MRExitAfterInitialization = False
-        <-------------------------------------------->
-
-        Hosting environment: Production
-        Content root path: /home/stephen/projects/ModelRelief/Publish
-        Now listening on: http://localhost:5000
-        Now listening on: https://localhost:5001
-        Application started. Press Ctrl+C to shut down.
+    Should PYTHONPATH be set in the appsettings.Production.json or in StartModelRelief.sh?
 
 ### UI
     Add landing page video.
@@ -129,6 +108,7 @@ StartModelRelief.sh starts the Production server.
         Jupyter notebooks?
         Matlab
         *.bat files
+
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
     https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
@@ -1181,10 +1161,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     VSCode Profile: .Net Core Launch
         FE: Chrome   BE: VSCode  TypeScript: DNW  Reload: DNW
 
-    VSCode Resources
-        https://stackoverflow.com/questions/43628397/debug-typescript-in-vscode-with-asp-net-core
-        https://code.visualstudio.com/blogs/2016/02/23/introducing-chrome-debugger-for-vs-code
-
 #### Depth Buffer Notes
     The depth buffer raw values are linear. Can the precision be higher?
         https://stackoverflow.com/questions/42509883/how-to-correctly-linearize-depth-in-opengl-es-in-ios/42515399#42515399
@@ -1273,14 +1249,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
                 super.model(model);     // not valid
             }
 
-    TypeScript Typings management
-        Where is the Visual Studio instance of node.s installed?
-            "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Microsoft\Web Tools\External"
-            Where are the Visual Studio (automatic) npm typings?
-                C:\Users\Steve Knipmeyer\AppData\Local\Microsoft\TypeScript\node_modules\@types
-                https://stackoverflow.com/questions/42663010/typescript-in-visual-studio-2017-automatic-definition-inclusion-causes-duplicat
-                https://blogs.msdn.microsoft.com/visualstudio/2016/11/28/more-productive-javascript-in-visual-studio-2017-rc/
-                    (Note: This feature is disabled by default if using a tsconfig.json configuration file
 
         var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
             EventTarget does not contain a member result.
@@ -1410,12 +1378,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Art
     Scallop Image                               Dreamstime  Royalty Free        https://www.dreamstime.com/scallop-logo-isolated-scallop-white-background-scallop-logo-isolated-scallop-white-background-eps-vector-illustration-image131838280
     Scallop Icon                                Flaticon    Royalty Free        <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-#### Visual Studio
-    Performance
-        https://developercommunity.visualstudio.com/content/problem/43364/visual-studio-2017-increadibly-slow-and-laggy.html
-    Private Hive
-    https://stackoverflow.com/questions/42916299/access-visual-studio-2017s-private-registry-hive
 
 #### Identity
     https://andrewlock.net/introduction-to-authentication-with-asp-net-core/
@@ -1641,10 +1603,11 @@ https://semver.npmjs.com/
         PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
 
         The insecure and secure  ports must be configured.
-                (insecure) HTTP, MRPort
-                    The insecure port (typically, 80 in production and 5000 in development).
-                (secure):  MRPortSecure
-                    The secure port where the client is redirected (typically, 443 in production and 5001 in development).
+                (insecure) HTTP: The insecure port (typically, 80 in production and 5000 in development).
+                (secure)  HTTPS: The secure port where the client is redirected (typically, 443 in production and 5001 in development).
+
+        MRUrls https://localhost:5001/;http://localhost:5000/
+        MRUrls https://localhost:443/;http://localhost:80/
 
     azurekeyvault.json must be copied to the root folder.
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval

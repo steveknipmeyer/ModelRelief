@@ -13,6 +13,9 @@ echo "Activating Production Python environment"
 echo "Starting Nginx server"
 #sudo service nginx start
 
+# configure ports
+export MRUrls="https://localhost:443/;http://localhost:80/"
+
 # start Kestrel NET.Core
 echo "Starting Kestrel .NET Core server"
 dotnet ModelRelief.dll

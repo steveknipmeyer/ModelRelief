@@ -54,7 +54,6 @@ namespace ModelRelief.Services
 
             LogConfigurationSetting($"{ConfigurationSettings.ENVIRONMENT} = {GetSetting(ConfigurationSettings.ENVIRONMENT)}");
             LogConfigurationSetting($"{ConfigurationSettings.URLS} = {GetSetting(ConfigurationSettings.URLS)}");
-            LogConfigurationSetting($"{ConfigurationSettings.HTTPSPORT} = {GetSetting(ConfigurationSettings.HTTPSPORT)}");
             LogConfigurationSetting(string.Empty);
 
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -131,9 +130,7 @@ namespace ModelRelief.Services
     {
         // configuration settings
         public const string ENVIRONMENT                 = "ASPNETCORE_ENVIRONMENT";
-        public const string URLS                        = "ASPNETCORE_URLS";
-        public const string HTTPSPORT                   = "ASPNETCORE_ANCM_HTTPS_PORT";
-
+        public const string URLS                        = "MRUrls";
         public const string MRDatabaseProvider          = "MRDatabaseProvider";
 
         public const string MRUpdateSeedData            = "MRUpdateSeedData";
