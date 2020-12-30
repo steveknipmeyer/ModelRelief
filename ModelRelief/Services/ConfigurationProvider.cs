@@ -130,7 +130,7 @@ namespace ModelRelief.Services
     {
         // configuration settings
         public const string ENVIRONMENT                 = "ASPNETCORE_ENVIRONMENT";
-        public const string URLS                        = "MRUrls";
+        public const string URLS                        = "ASPNETCORE_URLS";
         public const string MRDatabaseProvider          = "MRDatabaseProvider";
 
         public const string MRUpdateSeedData            = "MRUpdateSeedData";

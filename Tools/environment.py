@@ -37,7 +37,7 @@ class EnvironmentNames:
 
     # runtime
     ASPNETCORE_ENVIRONMENT = "ASPNETCORE_ENVIRONMENT"
-    MRUrls = "MRUrls"
+    ASPNETCORE_URLS = "ASPNETCORE_URLS"
     MRDatabaseProvider = "MRDatabaseProvider"
 
     # debug
@@ -77,9 +77,10 @@ class Environment:
             EnvironmentNames.MRExitAfterInitialization : os.environ[EnvironmentNames.MRExitAfterInitialization],
 
             # runtime
-            EnvironmentNames.MRUrls : os.environ[EnvironmentNames.MRUrls],
             EnvironmentNames.MRDatabaseProvider : os.environ[EnvironmentNames.MRDatabaseProvider],
+
             EnvironmentNames.ASPNETCORE_ENVIRONMENT : os.environ[EnvironmentNames.ASPNETCORE_ENVIRONMENT],
+            EnvironmentNames.ASPNETCORE_URLS : os.environ[EnvironmentNames.ASPNETCORE_URLS],
         }
 
         self.stack:List[Dict] = []

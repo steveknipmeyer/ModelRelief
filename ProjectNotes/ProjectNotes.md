@@ -63,7 +63,6 @@
             How should the contact e-mail address be defined?
 
 ### Publish
-    Should PYTHONPATH be set in the appsettings.Production.json or in StartModelRelief.sh?
 
 ### UI
     Add landing page video.

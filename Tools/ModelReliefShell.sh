@@ -27,27 +27,27 @@ export MRPublish=${MRSolution}Publish/
 #       https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-run?tabs=netcore21
 #       Disable with 'dotnet run --no-launch-profile'.
 
-# ASPNET CORE Configuration
+# ASPNET Core Configuration
 export ASPNETCORE_ENVIRONMENT=Development
+export ASPNETCORE_URLS="https://localhost:5001/;http://localhost:5000/"
 
-export MRUrls="https://localhost:5001/;http://localhost:5000/"
+# ModelRelief Configuration
 export MRDatabaseProvider=SQLite
 export MRUpdateSeedData=False
 export MRInitializeDatabase=False
 export MRSeedDatabase=False
 export MRExitAfterInitialization=False
 
-export PATH="$PATH:${MRSolution}Tools:${MRSolution}Build"
+# Python environment
+echo "Activating Development Python environment"
+. devenv/bin/activate
 
-# PYTHON
 # include Tools folder for general utility support
 export "PYTHONPATH=${MRSolution}Tools:${MRSolution}Solver:${MRSolution}Explorer:$PYTHONPATH"
 # MyPy Linter
 export "MYPYPATH=${MRSolution}Tools/"
 
-# activate the ModelRelief Python environment.
-source devenv/bin/activate
-#PS1='(devenv) ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+export PATH="$PATH:${MRSolution}Tools:${MRSolution}Build"
 
 MRHome () {
   cd $MRSolution

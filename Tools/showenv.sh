@@ -8,10 +8,10 @@ echo
 #cyan
 printf "\e[38;5;87m"
 echo ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
+echo ASPNETCORE_URLS=$ASPNETCORE_URLS
 echo
 #magenta
 printf  "\e[38;5;207m"
-echo MRUrls=$MRUrls
 echo MRDatabaseProvider=$MRDatabaseProvider
 echo MRUpdateSeedData=$MRUpdateSeedData
 echo MRInitializeDatabase=$MRInitializeDatabase

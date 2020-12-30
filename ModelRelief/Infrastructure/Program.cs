@@ -113,8 +113,7 @@ namespace ModelRelief.Infrastructure
                                              builtConfig["AzureKeyVault:ModelReliefKVKey"]);
                                      })
                                      .UseStartup<Startup>()
-                                     // configure ports using private environment variable: ASPNETCORE_URLS implementation obscure
-                                     .UseUrls(Environment.GetEnvironmentVariable("MRUrls"))
+                                    //  .UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
                                      .UseSerilog();
                 return webHostBuilder;
             }
