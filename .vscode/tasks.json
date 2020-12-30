@@ -158,17 +158,5 @@
             },
             "problemMatcher": []
         },
-
-        {
-            "label": "dotnet ProcessID",
-            "type": "shell",
-            "command": "powershell -executionPolicy bypass -noexit -file Tools/DotNetPID.ps1",
-            "group": "none",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
-            },
-            "problemMatcher": []
-        },
     ]
 }

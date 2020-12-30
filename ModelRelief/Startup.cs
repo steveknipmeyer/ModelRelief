@@ -186,7 +186,7 @@ namespace ModelRelief
             app.ConfigureStaticFiles();
             app.AddStaticFilePaths(env.ContentRootPath, new string[] { "Scripts" });
             app.UseCookiePolicy();
-            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-2.2
+            // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,

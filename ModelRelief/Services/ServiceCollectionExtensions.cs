@@ -31,7 +31,7 @@ namespace ModelRelief.Services
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Extension method to conmfigure cookie policy.
+        /// Extension method to configure cookie policy.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
         public static void ConfigureCookies(this IServiceCollection services)

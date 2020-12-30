@@ -5,6 +5,7 @@
 ### Build
     Prove with clean Ubuntu installation!
         Add a test account.
+    Convert Alpha to a Linux server.
 
     WebGL2 Support
         https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
@@ -13,19 +14,8 @@
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 
-    nginx
-        Host ASP.NET Core on Linux with Nginx | Microsoft Docs
-        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-5.0
-
-        Administration
-            Create a new sudo account ('admin') from which to manage nginx.
-                sudo adduser nginxadmin
-                sudo usermod -a -G sudo nginxadmin
-
-        Debugging
-            What is the best practice to debug a production instance?
-                Add additional logging output.
-
+    Nginx
+        python Build\builder.py --target nginx --deploy True
         Elevated permissions are required in Builder to deploy to delete /var/www.
 
     Python
@@ -105,7 +95,7 @@
     Remove References
         ModelRelief.dgml (Linux?)
         Jupyter notebooks?
-        Matlab
+        MATLAB
         *.bat files
 
 ### SSL
@@ -123,70 +113,72 @@
         Attenuation Decay.
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
-#####  Linux Development
-    Linux Setup
-        .NET Core
-            Install .Net Core 3.1 SDK
-            dotnet tool install --global dotnet-ef
+#####  Linux Setup
+    .NET Core
+        Install .Net Core 3.1 SDK
+        dotnet tool install --global dotnet-ef
 
-        CMake
-            sudo apt install cmake
+    CMake
+        sudo apt install cmake
 
-        git
-            sudo apt install git
-            git config --global user.name "Steve Knipmeyer"
-            git config --global user.email "steve@knipmeyer.org"
+    git
+        sudo apt install git
+        git config --global user.name "Steve Knipmeyer"
+        git config --global user.email "steve@knipmeyer.org"
 
-            git clone https://github.com/steveknipmeyer/ModelRelief.git
-            Store credentials.
-                cd ModelRelief
-                git config credential.helper store
+        git clone https://github.com/steveknipmeyer/ModelRelief.git
+        Store credentials.
+            cd ModelRelief
+            git config credential.helper store
 
-            Pull Pybind11 and Catch2 repos.
-                git submodule init
-                git submodule update
+        Pull Pybind11 and Catch2 repos.
+            git submodule init
+            git submodule update
 
-        Python (3.8.5)
-            sudo apt-get install python3-venv
-            sudo apt install python3-pip
-            pip3 install wheel
+    Python (3.8.5)
+        sudo apt-get install python3-venv
+        sudo apt install python3-pip
+        pip3 install wheel
 
-        Node
-            sudo apt install nodejs
+    Node
+        sudo apt install nodejs
 
-        NPM
-            sudo apt install npm
-            npm install
-            sudo npm install --global gulp-cli
-            sudo npm install --global madge
+    NPM
+        sudo apt install npm
+        npm install
+        sudo npm install --global gulp-cli
+        sudo npm install --global madge
 
-        .NET Core
-            https://docs.microsoft.com/en-us/dotnet/core/install/linux
-            dotnet restore
-            dotnet build ModelRelief
+    .NET Core
+        https://docs.microsoft.com/en-us/dotnet/core/install/linux
+        dotnet restore
+        dotnet build ModelRelief
 
-        SQLite
-            sudo apt-get install sqlite3 (if required)
-            sudo apt-get install sqlitebrowser
+    SQLite
+        sudo apt-get install sqlite3 (if required)
+        sudo apt-get install sqlitebrowser
 
-        Runtime
-            Add azurekeyvault.json to ModelRelief project folder.
+    Runtime
+        Add azurekeyvault.json to ModelRelief project folder.
 
 
-        Build
-            Build/BuildPythonEnvironment.sh Development
-            python Build/Builder.py --target local
+    Build
+        Build/BuildPythonEnvironment.sh Development
+        python Build/Builder.py --target local
 
-        Test
-            python Tools/testrunner.py
+    Test
+        python Tools/testrunner.py
 
-        nginx
-            https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+    nginx
+        https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
 
-            source ./linux/NginxEnvironment.sh
-            sudo service nginx start
+        sudo cp nginx/default /etc/nginx/sites-available/default
 
-            Start browser using https://localhost:5001.
+        sudo service nginx start
+        source ./linux/ModelReliefStart.sh
+
+        Start browser using https://localhost:443
 
 #### Privacy Page
     Add a Privacy page.
@@ -411,13 +403,13 @@
 
 ### Test Checklist
     Test Checklist
-        testrunner (XUnit)          python Tools\testrunner.py
+        testrunner (XUnit)          python Tools/testrunner.py
         Builder
-            Development             python.exe Build\Builder.py --target local
-             Nginx                  python.exe Build\builder.py --target nginx --deploy True
+            Development             python Build/Builder.py --target local
+             Nginx                  python Build/builder.py --target nginx --deploy True
         Postman
-        Explorer                    python.exe Explorer\explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
-        Solver                      python Solver\solver.py --s "Test/House.json" --w "Test/Working"
+        Explorer                    python.exe Explorer/explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
+        Solver                      python Solver/solver.py --s "Test/House.json" --w "Test/Working"
 
 ###### StandardView
 When the view camera is interactively changed, it should invalidate the StandardView in the UI.
@@ -1331,13 +1323,13 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
     Front End
     THREE.js                    MIT         https://threejs.org
-    TypeScript                  Apache      https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2/
+    TypeScript                  Apache      https://www.typescriptlang.org/
     Bootstrap                   MIT         https://getbootstrap.com/
     base64-js                   MIT         https://github.com/beatgammit/base64-js/blob/master/index.js
     http-status-codes           MIT         https://www.npmjs.com/package/http-status-codes
 
     Back End
-    ASP.NET Core                Apache      Microsoft
+    ASP.NET Core                Apache      https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1
     NumPy                                   https://www.numpy.org/
     PyAMG                       MIT         https://github.com/pyamg/pyamg
     Mavavi                      MIT, GPL    https://docs.enthought.com/mayavi/mayavi/
@@ -1753,3 +1745,17 @@ Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwine
 
 ##### Client Server Queries
     https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+
+### Nginx
+    Administration
+        Create a new sudo account ('admin') from which to manage nginx.
+            sudo adduser nginxadmin
+            sudo usermod -a -G sudo nginxadmin
+
+    Debugging
+        https://michaelscodingspot.com/debugging-asp-net-web-request-errors/
+        Add additional logging output.
+
+    What is the correct way to stop and restart Nginx?
+        sudo /etc/init.d/nginx start | stop | restart
+
