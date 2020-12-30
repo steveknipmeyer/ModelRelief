@@ -24,8 +24,6 @@
             pip3 install mayavi
 
 ### Runtime
-    HttpsRedirection?
-
     Solver
         Runtime error does not propagate back to UI.
 
@@ -42,8 +40,6 @@
     Review all casing of files and directories.
     Resolve WIP markers.
     Tools -> bin
-    Refactor empty <returns></returns> in *.cs.
-    <return> vs <returns>
 
 ### Security
     Azure Key Secrets

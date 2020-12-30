@@ -68,7 +68,7 @@ namespace ModelRelief.Test
         /// Requests an API JWT Bearer token from Auth0.
         /// The token is set as the default Authorization for all client requests.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True</returns>
         private async Task<bool> SetAuthorizationHeaderAsync()
         {
             var accounts = Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
@@ -104,7 +104,6 @@ namespace ModelRelief.Test
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <param name="binaryContent">File content for the requwst.</param>
-        /// <returns></returns>
         public async Task<RequestResponse> SubmitHttpRequestAsync(HttpClient client, HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
         {
             HttpContent content = null;
@@ -158,7 +157,6 @@ namespace ModelRelief.Test
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
         /// <param name="binaryContent">File content for the requwst.</param>
-        /// <returns></returns>
         public async Task<RequestResponse> SubmitHttpRequestAsync(HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
         {
             // use TestServer HTTPClient

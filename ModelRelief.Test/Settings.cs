@@ -53,7 +53,6 @@ namespace ModelRelief.Test
         /// Constructs a test ConfigurationProvider.
         /// </summary>
         /// <param name="configurationBuilder">ConfigurationBuilder instance.</param>
-        /// <returns></returns>
         public static IConfigurationRoot ConfigurationProvider(IConfigurationBuilder configurationBuilder)
         {
             var configurationProvider = configurationBuilder.SetBasePath(Settings.GetContentRootPath())

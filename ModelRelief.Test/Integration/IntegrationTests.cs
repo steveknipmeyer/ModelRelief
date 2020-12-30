@@ -49,7 +49,6 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Called before class is used. Opportunity to use an async method for setup.
         /// </summary>
-        /// <returns></returns>
         public async Task InitializeAsync()
         {
             await Task.CompletedTask;
@@ -58,7 +57,6 @@ namespace ModelRelief.Test.Integration
         /// <summary>
         /// Called before class is destroyed. Opportunity to use an async method for teardown.
         /// </summary>
-        /// <returns></returns>
         public async Task DisposeAsync()
         {
             await Task.CompletedTask;

@@ -57,7 +57,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">GetListRequest.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        /// <returns></returns>
         public override async Task<object> OnHandle(GetListRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);

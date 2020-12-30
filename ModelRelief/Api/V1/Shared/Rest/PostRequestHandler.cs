@@ -60,7 +60,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">POST request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        /// <returns></returns>
+        /// <returns>TGetModel for model</returns>
         public override async Task<TGetModel> OnHandle(PostRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var newModel = Mapper.Map<TEntity>(message.NewModel);

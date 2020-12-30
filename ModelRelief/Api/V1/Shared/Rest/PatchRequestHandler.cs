@@ -128,7 +128,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        /// <returns></returns>
         public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // construct to support validation
@@ -140,7 +139,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">PATCH request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        /// <returns></returns>
+        /// <returns>Patched TGetModel</returns>
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model

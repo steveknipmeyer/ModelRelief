@@ -52,7 +52,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="message">Request message</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// https://stackoverflow.com/questions/42460198/return-file-in-asp-net-core-web-api
-        /// <returns></returns>
         public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
         {
             // not a file-backed model?

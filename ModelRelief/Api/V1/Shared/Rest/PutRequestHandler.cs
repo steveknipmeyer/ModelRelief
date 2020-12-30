@@ -61,7 +61,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">PUT request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        /// <returns></returns>
+        /// <returns>TGetModel for model0</returns>
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
         {
             var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);

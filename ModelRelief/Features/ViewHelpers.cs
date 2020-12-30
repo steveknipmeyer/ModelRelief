@@ -25,7 +25,6 @@ namespace ModelRelief.Features
         /// </summary>
         /// <typeparam name="TEnum">The enum type of the list.</typeparam>
         /// <param name="prompt">Control selection prompt</param>
-        /// <returns></returns>
         public static List<SelectListItem> PopulateEnumDropDownList<TEnum>(string prompt)
             where TEnum : struct,  IComparable, IFormattable, IConvertible
         {
@@ -54,7 +53,6 @@ namespace ModelRelief.Features
         /// <param name="userId">Owning User Id; permit only authorized models.</param>
         /// <param name="prompt">Control selection prompt</param>
         /// <param name="selectedRow">(Optional) Primary key of selected row</param>
-        /// <returns></returns>
         public static List<SelectListItem> PopulateModelDropDownList<TEntity>(ModelReliefDbContext dbContext, string userId, string prompt, int? selectedRow = 0)
             where TEntity : DomainModel
         {

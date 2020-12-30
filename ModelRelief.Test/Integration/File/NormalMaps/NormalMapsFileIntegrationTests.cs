@@ -81,7 +81,6 @@ namespace ModelRelief.Test.Integration.NormalMaps
         /// <summary>
         /// Constructs a NormalMap and its dependent models.
         /// </summary>
-        /// <returns></returns>
         private async Task<DependencyGraph> InitializeDependencyGraph()
         {
             var dependencyGraph = new NormalMapDependencyGraph(ClassFixture, new List<ITestModelFactory>

@@ -31,7 +31,6 @@ namespace ModelRelief.Infrastructure
         /// Allow text/plain, application/octet-stream and no content type to be processed
         /// </summary>
         /// <param name="context">InputFormatterContext</param>
-        /// <returns></returns>
         public override bool CanRead(InputFormatterContext context)
         {
             if (context == null)
@@ -51,7 +50,6 @@ namespace ModelRelief.Infrastructure
         /// Handle application/octet-stream for byte[] results
         /// </summary>
         /// <param name="context">InputFormatterContext</param>
-        /// <returns></returns>
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
             var request     = context.HttpContext.Request;

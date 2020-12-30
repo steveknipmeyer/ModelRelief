@@ -104,7 +104,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">Request message</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
-        /// <returns></returns>
+        /// <returns>Null object</returns>
         public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
         {
             var modelToRemove = await FindModelAsync<TEntity>(message.User, message.Id);

@@ -81,7 +81,6 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         /// <summary>
         /// Constructs a DepthBuffer and its dependent models.
         /// </summary>
-        /// <returns></returns>
         private async Task<DependencyGraph> InitializeDependencyGraph()
         {
             var dependencyGraph = new DepthBufferDependencyGraph(ClassFixture, new List<ITestModelFactory>

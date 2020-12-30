@@ -23,7 +23,6 @@ namespace ModelRelief.Features.Errors
         /// <remarks>This is used for middleware errors such as no endpoint NotFound (404).
         /// It is NOT used for an error code returned by the application such as BadRequest (400)</remarks>
         /// <param name="statusCode">Error code.</param>
-        /// <returns></returns>
         public IActionResult Error(int? statusCode)
         {
             statusCode = statusCode ?? 0;

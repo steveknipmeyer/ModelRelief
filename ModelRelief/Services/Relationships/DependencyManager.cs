@@ -44,7 +44,6 @@ namespace ModelRelief.Services.Relationships
         /// <param name="classType">Class of property.</param>
         /// <param name="propertyName">Name of property.</param>
         /// <param name="attributeType">CustomAttribute to find.</param>
-        /// <returns></returns>
         public static bool PropertyHasAttribute(out Attribute propertyAttribute, Type classType, string propertyName, Type attributeType)
         {
             PropertyInfo property = classType.GetProperty(propertyName);
@@ -58,7 +57,6 @@ namespace ModelRelief.Services.Relationships
         /// <param name="classAttribute">Attribute (if found, null otherwise)</param>
         /// <param name="classType">Type of class.</param>
         /// <param name="attributeType">CustomAttribute to find.</param>
-        /// <returns></returns>
         public static bool ClassHasAttribute(out Attribute classAttribute, Type classType, Type attributeType)
         {
             classAttribute = classType.GetCustomAttribute(attributeType, true);
@@ -173,7 +171,6 @@ namespace ModelRelief.Services.Relationships
         /// Uses reflection to construct a FileRequest of the given type.
         /// </summary>
         /// <param name="type">FileRequest type (e.g. GenerateFileRequest).</param>
-        /// <returns></returns>
         private IFileRequest ConstructFileRequest(Type type)
         {
             // https://stackoverflow.com/questions/8376622/create-constructor-for-generic-class-using-reflection
@@ -434,7 +431,6 @@ namespace ModelRelief.Services.Relationships
         /// Dispatches a request (commonly FileRequest).
         /// </summary>
         /// <param name="fileRequest">FileRequest</param>
-        /// <returns></returns>
         private async Task<bool> HandleRequestAsync(IFileRequest fileRequest)
         {
             var request = fileRequest as IRequest<bool>;

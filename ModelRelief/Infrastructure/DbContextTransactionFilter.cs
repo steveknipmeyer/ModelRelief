@@ -42,7 +42,6 @@ namespace ModelRelief.Infrastructure
         /// </summary>
         /// <param name="context">Context</param>
         /// <param name="next">Action delegate</param>
-        /// <returns></returns>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             try

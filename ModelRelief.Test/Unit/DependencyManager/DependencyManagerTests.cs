@@ -43,7 +43,6 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// </summary>
         /// <param name="rootType">Type of root.</param>
         /// <param name="rootPrimaryKey">Prinary key of root.</param>
-        /// <returns></returns>
         private async Task<List<DomainModel>> FindDependentModels(Type rootType, int rootPrimaryKey)
         {
             var accounts = this.ClassFixture.ServerFramework.Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;

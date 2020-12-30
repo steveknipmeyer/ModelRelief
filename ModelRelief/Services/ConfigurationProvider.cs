@@ -72,7 +72,7 @@ namespace ModelRelief.Services
         /// </summary>
         /// <param name="settingName">Configuration setting to lookup.</param>
         /// <param name="throwIfNotFound">Throw an exception if the setting is not found.</param>
-        /// <returns></returns>
+        /// <returns>Setting string</returns>
         public string GetSetting(string settingName, bool throwIfNotFound = true)
         {
             var setting = Configuration[settingName];
@@ -87,7 +87,7 @@ namespace ModelRelief.Services
         /// Parses a boolean configuration variable.
         /// </summary>
         /// <param name="variableName">Name of configuration variable.</param>
-        /// <returns></returns>
+        /// <returns>Boolean value</returns>
         public bool ParseBooleanSetting(string variableName)
         {
             var variableValue = GetSetting(variableName, throwIfNotFound: false);
@@ -111,7 +111,6 @@ namespace ModelRelief.Services
         /// Returns the relational database to be used based on the given setting.
         /// </summary>
         /// <param name="databaseProvider">Database setting.</param>
-        /// <returns></returns>
         public static RelationalDatabaseProvider DatabaseFromSetting(string databaseProvider)
         {
             var provider = (databaseProvider ?? ConfigurationSettings.SQLite).ToLower();

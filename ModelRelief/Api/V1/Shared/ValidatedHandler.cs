@@ -210,7 +210,7 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        /// <returns></returns>
+        /// <returns>Task</returns>
         public virtual async Task PreHandle(TRequest message, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
@@ -221,7 +221,6 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        /// <returns></returns>
         public async Task<TResponse> Handle(TRequest message, CancellationToken cancellationToken)
         {
             // perform any setup required before validation
@@ -250,7 +249,6 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="message">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        /// <returns></returns>
         public abstract Task<TResponse> OnHandle(TRequest message, CancellationToken cancellationToken);
     }
 }

@@ -202,7 +202,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="httpRequest">HTTP request.</param>
         /// <param name="apiRequestType">CQRS request.</param>
-        /// <returns></returns>
+        /// <returns>API error code in context of HTTP request</returns>
         public static ApiErrorCode MapRequestToApiErrorCode(HttpRequest httpRequest, Type apiRequestType)
         {
             // 1st generic type is the domain model

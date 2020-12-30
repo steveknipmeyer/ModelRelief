@@ -22,7 +22,6 @@ namespace ModelRelief.Features
         /// <typeparam name="TController">Controller</typeparam>
         /// <param name="controller">Instance of Controller</param>
         /// <param name="action">Redirect Action</param>
-        /// <returns></returns>
         public static ActionResult RedirectToActionJson<TController>(this TController controller, string action)
             where TController : Controller
         {

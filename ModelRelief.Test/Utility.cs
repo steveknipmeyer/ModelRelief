@@ -19,7 +19,6 @@ namespace ModelRelief.Test
         /// Returns a byte array from a file. The file must exist in Test/Data/Files.
         /// </summary>
         /// <param name="fileName">File to read.</param>
-        /// <returns></returns>
         public static byte[] ByteArrayFromFile(string fileName)
         {
             var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";

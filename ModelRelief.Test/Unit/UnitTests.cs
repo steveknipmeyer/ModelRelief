@@ -55,7 +55,6 @@ namespace ModelRelief.Test.Unit
         /// <summary>
         /// Called before class is used. Opportunity to use an async method for setup.
         /// </summary>
-        /// <returns></returns>
         public Task InitializeAsync()
         {
             return Task.CompletedTask;
@@ -66,7 +65,6 @@ namespace ModelRelief.Test.Unit
         /// http://blog.stephencleary.com/2009/08/second-rule-of-implementing-idisposable.html
         /// Called before class is destroyed. Opportunity to use an async method for teardown.
         /// </summary>
-        /// <returns></returns>
         public Task DisposeAsync()
         {
             DbContext.Dispose();

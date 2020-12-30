@@ -64,7 +64,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">POST file request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        /// <returns></returns>
+        /// <returns>TGetModel for file</returns>
         public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // not a file-backed model?

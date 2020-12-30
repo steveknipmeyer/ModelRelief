@@ -106,7 +106,6 @@ namespace ModelRelief.Test.Integration.Meshes
         /// <summary>
         /// Constructs a Mesh and its dependent models.
         /// </summary>
-        /// <returns></returns>
         private async Task<DependencyGraph> InitializeDependencyGraph()
         {
             var dependencyGraph = new MeshDependencyGraph(ClassFixture, new List<ITestModelFactory>

@@ -75,7 +75,6 @@ namespace ModelRelief.Services
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Model instance. </param>
-        /// <returns></returns>
         public string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel
         {

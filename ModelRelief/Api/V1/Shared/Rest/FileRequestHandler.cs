@@ -100,7 +100,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">Request message</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
-        /// <returns></returns>
+        /// <returns>True if handled</returns>
         public override async Task<bool> OnHandle(FileRequest<TEntity> message, CancellationToken cancellationToken)
         {
             // not a file-backed model?

@@ -1047,7 +1047,6 @@ namespace ModelRelief.Database
         /// </summary>
         /// <typeparam name="TEntity">Domain model</typeparam>
         /// <param name="folderType">Folder type.</param>
-        /// <returns></returns>
         private string GetEntityJSONFileName<TEntity>(string folderType)
         {
             var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";

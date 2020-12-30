@@ -35,7 +35,7 @@ namespace ModelRelief.Utility
         /// https://stackoverflow.com/questions/5056635/converting-raw-byte-data-to-float
         /// </summary>
         /// <param name="byteArray">Byte array to convert</param>
-        /// <returns></returns>
+        /// <returns>Single precision float array</returns>
         public static float[] ByteArrayToFloatArray(byte[] byteArray)
         {
             float[] floatArray = new float[byteArray.Length / 4];
