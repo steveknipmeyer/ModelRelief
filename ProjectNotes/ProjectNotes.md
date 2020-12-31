@@ -2,6 +2,23 @@
 
 ## Commit Notes
 
+### Issues
+
+### Jupyter
+    pip3 install ipykernel
+    pip install scikit-image
+    pip3 install pandas
+    pip3 install nbconvert
+    sudo apt-get install python3-tk
+
+    https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
+        error: invalid command 'bdist_wheel'
+        ----------------------------------------
+        ERROR: Failed building wheel for pandocfilters
+
+    Notebooks -> Jupyter
+    Create an (incremental) Python requirements file for the Jupyter notebooks.
+
 ### Build
     Prove with clean Ubuntu installation!
         Add a test account.

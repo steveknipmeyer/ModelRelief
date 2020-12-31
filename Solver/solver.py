@@ -315,7 +315,7 @@ class Solver:
             if (mr_temp is None):
                 return
 
-            file_temp_path = os.path.join(windows_temp, filename + ".obj")
+            file_temp_path = os.path.join(mr_temp, filename + ".obj")
             Tools.copy_file(file_path, file_temp_path)
 
     def debug_results(self):
@@ -335,6 +335,8 @@ class Solver:
                 MathTools.print_array("dGydy", self.results.dGydy.image)
                 MathTools.print_array("divG", self.results.divG.image)
                 MathTools.print_array("Poisson Solution", self.results.mesh_transformed.image)
+
+                self.depth_buffer.scale_floats(1.0)
 
     @benchmark()
     def transform(self):

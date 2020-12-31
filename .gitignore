@@ -166,4 +166,5 @@ __pycache__
 # Azure Key Vault
 **/azurekeyvault.json
 
-#Linux
+#Jupyter
+.ipynb_checkpoints
