@@ -3,23 +3,24 @@
 ## Commit Notes
 
 ### Issues
+    *.bat files
 
 ### Jupyter
-    pip3 install ipykernel
-    pip install scikit-image
-    pip3 install pandas
-    pip3 install nbconvert
-    sudo apt-get install python3-tk
+    Notebooks -> Jupyter
 
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
         ----------------------------------------
         ERROR: Failed building wheel for pandocfilters
 
-    Notebooks -> Jupyter
     Create an (incremental) Python requirements file for the Jupyter notebooks.
+        pip3 install ipykernel
+        pip install scikit-image
+        pip3 install pandas
+        pip3 install nbconvert
+        sudo apt-get install python3-tk
 
-### Build
+    ### Build
     Prove with clean Ubuntu installation!
         Add a test account.
     Convert Alpha to a Linux server.
@@ -107,9 +108,6 @@
 
     Remove References
         ModelRelief.dgml (Linux?)
-        Jupyter notebooks?
-        MATLAB
-        *.bat files
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04

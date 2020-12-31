@@ -44,7 +44,7 @@
             "**/[Ww]ork*/**/*": true,
             "**/wwwroot/**/*": true,
             "**/lib/**/*": true,
-            "**/Notebooks/**/*": false,
+            "**/Jupyter/**/*": false,
             "**/MATLAB/**/*": false,
         },
 }
