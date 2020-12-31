@@ -145,7 +145,7 @@ class ReliefTest(unittest.TestCase):
     def test_RunCPlusPlusUnitTests(self):
         """ Executes the C++ unit tests."""
         root = os.path.dirname(os.path.realpath(__file__))
-        executable = os.path.join(root, '..', 'bin', 'reliefUnitTests.exe')
+        executable = os.path.join(root, '..', 'bin', 'reliefUnitTests')
         status = Tools.exec(executable)
         self.assertEqual(status, 0)
 

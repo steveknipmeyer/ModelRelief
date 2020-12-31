@@ -1,13 +1,14 @@
 ﻿# ASP.NETCore Migration
 
 ## Commit Notes
+Refactor Auth0Query to bash script
 
 ### Issues
-    *.bat files
+    relieftests
+        Check GaussianKernel against scipy?
+        https://stackoverflow.com/questions/13193248/how-to-make-a-gaussian-filter-in-matlab
 
 ### Jupyter
-    Notebooks -> Jupyter
-
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
         ----------------------------------------
