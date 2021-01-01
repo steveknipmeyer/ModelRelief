@@ -103,6 +103,9 @@ class CMakeBuild(build_ext):
 
         print()
 
+ # setup.py must be run from the Relief folder as the CMake paths are all relative to Relief
+os.chdir(sys.path[0])
+
 setup(
     name='relief',
     version='0.1',

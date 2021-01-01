@@ -130,7 +130,6 @@
         //  "program": "${workspaceFolder}/Relief/tests/python/relieftest.py",
 
         //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
-        //  "cwd": "${workspaceFolder}/Relief",
         //  "program": "${workspaceFolder}/Relief/setup.py",
         //  "args":["build", "install"]
 
@@ -141,6 +140,7 @@
 
         // "args":[]
         },
+
         {
             "name": "Python (Active File)",
             "type": "python",
@@ -180,6 +180,26 @@
             "args" : ["serve"],
             "cwd": "${workspaceFolder}/ModelRelief",
 //          "stopOnEntry": true
-        }
+        },
+
+        {
+            "name": "(gdb) Debug Relief Unit Tests",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Relief/tests/bin/reliefUnitTests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
     ]
 }

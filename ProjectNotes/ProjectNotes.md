@@ -1,9 +1,10 @@
 ﻿# ASP.NETCore Migration
 
 ## Commit Notes
-Refactor Auth0Query to bash script
 
 ### Issues
+    Build a VSCode C++ project from GaussianKernel.
+        https://code.visualstudio.com/docs/cpp/config-linux
 
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
@@ -37,7 +38,6 @@ Refactor Auth0Query to bash script
     Python
         Why does venv not add the Python 3.8 include files?
         Why does the 1st mayavi install fail with a vtk module error?
-            pip3 install mayavi
 
 ### Runtime
     Solver
@@ -58,6 +58,7 @@ Refactor Auth0Query to bash script
     Tools -> bin
 
 ### Security
+    Remove steve@knipmeyer.org.
     Azure Key Secrets
         Review settings in AzureKeyVault.
         Mock azurekeysecrets.json.
@@ -123,9 +124,13 @@ Refactor Auth0Query to bash script
             It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #####  Linux Setup
+
     .NET Core
         Install .Net Core 3.1 SDK
         dotnet tool install --global dotnet-ef
+
+    C++
+        sudo apt-get install build-essential gdb
 
     CMake
         sudo apt install cmake
