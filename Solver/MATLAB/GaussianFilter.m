@@ -3,8 +3,8 @@
 clear
 close all
 
-sigma = 4;
-kernelSize = 23;
+sigma = 1;
+kernelSize = 7;
 
 kernelMaximumIndex = (kernelSize - 1) / 2;
 kernelRange = -kernelMaximumIndex:kernelMaximumIndex
@@ -12,7 +12,6 @@ kernelRange = -kernelMaximumIndex:kernelMaximumIndex
 [x, y] = meshgrid(kernelRange, kernelRange);
 
 gaussian = exp(- (x.^2+y.^2) / (2*sigma^2));
-
 gaussianNormalized = gaussian ./ sum(gaussian(:));
 
 figure()

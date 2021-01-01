@@ -47,4 +47,18 @@
             "**/Jupyter/**/*": false,
             "**/MATLAB/**/*": false,
         },
+        "files.associations": {
+            "*.cshtml": "html",
+            "iostream": "cpp",
+            "functional": "cpp",
+            "optional": "cpp",
+            "system_error": "cpp",
+            "xlocmon": "cpp",
+            "xtr1common": "cpp",
+            "iomanip": "cpp",
+            "array": "cpp",
+            "ios": "cpp",
+            "xutility": "cpp",
+            "regex": "cpp"
+        },
 }

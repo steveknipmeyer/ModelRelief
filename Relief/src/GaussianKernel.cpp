@@ -39,6 +39,7 @@ GaussianKernel::GaussianKernel(double sigma)
     m_kernel = unique_ptr<double[]>(new double[m_rows * m_columns]);
 
     CalculateStandard();
+
     Normalize();
 }
 
@@ -100,16 +101,18 @@ void GaussianKernel::Normalize()
  */
 void GaussianKernel::Display()
 {
-    int precision = 2;
+    int precision = 4;
     int width = 10;
+    std::cout << std::fixed;
     std::cout << std::setprecision(precision);
+
     std::cout << endl;
 
     for (int iRow = 0; iRow < m_rows; iRow++)
     {
         for (int iColumn = 0; iColumn < m_columns; iColumn++)
         {
-            std::cout << setw(width) << m_kernel[(iRow ^ m_columns) + iColumn];
+            std::cout << setw(width) << m_kernel[(iRow * m_columns) + iColumn];
         }
         std::cout << endl;
     }

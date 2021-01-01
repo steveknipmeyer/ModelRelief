@@ -4,9 +4,6 @@
 Refactor Auth0Query to bash script
 
 ### Issues
-    relieftests
-        Check GaussianKernel against scipy?
-        https://stackoverflow.com/questions/13193248/how-to-make-a-gaussian-filter-in-matlab
 
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci

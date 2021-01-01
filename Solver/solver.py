@@ -310,7 +310,7 @@ class Solver:
             filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
             filewriter.write()
 
-            # copy to  file system for access by graphical applications outside WSL (e.g. MeshLab)
+            # copy to  file system for access by graphical applications (e.g. MeshLab)
             mr_temp = os.getenv(EnvironmentNames.MRTemp)
             if (mr_temp is None):
                 return

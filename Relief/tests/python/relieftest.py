@@ -135,10 +135,11 @@ class ReliefTest(unittest.TestCase):
 
     @display_tag('\nGaussianKernel', Colors.BrightMagenta)
     @display_tag()
-    def test_GaussianKernelOriginEquals1(self):
-        """ Verifies the origin (center) of the kernel is equal to 1.0."""
+    def test_GaussianKernelOriginEqualsExpectedValue(self):
+        """ Verifies the origin (center) of the normlized kernel is the expected value."""
+        """ See MATLAB/GaussianFilter"""
         k = relief.GaussianKernel(1.0)
-        self.assertAlmostEqual(k.Element(0, 0), 0.16210282163712664, places = 6)
+        self.assertAlmostEqual(k.Element(0, 0), 0.1592, places = 4)
 
     @display_tag('\nC++', Colors.BrightMagenta)
     @display_tag()

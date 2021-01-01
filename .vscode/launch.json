@@ -118,8 +118,8 @@
         // "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        // "program": "${workspaceFolder}/Explorer/explorer.py",
-        // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
+        "program": "${workspaceFolder}/Explorer/explorer.py",
+        "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceFolder}/Solver/solver.py",
@@ -127,7 +127,7 @@
 
         //  ----- Relief C++ Extensions
         //  "program": "${workspaceFolder}/Relief/tests/python/benchmark.py",
-         "program": "${workspaceFolder}/Relief/tests/python/relieftest.py",
+        //  "program": "${workspaceFolder}/Relief/tests/python/relieftest.py",
 
         //  setup.py must be run from the Relief folder as the CMake paths are all relative to Relief.
         //  "cwd": "${workspaceFolder}/Relief",
