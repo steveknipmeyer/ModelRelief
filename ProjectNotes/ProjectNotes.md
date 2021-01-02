@@ -3,8 +3,15 @@
 ## Commit Notes
 
 ### Issues
-    Build a VSCode C++ project from GaussianKernel.
-        https://code.visualstudio.com/docs/cpp/config-linux
+    GitHub avatar
+    TSLint -> ESLint
+        new branchrun
+        https://medium.com/@KevinBGreene/migrating-from-tslint-to-eslint-6382f8bd3b6
+        https://github.com/typescript-eslint/tslint-to-eslint-config
+    Prettier
+    KAK
+
+    NodeWortkbench
 
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
@@ -42,6 +49,8 @@
 ### Runtime
     Solver
         Runtime error does not propagate back to UI.
+            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
+            Should the GeneratedFile be deleted if the Solver fails?
 
     Explorer
         The UI layout has changed. The Process button is not visible.
@@ -54,7 +63,6 @@
 
 ### Refactoring
     Review all casing of files and directories.
-    Resolve WIP markers.
     Tools -> bin
 
 ### Security
@@ -86,10 +94,11 @@
 ### Project
     Clean up git branches.
         https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
-        master->Windows
+        master->win64
             SQLServer
             Docker
         linux->master
+
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Review ProjectNotes
@@ -1677,9 +1686,6 @@ np_fill, relief_fill
     Madge
         https://github.com/pahen/madge
         madge --warning --circular --extensions ts ModelRelief\Scripts
-
-    ALM
-        https://legacy.gitbook.com/book/alm-tools/alm/details
 
 #### DbInitializer
 
