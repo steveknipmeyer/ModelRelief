@@ -39,7 +39,21 @@ class LineCount:
 
         root = os.getcwd()
 
-        excluded_folders = {"bin", "devenv", ".git", "mrenv", "node_modules", "obj", "Publish", "store", "Test", "typings", ".vscode", "wwwroot"}
+        excluded_folders = {
+            ".git",
+            ".vscode",
+            "bin",
+            "lib",
+            "devenv",
+            "mrenv",
+            "node_modules",
+            "obj",
+            "Publish",
+            "store",
+            "Test",
+            "typings",
+            "wwwroot"
+        }
         source_extensions = {".cs", ".cpp", ".ts", ".py"}
         counts = dict()
         tools = Tools()

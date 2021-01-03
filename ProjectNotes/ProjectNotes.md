@@ -3,6 +3,13 @@
 ## Commit Notes
 
 ### Issues
+    Clean up git branches.
+        https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
+        master->win64
+            SQLServer
+            Docker
+        linux->master
+
     GitHub avatar
     TSLint -> ESLint
         new branchrun
@@ -92,13 +99,6 @@
 ### Test
 
 ### Project
-    Clean up git branches.
-        https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
-        master->win64
-            SQLServer
-            Docker
-        linux->master
-
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Review ProjectNotes
