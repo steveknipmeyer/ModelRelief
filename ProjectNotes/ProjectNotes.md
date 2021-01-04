@@ -3,16 +3,9 @@
 ## Commit Notes
 
 ### Issues
-    Clean up git branches.
-        https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
-        master->w10
-            SQLServer
-            Docker
-        linux->master
-
     GitHub avatar
     TSLint -> ESLint
-        new branchrun
+        new branch
         https://medium.com/@KevinBGreene/migrating-from-tslint-to-eslint-6382f8bd3b6
         https://github.com/typescript-eslint/tslint-to-eslint-config
     Prettier
