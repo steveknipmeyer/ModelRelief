@@ -5,7 +5,7 @@
 ### Issues
     Clean up git branches.
         https://www.hanselman.com/blog/easily-rename-your-git-default-branch-from-master-to-main
-        master->win64
+        master->w10
             SQLServer
             Docker
         linux->master
