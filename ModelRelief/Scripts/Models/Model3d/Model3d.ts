@@ -86,6 +86,7 @@ export class Model3d extends FileModel {
      * @description Perform setup and initialization.
      */
     public initialize(): void {
+        // NOP
     }
 
     /**

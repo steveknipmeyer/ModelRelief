@@ -85,7 +85,7 @@ export abstract class BaseCamera extends Model {
     /**
      * @description Resets the clipping planes to the default values.
      */
-    public setDefaultClippingPlanes() {
+    public setDefaultClippingPlanes(): void {
         CameraHelper.setDefaultClippingPlanes(this.viewCamera);
     }
 
@@ -144,7 +144,7 @@ export abstract class BaseCamera extends Model {
      * @description Finalize the camera clipping planes to fit the model if they are at the default values..
      * @param {THREE.Group} modelGroup Target model.
      */
-    public finalizeClippingPlanes(modelGroup: THREE.Group) {
+    public finalizeClippingPlanes(modelGroup: THREE.Group): void {
 
         const setNear = (this.viewCamera.near === DefaultCameraSettings.NearClippingPlane);
         const setFar  = (this.viewCamera.far === DefaultCameraSettings.FarClippingPlane);

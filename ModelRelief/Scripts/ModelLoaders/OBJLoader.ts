@@ -4,6 +4,7 @@
 // https://github.com/sohamkamani/three-object-loader/blob/master/source/index.js       //
 //                                                                                      //
 // -------------------------------------------------------------------------------------//
+/* eslint-disable */
 
 "use strict";
 

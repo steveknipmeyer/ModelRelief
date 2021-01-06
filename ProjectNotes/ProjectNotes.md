@@ -1,6 +1,5 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
-
 ### Issues
     Gravatar
 
@@ -42,25 +41,6 @@
             InheritanceTest.ts
             DepthBufferTest.ts
 
-        Models
-            Interfaces/IImageModel.ts
-
-            Mesh/Mesh.ts
-            MeshTransform/MeshTransform.ts
-            Camera/BaseCamera.ts
-            Camera/CameraHelper.ts
-            Camera/OrthographicCamera.ts
-            Camera/DefaultCameraSettings.ts
-            Camera/PerspectiveCamera.ts
-            Camera/CameraFactory.ts
-            Model3d/Model3d.ts
-            DepthBuffer/DepthBufferFactory.ts
-            DepthBuffer/DepthBuffer.ts
-            DepthBuffer/DepthBufferFactorySettings.ts
-            Project/Project.ts
-            NormalMap/NormalMap.ts
-            NormalMap/NormalMapFactory.ts
-            NormalMap/NormalMapFactorySettings.ts
 
         Controllers
             ComposerControllerDevelopment.ts

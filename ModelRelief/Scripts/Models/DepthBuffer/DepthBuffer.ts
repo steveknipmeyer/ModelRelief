@@ -178,7 +178,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
 
             if (depthValue < minimumNormalized)
                 minimumNormalized = depthValue;
-            }
+        }
 
         return minimumNormalized;
     }
@@ -207,7 +207,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
             const depthValue: number = this.depths[index];
             if (depthValue > maximumNormalized)
                 maximumNormalized = depthValue;
-            }
+        }
         return maximumNormalized;
     }
 
@@ -252,6 +252,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
      * @description Perform setup and initialization.
      */
     public initialize(): void {
+        // NOP
     }
 
     /**
@@ -316,7 +317,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
      * @param {any} column Buffer column.
      * @returns {number}
      */
-    public depthNormalized(row: number, column): number {
+    public depthNormalized(row: number, column: number): number {
 
         const index = (Math.round(row) * this.width) + Math.round(column);
         return this.depths[index];
@@ -328,7 +329,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
      * @param {any} column Buffer column.
      * @returns {number}
      */
-    public depth(row: number, column): number {
+    public depth(row: number, column: number): number {
 
         const depthNormalized = this.depthNormalized(row, column);
         const depth = this.normalizedToModelDepth(depthNormalized);
@@ -339,7 +340,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
     /**
      * @description Analyzes properties of a depth buffer.
      */
-    public analyze() {
+    public analyze(): void {
         // this._logger.clearLog();
 
         const middle = this.width / 2;

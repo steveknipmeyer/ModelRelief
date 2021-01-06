@@ -25,6 +25,7 @@ export class CameraHelper {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 
 //#region Clipping Planes
@@ -33,7 +34,7 @@ export class CameraHelper {
      * @static
      * @param {IThreeBaseCamera} camera Camera to update.
      */
-    public static setDefaultClippingPlanes(camera: IThreeBaseCamera) {
+    public static setDefaultClippingPlanes(camera: IThreeBaseCamera): void {
 
         camera.near = DefaultCameraSettings.NearClippingPlane;
         camera.far  = DefaultCameraSettings.FarClippingPlane;

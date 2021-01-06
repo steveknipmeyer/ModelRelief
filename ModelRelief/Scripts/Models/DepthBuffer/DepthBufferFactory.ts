@@ -106,7 +106,7 @@ export class DepthBufferFactory extends ImageFactory {
     /**
      * Analyze the render and depth targets.
      */
-    protected analyzeTargets()  {
+    protected analyzeTargets(): void  {
 
         this._depthBuffer.analyze();
     }

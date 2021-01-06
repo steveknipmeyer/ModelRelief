@@ -117,7 +117,7 @@ export class NormalMapFactory extends ImageFactory {
     /**
      * Analyze the render and depth targets.
      */
-    protected analyzeTargets()  {
+    protected analyzeTargets(): void  {
 
         this._normalMap.analyze();
     }

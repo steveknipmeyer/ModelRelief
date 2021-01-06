@@ -147,6 +147,7 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
      * @description Perform setup and initialization.
      */
     public initialize(): void {
+        // NOP
     }
 
     /**
@@ -195,7 +196,7 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
     /**
      * @description Analyzes properties of a normal map.
      */
-    public analyze() {
+    public analyze(): void {
         // this._logger.clearLog();
 
         const middle = this.width / 2;

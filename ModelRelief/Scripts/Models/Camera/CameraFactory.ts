@@ -27,6 +27,7 @@ export class CameraFactory {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 
     /**
