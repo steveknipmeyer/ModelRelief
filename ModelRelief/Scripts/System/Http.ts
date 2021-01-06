@@ -146,7 +146,7 @@ export class HttpLibrary {
      * @param postUrl Url to post.
      * @param fileData File data, may be binary.
      */
-    public static async postFileAsync(postUrl: string, fileData: any): Promise<IModel> {
+    public static async postFileAsync(postUrl: string, fileData: ArrayBuffer): Promise<IModel> {
 
         const blob = new Blob([fileData], { type: ContentType.OctetStream });
         const result = await HttpLibrary.submitHttpRequestAsync(postUrl, MethodType.Post, ContentType.OctetStream, blob);

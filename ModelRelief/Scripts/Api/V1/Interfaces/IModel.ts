@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
- /**
+/**
   *  Common interface for all DTO model types.
   *  @interface
   */

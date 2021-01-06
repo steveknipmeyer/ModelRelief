@@ -73,7 +73,7 @@ export class Model<T extends IModel> implements IModel {
      * @param {*} requestData Data to send (or null)
      * @returns {Promise<RequestResponse>}
      */
-    public async submitRequestAsync(endPoint: string, requestType: MethodType, contentType: ContentType, requestData: any): Promise<RequestResponse> {
+    public async submitRequestAsync(endPoint: string, requestType: MethodType, contentType: ContentType, requestData: string): Promise<RequestResponse> {
 
         const exportTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
 
@@ -89,6 +89,7 @@ export class Model<T extends IModel> implements IModel {
      * @returns {*}
      */
     public factory(parameters: IModel): any {
+        // NOP
     }
 
     /**
@@ -175,7 +176,7 @@ export class FileModel<T extends IFileModel> extends Model<T> implements IFileMo
      * @description Posts the model and a backing file to its API endpoint.
      * @returns {Promise<T>}
      */
-    public async postFileAsync(fileData: any): Promise<T> {
+    public async postFileAsync(fileData: ArrayBuffer): Promise<T> {
 
         const exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
@@ -415,7 +416,7 @@ export class Camera extends Model<Camera> implements ICamera {
         // Navigation Properties
         this.projectId              = projectId;
         this.project                = project;
-        }
+    }
 
     /**
      * @description Constructs an instance of a Camera.
@@ -697,7 +698,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         // Navigation Properties
         this.projectId              = projectId;
         this.project                = project;
-        }
+    }
 
     /**
      * @description Constructs an instance of a MeshTransform.

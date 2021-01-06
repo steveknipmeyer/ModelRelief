@@ -1,98 +1,112 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
+Api/V1/Models
+
 ### Issues
     Gravatar
 
     TSLint -> ESLint
-        ./Viewers/DepthBufferViewer.ts
-        `./Viewers/TrackballControls.ts
-        ./Viewers/Viewer.ts
-        ./Viewers/OrthographicTrackballControls.ts
-        ./Viewers/NormalMapViewerControls.ts
-        ./Viewers/NormalMapViewer.ts
-        ./Viewers/ImageViewer.ts
-        ./Viewers/ModelViewer.ts
-        ./Viewers/InputControllerHelper.ts
-        ./Viewers/ModelViewerControls.ts
-        ./Viewers/CameraControls.ts
-        ./Viewers/MeshViewerControls.ts
-        ./Viewers/MeshViewer.ts
-        ./Viewers/ModelViewerControlsDevelopment.ts
-        ./Viewers/DepthBufferViewerControls.ts
-        ./Viewers/CameraControlsDevelopment.ts
-        ./ModelRelief.ts
-        ./Views/MeshView.ts
-        ./Views/NormalMapView.ts
-        ./Views/DepthBufferView.ts
-        ./Views/ModelView.ts
-        ./Views/ComposerView.ts
-        ./UnitTests/UnitTests.ts
-        ./Api/V1/Interfaces/IMeshTransform.ts
-        ./Api/V1/Interfaces/IMesh.ts
-        ./Api/V1/Interfaces/ICamera.ts
-        ./Api/V1/Interfaces/IGeneratedFileModel.ts
-        ./Api/V1/Interfaces/IFileModel.ts
-        ./Api/V1/Interfaces/IProject.ts
-        ./Api/V1/Interfaces/IModel.ts
-        ./Api/V1/Interfaces/IDepthBuffer.ts
-        ./Api/V1/Interfaces/INormalMap.ts
-        ./Api/V1/Interfaces/IModel3d.ts
-        ./Api/V1/Models/GeneratedFileModel.ts
-        ./Api/V1/Models/FileModel.ts
-        ./Api/V1/Models/DtoModels.ts
-        ./Api/V1/Models/Model.ts
-        ./ModelExporters/OBJExporter.ts
-        ./Graphics/Mesh3dCache.ts
-        ./Graphics/ImageFactorySettings.ts
-        ./Graphics/ImageFactory.ts
-        ./Graphics/Graphics.ts
-        ./Graphics/Mesh3d.ts
-        ./Graphics/Materials.ts
-        ./Graphics/IThreeBaseCamera.ts
-        ./Graphics/WebGLDetector.ts
-        ./Workbench/QuokkaWorkbench.ts
-        ./Workbench/CameraTest.ts
-        ./Workbench/InheritanceTest.ts
-        ./Workbench/DepthBufferTest.ts
-        ./Models/Interfaces/IImageModel.ts
-        ./Models/Mesh/Mesh.ts
-        ./Models/MeshTransform/MeshTransform.ts
-        ./Models/Camera/BaseCamera.ts
-        ./Models/Camera/CameraHelper.ts
-        ./Models/Camera/OrthographicCamera.ts
-        ./Models/Camera/DefaultCameraSettings.ts
-        ./Models/Camera/PerspectiveCamera.ts
-        ./Models/Camera/CameraFactory.ts
-        ./Models/Model3d/Model3d.ts
-        ./Models/DepthBuffer/DepthBufferFactory.ts
-        ./Models/DepthBuffer/DepthBuffer.ts
-        ./Models/DepthBuffer/DepthBufferFactorySettings.ts
-        ./Models/Project/Project.ts
-        ./Models/NormalMap/NormalMap.ts
-        ./Models/NormalMap/NormalMapFactory.ts
-        ./Models/NormalMap/NormalMapFactorySettings.ts
-        ./Controllers/ComposerControllerDevelopment.ts
-        ./@types/ModelReliefExtensions.d.ts
-        ./System/Services.ts
-        ./System/ConvertBase64.ts
-        ./System/EventManager.ts
-        ./System/Exception.ts
-        ./System/StopWatch.ts
-        ./System/Initializer.ts
-        ./System/Html.ts
-        ./System/RequestResponse.ts
-        ./System/Math.ts
-        ./System/SystemSettings.ts
-        ./System/Format.ts
-        ./System/HttpStatus.ts
-        ./System/Tools.ts
-        ./System/Image.ts
-        ./System/Logger.ts
-        ./System/Http.ts
-        ./ModelLoaders/Loader.ts
-        ./ModelLoaders/TestModelLoader.ts
-        ./ModelLoaders/SinglePrecisionLoader.ts
-        ./ModelLoaders/OBJLoader.ts
+
+        Viewers
+            DepthBufferViewer.ts
+            TrackballControls.ts
+            Viewer.ts
+            OrthographicTrackballControls.ts
+            NormalMapViewerControls.ts
+            NormalMapViewer.ts
+            ImageViewer.ts
+            ModelViewer.ts
+            InputControllerHelper.ts
+            ModelViewerControls.ts
+            CameraControls.ts
+            MeshViewerControls.ts
+            MeshViewer.ts
+            ModelViewerControlsDevelopment.ts
+            DepthBufferViewerControls.ts
+            CameraControlsDevelopment.ts
+
+        UnitTests
+            UnitTests.ts
+
+        Api/V1/Interfaces
+            IMeshTransform.ts
+            IMesh.ts
+            ICamera.ts
+            IGeneratedFileModel.ts
+            IFileModel.ts
+            IProject.ts
+            IModel.ts
+            IDepthBuffer.ts
+            INormalMap.ts
+            IModel3d.ts
+
+
+        ModelExporters
+            OBJExporter.ts
+
+        Graphics
+            Mesh3dCache.ts
+            Mesh3dCache.ts
+            ImageFactorySettings.ts
+            ImageFactory.ts
+            Graphics.ts
+            Mesh3d.ts
+            Materials.ts
+            IThreeBaseCamera.ts
+            WebGLDetector.ts
+
+        Workbench
+            QuokkaWorkbench.ts
+            CameraTest.ts
+            InheritanceTest.ts
+            DepthBufferTest.ts
+
+        Models
+            Interfaces/IImageModel.ts
+
+            Mesh/Mesh.ts
+            MeshTransform/MeshTransform.ts
+            Camera/BaseCamera.ts
+            Camera/CameraHelper.ts
+            Camera/OrthographicCamera.ts
+            Camera/DefaultCameraSettings.ts
+            Camera/PerspectiveCamera.ts
+            Camera/CameraFactory.ts
+            Model3d/Model3d.ts
+            DepthBuffer/DepthBufferFactory.ts
+            DepthBuffer/DepthBuffer.ts
+            DepthBuffer/DepthBufferFactorySettings.ts
+            Project/Project.ts
+            NormalMap/NormalMap.ts
+            NormalMap/NormalMapFactory.ts
+            NormalMap/NormalMapFactorySettings.ts
+
+        Controllers
+            ComposerControllerDevelopment.ts
+
+        System
+            Services.ts
+            ConvertBase64.ts
+            EventManager.ts
+            Exception.ts
+            StopWatch.ts
+            Initializer.ts
+            Html.ts
+            RequestResponse.ts
+            Math.ts
+            SystemSettings.ts
+            Format.ts
+            HttpStatus.ts
+            Tools.ts
+            Image.ts
+            Logger.ts
+            Http.ts
+
+        ModelLoaders
+            Loader.ts
+            TestModelLoader.ts
+            SinglePrecisionLoader.ts
+            OBJLoader.ts
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
