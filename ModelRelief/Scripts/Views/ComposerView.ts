@@ -15,14 +15,13 @@ import {Mesh} from "Scripts/Models/Mesh/Mesh";
 import {EventManager, EventType} from "Scripts/System/EventManager";
 import {ElementIds} from "Scripts/System/Html";
 import {Services} from "Scripts/System/Services";
-import {SystemSettings} from "Scripts/System/SystemSettings";
 import {DepthBufferView} from "Scripts/Views/DepthBufferView";
 import {MeshView} from "Scripts/Views/MeshView";
 import {ModelView} from "Scripts/Views/ModelView";
 import {NormalMapView} from "Scripts/Views/NormalMapView";
 
 // defined in Edit HTML page
-declare var composerMeshModel: Dto.Mesh;
+declare let composerMeshModel: Dto.Mesh;
 
 /**
  * @description Represents the UI view used to compose a relief.
@@ -43,7 +42,7 @@ export class ComposerView {
     // Private
     private _eventManager: EventManager = null;
 
-//#region Properties
+    //#region Properties
     /**
      * @description Gets the Container Id.
      * @readonly
@@ -109,7 +108,7 @@ export class ComposerView {
     /**
      * @description Performs initialization.
      */
-    public initialize() {
+    public initialize(): void {
 
         Services.defaultLogger.addInfoMessage("ModelRelief started");
 
@@ -166,12 +165,12 @@ export class ComposerView {
         });
     }
 
-//#endregion
+    //#endregion
 
-//#region Event Handlers
-//#endregion
+    //#region Event Handlers
+    //#endregion
 
-//#region Initialization
+    //#region Initialization
     /**
      * @description Initializes the Composer context.
      *  The JSON DTO objects are hydrated into full instances.
@@ -188,7 +187,7 @@ export class ComposerView {
                 MeshTransform
         */
         return Mesh.fromDtoModelAsync(composerMeshModel);
-        }
+    }
 
 //#endregion
 }

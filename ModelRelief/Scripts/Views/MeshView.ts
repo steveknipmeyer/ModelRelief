@@ -35,7 +35,7 @@ export class MeshView {
         this.initialize(model);
     }
 
-//#region Properties
+    //#region Properties
     /**
      * @description Gets the Container Id.
      * @readonly
@@ -55,17 +55,17 @@ export class MeshView {
 
         return this._meshViewer;
     }
-//#endregion
+    //#endregion
 
-//#region Event Handlers
-//#endregion
+    //#region Event Handlers
+    //#endregion
 
-//#region Initialization
+    //#region Initialization
     /**
      * @description Performs initialization.
      * @param {FileModel} model Initial model to load.
      */
-    public initialize(model: FileModel) {
+    public initialize(model: FileModel): void {
 
         // Mesh Viewer
         this._meshViewer = new MeshViewer("MeshViewer", ElementIds.MeshView, ElementIds.MeshCanvas, model);

@@ -32,7 +32,7 @@ export class NormalMapView {
         this.initialize(normalMAp);
     }
 
-//#region Properties
+    //#region Properties
     /**
      * @description Gets the Container Id.
      * @readonly
@@ -52,17 +52,17 @@ export class NormalMapView {
 
         return this._normalMapViewer;
     }
-//#endregion
+    //#endregion
 
-//#region Event Handlers
-//#endregion
+    //#region Event Handlers
+    //#endregion
 
-//#region Initialization
+    //#region Initialization
     /**
      * @description Performs initialization.
      * @param {NormalMap} normalMap The NormalMap bound to this view.
      */
-    public initialize(normalMap: NormalMap) {
+    public initialize(normalMap: NormalMap): void {
 
         // NormalMap Viewer
         this._normalMapViewer = new NormalMapViewer("NormalMapViewer", ElementIds.NormalMapCanvas, normalMap);

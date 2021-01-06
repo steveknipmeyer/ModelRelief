@@ -32,7 +32,7 @@ export class DepthBufferView {
         this.initialize(depthBuffer);
     }
 
-//#region Properties
+    //#region Properties
     /**
      * @description Gets the Container Id.
      * @readonly
@@ -52,17 +52,17 @@ export class DepthBufferView {
 
         return this._depthBufferViewer;
     }
-//#endregion
+    //#endregion
 
-//#region Event Handlers
-//#endregion
+    //#region Event Handlers
+    //#endregion
 
-//#region Initialization
+    //#region Initialization
     /**
      * @description Performs initialization.
      * @param {DepthBuffer} depthBuffer The DepthBuffer bound to this view.
      */
-    public initialize(depthBuffer: DepthBuffer) {
+    public initialize(depthBuffer: DepthBuffer): void {
 
         // DepthBuffer Viewer
         this._depthBufferViewer = new DepthBufferViewer("DepthBufferViewer", ElementIds.DepthBufferCanvas, depthBuffer);

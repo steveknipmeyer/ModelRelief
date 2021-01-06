@@ -36,7 +36,7 @@ export class ModelView {
         this.initialize(model);
     }
 
-//#region Properties
+    //#region Properties
     /**
      * @description Gets the Container Id.
      * @readonly
@@ -56,17 +56,17 @@ export class ModelView {
 
         return this._modelViewer;
     }
-//#endregion
+    //#endregion
 
-//#region Event Handlers
-//#endregion
+    //#region Event Handlers
+    //#endregion
 
-//#region Initialization
+    //#region Initialization
     /**
      * @description Performs initialization.
      * @param {FileModel} model Initial model to load.
      */
-    public initialize(model: FileModel) {
+    public initialize(model: FileModel): void {
 
         // Model Viewer
         this._modelViewer = new ModelViewer("ModelViewer", ElementIds.ModelView, ElementIds.ModelCanvas, model);
