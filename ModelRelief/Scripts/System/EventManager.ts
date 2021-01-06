@@ -48,6 +48,7 @@ export class EventManager {
      * Creates EventManager object. It needs to be called with '.call' to add the functionality to an object.
      */
     constructor() {
+        // NOP
     }
 
     /**
@@ -130,7 +131,7 @@ export class EventManager {
      * @param {...any[]} args Arguments for event.
      * @returns {void}
      */
-    public dispatchEvent(theTarget: any, theEventType: EventType, ...args: any[]): void {
+    public dispatchEvent(theTarget: unknown, theEventType: EventType, ...args: any[]): void {
 
         // no events defined; do nothing
         if (this._listeners === undefined)

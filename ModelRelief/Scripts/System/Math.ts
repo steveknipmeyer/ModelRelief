@@ -27,5 +27,6 @@ export class MathLibrary {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 }

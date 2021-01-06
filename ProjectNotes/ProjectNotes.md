@@ -1,5 +1,7 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
+System
+
 ### Issues
     Gravatar
 
@@ -44,25 +46,6 @@
 
         Controllers
             ComposerControllerDevelopment.ts
-
-        System
-            Services.ts
-            ConvertBase64.ts
-            EventManager.ts
-            Exception.ts
-            StopWatch.ts
-            Initializer.ts
-            Html.ts
-            RequestResponse.ts
-            Math.ts
-            SystemSettings.ts
-            Format.ts
-            HttpStatus.ts
-            Tools.ts
-            Image.ts
-            Logger.ts
-            Http.ts
-
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'

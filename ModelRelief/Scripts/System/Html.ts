@@ -46,7 +46,7 @@ export enum ElementClasses {
     FitViewButton      = "fitViewButton",
 }
 
-export let ElementAttributes = {
+export const ElementAttributes = {
 
     DatGuiWidth :  256,
 };
@@ -61,5 +61,6 @@ export class HtmlLibrary {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 }

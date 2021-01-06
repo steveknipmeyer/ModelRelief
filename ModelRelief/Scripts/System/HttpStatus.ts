@@ -349,7 +349,7 @@ interface IMessageMap {
     [code: number]: string;
 }
 
-export let HttpStatusMessage: IMessageMap = {};
+export const HttpStatusMessage: IMessageMap = {};
 
 HttpStatusMessage[HttpStatusCode.ACCEPTED] = "Accepted";
 HttpStatusMessage[HttpStatusCode.BAD_GATEWAY] = "Bad Gateway";

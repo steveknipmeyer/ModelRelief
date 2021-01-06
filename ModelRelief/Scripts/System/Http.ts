@@ -59,7 +59,7 @@ export class HttpLibrary {
      * @param requestData Data for request.
      * @param onComplete  Callback for request completion.
      */
-    public static sendXMLHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any, onComplete: (request: XMLHttpRequest) => any): void {
+    public static sendXMLHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: Document | BodyInit, onComplete: (request: XMLHttpRequest) => any): void {
 
         const requestTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
         const request = new XMLHttpRequest();
@@ -128,7 +128,7 @@ export class HttpLibrary {
      * @param {Uint8} buffer The buffer to convert.
      * @param {Function} callback The function to call when conversion is complete.
      */
-    public static async largeBufferToStringAsync(buffer): Promise<string> {
+    public static async largeBufferToStringAsync(buffer: BlobPart): Promise<string> {
 
         return new Promise<string>((resolve, reject) => {
             const bufferBlob = new Blob([buffer]);
@@ -163,7 +163,7 @@ export class HttpLibrary {
      * @param {ContentType} contentType HTTP content type.
      * @param {any} requestData Data to send in the request.
      */
-    public static async submitHttpRequestAsync(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: any): Promise<RequestResponse> {
+    public static async submitHttpRequestAsync(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: BodyInit): Promise<RequestResponse> {
 
         const headers = new Headers({
             "Content-Type": contentType,
@@ -199,6 +199,7 @@ export class HttpLibrary {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 }
 

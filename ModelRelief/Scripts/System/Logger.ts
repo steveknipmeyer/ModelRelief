@@ -44,6 +44,7 @@ export class ConsoleLogger implements ILogger {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 
     /**
@@ -84,7 +85,7 @@ export class ConsoleLogger implements ILogger {
      * Add an error message to the log.
      * @param errorMessage Error message text.
      */
-    public addErrorMessage(errorMessage: string) {
+    public addErrorMessage(errorMessage: string): void {
 
         this.addMessageEntry(errorMessage, MessageClass.Error);
     }
@@ -93,7 +94,7 @@ export class ConsoleLogger implements ILogger {
      * Add a warning message to the log.
      * @param warningMessage Warning message text.
      */
-    public addWarningMessage(warningMessage: string) {
+    public addWarningMessage(warningMessage: string): void {
 
         this.addMessageEntry(warningMessage, MessageClass.Warning);
     }
@@ -102,7 +103,7 @@ export class ConsoleLogger implements ILogger {
      * Add an informational message to the log.
      * @param infoMessage Information message text.
      */
-    public addInfoMessage(infoMessage: string) {
+    public addInfoMessage(infoMessage: string): void {
 
         this.addMessageEntry(infoMessage, MessageClass.Info);
     }
@@ -112,7 +113,7 @@ export class ConsoleLogger implements ILogger {
      * @param message Information message text.
      * @param style Optional style.
      */
-    public addMessage(message: string, style?: string) {
+    public addMessage(message: string, style?: string): void {
 
         this.addMessageEntry(message, MessageClass.None, style);
     }
@@ -120,7 +121,7 @@ export class ConsoleLogger implements ILogger {
     /**
      * Adds an empty line
      */
-    public addEmptyLine() {
+    public addEmptyLine(): void {
 
         console.log("");
     }
@@ -128,7 +129,7 @@ export class ConsoleLogger implements ILogger {
     /**
      * Clears the log output
      */
-    public clearLog() {
+    public clearLog(): void {
 
         console.clear();
     }
@@ -188,7 +189,7 @@ export class HTMLLogger implements ILogger {
      * Add an error message to the log.
      * @param errorMessage Error message text.
      */
-    public addErrorMessage(errorMessage: string) {
+    public addErrorMessage(errorMessage: string): void {
 
         this.addMessageElement(errorMessage, MessageClass.Error);
     }
@@ -197,7 +198,7 @@ export class HTMLLogger implements ILogger {
      * Add a warning message to the log.
      * @param warningMessage Warning message text.
      */
-    public addWarningMessage(warningMessage: string) {
+    public addWarningMessage(warningMessage: string): void {
 
         this.addMessageElement(warningMessage, MessageClass.Warning);
     }
@@ -206,7 +207,7 @@ export class HTMLLogger implements ILogger {
      * Add an informational message to the log.
      * @param infoMessage Information message text.
      */
-    public addInfoMessage(infoMessage: string) {
+    public addInfoMessage(infoMessage: string): void {
 
         this.addMessageElement(infoMessage, MessageClass.Info);
     }
@@ -216,7 +217,7 @@ export class HTMLLogger implements ILogger {
      * @param message Information message text.
      * @param style Optional CSS style.
      */
-    public addMessage(message: string, style?: string) {
+    public addMessage(message: string, style?: string): void {
 
         const messageElement = this.addMessageElement(message);
         if (style)
@@ -226,7 +227,7 @@ export class HTMLLogger implements ILogger {
     /**
      * Adds an empty line
      */
-    public addEmptyLine() {
+    public addEmptyLine(): void {
 
         // https://stackoverflow.com/questions/5140547/line-break-inside-a-list-item-generates-space-between-the-lines
 //      this.addMessage('<br/><br/>');
@@ -236,7 +237,7 @@ export class HTMLLogger implements ILogger {
     /**
      * Clears the log output
      */
-    public clearLog() {
+    public clearLog(): void {
 
         // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
         while (this.rootElement.firstChild) {

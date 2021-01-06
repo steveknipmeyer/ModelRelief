@@ -55,5 +55,5 @@ export class Initializer  {
         await this.initializeSystemSettings();
 
         return true;
-        }
+    }
 }

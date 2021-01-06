@@ -14,7 +14,7 @@ export class Exception {
      * @static
      * @param {string} exceptionMessage Exception message.
      */
-    public static throwError(exceptionMessage: string) {
+    public static throwError(exceptionMessage: string): void {
 
         Services.defaultLogger.addErrorMessage(exceptionMessage);
         throw new Error(exceptionMessage);
@@ -24,5 +24,6 @@ export class Exception {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 }

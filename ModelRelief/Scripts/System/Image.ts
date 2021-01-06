@@ -63,7 +63,7 @@ export class Image {
      * @param row Pixel row.
      * @param column Column row.
      */
-     public HexRGBA(row: number, column: number): string {
+    public HexRGBA(row: number, column: number): string {
 
         const offset = (row * this.width) + column;
         const rValue = this.data[offset + 0].toString(16);
