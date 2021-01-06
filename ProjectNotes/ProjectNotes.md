@@ -1,6 +1,5 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
-Api/V1/Models
 
 ### Issues
     Gravatar
@@ -25,24 +24,6 @@ Api/V1/Models
             DepthBufferViewerControls.ts
             CameraControlsDevelopment.ts
 
-        UnitTests
-            UnitTests.ts
-
-        Api/V1/Interfaces
-            IMeshTransform.ts
-            IMesh.ts
-            ICamera.ts
-            IGeneratedFileModel.ts
-            IFileModel.ts
-            IProject.ts
-            IModel.ts
-            IDepthBuffer.ts
-            INormalMap.ts
-            IModel3d.ts
-
-
-        ModelExporters
-            OBJExporter.ts
 
         Graphics
             Mesh3dCache.ts
@@ -102,11 +83,6 @@ Api/V1/Models
             Logger.ts
             Http.ts
 
-        ModelLoaders
-            Loader.ts
-            TestModelLoader.ts
-            SinglePrecisionLoader.ts
-            OBJLoader.ts
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'

@@ -55,7 +55,7 @@ export class Loader {
             return await this.loadMeshAsync(fileModel);
 
         this._logger.addErrorMessage(`Logger: invalid FileModel type = ${typeof(fileModel)}`);
-   }
+    }
 
     /**
      * @description Loads a mesh from a Model3d.
@@ -109,12 +109,13 @@ export class Loader {
                 transformer = depthBuffer.normalizedToModelDepth.bind(depthBuffer);
                 break;
 
-            case MeshFormat.SFP:
+            case MeshFormat.SFP: {
                 // N.B. Solver returns a grid scaled according to the DepthBuffer dimensions (pixels). Only the Z coordinates are returned so the XY dimensions are implicity the DepthBuffer pixel units.
                 //      However, the Mesh construction logic will build the grid in real world model units so a conversion is required to map the Z values to real world units.
                 const scaleFactor = meshExtents.x / depthBuffer.width;
                 transformer = (value: number) => scaleFactor * value;
                 break;
+            }
 
             case MeshFormat.DDB:
             case MeshFormat.DFP:

@@ -4,6 +4,7 @@
 // https://github.com/AndrewRayCode/three-obj-exporter/blob/master/index.js       //
 //                                                                                      //
 // -------------------------------------------------------------------------------------//
+/* eslint-disable */
 
 "use strict";
 

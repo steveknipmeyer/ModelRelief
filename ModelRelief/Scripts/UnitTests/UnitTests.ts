@@ -24,7 +24,7 @@ import {Services} from "Scripts/System/Services";
  */
 export class UnitTests {
 
-    public static DefaultTolerance: number = 0.001;
+    public static DefaultTolerance = 0.001;
 
     /**
      * @description Determines whether two matrices are equal within the given tolerance.
@@ -34,7 +34,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance) {
+    public static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`;
@@ -57,7 +57,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance) {
+    public static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
     }
@@ -70,7 +70,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance) {
+    public static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`;
@@ -87,7 +87,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance) {
+    public static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`;
@@ -103,7 +103,7 @@ export class UnitTests {
      * @param {number} scale The range of the scalar. (default = 1).
      * @returns {number}
      */
-    public static generateScalar(scale: number = 1): number {
+    public static generateScalar(scale = 1): number {
 
         const scalar = Math.random() * scale;
         return scalar;
@@ -138,7 +138,7 @@ export class UnitTests {
      * @param {THREE.PerspectiveCamera} c1 First camera to compare.
      * @param {THREE.PerspectiveCamera} c2 Second camera to compare.
      */
-    public static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera) {
+    public static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera): void {
 
         try {
             this.scalarsEqualWithinTolerance(c1.fov, c2.fov, "fov");
@@ -168,7 +168,7 @@ export class UnitTests {
      * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
      * @static
      */
-    public static cameraRoundTrip() {
+    public static cameraRoundTrip(): void {
 
         // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
 
@@ -202,8 +202,7 @@ export class UnitTests {
                 id          : 1,
                 name        : "Perspective Camera",
                 description : "This camera has random properties.",
-                },
-                perspectiveCamera);
+            }, perspectiveCamera);
 
             const cameraModel = camera.toDtoModel();
             CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
@@ -243,7 +242,7 @@ export class UnitTests {
         assert.deepEqual(originalByteArray, readByteArray, "Byte arrays are equal.");
     }
 
-    public static vertexMapping(depthBuffer: DepthBuffer, mesh: THREE.Mesh) {
+    public static vertexMapping(depthBuffer: DepthBuffer, mesh: THREE.Mesh): void {
 
         const image = new Image(depthBuffer.width, depthBuffer.height, depthBuffer.rgbaArray);
 
@@ -329,6 +328,7 @@ export class UnitTests {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 }
 

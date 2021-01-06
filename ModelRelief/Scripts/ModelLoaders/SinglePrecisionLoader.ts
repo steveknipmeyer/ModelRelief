@@ -68,7 +68,7 @@ export class SinglePrecisionLoader {
      * @param {any} column Buffer column.
      * @returns {number}
      */
-    public value(row: number, column): number {
+    public value(row: number, column: number): number {
 
         const index = (Math.round(row) * this.bufferExtents.x) + Math.round(column);
         const valueRaw = this.values[index];
@@ -121,17 +121,17 @@ export class SinglePrecisionLoader {
         const upperRight  = new THREE.Vector3(originX + faceSize,  originY + faceSize, this.value(row + 1, column + 1));            // baseVertexIndex + 3
 
         facePair.vertices.push(
-             lowerLeft,             // baseVertexIndex + 0
-             lowerRight,            // baseVertexIndex + 1
-             upperLeft,             // baseVertexIndex + 2
-             upperRight,             // baseVertexIndex + 3
-         );
+            lowerLeft,             // baseVertexIndex + 0
+            lowerRight,            // baseVertexIndex + 1
+            upperLeft,             // baseVertexIndex + 2
+            upperRight,             // baseVertexIndex + 3
+        );
 
          // right hand rule for polygon winding
         facePair.faces.push(
-             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
-             new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2),
-         );
+            new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 1, baseVertexIndex + 3),
+            new THREE.Face3(baseVertexIndex + 0, baseVertexIndex + 3, baseVertexIndex + 2),
+        );
 
         return facePair;
     }
@@ -174,67 +174,67 @@ export class SinglePrecisionLoader {
      * @param {THREE.Material} material Material to assign to the mesh.
      * @returns {THREE.Mesh}
      */
-   public constructGraphicsByTriangulation(meshXYExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
-       const meshGeometry = new THREE.Geometry();
-       const faceSize: number = meshXYExtents.x / (this.bufferExtents.x - 1);
-       let baseVertexIndex: number = 0;
+    public constructGraphicsByTriangulation(meshXYExtents: THREE.Vector2, material: THREE.Material): THREE.Mesh {
+        const meshGeometry = new THREE.Geometry();
+        const faceSize: number = meshXYExtents.x / (this.bufferExtents.x - 1);
+        let baseVertexIndex: number = 0;
 
-       const meshLowerLeft: THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2));
+        const meshLowerLeft: THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2));
 
-       for (let iRow = 0; iRow < (this.bufferExtents.y - 1); iRow++) {
-           for (let iColumn = 0; iColumn < (this.bufferExtents.x - 1); iColumn++) {
+        for (let iRow = 0; iRow < (this.bufferExtents.y - 1); iRow++) {
+            for (let iColumn = 0; iColumn < (this.bufferExtents.x - 1); iColumn++) {
 
-               const facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
+                const facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
 
-               meshGeometry.vertices.push(...facePair.vertices);
-               meshGeometry.faces.push(...facePair.faces);
+                meshGeometry.vertices.push(...facePair.vertices);
+                meshGeometry.faces.push(...facePair.faces);
 
-               baseVertexIndex += 4;
-           }
-       }
-       meshGeometry.mergeVertices();
-       const mesh = new THREE.Mesh(meshGeometry, material);
+                baseVertexIndex += 4;
+            }
+        }
+        meshGeometry.mergeVertices();
+        const mesh = new THREE.Mesh(meshGeometry, material);
 
-       return mesh;
-   }
+        return mesh;
+    }
 
    /**
     * @description Constructs a mesh of the given base dimension.
     * @param {THREE.Material} [material] Material to assign to mesh.
     * @returns {THREE.Mesh}
     */
-   public constructGraphics(material?: THREE.Material): THREE.Mesh {
+    public constructGraphics(material?: THREE.Material): THREE.Mesh {
 
-       const timerTag = Services.timer.mark("SinglePrecisionLoader.constructGraphics");
+        const timerTag = Services.timer.mark("SinglePrecisionLoader.constructGraphics");
 
-       if (!material)
-           material = new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters);
+        if (!material)
+            material = new THREE.MeshPhongMaterial(Mesh3d.DefaultMeshPhongMaterialParameters);
 
        // The mesh size is in real world units to match the buffer values which are also in real world units.
        // Find the size of the near plane to size the mesh to the model units.
 
-       let meshCache: THREE.Mesh = Mesh3d.Cache.getMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y));
-       meshCache = null;
-       const mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, this.meshExtents, material) : this.constructGraphicsByTriangulation(this.meshExtents, material);
-       mesh.name = this.meshParameters.name;
+        let meshCache: THREE.Mesh = Mesh3d.Cache.getMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y));
+        meshCache = null;
+        const mesh: THREE.Mesh = meshCache ? this.constructGraphicsFromTemplate(meshCache, this.meshExtents, material) : this.constructGraphicsByTriangulation(this.meshExtents, material);
+        mesh.name = this.meshParameters.name;
 
-       const meshGeometry = mesh.geometry as THREE.Geometry;
-       meshGeometry.verticesNeedUpdate = true;
-       meshGeometry.normalsNeedUpdate  = true;
-       meshGeometry.elementsNeedUpdate = true;
+        const meshGeometry = mesh.geometry as THREE.Geometry;
+        meshGeometry.verticesNeedUpdate = true;
+        meshGeometry.normalsNeedUpdate  = true;
+        meshGeometry.elementsNeedUpdate = true;
 
-       const faceNormalsTag = Services.timer.mark("meshGeometry.computeFaceNormals");
-       meshGeometry.computeVertexNormals();
-       meshGeometry.computeFaceNormals();
-       Services.timer.logElapsedTime(faceNormalsTag);
+        const faceNormalsTag = Services.timer.mark("meshGeometry.computeFaceNormals");
+        meshGeometry.computeVertexNormals();
+        meshGeometry.computeFaceNormals();
+        Services.timer.logElapsedTime(faceNormalsTag);
 
        // Mesh was constructed with Z = buffer(X,Y).
        // Now rotate mesh to align with viewer XY plane so Top view is looking down on the mesh.
-       mesh.rotateX(-Math.PI / 2);
+        mesh.rotateX(-Math.PI / 2);
 
-       Mesh3d.Cache.addMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y), mesh);
-       Services.timer.logElapsedTime(timerTag);
+        Mesh3d.Cache.addMesh(this.meshExtents, new THREE.Vector2(this.bufferExtents.x, this.bufferExtents.y), mesh);
+        Services.timer.logElapsedTime(timerTag);
 
-       return mesh;
-   }
+        return mesh;
+    }
 }

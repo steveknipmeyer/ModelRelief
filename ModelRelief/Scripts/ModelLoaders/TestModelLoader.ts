@@ -26,6 +26,7 @@ export class TestModelLoader {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 
     /**
@@ -53,20 +54,20 @@ export class TestModelLoader {
                 break;
 
             case TestModel.Sphere:
-            modelGroup = this.loadSphereModel();
-            break;
+                modelGroup = this.loadSphereModel();
+                break;
 
             case TestModel.SlopedPlane:
-            modelGroup = this.loadSlopedPlaneModel();
-            break;
+                modelGroup = this.loadSlopedPlaneModel();
+                break;
 
             case TestModel.Box:
-            modelGroup = this.loadBoxModel();
-            break;
+                modelGroup = this.loadBoxModel();
+                break;
 
             case TestModel.Checkerboard:
-            modelGroup = this.loadCheckerboardModel();
-            break;
+                modelGroup = this.loadCheckerboardModel();
+                break;
         }
         return modelGroup;
     }
