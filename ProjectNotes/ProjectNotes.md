@@ -1,18 +1,98 @@
 ﻿# ASP.NETCore Migration
-
 ## Commit Notes
-
 ### Issues
-    GitHub avatar
+    Gravatar
+
     TSLint -> ESLint
-        new branch
-        https://medium.com/@KevinBGreene/migrating-from-tslint-to-eslint-6382f8bd3b6
-        https://github.com/typescript-eslint/tslint-to-eslint-config
-    Prettier
-    KAK
-
-    NodeWortkbench
-
+        ./Viewers/DepthBufferViewer.ts
+        `./Viewers/TrackballControls.ts
+        ./Viewers/Viewer.ts
+        ./Viewers/OrthographicTrackballControls.ts
+        ./Viewers/NormalMapViewerControls.ts
+        ./Viewers/NormalMapViewer.ts
+        ./Viewers/ImageViewer.ts
+        ./Viewers/ModelViewer.ts
+        ./Viewers/InputControllerHelper.ts
+        ./Viewers/ModelViewerControls.ts
+        ./Viewers/CameraControls.ts
+        ./Viewers/MeshViewerControls.ts
+        ./Viewers/MeshViewer.ts
+        ./Viewers/ModelViewerControlsDevelopment.ts
+        ./Viewers/DepthBufferViewerControls.ts
+        ./Viewers/CameraControlsDevelopment.ts
+        ./ModelRelief.ts
+        ./Views/MeshView.ts
+        ./Views/NormalMapView.ts
+        ./Views/DepthBufferView.ts
+        ./Views/ModelView.ts
+        ./Views/ComposerView.ts
+        ./UnitTests/UnitTests.ts
+        ./Api/V1/Interfaces/IMeshTransform.ts
+        ./Api/V1/Interfaces/IMesh.ts
+        ./Api/V1/Interfaces/ICamera.ts
+        ./Api/V1/Interfaces/IGeneratedFileModel.ts
+        ./Api/V1/Interfaces/IFileModel.ts
+        ./Api/V1/Interfaces/IProject.ts
+        ./Api/V1/Interfaces/IModel.ts
+        ./Api/V1/Interfaces/IDepthBuffer.ts
+        ./Api/V1/Interfaces/INormalMap.ts
+        ./Api/V1/Interfaces/IModel3d.ts
+        ./Api/V1/Models/GeneratedFileModel.ts
+        ./Api/V1/Models/FileModel.ts
+        ./Api/V1/Models/DtoModels.ts
+        ./Api/V1/Models/Model.ts
+        ./ModelExporters/OBJExporter.ts
+        ./Graphics/Mesh3dCache.ts
+        ./Graphics/ImageFactorySettings.ts
+        ./Graphics/ImageFactory.ts
+        ./Graphics/Graphics.ts
+        ./Graphics/Mesh3d.ts
+        ./Graphics/Materials.ts
+        ./Graphics/IThreeBaseCamera.ts
+        ./Graphics/WebGLDetector.ts
+        ./Workbench/QuokkaWorkbench.ts
+        ./Workbench/CameraTest.ts
+        ./Workbench/InheritanceTest.ts
+        ./Workbench/DepthBufferTest.ts
+        ./Models/Interfaces/IImageModel.ts
+        ./Models/Mesh/Mesh.ts
+        ./Models/MeshTransform/MeshTransform.ts
+        ./Models/Camera/BaseCamera.ts
+        ./Models/Camera/CameraHelper.ts
+        ./Models/Camera/OrthographicCamera.ts
+        ./Models/Camera/DefaultCameraSettings.ts
+        ./Models/Camera/PerspectiveCamera.ts
+        ./Models/Camera/CameraFactory.ts
+        ./Models/Model3d/Model3d.ts
+        ./Models/DepthBuffer/DepthBufferFactory.ts
+        ./Models/DepthBuffer/DepthBuffer.ts
+        ./Models/DepthBuffer/DepthBufferFactorySettings.ts
+        ./Models/Project/Project.ts
+        ./Models/NormalMap/NormalMap.ts
+        ./Models/NormalMap/NormalMapFactory.ts
+        ./Models/NormalMap/NormalMapFactorySettings.ts
+        ./Controllers/ComposerControllerDevelopment.ts
+        ./@types/ModelReliefExtensions.d.ts
+        ./System/Services.ts
+        ./System/ConvertBase64.ts
+        ./System/EventManager.ts
+        ./System/Exception.ts
+        ./System/StopWatch.ts
+        ./System/Initializer.ts
+        ./System/Html.ts
+        ./System/RequestResponse.ts
+        ./System/Math.ts
+        ./System/SystemSettings.ts
+        ./System/Format.ts
+        ./System/HttpStatus.ts
+        ./System/Tools.ts
+        ./System/Image.ts
+        ./System/Logger.ts
+        ./System/Http.ts
+        ./ModelLoaders/Loader.ts
+        ./ModelLoaders/TestModelLoader.ts
+        ./ModelLoaders/SinglePrecisionLoader.ts
+        ./ModelLoaders/OBJLoader.ts
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
@@ -80,6 +160,7 @@
 
 ### Publishing
     Host on Digital Ocean.
+    KAK invitation
     Notices:
         3D CAD Jewelry
             https://matrixusergroup.com/
@@ -108,6 +189,7 @@
         (Hidden) DepthBufferView and NormalMapView
 
     Remove References
+        *.exe
         ModelRelief.dgml (Linux?)
 
 ### SSL

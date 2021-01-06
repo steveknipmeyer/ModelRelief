@@ -81,7 +81,7 @@ class ControlSettings {
 export class ComposerController {
 
     // Static
-    public static DefaultReliefDimensions: number = 512;           // relief dimensions
+    public static DefaultReliefDimensions = 512;                    // relief dimensions
 
     // Public
     public _composerView: ComposerView;                             // application view
@@ -343,7 +343,7 @@ export class ComposerController {
     /**
      * @description Saves the relief.
      */
-    public saveReliefDebug() {
+    public saveReliefDebug(): void {
         CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "saveRelief");
         InputControllerHelper.debugInputControllerProperties(this.modelViewer.name, this.modelViewer.controls, this.modelViewer.scene, this.modelViewer.camera);
     }
@@ -351,7 +351,7 @@ export class ComposerController {
     /**
      * @description Saves the relief.
      */
-    public saveRelief() {
+    public saveRelief(): void {
         // WIP: Save the Mesh as an OBJ format file?
         // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
 
@@ -375,7 +375,7 @@ export class ComposerController {
     /**
      * @description Initialization.
      */
-    public initialize() {
+    public initialize(): void{
         this._logger = Services.defaultLogger;
 
         // overall dimensions
@@ -392,7 +392,7 @@ export class ComposerController {
     /**
      * @description Initialize the view settings that are controllable by the user
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
 
         this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform);
 

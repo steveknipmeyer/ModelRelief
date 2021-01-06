@@ -24,16 +24,6 @@
         "Scripts/*"
       ]
     },
-
-    "plugins": [
-      {
-        "name": "typescript-tslint-plugin",
-        "alwaysShowRuleFailuresAsWarnings": true,
-        "ignoreDefinitionFiles": true,
-        "suppressWhileTypeErrorsPresent": false,
-        "mockTypeScriptVersion": false
-      }
-    ]
   },
 
   "exclude": [ // folders <not> included in compilation
