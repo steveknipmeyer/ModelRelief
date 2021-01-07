@@ -1,10 +1,10 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
+Use npx tsc
 ### Issues
+    When does tsc use .tsconfig?
     Experiment with Scripts/Workbench tools.
-            QuokkaWorkbench.ts
             CameraTest.ts
-            InheritanceTest.ts
 
     TSLint -> ESLint
         Viewers
@@ -123,6 +123,7 @@
         Check lists ([])
         Remove backslashes.
     Documentation
+        Document DepthBufferView and analyze tools (e.g. HtmlLogger).
         Document VcXsrv
         AzureKeyVault
         Solver

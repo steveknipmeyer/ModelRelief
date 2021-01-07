@@ -65,9 +65,7 @@
     "yallist": "^3.0.2"
   },
   "scripts": {
-    "test": "echo hello, world",
-    "jsdoc": "node_modules/.bin/jsdoc.cmd",
-    "tsc": "tsc"
+    "test": "echo hello, world"
   },
   "author": "",
   "license": "ISC"

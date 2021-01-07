@@ -142,7 +142,7 @@
         },
 
         {
-            "name": "Python (Active File)",
+            "name": "Python (active file)",
             "type": "python",
             "request": "launch",
             "python": "${command:python.interpreterPath}",
@@ -164,13 +164,16 @@
         },
 
         {
-            "name": "node Workbench",
+            "name": "node workbench",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/NodeWorkbench/workbench.js",
-            "outFiles": [
-                "${workspaceFolder}/NodeWorkbench/**/*.js"
-            ]
+            "program": "${workspaceFolder}/NodeWorkbench/workbench.js"
+        },
+        {
+            "name": "node (active file)",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}",
         },
         {
             "name": "gulp Debug",

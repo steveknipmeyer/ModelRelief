@@ -42,7 +42,7 @@
             "label": "Compile TypeScript",
             "type": "shell",
             "linux": {
-                "command": "${workspaceFolder}/node_modules/typescript/bin/tsc --pretty -p ./ModelRelief "
+                "command": "npx tsc --pretty -p ./ModelRelief "
             },
             "group": "build",
             "presentation": {

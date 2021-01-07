@@ -4,11 +4,10 @@
 //                                                                         //
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
+// MRHome; cd ModelRelief
+// npx tsc -t ES2020 -m commonjs Scripts/Workbench/InheritanceTest.ts
+
 "use strict";
-
-import {HTMLLogger} from "Scripts/System/Logger";
-
-const logger = new HTMLLogger();
 
 /**
  * @description Widget
@@ -35,12 +34,12 @@ export class Widget {
      * @description Operate
      */
     public operate(): void {
-        logger.addInfoMessage(`${this.name} operating....`);
+        console.log(`${this.name} operating....`);
     }
 }
 
 /**
- * @description SuperWidget
+ * @description ColorWidget
  * @export
  * @class ColorWidget
  * @extends {Widget}
@@ -146,7 +145,7 @@ export class InheritanceTest {
         const colorWidget = new ColorWidget ("ColorWidget", 1.0, "red");
         colorWidget.operate();
 
-        const child = new Child("GaGa", "Dad", "Steve");
+        const child = new Child("Grandfather", "Father", "Child");
     }
 }
 

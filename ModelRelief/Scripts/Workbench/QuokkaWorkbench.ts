@@ -1,11 +1,6 @@
 import fetch = require("node-fetch");
 
  /**
-  *  Common interface for all DTO model types.
-  *  @interface
-  */
-
- /**
   * Server Endpoints
   */
 export enum ServerEndPoints {
@@ -33,11 +28,11 @@ enum ContentType {
  * HTTP Method
  */
 enum MethodType {
-    Get = "GET",
-    Delete = "DELETE",
-    Patch = "PUT",
-    Post  = "POST",
-    Put = "PUT",
+    Get     = "GET",
+    Delete  = "DELETE",
+    Patch   = "PUT",
+    Post    = "POST",
+    Put     = "PUT",
 }
 
 /**

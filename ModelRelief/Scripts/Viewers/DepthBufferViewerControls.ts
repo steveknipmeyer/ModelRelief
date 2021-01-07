@@ -8,7 +8,6 @@
 import * as dat from "dat.gui";
 import {SystemSettings} from "Scripts/System/SystemSettings";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
-import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
 
 /**
  * @class
@@ -36,7 +35,7 @@ export class DepthBufferViewerControls {
      * Creates an instance of DepthBufferViewerControls.
      * @param {*} depthBufferViewer
      */
-    constructor(depthBufferViewer: DepthBufferViewer) {
+    constructor(depthBufferViewer: unknown) {
 
         this._depthBufferViewer = depthBufferViewer;
 
