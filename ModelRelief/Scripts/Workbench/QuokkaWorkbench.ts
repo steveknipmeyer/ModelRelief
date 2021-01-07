@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const fetch = require("node-fetch");
+import fetch = require("node-fetch");
 
  /**
   *  Common interface for all DTO model types.
@@ -107,7 +106,7 @@ async function submitHttpRequestAsync(theEndpoint: string, methodType: MethodTyp
     return result;
 }
 
-const endpoint = "http://localhost:60655/api/v1/projects/1";
+const endpoint = "http://localhost:5000";
 const resultPromise = submitHttpRequestAsync(endpoint, MethodType.Get, ContentType.Json, null);
 resultPromise.then((resolution) => {
     console.log (resolution);

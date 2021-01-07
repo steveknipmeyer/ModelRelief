@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as dat from "dat-gui";
+import * as dat from "dat.gui";
 import * as THREE from "three";
 
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
@@ -27,7 +27,7 @@ import {Viewer} from "Scripts/Viewers/Viewer";
  */
 export class CameraViewer extends Viewer {
 
-    public populateScene() {
+    public populateScene(): void {
 
         const triad = Graphics.createWorldAxesTriad(new THREE.Vector3(), 10, 2.5, 2.5);
         this.scene.add(triad);
@@ -61,10 +61,10 @@ class ViewerControls {
      */
     constructor(camera: IThreeBaseCamera, showBoundingBoxes: () => any, setClippingPlanes: () => any, roundtripCamera: () => any) {
 
-            this.showBoundingBoxes = showBoundingBoxes;
-            this.setClippingPlanes  = setClippingPlanes;
-            this.roundtripCamera    = roundtripCamera;
-        }
+        this.showBoundingBoxes = showBoundingBoxes;
+        this.setClippingPlanes  = setClippingPlanes;
+        this.roundtripCamera    = roundtripCamera;
+    }
 }
 
 /**
@@ -83,12 +83,13 @@ export class App {
      * Creates an instance of App.
      */
     constructor() {
+        // NOP
     }
 
     /**
      * @description Set the camera clipping planes to the model extents in View coordinates.
      */
-    public setClippingPlanes() {
+    public setClippingPlanes(): void {
 
         const modelGroup: THREE.Group   = this._viewer.modelGroup;
         const cameraMatrixWorldInverse: THREE.Matrix4 = this._viewer.camera.matrixWorldInverse;
@@ -116,19 +117,19 @@ export class App {
      */
     public createBoundingBox(object: THREE.Object3D, color: number): THREE.Mesh {
 
-            let boundingBox: THREE.Box3 = new THREE.Box3();
-            boundingBox = boundingBox.setFromObject(object);
+        let boundingBox: THREE.Box3 = new THREE.Box3();
+        boundingBox = boundingBox.setFromObject(object);
 
-            const material = new THREE.MeshPhongMaterial( {color, opacity : 1.0, wireframe : true});
-            const boundingBoxMesh: THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(), boundingBox, material);
+        const material = new THREE.MeshPhongMaterial( {color, opacity : 1.0, wireframe : true});
+        const boundingBoxMesh: THREE.Mesh = Graphics.createBoundingBoxMeshFromBoundingBox(boundingBox.getCenter(new THREE.Vector3()), boundingBox, material);
 
-            return boundingBoxMesh;
-        }
+        return boundingBoxMesh;
+    }
 
     /**
      * @description Show the clipping planes of the model in View and World coordinates.
      */
-    public showBoundingBoxes() {
+    public showBoundingBoxes(): void {
 
         const modelGroup: THREE.Group   = this._viewer.modelGroup;
         const cameraMatrixWorld: THREE.Matrix4 = this._viewer.camera.matrixWorld;
@@ -154,7 +155,7 @@ export class App {
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    public roundtripCameraX()  {
+    public roundtripCameraX(): void  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
@@ -180,7 +181,7 @@ export class App {
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    public roundtripCameraY()  {
+    public roundtripCameraY(): void  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
@@ -189,7 +190,7 @@ export class App {
         const position    = new THREE.Vector3();
         const quaternion  = new THREE.Quaternion();
         const scale       = new THREE.Vector3();
-        let up          = new THREE.Vector3();
+        let up            = new THREE.Vector3();
         originalCamera.matrix.decompose(position, quaternion, scale);
         up = originalCamera.up;
 
@@ -212,7 +213,7 @@ export class App {
     /**
      * @description Roundtrip a PerspectiveCamera through the DTO model.
      */
-    public roundtripCameraZ()  {
+    public roundtripCameraZ(): void  {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
         const camera = new PerspectiveCamera({}, this._viewer.camera as THREE.PerspectiveCamera);
@@ -236,9 +237,7 @@ export class App {
     /**
      * @description Initialize the view settings that are controllable by the user
      */
-    public initializeViewerControls() {
-
-        const scope = this;
+    public initializeViewerControls(): void {
 
         this._viewerControls = new ViewerControls(this._viewer.camera, this.showBoundingBoxes.bind(this), this.setClippingPlanes.bind(this), this.roundtripCameraZ.bind(this));
 
@@ -266,13 +265,13 @@ export class App {
     }
 
     /**
-     * @description Main.
+     * @description Main
      */
-    public run() {
+    public run(): void {
         this._logger = Services.defaultLogger;
 
         // Viewer
-        this._viewer = new CameraViewer("CameraViewer", "viewerCanvas");
+        this._viewer = new CameraViewer("CameraViewer", "viewrContainerId", "modelCanvasId");
 
         // UI Controls
         this.initializeViewerControls();

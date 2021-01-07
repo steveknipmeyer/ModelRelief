@@ -15,6 +15,7 @@
     "@types/three": "0.93.10",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
+    "acorn": "^8.0.4",
     "ansi-colors": "^4.1.1",
     "ansi-regex": "^2.1.1",
     "babel-eslint": "^7.2.3",
@@ -46,6 +47,7 @@
     "minipass": "^2.3.5",
     "mkdirp": "^0.5.1",
     "natives": "^1.1.6",
+    "node-fetch": "^2.6.1",
     "number-is-nan": "^1.0.1",
     "once": "^1.4.0",
     "path": "^0.12.7",
@@ -68,6 +70,5 @@
     "tsc": "tsc"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "ISC"
 }

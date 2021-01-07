@@ -8,6 +8,7 @@
 import * as dat from "dat.gui";
 import {SystemSettings} from "Scripts/System/SystemSettings";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
 
 /**
  * @class
@@ -35,7 +36,7 @@ export class DepthBufferViewerControls {
      * Creates an instance of DepthBufferViewerControls.
      * @param {*} depthBufferViewer
      */
-    constructor(depthBufferViewer: any) {
+    constructor(depthBufferViewer: DepthBufferViewer) {
 
         this._depthBufferViewer = depthBufferViewer;
 
@@ -50,9 +51,7 @@ export class DepthBufferViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    public initializeControls() {
-
-        const scope = this;
+    public initializeControls(): void {
 
         this._depthBufferViewerSettings = new DepthBufferViewerSettings();
 
@@ -75,7 +74,7 @@ export class DepthBufferViewerControls {
         const controlDisplayDepthBuffer = depthBufferViewerOptions.add(this._depthBufferViewerSettings, "displayDepthBuffer").name("Display DepthBuffer");
         controlDisplayDepthBuffer.onChange ((value: boolean) => {
 
-            scope._depthBufferViewer.displayImage(value);
+            this._depthBufferViewer.displayImage(value);
         });
         depthBufferViewerOptions.open();
     }

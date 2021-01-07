@@ -34,7 +34,7 @@ export class Widget {
     /**
      * @description Operate
      */
-    public operate() {
+    public operate(): void {
         logger.addInfoMessage(`${this.name} operating....`);
     }
 }
@@ -132,12 +132,13 @@ export class InheritanceTest {
      * @constructor
      */
     constructor() {
+        // NOP
     }
 
     /**
      * @description Main
      */
-    public main() {
+    public main(): void {
 
         const widget = new Widget ("Widget", 1.0);
         widget.operate();

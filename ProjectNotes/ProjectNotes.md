@@ -1,12 +1,12 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
-System
-
 ### Issues
-    Gravatar
+    Experiment with Scripts/Workbench tools.
+            QuokkaWorkbench.ts
+            CameraTest.ts
+            InheritanceTest.ts
 
     TSLint -> ESLint
-
         Viewers
             DepthBufferViewer.ts
             TrackballControls.ts
@@ -25,7 +25,6 @@ System
             DepthBufferViewerControls.ts
             CameraControlsDevelopment.ts
 
-
         Graphics
             Mesh3dCache.ts
             Mesh3dCache.ts
@@ -37,15 +36,7 @@ System
             IThreeBaseCamera.ts
             WebGLDetector.ts
 
-        Workbench
-            QuokkaWorkbench.ts
-            CameraTest.ts
-            InheritanceTest.ts
-            DepthBufferTest.ts
-
-
-        Controllers
-            ComposerControllerDevelopment.ts
+    Gravatar
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
