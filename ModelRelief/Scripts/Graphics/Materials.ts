@@ -7,7 +7,8 @@
 
 import * as THREE from "three";
 
-import {Services} from "Scripts/System/Services";
+// Three.js may handle materials as a single instance or an array of instances.
+export type ThreeMaterial = THREE.Material | THREE.Material[];
 
 /**
  * @description General THREE.js Material classes and helpers
@@ -21,6 +22,7 @@ export class Materials {
      * Creates an instance of Materials.
      */
     constructor() {
+        // NOP
     }
 
     /**
@@ -54,9 +56,7 @@ export class Materials {
      */
     public static createMeshPhongBumpMaterial(bumpMapTexture: THREE.Texture): THREE.MeshPhongMaterial {
 
-        let material: THREE.MeshPhongMaterial;
-
-        material = new THREE.MeshPhongMaterial({
+        const material = new THREE.MeshPhongMaterial({
             color   : 0xffffff,
 
             bumpMap   : bumpMapTexture,
@@ -159,7 +159,7 @@ export class Materials {
      * @static
      * @param {*} material Material to free.
      */
-    public static disposeMaterial(material) {
+    public static disposeMaterial(material: ThreeMaterial): void {
         Materials.processMaterial(material, Materials.dispose);
     }
 
@@ -168,9 +168,9 @@ export class Materials {
      * @static
      * @param {*} material Material to clone.
      */
-    public static cloneMaterial(material): THREE.Material {
+    public static cloneMaterial(material: ThreeMaterial): THREE.Material {
 
-        const cloneMaterial = material.isMaterial ? material.clone() : material.slice(0);
+        const cloneMaterial = material instanceof THREE.Material ? material.clone() : material[0];
 
         Materials.processMaterial(cloneMaterial, Materials.cloneTextures);
         return cloneMaterial;

@@ -76,7 +76,7 @@ export class Graphics {
      * @param {boolean} removeRoot Remove root object itself.
      * @returns
      */
-    public static removeObjectChildren(rootObject: THREE.Object3D, removeRoot: boolean) {
+    public static removeObjectChildren(rootObject: THREE.Object3D, removeRoot: boolean): void {
 
         if (!rootObject)
             return;
@@ -190,14 +190,10 @@ export class Graphics {
      * @returns {THREE.Mesh}
      */
     public static createBoundingBoxMeshFromGeometry(position: THREE.Vector3, geometry: THREE.Geometry, material: THREE.Material): THREE.Mesh {
-
-        let boundingBox: THREE.Box3;
-        let boxMesh: THREE.Mesh;
-
         geometry.computeBoundingBox();
-        boundingBox = geometry.boundingBox;
 
-        boxMesh = this.createBoundingBoxMeshFromBoundingBox (position, boundingBox, material);
+        const boundingBox: THREE.Box3 = geometry.boundingBox;
+        const boxMesh: THREE.Mesh = this.createBoundingBoxMeshFromBoundingBox (position, boundingBox, material);
 
         return boxMesh;
     }
@@ -238,7 +234,7 @@ export class Graphics {
 
         Services.timer.logElapsedTime(timerTag);
         return boundingBox;
-        }
+    }
 
     /**
      * @description Creates a box mesh.
@@ -430,8 +426,7 @@ export class Graphics {
         // camera target line
         const unitTarget = new THREE.Vector3(0, 0, -1);
         unitTarget.applyQuaternion(camera.quaternion);
-        let scaledTarget: THREE.Vector3;
-        scaledTarget = unitTarget.multiplyScalar(-boundingBoxView.max.z);
+        const scaledTarget: THREE.Vector3 = unitTarget.multiplyScalar(-boundingBoxView.max.z);
 
         const startPoint: THREE.Vector3 = camera.position;
         const endPoint: THREE.Vector3 = new THREE.Vector3();
@@ -692,7 +687,7 @@ export class Graphics {
             const intersection = intersects[iIntersection];
             if (!(intersection.object instanceof THREE.Line))
                 return intersection;
-            }
+        }
 
         return null;
     }
@@ -716,7 +711,7 @@ export class Graphics {
         if (!canvas) {
             Services.defaultLogger.addErrorMessage(`Canvas element id = ${id} not found`);
             return null;
-            }
+        }
 
         // CSS controls the size
         if (!width || !height)
@@ -737,6 +732,7 @@ export class Graphics {
      * Creates an instance of Graphics.
      */
     constructor() {
+        // NOP
     }
 //#endregion
 
@@ -747,7 +743,7 @@ export class Graphics {
     /**
      * @description Display WebGLProgram properties.
      */
-    public static showWebGLPrograms(renderer: THREE.WebGLRenderer) {
+    public static showWebGLPrograms(renderer: THREE.WebGLRenderer): void {
 
         const info = renderer.info;
         const gl = renderer.context;
@@ -772,7 +768,7 @@ export class Graphics {
      * @description Reset all WebGL vertex attributes.
      * @param renderer WebGLRenderer
      */
-    public static resetWebGLVertexAttributes(renderer: THREE.WebGLRenderer) {
+    public static resetWebGLVertexAttributes(renderer: THREE.WebGLRenderer): void {
 
         // https://github.com/stackgl/gl-reset/blob/master/state.js
         // https://stackoverflow.com/questions/12427880/is-it-important-to-call-gldisablevertexattribarray

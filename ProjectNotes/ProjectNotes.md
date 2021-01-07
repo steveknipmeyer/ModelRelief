@@ -1,12 +1,15 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
-Use npx tsc
+
 ### Issues
     When does tsc use .tsconfig?
+    Ctrl+Shift+G G
     Experiment with Scripts/Workbench tools.
             CameraTest.ts
 
     TSLint -> ESLint
+        Test Graphics refatoring.
+
         Viewers
             DepthBufferViewer.ts
             TrackballControls.ts
@@ -24,17 +27,6 @@ Use npx tsc
             ModelViewerControlsDevelopment.ts
             DepthBufferViewerControls.ts
             CameraControlsDevelopment.ts
-
-        Graphics
-            Mesh3dCache.ts
-            Mesh3dCache.ts
-            ImageFactorySettings.ts
-            ImageFactory.ts
-            Graphics.ts
-            Mesh3d.ts
-            Materials.ts
-            IThreeBaseCamera.ts
-            WebGLDetector.ts
 
     Gravatar
 ### Jupyter
@@ -85,10 +77,6 @@ Use npx tsc
 
         A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it
 
-### Refactoring
-    Review all casing of files and directories.
-    Tools -> bin
-
 ### Security
     Remove steve@knipmeyer.org.
     Azure Key Secrets
@@ -96,26 +84,15 @@ Use npx tsc
         Mock azurekeysecrets.json.
             Move to a new settings file?
             How should the contact e-mail address be defined?
-
 ### Publish
 
 ### UI
     Add landing page video.
 
-### Publishing
-    Host on Digital Ocean.
-    KAK invitation
-    Notices:
-        3D CAD Jewelry
-            https://matrixusergroup.com/
-        CNC
-        ArtCAM
-        Vectrix
-        3D Printing
-        HackerNews
-
 ### Test
-
+### Refactoring
+    Review all casing of files and directories.
+    Tools -> bin
 ### Project
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
@@ -136,6 +113,17 @@ Use npx tsc
     Remove References
         *.exe
         ModelRelief.dgml (Linux?)
+### Publishing
+    Host on Digital Ocean.
+    KAK invitation
+    Notices:
+        3D CAD Jewelry
+            https://matrixusergroup.com/
+        CNC
+        ArtCAM
+        Vectrix
+        3D Printing
+        HackerNews
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04

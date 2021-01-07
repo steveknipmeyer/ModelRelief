@@ -121,7 +121,7 @@ export class ImageFactory {
     /**
      * @description Removes all scene objects
      */
-    public clearAllAssests() {
+    public clearAllAssests(): void {
 
         Graphics.removeObjectChildren(this._root, false);
         Graphics.removeObjectChildren(this._postRoot, false);
@@ -187,7 +187,7 @@ export class ImageFactory {
     /**
      * Initialize the  model view.
      */
-     protected initializeRenderer(): void {
+    protected initializeRenderer(): void {
 
         this._renderer = this.constructRenderer();
 
@@ -331,7 +331,7 @@ export class ImageFactory {
     /**
      * Constructs the orthographic camera used in the post scene to create the image.
      */
-    protected initializePostCamera() {
+    protected initializePostCamera(): void {
 
         // Setup post processing stage
         const left: number      =  -1;
