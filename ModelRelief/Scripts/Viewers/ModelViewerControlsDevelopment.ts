@@ -51,9 +51,7 @@ export class ModelViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    public initializeControls() {
-
-        const scope = this;
+    public initializeControls(): void {
 
         this._modelViewerSettings = new ModelViewerSettings();
 
@@ -76,7 +74,7 @@ export class ModelViewerControls {
         const controlDisplayGrid = modelViewerOptions.add(this._modelViewerSettings, "displayGrid").name("Display Grid");
         controlDisplayGrid.onChange ((value: boolean) => {
 
-            scope._modelViewer.displayGrid(value);
+            this._modelViewer.displayGrid(value);
         });
         modelViewerOptions.open();
     }

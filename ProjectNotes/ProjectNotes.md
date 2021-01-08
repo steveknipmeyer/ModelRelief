@@ -3,32 +3,29 @@
 
 ### Issues
     When does tsc use .tsconfig?
-    Ctrl+Shift+G G
-    Experiment with Scripts/Workbench tools.
-            CameraTest.ts
-
-    TSLint -> ESLint
-        Test Graphics refatoring.
-
-        Viewers
-            DepthBufferViewer.ts
-            TrackballControls.ts
-            Viewer.ts
-            OrthographicTrackballControls.ts
-            NormalMapViewerControls.ts
-            NormalMapViewer.ts
-            ImageViewer.ts
-            ModelViewer.ts
-            InputControllerHelper.ts
-            ModelViewerControls.ts
-            CameraControls.ts
-            MeshViewerControls.ts
-            MeshViewer.ts
-            ModelViewerControlsDevelopment.ts
-            DepthBufferViewerControls.ts
-            CameraControlsDevelopment.ts
-
+    Solver
+        Handle divide by zero errors.
+        Slope Attenuation
+                File ".././Solver/solver.py", line 206, in process_attenuation
+                    self.results.gradient_x.image = attenuation.apply(self.results.gradient_x.image, self.mesh_transform.attenuation_parameters)
+                File "/home/stephen/projects/ModelRelief/Solver/attenuation.py", line 79, in apply
+                    attenuated_array = vattenuator(array, a, b)
+                File "/home/stephen/projects/ModelRelief/devenv/lib/python3.8/site-packages/numpy/lib/function_base.py", line 2108, in __call__
+                    return self._vectorize_call(func=func, args=vargs)
+                File "/home/stephen/projects/ModelRelief/devenv/lib/python3.8/site-packages/numpy/lib/function_base.py", line 2192, in _vectorize_call
+                    outputs = ufunc(*inputs)
+                File "/home/stephen/projects/ModelRelief/Solver/attenuation.py", line 74, in attenuator
+                    weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b
+                ZeroDivisionError: float division by zero
+        How is Slope Attenuation processed?
     Gravatar
+    Experiment with development variations.
+            CameraTest.ts
+            Viewers/ModelViewerControlsDevelopment.ts
+            Viewers/CameraControlsDevelopment.ts
+
+    Class Diagram
+        https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'

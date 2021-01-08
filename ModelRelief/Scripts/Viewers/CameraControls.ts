@@ -162,24 +162,24 @@ export class CameraControls {
 
         for (const enumMember in StandardView) {
 
-            var isValueProperty = parseInt(enumMember, 10) >= 0
+            const isValueProperty = parseInt(enumMember, 10) >= 0;
             if (!isValueProperty) {
                 const viewName = enumMember;
                 const viewValue = StandardView[enumMember];
                 if (viewName === "None")
                     continue;
 
-                var anchorElement: HTMLAnchorElement = document.createElement('a');
+                const anchorElement: HTMLAnchorElement = document.createElement("a");
                 anchorElement.text = viewName;
-                anchorElement.setAttribute('data-view', viewValue);
+                anchorElement.setAttribute("data-view", viewValue);
                 anchorElement.className = "dropdown-item";
-                anchorElement.addEventListener('click', (clickEvent) => {
+                anchorElement.addEventListener("click", (clickEvent) => {
                     const targetElement : HTMLElement = <HTMLElement> clickEvent.target;
                     const standardView = parseInt(targetElement.getAttribute("data-view"), 10);
                     viewer.setCameraToStandardView(standardView);
-                }, false)
+                }, false);
 
-            standardViewControl.appendChild(anchorElement) ;
+                standardViewControl.appendChild(anchorElement) ;
             }
         }
     }

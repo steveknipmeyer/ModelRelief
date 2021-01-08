@@ -1,12 +1,12 @@
-/**
- *  https://github.com/gtsop/threejs-trackball-controls
- * "three": "^0.97.0",
- * @author Eberhard Graether / http://egraether.com/
- * @author Mark Lundin 	/ http://mark-lundin.com
- * @author Simone Manini / http://daron1337.github.io
- * @author Luca Antiga 	/ http://lantiga.github.io
- */
-
+//
+//   https://github.com/gtsop/threejs-trackball-controls
+// "three": "^0.97.0",
+// @author Eberhard Graether / http://egraether.com/
+// @author Mark Lundin 	/ http://mark-lundin.com
+// @author Simone Manini / http://daron1337.github.io
+// @author Luca Antiga 	/ http://lantiga.github.io
+//
+/* eslint-disable */
 'use strict';
 
 import * as THREE from 'three';

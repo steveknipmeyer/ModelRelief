@@ -44,7 +44,7 @@ export class MeshViewer extends Viewer {
     /**
      * @description Populate scene.
      */
-    public populateScene() {
+    public populateScene(): void {
 
         const height = 1;
         const width  = 1;
@@ -57,7 +57,7 @@ export class MeshViewer extends Viewer {
     /**
      * @description Adds lighting to the scene.
      */
-    public initializeLighting() {
+    public initializeLighting(): void {
 
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
         this.scene.add(ambientLight);
@@ -70,7 +70,7 @@ export class MeshViewer extends Viewer {
     /**
      * @description UI controls initialization.
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
 
         super.initializeUIControls();
     }

@@ -92,7 +92,7 @@ export class ImageViewer  {
     /**
      * @description Initialization.
      */
-    public initialize() {
+    public initialize(): void {
         this.initializeUIControls();
 
         const $canvas = $(this.canvas).on("mousedown", this.onMouseDown.bind(this));
@@ -101,7 +101,8 @@ export class ImageViewer  {
     /**
      * @description UI controls initialization.
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
+        // NOP
     }
 
 //#endregion
@@ -112,7 +113,8 @@ export class ImageViewer  {
      * @param row Image row.
      * @param column Image column.
      */
-    public analyzePixel(row: number, column: number) {
+    public analyzePixel(row: number, column: number): void {
+        // NOP
     }
 //#endregion
 }

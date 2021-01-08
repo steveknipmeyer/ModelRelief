@@ -33,6 +33,7 @@ export class InputControllerHelper {
      * @constructor
      */
     constructor() {
+            // NOP
     }
 
     /**
@@ -67,7 +68,7 @@ export class InputControllerHelper {
         consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
-        consoleLogger.addMessage(`Note: Target + Eye = Camera.Position`, messageStyle);
+        consoleLogger.addMessage("Note: Target + Eye = Camera.Position", messageStyle);
         consoleLogger.addMessage(`${Format.formatVector3("Camera.Position", camera.position)}`, messageStyle);
 
         // construct root object of the helper

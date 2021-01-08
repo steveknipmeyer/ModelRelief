@@ -107,13 +107,13 @@ export class CameraControls {
         // Camera
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraProperties, (event: IMREvent, camera: IThreeBaseCamera) => {
             this.synchronizeSettingsFromViewCamera(camera);
-            });
+        });
 
         // Camera Standard View
         this.viewer.eventManager.addEventListener(EventType.ViewerCameraStandardView, (event: IMREvent, standardView: StandardView) => {
             this.settings.standardView = standardView;
         });
-        }
+    }
 
     /**
      * @description Fits the active view.
@@ -175,7 +175,6 @@ export class CameraControls {
             clippingControls : showClippingControls = true,
         } = controlOptions;
 
-        const scope = this;
         this.settings = new CameraControlsSettings(this.viewer.camera);
 
         // Init dat.gui and controls for the UI
@@ -212,7 +211,7 @@ export class CameraControls {
         this._controlStandardView.onChange ((viewSetting: string) => {
 
             const view: StandardView = parseInt(viewSetting, 10);
-            scope.viewer.setCameraToStandardView(view);
+            this.viewer.setCameraToStandardView(view);
         });
 
         // Fit View
@@ -227,8 +226,8 @@ export class CameraControls {
             this._controlNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize);
             this._controlNearClippingPlane.onChange ((value) => {
 
-                scope.viewer.camera.near = value;
-                scope.viewer.camera.updateProjectionMatrix();
+                this.viewer.camera.near = value;
+                this.viewer.camera.updateProjectionMatrix();
             });
 
             // Far Clipping Plane
@@ -238,8 +237,8 @@ export class CameraControls {
             this._controlFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize);
             this._controlFarClippingPlane.onChange ((value) => {
 
-                scope.viewer.camera.far = value;
-                scope.viewer.camera.updateProjectionMatrix();
+                this.viewer.camera.far = value;
+                this.viewer.camera.updateProjectionMatrix();
             });
 
             // Bound Clipping Planes
@@ -273,9 +272,9 @@ export class CameraControls {
             stepSize = 1;
             this._controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize);
             this._controlFieldOfView.onChange((value) => {
-                if (scope.viewer.camera instanceof THREE.PerspectiveCamera) {
-                    scope.viewer.camera.fov = value;
-                    scope.viewer.camera.updateProjectionMatrix();
+                if (this.viewer.camera instanceof THREE.PerspectiveCamera) {
+                    this.viewer.camera.fov = value;
+                    this.viewer.camera.updateProjectionMatrix();
                 }
             });
         }

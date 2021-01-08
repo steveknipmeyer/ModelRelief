@@ -271,7 +271,7 @@ export class App {
         this._logger = Services.defaultLogger;
 
         // Viewer
-        this._viewer = new CameraViewer("CameraViewer", "viewrContainerId", "modelCanvasId");
+        this._viewer = new CameraViewer("CameraViewer", "viewerContainerId", "modelCanvasId");
 
         // UI Controls
         this.initializeViewerControls();

@@ -35,7 +35,7 @@ export class NormalMapViewerControls {
      * Creates an instance of NormalMapViewerControls.
      * @param {*} normalMapViewer
      */
-    constructor(normalMapViewer: any) {
+    constructor(normalMapViewer: unknown) {
 
         this._normalMapViewer = normalMapViewer;
 
@@ -50,9 +50,8 @@ export class NormalMapViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    public initializeControls() {
+    public initializeControls(): void {
 
-        const scope = this;
 
         this._normalMapViewerSettings = new NormalMapViewerSettings();
 
@@ -75,7 +74,7 @@ export class NormalMapViewerControls {
         const controlDisplayNormalMap = normalMapViewerOptions.add(this._normalMapViewerSettings, "displayNormalMap").name("Display NormalMap");
         controlDisplayNormalMap.onChange ((value: boolean) => {
 
-            scope._normalMapViewer.displayImage(value);
+            this._normalMapViewer.displayImage(value);
         });
         normalMapViewerOptions.open();
     }

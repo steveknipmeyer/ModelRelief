@@ -42,7 +42,7 @@ export class DepthBufferViewer extends ImageViewer {
     /**
      * @description UI controls initialization.
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
 
         this._depthBufferViewerControls = new DepthBufferViewerControls(this);
     }
@@ -53,7 +53,7 @@ export class DepthBufferViewer extends ImageViewer {
      * @param row Image row.
      * @param column Image column.
      */
-    public analyzePixel(row: number, column: number) {
+    public analyzePixel(row: number, column: number): void {
 
         const depthBuffer = this.imageModel as DepthBuffer;
 

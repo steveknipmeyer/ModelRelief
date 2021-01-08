@@ -49,7 +49,7 @@ export class ModelViewerControls {
     /**
      * Initialize the view settings that are controllable by the user.
      */
-    public initializeControls() {
+    public initializeControls(): void {
 
         this._modelViewerSettings = new ModelViewerSettings();
     }

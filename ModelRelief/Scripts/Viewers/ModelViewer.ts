@@ -45,7 +45,7 @@ export class ModelViewer extends Viewer {
      * @description Sets the graphics of the model viewer.
      * @param {THREE.Group} modelGroup Graphics group to set.
      */
-    public setModelGroup(modelGroup: THREE.Group) {
+    public setModelGroup(modelGroup: THREE.Group): void {
 
         // Call base class property via super
         // https://github.com/Microsoft/TypeScript/issues/4465
@@ -61,7 +61,7 @@ export class ModelViewer extends Viewer {
     /**
      * @description Populate scene.
      */
-    public populateScene() {
+    public populateScene(): void {
 
         super.populateScene();
 
@@ -73,7 +73,7 @@ export class ModelViewer extends Viewer {
     /**
      * @description General initialization.
      */
-    public initialize() {
+    public initialize(): void {
 
         super.initialize();
     }
@@ -81,7 +81,7 @@ export class ModelViewer extends Viewer {
     /**
      * @description UI controls initialization.
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
 
         super.initializeUIControls();
     }
@@ -92,7 +92,7 @@ export class ModelViewer extends Viewer {
      * @description Display the reference grid.
      * @param {boolean} visible
      */
-    public displayGrid(visible: boolean) {
+    public displayGrid(visible: boolean): void {
 
         const gridGeometry: THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;

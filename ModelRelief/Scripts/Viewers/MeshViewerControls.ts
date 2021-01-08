@@ -17,7 +17,7 @@ import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 class MeshViewerSettings {
 
     constructor() {
-
+        // NOP
     }
 }
 
@@ -48,9 +48,7 @@ export class MeshViewerControls {
     /**
      * Initialize the view settings that are controllable by the user
      */
-    public initializeControls() {
-
-        const scope = this;
+    public initializeControls(): void {
 
         this._meshViewerSettings = new MeshViewerSettings();
 

@@ -159,7 +159,7 @@ export class Viewer {
         this.initializeInputControls();
 
         this.eventManager.dispatchEvent(this, EventType.ViewerCameraProperties, camera);
-        }
+    }
 
     /**
      * @description Returns the active model.
@@ -192,7 +192,7 @@ export class Viewer {
      * @description Sets the graphics of the displayed model.
      * @param {THREE.Group} modelGroup New model to activate.
      */
-    public setModelGroup(modelGroup: THREE.Group) {
+    public setModelGroup(modelGroup: THREE.Group): void {
 
         // N.B. This is a method not a property so a sub class can override.
         // https://github.com/Microsoft/TypeScript/issues/4465
@@ -250,7 +250,7 @@ export class Viewer {
     /**
      * @description Adds a test sphere to a scene.
      */
-    public populateScene() {
+    public populateScene(): void {
 
         const mesh = Graphics.createSphereMesh(new THREE.Vector3(), 2);
         mesh.visible = false;
@@ -260,7 +260,7 @@ export class Viewer {
     /**
      * @description Initialize Scene
      */
-    public initializeScene() {
+    public initializeScene(): void {
 
         this.scene = new THREE.Scene();
         this.createRoot();
@@ -271,7 +271,7 @@ export class Viewer {
     /**
      * @description Initialize the WebGL renderer.
      */
-    public initializeRenderer() {
+    public initializeRenderer(): void {
 
         this._renderer = new THREE.WebGLRenderer({
 
@@ -286,14 +286,14 @@ export class Viewer {
     /**
      * @description Initialize the viewer camera
      */
-    public initializeCamera() {
+    public initializeCamera(): void {
         this.camera = CameraHelper.getStandardViewCamera(StandardView.Top, this.camera, this.aspectRatio, this.modelGroup);
     }
 
     /**
      * @description Adds lighting to the scene
      */
-    public initializeLighting() {
+    public initializeLighting(): void {
 
         const ambientLight = new THREE.AmbientLight(0x404040);
         this.scene.add(ambientLight);
@@ -309,7 +309,7 @@ export class Viewer {
     /**
      * @description Sets up the user input controls (Trackball or OrthographicTrackballControls)
      */
-    public initializeInputControls() {
+    public initializeInputControls(): void {
 
         //  capture active lookAt before initializing input controller
         const cameraLookAt: THREE.Vector3 = CameraHelper.getLookAt(this.camera, this.modelGroup);
@@ -329,7 +329,8 @@ export class Viewer {
     /**
      * @description Sets up the user input controls (Settings)
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void {
+        // NOP
     }
 
     /**
@@ -338,7 +339,7 @@ export class Viewer {
      * @param {KeyboardEvent} event
      * @returns
      */
-    public keydownHandler(event: KeyboardEvent) {
+    public keydownHandler(event: KeyboardEvent): void {
         let standardView = StandardView.None;
 
         // https://css-tricks.com/snippets/javascript/javascript-keycodes/
@@ -346,7 +347,7 @@ export class Viewer {
         switch (keyCode) {
 
             case "B".charCodeAt(0):
-            case "B".charCodeAt(0):
+            case "b".charCodeAt(0):
                 standardView = StandardView.Bottom;
                 break;
             case "F".charCodeAt(0):
@@ -383,7 +384,7 @@ export class Viewer {
     /**
      * @description Sets up the keyboard shortcuts.
      */
-    public initializeKeyboardShortcuts() {
+    public initializeKeyboardShortcuts(): void {
 
         this._canvas.addEventListener("keyup", (event: KeyboardEvent) => {
             this.keydownHandler(event);
@@ -393,7 +394,7 @@ export class Viewer {
     /**
      * @description Initializes diagnostic tools for debugging.
      */
-    public initializeDiagnostics() {
+    public initializeDiagnostics(): void {
 
         if (this._canvas.id !== ElementIds.ModelCanvas)
             return;
@@ -409,7 +410,7 @@ export class Viewer {
     /**
      * @description Initialize the scene with the base objects
      */
-    public initialize() {
+    public initialize(): void {
 
         this.initializeScene();
         this.initializeRenderer();
@@ -429,7 +430,7 @@ export class Viewer {
     /**
      * @description Removes all scene objects
      */
-    public clearAllAssests() {
+    public clearAllAssests(): void {
 
         Graphics.removeObjectChildren(this._root, false);
     }
@@ -437,7 +438,7 @@ export class Viewer {
     /**
      * @description Creates the root object in the scene
      */
-    public createRoot() {
+    public createRoot(): void {
 
         this._root = new THREE.Group();
         this._root.name = ObjectNames.Root;
@@ -450,7 +451,7 @@ export class Viewer {
      * @description Sets the view camera properties to the given view.
      * @param {StandardView} standardView Standard camera view to apply.
      */
-    public setCameraToStandardView(standardView: StandardView) {
+    public setCameraToStandardView(standardView: StandardView): void {
 
         const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.aspectRatio, this.modelGroup);
 
@@ -462,7 +463,7 @@ export class Viewer {
     /**
      * @description Fits the active view.
      */
-    public fitView() {
+    public fitView(): void {
 
         CameraHelper.setDefaultClippingPlanes(this.camera);
         this.camera = CameraHelper.getFitViewCamera (this.camera, this.aspectRatio, this.modelGroup);
@@ -473,7 +474,7 @@ export class Viewer {
     /**
      * @description Updates the scene camera to match the new window size
      */
-    public updateCameraOnWindowResize() {
+    public updateCameraOnWindowResize(): void {
         if (this.camera instanceof THREE.PerspectiveCamera)
             this.camera.aspect = this.aspectRatio;
 
@@ -483,7 +484,7 @@ export class Viewer {
     /**
      * @description Handles the WebGL processing for a DOM window 'resize' event
      */
-    public resizeDisplayWebGL() {
+    public resizeDisplayWebGL(): void {
 
         this._width =  this._canvas.offsetWidth;
         this._height = this._canvas.offsetHeight;
@@ -496,7 +497,7 @@ export class Viewer {
     /**
      * @description Handles a window resize event
      */
-    public onResizeWindow() {
+    public onResizeWindow(): void {
 
         this.resizeDisplayWebGL();
     }
@@ -506,7 +507,7 @@ export class Viewer {
     /**
      * @description Performs the WebGL render of the scene
      */
-    public renderWebGL() {
+    public renderWebGL(): void {
 
         this.controls.update();
         this._renderer.render(this.scene, this.camera);
@@ -515,7 +516,7 @@ export class Viewer {
     /**
      * @description Main DOM render loop.
      */
-    public animate() {
+    public animate(): void {
 
         requestAnimationFrame(this.animate.bind(this));
         this.renderWebGL();

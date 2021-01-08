@@ -6,6 +6,7 @@
  * @author Patrick Fuller / http://patrick-fuller.com
  * @author Max Smolens / https://github.com/msmolens
  */
+/* eslint-disable */
 
 'use strict';
 
