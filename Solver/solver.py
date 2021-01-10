@@ -336,7 +336,9 @@ class Solver:
                 MathTools.print_array("divG", self.results.divG.image)
                 MathTools.print_array("Poisson Solution", self.results.mesh_transformed.image)
 
-                self.depth_buffer.scale_floats(1.0)
+                # skip if TestDepthBuffer is active; TestDepthBuffer has overridden DepthBuffer.floats property (from command line JSON)
+                if len(self.depth_buffer.floats_raw) == len(self.depth_buffer.floats):
+                    self.depth_buffer.scale_floats(1.0)
 
     @benchmark()
     def transform(self):

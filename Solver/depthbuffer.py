@@ -383,6 +383,7 @@ class DepthBuffer:
             FileManager().write_floats(scaled_path, float_list)
 
             self.verify_scale_buffer((unscaled_path, scaled_path), scale)
+
         scaled_floats = float_array.reshape(self.width, self.height)
 
         return scaled_floats
