@@ -3,24 +3,26 @@
 
 ### Issues
     Solver
+        Experiment with DepthBuffer test case!
+
+        Handle divide by zero errors in all processing steps.
         Why are portions of the generated mesh below the XY plane?
+        Unsharp Masking seems to contribute the most valuable transform.
+
+        Attenuation
+            All non-zero a values yield virtually the same mesh!
+            Modify the attenuation function?
+            Hide the attenuation function in the UI and Explorer?
+                Fix to (10%, 0.9) per published research?
+            Can a vectorized function return references instead of constants?
+                When apply returns weight directly the attenuated array is all zeros.
+
+        Review Solver/Experiments.
+
         Are there alternate Poisson equation solvers available?
             https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
             https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
             https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
-
-        Unsharp Masking seems to contribute the most valuable transform.
-        Attenuation
-            All non-zero a values yield the same mesh!
-            Modify the attenuation function?
-            Hide the attenuation function in the UI and Explorer?
-                Fix to (10%, 0.9)?
-            Can a vectorized function return references instead of constants?
-                When apply returns weight directly the attenuated array is all zeros.
-
-        Handle divide by zero errors in all processing steps.
-
-        Review Solver/Experiments.
 
     Review all Pylance lint issues with Python source.
 

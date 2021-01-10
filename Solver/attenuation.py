@@ -85,6 +85,7 @@ class Attenuation:
 
         vgenerate_weights = np.vectorize(generate_weights)
         weights: np.ndarray = vgenerate_weights(np.copy(array), a, b)
+
         if self.debug:
             MathTools.analyze_array("Gradient", array, color = Colors.BrightCyan)
             MathTools.analyze_array("Attenuation Weights", weights, color = Colors.BrightMagenta)
