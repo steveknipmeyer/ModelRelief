@@ -284,7 +284,7 @@ class Solver:
         #   All gradients are masked because they are too large.
         validMeshHeight: bool = current_height > 0.0
         if not validMeshHeight:
-            self.services.logger.logError (f"{self.depth_buffer.camera.projection} camera generated a flat mesh of height {current_height}.")
+            self.services.logger.logError (f"Solver: A mesh of height {current_height} was generated.")
         factor = 1.0 if not validMeshHeight else (target_height / current_height)
 
         self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor

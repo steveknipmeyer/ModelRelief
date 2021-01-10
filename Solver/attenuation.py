@@ -12,8 +12,10 @@
 """
 import numpy as np
 
+from mathtools import MathTools
+from logger import Logger
 from services import Services
-
+from tools import Colors
 class AttenuationParameters:
 
     """
@@ -31,12 +33,12 @@ class AttenuationParameters:
                 v < a, v is amplified.
                 v = a, v is unchanged.
                 v > a, v is reduced.
-        b       
-            Controls the rate at which the attenuation curve decays.     
+        b
+            Controls the rate at which the attenuation curve decays.
         """
         self.factor = factor
         self.decay  = decay
-    
+
 class Attenuation:
     """
     A class for attenuating image components.
@@ -54,6 +56,7 @@ class Attenuation:
 
     def apply (self, array: np.ndarray, parameters: AttenuationParameters) -> np.ndarray:
         """
+        N.B. See Jupyter notebook Attenuation.ipynb for a test workbench.
         Applies the attenuation function to all elements in an ndarray.
 
         Parameters
@@ -65,17 +68,27 @@ class Attenuation:
             factor -> boundary between amplication and reduction; percentage of mean absolute value of gradient
             decay  -> rate of decay of attenuation curve
         """
-        absolute_value = np.absolute(array)
-        mean_absolute_value = np.mean(absolute_value)
-        a = (parameters.factor / 100.0) * mean_absolute_value
+        epsilon = 1E-4
+
+        # average of absolute value of non-zero elements
+        absolute = np.absolute(array)
+        mean = absolute[absolute > epsilon].mean()
+
+        a = (parameters.factor / 100.0) * mean
         b = parameters.decay
 
-        def attenuator (v, a, b):
-            weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b
-            value = weight * v
-            return value
+        def generate_weights (v, a, b):
+            # weight = (a / abs(v)) * (abs(v) / a)**b
+            weight = 0 if abs(v) < epsilon else (a ** (1 - b)) * (abs(v) ** (b - 1))
 
-        vattenuator = np.vectorize(attenuator)
-        attenuated_array = vattenuator(array, a, b)
+            return float(weight)
+
+        vgenerate_weights = np.vectorize(generate_weights)
+        weights: np.ndarray = vgenerate_weights(np.copy(array), a, b)
+        if self.debug:
+            MathTools.analyze_array("Gradient", array, color = Colors.BrightCyan)
+            MathTools.analyze_array("Attenuation Weights", weights, color = Colors.BrightMagenta)
+
+        attenuated_array = weights * array
 
         return attenuated_array

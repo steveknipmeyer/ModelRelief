@@ -10,6 +10,7 @@
 
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
+from logger import Logger
 from results import Results
 
 class Services:
@@ -17,7 +18,7 @@ class Services:
     A class for supporting runtime services such as loggers and timers.
     """
 
-    def __init__(self, content_folder : str, working_folder : str, logger, results: Results) -> None:
+    def __init__(self, content_folder : str, working_folder : str, logger: Logger, results: Results) -> None:
         """
         Initialize an instance of Services.
         Parameters
@@ -30,7 +31,7 @@ class Services:
             The logger instance for recording log events.
         results
             Results collection of processing results (images, meshes, workbench).
-        
+
         """
         self.debug = True
         self.content_folder = content_folder

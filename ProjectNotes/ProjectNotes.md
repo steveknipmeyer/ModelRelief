@@ -2,27 +2,39 @@
 ## Commit Notes
 
 ### Issues
-    When does tsc use .tsconfig?
     Solver
-        Handle divide by zero errors.
-        Slope Attenuation
-                File ".././Solver/solver.py", line 206, in process_attenuation
-                    self.results.gradient_x.image = attenuation.apply(self.results.gradient_x.image, self.mesh_transform.attenuation_parameters)
-                File "/home/stephen/projects/ModelRelief/Solver/attenuation.py", line 79, in apply
-                    attenuated_array = vattenuator(array, a, b)
-                File "/home/stephen/projects/ModelRelief/devenv/lib/python3.8/site-packages/numpy/lib/function_base.py", line 2108, in __call__
-                    return self._vectorize_call(func=func, args=vargs)
-                File "/home/stephen/projects/ModelRelief/devenv/lib/python3.8/site-packages/numpy/lib/function_base.py", line 2192, in _vectorize_call
-                    outputs = ufunc(*inputs)
-                File "/home/stephen/projects/ModelRelief/Solver/attenuation.py", line 74, in attenuator
-                    weight = 0 if v == 0 else (a / abs(v)) * (abs(v) / a)**b
-                ZeroDivisionError: float division by zero
-        How is Slope Attenuation processed?
+        Why are portions of the generated mesh below the XY plane?
+        Are there alternate Poisson equation solvers available?
+            https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
+            https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
+            https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
+
+        Unsharp Masking seems to contribute the most valuable transform.
+        Attenuation
+            All non-zero a values yield the same mesh!
+            Modify the attenuation function?
+            Hide the attenuation function in the UI and Explorer?
+                Fix to (10%, 0.9)?
+            Can a vectorized function return references instead of constants?
+                When apply returns weight directly the attenuated array is all zeros.
+
+        Handle divide by zero errors in all processing steps.
+
+        Review Solver/Experiments.
+
+    Review all Pylance lint issues with Python source.
+
     Gravatar
+
     Experiment with development variations.
             CameraTest.ts
             Viewers/ModelViewerControlsDevelopment.ts
             Viewers/CameraControlsDevelopment.ts
+
+    When does tsc use .tsconfig?
+
+    Why is QtDesigner not in the path?
+        devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
@@ -66,7 +78,7 @@
             Should the GeneratedFile be deleted if the Solver fails?
 
     Explorer
-        The UI layout has changed. The Process button is not visible.
+        Refactor the UI layout.
 
         qdarkstyle introduced several issues in a recent update.
             There is clipping in the labels.
@@ -106,6 +118,7 @@
             pyamg/gallery/stencil.py:110: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
             diags[s] = 0
         (Hidden) DepthBufferView and NormalMapView
+        Desmos attenuation graph
 
     Remove References
         *.exe
@@ -341,6 +354,9 @@
         minifiedExtension
 
 #### Explorer
+
+    devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
+
     Build a Python installer package for Explorer.
 
     How can the mayavi log be viewed?
