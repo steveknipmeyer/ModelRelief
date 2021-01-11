@@ -326,8 +326,8 @@ class Solver:
             (rows, _) = self.depth_buffer.floats.shape
             maximum_rows = 16
             if rows <= maximum_rows:
-                print ("Results")
-                print ("------------------------------------------------------------")
+                self.services.logger.logDebug ("\nResults", Colors.BrightYellow)
+                self.services.logger.logDebug  ("------------------------------------------------------------", Colors.BrightYellow)
                 MathTools.print_array("I", self.depth_buffer.floats)
                 MathTools.print_array("Gx", self.results.gradient_x.image)
                 MathTools.print_array("dGxdx", self.results.dGxdx.image)

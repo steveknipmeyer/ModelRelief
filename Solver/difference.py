@@ -64,20 +64,22 @@ class Difference:
         if direction == FiniteDifference.Forward:
             shift = -1
             duplicated_column = columns - 1
-        if direction == FiniteDifference.Backward:
+        elif direction == FiniteDifference.Backward:
             shift = +1
             duplicated_column = 0
+        else:
+            raise ValueError("Invalid FiniteDifference")
 
         a_prime = np.roll(a, shift, 1)
         a_prime[:, duplicated_column] = a[:, duplicated_column]
 
         f_plus_delta = a_prime if direction == FiniteDifference.Forward else a
         f = a if direction == FiniteDifference.Forward else a_prime
-        
+
         difference = f_plus_delta - f
         return difference
 
-    def difference_y(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray: 
+    def difference_y(self, a: np.ndarray, direction:FiniteDifference) -> np.ndarray:
         """
         Calculates the finite dfferences along the Y axis.
         Parameters
@@ -94,13 +96,13 @@ class Difference:
         at_difference_x = self.difference_x(at, direction)
         return at_difference_x.transpose()
 
-    def calculate(self, a: np.ndarray, direction:FiniteDifference, axis:Axis) -> np.ndarray: 
+    def calculate(self, a: np.ndarray, direction:FiniteDifference, axis:Axis) -> np.ndarray:
         """
         Calculates the finite dfferences along an axis.
         Parameters
         ----------
         a
-            The array from which to calculate the finite differences.   
+            The array from which to calculate the finite differences.
         direction
             The direction of the finite difference (forward, backward).
         axis
@@ -110,8 +112,8 @@ class Difference:
         An ndarray containing the finite differences.
         """
         if axis == Axis.X:
-            return self.difference_x(a, direction)        
+            return self.difference_x(a, direction)
         if axis == Axis.Y:
-            return self.difference_y(a, direction)        
+            return self.difference_y(a, direction)
 
         return None

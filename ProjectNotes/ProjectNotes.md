@@ -3,26 +3,31 @@
 
 ### Issues
     Solver
-        Experiment with DepthBuffer test case!
+        Use Numpy gradients and divergence.
+        Clean up the Explorer UI.
 
+        Hide the attenuation function in the UI and Explorer?
+            Fix to (10%, 0.9) per published research?
+        Rebuild models.
+            Test
+            Delivery
         Handle divide by zero errors in all processing steps.
+
+        Generate a histogram of the gradient values.
+            Dynamically set gradient threshold.
+
+        Experiment with DepthBuffer test case!
         Why are portions of the generated mesh below the XY plane?
         Unsharp Masking seems to contribute the most valuable transform.
 
-        Attenuation
-            All non-zero a values yield virtually the same mesh!
-            Modify the attenuation function?
-            Hide the attenuation function in the UI and Explorer?
-                Fix to (10%, 0.9) per published research?
-            Can a vectorized function return references instead of constants?
-                When apply returns weight directly the attenuated array is all zeros.
+        Poisson Equation
+            How should the boundary conditions be handled?
+            Are there alternate Poisson equation solvers available?
+                https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
+                https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
+                https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
 
         Review Solver/Experiments.
-
-        Are there alternate Poisson equation solvers available?
-            https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
-            https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
-            https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
 
     Review all Pylance lint issues with Python source.
 

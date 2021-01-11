@@ -115,7 +115,7 @@ export class MeshTransform extends Model {
      * @description Perform setup and initialization.
      */
     public initialize(): void {
-
+        // NOP
     }
 
     /**

@@ -81,7 +81,7 @@ class Attenuation:
             # weight = (a / abs(v)) * (abs(v) / a)**b
             weight = 0 if abs(v) < epsilon else (a ** (1 - b)) * (abs(v) ** (b - 1))
 
-            return float(weight)
+            return weight
 
         vgenerate_weights = np.vectorize(generate_weights)
         weights: np.ndarray = vgenerate_weights(np.copy(array), a, b)

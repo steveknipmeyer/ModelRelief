@@ -40,7 +40,7 @@
             "**/*.obj": true,
             "**/devenv": true,
             "**/node_modules": true,
-            "**/Publish": true,
+            "**/Publish/**/*": true,
             "**/[Ww]ork*/**/*": true,
             "**/wwwroot/**/*": true,
             "**/lib/**/*": true,

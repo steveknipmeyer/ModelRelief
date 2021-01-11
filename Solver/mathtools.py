@@ -40,14 +40,16 @@ class MathTools:
             NumPy array
         """
         logger = Logger()
-        logger.logDebug(f"\n{name}",Colors.BrightCyan)
+        logger.logDebug(f"\n{name}", Colors.BrightCyan)
 
+        logger.logDebug("", Colors.BrightWhite)
         (rows, columns) = a.shape
         for row in range(rows):
             for column in range(columns):
                 value = '{:.2f}'.format(a[row, column])
                 print ('{:>8s}'.format(value), end="")
             print ('')
+        logger.logDebug("", Colors.Reset)
 
     @staticmethod
     def analyze_array(name: str, a: np.ndarray, epsilon: float = NONZERO_TOLERANCE, precision: int = PRECISION, color: Colors = Colors.BrightWhite)-> None:
