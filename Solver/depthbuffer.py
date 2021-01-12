@@ -33,28 +33,14 @@ class TestDepthBuffer:
         """
         Initialize an instance of a TestDepthBuffer.
         """
-        # data = np.array(
-        #  [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   5.0,   6.0,   7.0,   8.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0,
-        #    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,  0.0,   0.0 ]
-        # )
-
+        # normalized linear values [0..1]
         data = np.array(
         [  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
            0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
-           0.0,   0.0,   1.0,   2.0,   3.0,   4.0,   0.0,   0.0,
-           0.0,   0.0,   1.0,   2.0,   3.0,   4.0,   0.0,   0.0,
-           0.0,   0.0,   1.0,   2.0,   3.0,   4.0,   0.0,   0.0,
-           0.0,   0.0,   1.0,   2.0,   3.0,   4.0,   0.0,   0.0,
+           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
+           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
+           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
+           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
            0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
            0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ]
         )
@@ -83,15 +69,18 @@ class DepthBuffer:
         use_np_gradient
             User Numpy gradient method.
         """
-        self.debug = False
+        self.debug = True
+        self.use_test_buffer = False
+        if self.use_test_buffer:
+            self.test_buffer = TestDepthBuffer()
 
         self.settings = settings
         self.services = services
         self.use_np_gradient = use_np_gradient
 
         self.path = os.path.join(self.services.content_folder,  settings['RelativeFileName'])
-        self._width = int(settings['Width'])
-        self._height = int(settings['Height'])
+        self._width = int(settings['Width']) if not self.use_test_buffer else self.test_buffer.width
+        self._height = int(settings['Height']) if not self.use_test_buffer else self.test_buffer.height
         self.format = settings['Format']
 
         self.camera: Camera = CameraFactory.construct(settings['Camera'])
@@ -195,11 +184,10 @@ class DepthBuffer:
         Returns an np 2D array that holds the depths (model units).
         N.B. The model depths are scaled to match a unit differential grid.
         """
-        if self.debug:
-            test_depth_buffer = TestDepthBuffer()
-            self._floats = test_depth_buffer.floats
-            self._width = test_depth_buffer.width
-            self._height = test_depth_buffer.height
+        if self.use_test_buffer:
+            self._floats = self.test_buffer.floats
+            self._width = self.test_buffer.width
+            self._height = self.test_buffer.height
 
         # cached?
         if (len(self._floats) > 0):

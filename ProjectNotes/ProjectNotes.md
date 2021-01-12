@@ -1,31 +1,52 @@
 ﻿# ASP.NETCore Migration
 ## Commit Notes
-
+DepthBuffer.debug -> DepthBuffer.test_model
 ### Issues
-    Solver
-        Use Numpy gradients and divergence.
+    What is the relationship between the experimenal settings initialized in Solver and the JSON files?
+
+    How can TestDeptbuffer be made complete so no special handling is required?
+        Consider making a Jupyter notebook to experiment with Poisson solvers, etc.
+            What tools are available to display 3D surfaces?
+        Generate bytes_raw instead of overriding floats property.
+        Create a supporting JSON file that has the correct properties so no special tests are required.
+
+    Explorer
+        Add exception handlers for input fields.
         Clean up the Explorer UI.
+    Solver
+        Attenuation generate_weights requires explicit conversion to float!
+
+        Use Numpy gradients and divergence.
+            Change switch to "Use Difference class"
+
+        Review all experimental processing.
 
         Hide the attenuation function in the UI and Explorer?
             Fix to (10%, 0.9) per published research?
+
         Rebuild models.
-            Test
+            Solver/Test
             Delivery
         Handle divide by zero errors in all processing steps.
 
         Generate a histogram of the gradient values.
             Dynamically set gradient threshold.
 
-        Experiment with DepthBuffer test case!
         Why are portions of the generated mesh below the XY plane?
         Unsharp Masking seems to contribute the most valuable transform.
 
-        Poisson Equation
+        Poisson Solver
             How should the boundary conditions be handled?
             Are there alternate Poisson equation solvers available?
                 https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
                 https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
-                https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
+
+                Blender
+                    https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
+                    What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
+                    Generate a test Blender depth buffer.
+                    How was the compositing processing defined to create the depth buffer?
+                    Obtain a Shockwave player for the videos.
 
         Review Solver/Experiments.
 
