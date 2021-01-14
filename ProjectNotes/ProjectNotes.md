@@ -2,10 +2,11 @@
 ## Commit Notes
 
 ### Issues
+    How can Microsoft log messages be suppressed from Serilog?
     Write a VSCode extension for removing Working file editors.
-    Where is Python stdout when running ModelRelief from VSCode?
 
     What is the relationship between the experimental settings initialized in Solver and the JSON files?
+        They are active!
 
     TestDeptbuffer
         Create a TestDepthBuffer obj model.
@@ -16,8 +17,6 @@
         Add exception handlers for input fields.
         Clean up the Explorer UI.
     Solver
-        Attenuation generate_weights requires explicit conversion to float!
-
         Use Numpy gradients and divergence.
             Change switch to "Use Difference class"
 
@@ -959,6 +958,7 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
                     default                         Error.cshtml
 
 #### Logging
+    N.B. Solver stdout is sent to the console only if the Serilog MinimumLevel is Information. (MinimumLevel = Error will suppress it.)
     How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?
 
     Limit the size of the log file.

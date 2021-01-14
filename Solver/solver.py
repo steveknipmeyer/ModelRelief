@@ -63,7 +63,7 @@ class Solver:
         working
             Working folder path for intermediate files.
         """
-        self.debug = False
+        self.debug = True
 
         # results collection
         self.results = Results()
@@ -91,7 +91,7 @@ class Solver:
         self.enable_p5 = False               # use Numpy gradients, not Difference class
         self.enable_p6 = False               # translate mesh Z to positive values
         self.enable_p7 = False               # force planar by zeroing with background mask
-        self.enable_p8 = True                # use NormalMap gradients (not DepthBuffer heightfields)
+        self.enable_p8 = False               # use NormalMap gradients (not DepthBuffer heightfields)
 
         # file output
         self.enable_obj = True
@@ -171,7 +171,7 @@ class Solver:
         if self.enable_p8:
             self.results.gradient_x.image = self.normal_map.gradient_x
             self.results.gradient_y.image = self.normal_map.gradient_y
-        # DepthBuffer (heighfield) gradients
+        # DepthBuffer (heightfield) gradients
         else:
             self.results.gradient_x.image = self.depth_buffer.gradient_x
             self.results.gradient_y.image = self.depth_buffer.gradient_y
