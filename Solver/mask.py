@@ -18,7 +18,7 @@ class Mask:
     """
     A class for masking image arrays.
     """
-    EPSILON = 1.0e-5    
+    EPSILON = 1.0e-5
 
     def __init__(self, services : Services) -> None:
         """
@@ -54,7 +54,7 @@ class Mask:
         """
         Masks an image array by setting array elements with an absolute value below the threshold to 1.
         N.B. This produces a different result than self.background_from_depth+buffer which expects to operate on only <positive> image values such as from a depth_buffer.
-        Parameters 
+        Parameters
         ----------
         array
             The ndarray from which to create a mask.
@@ -65,10 +65,10 @@ class Mask:
         Returns
         -------
             A mask where all 1 elements had an absolute value below the threshold in the source array..
-        """            
-        
+        """
+
         def f(x):
-            return 1 if (abs(x) < threshold) else 0
+            return 1.0 if (abs(x) < threshold) else 0.0
 
         vf = np.vectorize(f)
         result = vf(array)
@@ -78,14 +78,14 @@ class Mask:
     def invert (self, array: np.ndarray) -> np.ndarray:
         """
         Inverts a mask.
-        Parameters 
+        Parameters
         ----------
         array
             The ndarray mask to invert.
             Values (0, 1) are inverted (1, 0).
         """
         def f(x):
-            return 1 if (x == 0) else 0
+            return 1.0 if (x == 0) else 0.0
 
         vf = np.vectorize(f)
         result = vf(array)

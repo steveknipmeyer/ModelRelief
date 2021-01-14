@@ -34,23 +34,20 @@ class TestDepthBuffer:
         Initialize an instance of a TestDepthBuffer.
         """
         # normalized linear values [0..1]
-        data = np.array(
-        [  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
-           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
-           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
-           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
-           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
-           0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0,
-           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
-           0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ]
+        self.floats = np.array(
+        [[ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.2,   0.4,   0.6,   0.8,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ],
+         [ 0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0 ]]
         )
 
-        dimensions = int(math.sqrt(len(data)))
-        self.width  = dimensions
-        self.height = dimensions
-
-        self.floats = data.reshape((dimensions, dimensions))
-
+        size = len(self.floats[0])
+        self.width  = size
+        self.height = size
 class DepthBuffer:
     """
     A rendering DepthBuffer created from a Model3d and a Camera.
@@ -69,7 +66,7 @@ class DepthBuffer:
         use_np_gradient
             User Numpy gradient method.
         """
-        self.debug = True
+        self.debug = False
         self.use_test_buffer = False
         if self.use_test_buffer:
             self.test_buffer = TestDepthBuffer()

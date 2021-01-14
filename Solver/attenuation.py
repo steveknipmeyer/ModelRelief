@@ -51,7 +51,7 @@ class Attenuation:
         services
             Service provider (logging, timers, etc.)
         """
-        self.debug = True
+        self.debug = False
         self.services = services
 
     def apply (self, array: np.ndarray, parameters: AttenuationParameters) -> np.ndarray:
@@ -79,14 +79,15 @@ class Attenuation:
 
         def generate_weights (v, a, b):
             # weight = (a / abs(v)) * (abs(v) / a)**b
-            weight = 0 if abs(v) < epsilon else (a ** (1 - b)) * (abs(v) ** (b - 1))
+            weight = 0.0 if abs(v) < epsilon else (a ** (1 - b)) * (abs(v) ** (b - 1))
 
-            return float(weight)
+            return weight
 
         vgenerate_weights = np.vectorize(generate_weights)
         weights: np.ndarray = vgenerate_weights(np.copy(array), a, b)
 
         if self.debug:
+            MathTools.print_array("Weights", weights)
             MathTools.analyze_array("Gradient", array, color = Colors.BrightCyan)
             MathTools.analyze_array("Attenuation Weights", weights, color = Colors.BrightMagenta)
 

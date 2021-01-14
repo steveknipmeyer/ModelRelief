@@ -51,7 +51,6 @@ class LineCount:
             "Publish",
             "store",
             "Test",
-            "typings",
             "wwwroot"
         }
         source_extensions = {".cs", ".cpp", ".ts", ".py"}
