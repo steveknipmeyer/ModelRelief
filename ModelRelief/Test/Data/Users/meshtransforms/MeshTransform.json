@@ -185,15 +185,71 @@
     "P6": 0.0,
     "P7": 0.0,
     "P8": 0.0,
+    "ProjectId": 2,
+    "Project": {
+      "Id": 2,
+      "Name": "Jewelry",
+      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+    },
+    "Id": 7,
+    "Name": "Horse",
+    "Description": "Horse transform (development@modelrelief.com)"
+  },
+  {
+    "Width": 100.0,
+    "Height": 100.0,
+    "Depth": 1.0,
+    "GradientThreshold": 5.0,
+    "AttenuationFactor": 10.0,
+    "AttenuationDecay": 0.6,
+    "UnsharpGaussianLow": 4.0,
+    "UnsharpGaussianHigh": 1.0,
+    "UnsharpHighFrequencyScale": 3.0,
+    "P1": 0.03,
+    "P2": 0.0,
+    "P3": 0.0,
+    "P4": 0.0,
+    "P5": 0.0,
+    "P6": 0.0,
+    "P7": 0.0,
+    "P8": 0.0,
     "ProjectId": 1,
     "Project": {
       "Id": 1,
       "Name": "Architecture",
       "Description": "Architectural structures, woodwork, panels and details (development@modelrelief.com)"
     },
-    "Id": 7,
+    "Id": 8,
     "Name": "House",
     "Description": "House transform (development@modelrelief.com)"
+  },
+  {
+    "Width": 100.0,
+    "Height": 100.0,
+    "Depth": 1.0,
+    "GradientThreshold": 5.0,
+    "AttenuationFactor": 10.0,
+    "AttenuationDecay": 0.6,
+    "UnsharpGaussianLow": 4.0,
+    "UnsharpGaussianHigh": 1.0,
+    "UnsharpHighFrequencyScale": 3.0,
+    "P1": 0.05,
+    "P2": 0.0,
+    "P3": 0.0,
+    "P4": 0.0,
+    "P5": 0.0,
+    "P6": 0.0,
+    "P7": 0.0,
+    "P8": 0.0,
+    "ProjectId": 3,
+    "Project": {
+      "Id": 3,
+      "Name": "ModelRelief",
+      "Description": "Development and Test (development@modelrelief.com)"
+    },
+    "Id": 9,
+    "Name": "LowResolution",
+    "Description": "LowResolution transform (development@modelrelief.com)"
   },
   {
     "Width": 100.0,
@@ -219,7 +275,7 @@
       "Name": "Stanford",
       "Description": "Stanford model repository (development@modelrelief.com)"
     },
-    "Id": 8,
+    "Id": 10,
     "Name": "Lucy",
     "Description": "Lucy transform (development@modelrelief.com)"
   },
@@ -247,9 +303,9 @@
       "Name": "Jewelry",
       "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
     },
-    "Id": 9,
-    "Name": "Roadster",
-    "Description": "Roadster transform (development@modelrelief.com)"
+    "Id": 11,
+    "Name": "PlunderbussPete",
+    "Description": "Plunderbuss Pete transform (development@modelrelief.com)"
   },
   {
     "Width": 100.0,
@@ -275,65 +331,9 @@
       "Name": "Jewelry",
       "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
     },
-    "Id": 10,
-    "Name": "Statue",
-    "Description": "Statue transform (development@modelrelief.com)"
-  },
-  {
-    "Width": 100.0,
-    "Height": 100.0,
-    "Depth": 1.0,
-    "GradientThreshold": 5.0,
-    "AttenuationFactor": 10.0,
-    "AttenuationDecay": 0.6,
-    "UnsharpGaussianLow": 4.0,
-    "UnsharpGaussianHigh": 1.0,
-    "UnsharpHighFrequencyScale": 3.0,
-    "P1": 0.03,
-    "P2": 0.0,
-    "P3": 0.0,
-    "P4": 0.0,
-    "P5": 0.0,
-    "P6": 0.0,
-    "P7": 0.0,
-    "P8": 0.0,
-    "ProjectId": 3,
-    "Project": {
-      "Id": 3,
-      "Name": "ModelRelief",
-      "Description": "Development and Test (development@modelrelief.com)"
-    },
-    "Id": 11,
-    "Name": "Test",
-    "Description": "Test transform (development@modelrelief.com)"
-  },
-  {
-    "Width": 100.0,
-    "Height": 100.0,
-    "Depth": 1.0,
-    "GradientThreshold": 5.0,
-    "AttenuationFactor": 10.0,
-    "AttenuationDecay": 0.6,
-    "UnsharpGaussianLow": 4.0,
-    "UnsharpGaussianHigh": 1.0,
-    "UnsharpHighFrequencyScale": 3.0,
-    "P1": 0.03,
-    "P2": 0.0,
-    "P3": 0.0,
-    "P4": 0.0,
-    "P5": 0.0,
-    "P6": 0.0,
-    "P7": 0.0,
-    "P8": 0.0,
-    "ProjectId": 4,
-    "Project": {
-      "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
-    },
     "Id": 12,
-    "Name": "Tyrannosaurus",
-    "Description": "Tyrannosaurus transform (development@modelrelief.com)"
+    "Name": "Roadster",
+    "Description": "Roadster transform (development@modelrelief.com)"
   },
   {
     "Width": 100.0,
@@ -388,8 +388,8 @@
       "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
     },
     "Id": 14,
-    "Name": "Horse",
-    "Description": "Horse transform (development@modelrelief.com)"
+    "Name": "Statue",
+    "Description": "Statue transform (development@modelrelief.com)"
   },
   {
     "Width": 100.0,
@@ -409,14 +409,42 @@
     "P6": 0.0,
     "P7": 0.0,
     "P8": 0.0,
-    "ProjectId": 2,
+    "ProjectId": 3,
     "Project": {
-      "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Id": 3,
+      "Name": "ModelRelief",
+      "Description": "Development and Test (development@modelrelief.com)"
     },
     "Id": 15,
-    "Name": "PlunderbussPete",
-    "Description": "Plunderbuss Pete transform (development@modelrelief.com)"
+    "Name": "Test",
+    "Description": "Test transform (development@modelrelief.com)"
+  },
+  {
+    "Width": 100.0,
+    "Height": 100.0,
+    "Depth": 1.0,
+    "GradientThreshold": 5.0,
+    "AttenuationFactor": 10.0,
+    "AttenuationDecay": 0.6,
+    "UnsharpGaussianLow": 4.0,
+    "UnsharpGaussianHigh": 1.0,
+    "UnsharpHighFrequencyScale": 3.0,
+    "P1": 0.03,
+    "P2": 0.0,
+    "P3": 0.0,
+    "P4": 0.0,
+    "P5": 0.0,
+    "P6": 0.0,
+    "P7": 0.0,
+    "P8": 0.0,
+    "ProjectId": 4,
+    "Project": {
+      "Id": 4,
+      "Name": "Stanford",
+      "Description": "Stanford model repository (development@modelrelief.com)"
+    },
+    "Id": 16,
+    "Name": "Tyrannosaurus",
+    "Description": "Tyrannosaurus transform (development@modelrelief.com)"
   }
 ]

@@ -100,7 +100,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyCameraFindsAllDependents()
         {
             // Arrange
-            var lucyCameraPrimaryKey = 9;
+            var lucyCameraPrimaryKey = 11;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Camera), lucyCameraPrimaryKey);
@@ -121,7 +121,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyDepthBufferFindsOneDependent()
         {
             // Arrange
-            var lucyDepthBufferPrimaryKey = 8;
+            var lucyDepthBufferPrimaryKey = 9;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(DepthBuffer), lucyDepthBufferPrimaryKey);
@@ -142,7 +142,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyModel3dHasTwoDependents()
         {
             // Arrange
-            var lucyPrimaryKey = 8;
+            var lucyPrimaryKey = 9;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Model3d), lucyPrimaryKey);

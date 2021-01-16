@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels.Meshes
             ApiUrl = "/api/v1/meshes";
             UxUrl  = "/meshes";
 
-            IdRange = Enumerable.Range(1, 14);
+            IdRange = Enumerable.Range(1, 15);
             FirstModelName = "armadillo.sfp";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };

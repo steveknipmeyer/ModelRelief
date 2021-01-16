@@ -34,7 +34,7 @@ namespace ModelRelief.Test.TestModels.Models
             ApiUrl = "/api/v1/models";
             UxUrl  = "/models";
 
-            IdRange = Enumerable.Range(1, 14);
+            IdRange = Enumerable.Range(1, 15);
             FirstModelName = "armadillo.obj";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "CameraId" };

@@ -2,25 +2,39 @@
 ## Commit Notes
 
 ### Issues
-    How can Microsoft log messages be suppressed from Serilog?
+    What is the history/contents of depthbuffer.sdb?
+    Is the depthbuffer.sdb.scaled.05 used?
+    Unit Tests
+        fail: ModelRelief.Services.Jobs.Dispatcher[0]
+            stderr = /home/stephen/projects/ModelRelief/Solver/attenuation.py:75: RuntimeWarning: Mean of empty slice.
+                mean = absolute[absolute > epsilon].mean()
+
+    Explorer
+        Model meshes are small and difficult to view.
+    DepthBuffer
+        How are the directions Gx and Gy determined?
+            Do they match the geometry of the model?
+
     Write a VSCode extension for removing Working file editors.
 
-    What is the relationship between the experimental settings initialized in Solver and the JSON files?
-        They are active!
-
     TestDeptbuffer
-        Create a TestDepthBuffer obj model.
+        Create a lowresolution obj model.
         Follow "New Test Model" steps below.
             public static DefaultReliefDimensions = 16;                    // relief dimensions
+        Why do Meshes not have a resolution?
 
     Explorer
         Add exception handlers for input fields.
         Clean up the Explorer UI.
+
     Solver
         Use Numpy gradients and divergence.
             Change switch to "Use Difference class"
 
+        Handle divide by zero errors in all processing steps.
+
         Review all experimental processing.
+            Document Solver defaults as active settings (no Web UI).
 
         Hide the attenuation function in the UI and Explorer?
             Fix to (10%, 0.9) per published research?
@@ -28,7 +42,7 @@
         Rebuild models.
             Solver/Test
             Delivery
-        Handle divide by zero errors in all processing steps.
+
 
         Generate a histogram of the gradient values.
             Dynamically set gradient threshold.
@@ -1611,7 +1625,7 @@ https://semver.npmjs.com/
         [X] AddMeshes
         [X] AddNormalMaps
 
-    Update JSON files.
+    Update JSON files (Camera.json, MeshTransform.json).
         Place the new entities at the end and increment the Id.
         Update the Project Id to reflect the Project that was assigned to the model.
         [X] Camera.json (placeholder, values not important)
@@ -1625,8 +1639,11 @@ https://semver.npmjs.com/
 
     Update the model counts in the integration tests.
         IdRange = Enumerable.Range(1, X);
-        N.B. The LucyDepthBufferFindsOneDependent integration test has several Ids that are hard-coded.
-            These need to be changed if the Lucy Camera, DepthBuffer of Model keys change.
+        N.B. The Lucy DependencyManager integration test has several Ids that are hard-coded.
+        These need to be changed if the Lucy Camera, DepthBuffer or Model keys change.
+            LucyCameraFindsAllDependents()
+            LucyDepthBufferFindsOneDependent
+            LucyModel3dHasTwoDependents()
 #### Numpy
 
 **Benchmarks (512x512 Array)**

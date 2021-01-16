@@ -446,6 +446,11 @@ namespace ModelRelief.Database
                 },
                 new Model3d
                 {
+                    Name = "lowresolution.obj", Description = "Low resolution test model", Format = Model3dFormat.OBJ,
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief), Camera = FindByName<Camera>(user, "Top Camera"),
+                },
+                new Model3d
+                {
                     Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
                     UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
@@ -582,6 +587,14 @@ namespace ModelRelief.Database
                 },
                 new DepthBuffer
                 {
+                    Name = "lowresolution.sdb", Description = "Generated in ModelRelief",
+                    Width = 16, Height = 16,
+                    Format = DepthBufferFormat.SDB,
+                    Model3d = FindByName<Model3d>(user, "lowresolution.obj"), Camera = FindByName<Camera>(user, "LowResolution"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
+                },
+                new DepthBuffer
+                {
                     Name = "lucy.sdb", Description = "Generated in Maya",
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
@@ -700,6 +713,12 @@ namespace ModelRelief.Database
                 },
                 new Mesh
                 {
+                    Name = "lowresolution.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
+                    DepthBuffer = FindByName<DepthBuffer>(user, "lowresolution.sdb"), NormalMap = FindByName<NormalMap>(user, "lowresolution.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "LowResolution"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
+                },
+                new Mesh
+                {
                     Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"),
                     DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), NormalMap = FindByName<NormalMap>(user, "lucy.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
@@ -815,6 +834,14 @@ namespace ModelRelief.Database
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
                     UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
+                },
+                new NormalMap
+                {
+                    Name = "lowresolution.nmap", Description = "Generated in ModelRelief",
+                    Width = 16, Height = 16,
+                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
+                    Model3d = FindByName<Model3d>(user, "lowresolution.obj"), Camera = FindByName<Camera>(user, "LowResolution"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
                 },
                 new NormalMap
                 {

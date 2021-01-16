@@ -36,7 +36,7 @@ namespace ModelRelief.Test.TestModels.Cameras
             ApiUrl = "/api/v1/cameras";
             UxUrl  = "/cameras";
 
-            IdRange = Enumerable.Range(1, 16);
+            IdRange = Enumerable.Range(1, 17);
             FirstModelName = "Top Camera";
 
             ReferencePropertyNames = new List<string> { "ProjectId" };
