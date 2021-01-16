@@ -34,9 +34,6 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             ApiUrl = "/api/v1/meshtransforms";
             UxUrl  = "/meshtransforms";
 
-            IdRange = Enumerable.Range(1, 16);
-            FirstModelName = "Identity";
-
             ReferencePropertyNames = new List<string> { "ProjectId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
@@ -53,13 +50,14 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             var validModel = base.ConstructValidModel();
             validModel.Name = "TestMeshTransform";
 
-            var meshModel = validModel as Dto.MeshTransform;
-            meshModel.Width = 100;
-            meshModel.Height = 100;
-            meshModel.Depth = 1.0;
-            meshModel.UnsharpHighFrequencyScale = 1.0;
+            var meshTransformModel = validModel as Dto.MeshTransform;
+            meshTransformModel.Width = 100;
+            meshTransformModel.Height = 100;
+            meshTransformModel.Depth = 1.0;
+            meshTransformModel.GradientThreshold = 5.0;
+            meshTransformModel.UnsharpHighFrequencyScale = 1.0;
 
-            return meshModel;
+            return meshTransformModel;
         }
     }
 }

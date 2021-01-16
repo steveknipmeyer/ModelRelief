@@ -2,7 +2,9 @@
 ## Commit Notes
 
 ### Issues
-    What is the history/contents of depthbuffer.sdb?
+    Implement a query controller for all models.
+    Replace the ValidModel data with instances from queries.
+
     Is the depthbuffer.sdb.scaled.05 used?
     Unit Tests
         fail: ModelRelief.Services.Jobs.Dispatcher[0]
@@ -1637,13 +1639,11 @@ https://semver.npmjs.com/
     Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief\Test.
     Update the Solver\Test JSON files using MRUpdateSeedData.
 
-    Update the model counts in the integration tests.
-        IdRange = Enumerable.Range(1, X);
-        N.B. The Lucy DependencyManager integration test has several Ids that are hard-coded.
-        These need to be changed if the Lucy Camera, DepthBuffer or Model keys change.
-            LucyCameraFindsAllDependents()
-            LucyDepthBufferFindsOneDependent
-            LucyModel3dHasTwoDependents()
+    N.B. The Lucy DependencyManager integration test has several Ids that are hard-coded.
+    These need to be changed if the Lucy Camera, DepthBuffer or Model keys change.
+        LucyCameraFindsAllDependents()
+        LucyDepthBufferFindsOneDependent
+        LucyModel3dHasTwoDependents()
 #### Numpy
 
 **Benchmarks (512x512 Array)**

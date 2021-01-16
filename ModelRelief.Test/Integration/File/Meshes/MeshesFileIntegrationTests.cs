@@ -207,7 +207,7 @@ namespace ModelRelief.Test.Integration.Meshes
         }
         // WIP: This test has been deprecated since the Solver now returns the fully transformed mesh instead of only scaling the depth buffer values.
         // New tests need to be created that directly test the contents of the transformed mesh.
-        #if false
+#if false
         /// <summary>
         /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
         /// </summary>
@@ -263,7 +263,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 await dependencyGraph.Rollback();
             }
         }
-        #endif
+#endif
         #endregion
     }
 }
