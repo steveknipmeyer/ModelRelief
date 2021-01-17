@@ -87,13 +87,15 @@ namespace ModelRelief.Features
         /// Action handler for a Details page.
         /// </summary>
         /// <param name="id">Model Id.</param>
+        /// <param name="name">Model Name.</param>
         /// <returns>Details page.</returns>
-        public virtual async Task<IActionResult> Details(int id)
+        public virtual async Task<IActionResult> Details(int id, [FromQuery] string name)
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
                 Id = id,
+                Name = name,
             });
             if (model == null)
                 return NotFound();

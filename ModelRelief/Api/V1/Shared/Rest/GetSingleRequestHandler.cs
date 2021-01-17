@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents the concrete handler for a GET single model request.
@@ -57,11 +59,29 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for request</returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            TEntity targetModel;
+
+            // query by Name
+            if (message.Id == 0)
+            {
+                var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);
+                targetModel = DbContext.Set<TEntity>()
+                                                .AsEnumerable()
+                                                .Where(m => (m.UserId == applicationUser.Id))
+                                                .Where(m => m.Name.StartsWith(message.Name, true, CultureInfo.CurrentCulture))
+                                                .FirstOrDefault();
+            }
+            // query by Id
+            else
+            {
+                targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            }
+
+            // ProjectTo requires IQueryable<TEntity>
+            IQueryable<TEntity> model = DbContext.Set<TEntity>()
+                                                .Where(m => (m.Id == targetModel.Id));
 
             // fully populate return model
-            IQueryable<TEntity> model = DbContext.Set<TEntity>()
-                                            .Where(m => (m.Id == message.Id));
             var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
             return projectedModel;

@@ -29,5 +29,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets the Id for the single model to be returned.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Name for the single model to be returned.
+        /// Optionally provided by a query parameter.
+        /// </summary>
+        public string Name { get; set; }
     }
 }
