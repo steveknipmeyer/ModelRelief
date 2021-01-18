@@ -9,9 +9,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Domain;
 
     /// <summary>
-    /// Represents a GET request of a collection that supports paging.
+    /// Represents a GET query request of a collection that supports paging.
     /// </summary>
-    public class GetListRequest
+    public class GetQueryParameters
     {
         /// <summary>
         /// Gets or sets the page number of the collection.
