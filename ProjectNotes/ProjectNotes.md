@@ -1,12 +1,8 @@
 ﻿
 ## Commit Notes
-Name query supported in UI and REST
-UI: <models>/?name=<string>, <models>/details/?name=<string>
-REST: api/v1/<models>/?name=<string>
-GetListRequest -> GetQueryParameters
-GetListRequest -> GetQueryRequest
-PagedResults explicitly disabled in ViewController (no UI support)
+In test suite replace several hard-coded database Ids with queries
 ### Issues
+
     Replace the ValidModel data with instances from queries.
 
     Is the depthbuffer.sdb.scaled.05 used?
@@ -45,7 +41,6 @@ PagedResults explicitly disabled in ViewController (no UI support)
         Rebuild models.
             Solver/Test
             Delivery
-
 
         Generate a histogram of the gradient values.
             Dynamically set gradient threshold.
@@ -1639,12 +1634,6 @@ https://semver.npmjs.com/
     In ModelRelief, open the new model and generate a relief.
     Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief\Test.
     Update the Solver\Test JSON files using MRUpdateSeedData.
-
-    N.B. The Lucy DependencyManager integration test has several Ids that are hard-coded.
-    These need to be changed if the Lucy Camera, DepthBuffer or Model keys change.
-        LucyCameraFindsAllDependents()
-        LucyDepthBufferFindsOneDependent
-        LucyModel3dHasTwoDependents()
 #### Numpy
 
 **Benchmarks (512x512 Array)**

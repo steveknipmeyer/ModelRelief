@@ -9,16 +9,21 @@ namespace ModelRelief.Test.Unit.DependencyManager
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Settings;
+    using ModelRelief.Test;
     using ModelRelief.Utility;
+    using Newtonsoft.Json;
     using Xunit;
 
     public class DependencyManagerTests : UnitTests
@@ -93,6 +98,22 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
+        /// Find the primary key of a given model type by name.
+        /// </summary>
+        /// <param name="modelType">Model type</param>
+        /// <param name="name">Name pattern</param>
+        private async Task<int> FindPrimaryKeyFromName<TGetModel>(string modelType, string name)
+            where TGetModel : IModel
+        {
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"/api/v1/{modelType}/?name={name}");
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
+            var model = pagedResults.Results.First();
+            return model.Id;
+        }
+
+        /// <summary>
         /// Finds all dependents of the Lucy Camera.
         /// </summary>
         [Fact]
@@ -100,10 +121,10 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyCameraFindsAllDependents()
         {
             // Arrange
-            var lucyCameraPrimaryKey = 11;
+            var lucyCameraPrimaryKey = await FindPrimaryKeyFromName<Dto.Camera>("cameras", "Lucy");
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(Camera), lucyCameraPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Domain.Camera), lucyCameraPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(2);
@@ -121,10 +142,10 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyDepthBufferFindsOneDependent()
         {
             // Arrange
-            var lucyDepthBufferPrimaryKey = 9;
+            var lucyDepthBufferPrimaryKey = await FindPrimaryKeyFromName<Dto.DepthBuffer>("depth-buffers", "Lucy");
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(DepthBuffer), lucyDepthBufferPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Domain.DepthBuffer), lucyDepthBufferPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(1);
@@ -142,10 +163,10 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyModel3dHasTwoDependents()
         {
             // Arrange
-            var lucyPrimaryKey = 9;
+            var lucyPrimaryKey = await FindPrimaryKeyFromName<Dto.Model3d>("models", "Lucy");
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(Model3d), lucyPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Domain.Model3d), lucyPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(2);
