@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetListRequest.cs" company="ModelRelief">
+// <copyright file="GetQueryRequest.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -12,12 +12,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Dto;
 
     /// <summary>
-    ///  Represents a GET request for a collection of models.
+    ///  Represents a GET query request for a collection of models.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
     /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
-    public class GetListRequest<TEntity, TGetModel> : IRequest<object>
+    public class GetQueryRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {
@@ -55,5 +55,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets a value indicating whether to use paging in the returned collection.
         /// </summary>
         public bool UsePaging { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value for a Name query parameter.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

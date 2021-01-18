@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetListRequest.cs" company="ModelRelief">
+// <copyright file="GetQueryParameters.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Domain;
 
     /// <summary>
-    /// Represents a GET query request of a collection that supports paging.
+    /// Represents GET query parameters for a collection that supports paging.
     /// </summary>
     public class GetQueryParameters
     {
@@ -32,5 +32,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets a value indicating whether gets or sets the order of the collectionn sort; ascending or descending.
         /// </summary>
         public bool Ascending { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a model Name query parameter.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

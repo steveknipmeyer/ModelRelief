@@ -59,22 +59,21 @@ namespace ModelRelief.Features
         /// Action handler for an Index page.
         /// Returns a collection of models.
         /// </summary>
-        /// <param name="getRequest">Request with paging options such as PageNumber, PageSize, etc.</param>
+        /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
         /// <returns>Index page.</returns>
-        public virtual async Task<IActionResult> Index([FromQuery] GetListRequest getRequest)
+        public virtual async Task<IActionResult> Index([FromQuery] GetQueryParameters getRequest)
         {
-            getRequest = getRequest ?? new GetListRequest();
-            var results = await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
+            getRequest = getRequest ?? new GetQueryParameters();
+            var results = await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
             {
                 User = User,
-                UrlHelperContainer  = this,
+                UrlHelperContainer = this,
 
-                PageNumber          = getRequest.PageNumber,
-                NumberOfRecords     = getRequest.NumberOfRecords,
-                OrderBy             = getRequest.OrderBy,
-                Ascending           = getRequest.Ascending,
+                // not implemented in UI
+                UsePaging = false,
 
-                UsePaging           = ViewControllerOptions.UsePaging,
+                // (optional) query parameters
+                Name = getRequest.Name,
             });
 
             // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.

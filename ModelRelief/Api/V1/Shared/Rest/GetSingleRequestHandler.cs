@@ -76,8 +76,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             {
                 targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             }
-
-            // ProjectTo requires IQueryable<TEntity>
+            // fully populate return model; ProjectTo requires IQueryable<TEntity>
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                                 .Where(m => (m.Id == targetModel.Id));
 

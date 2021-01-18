@@ -55,25 +55,29 @@ namespace ModelRelief.Api.V1.Shared
 
         #region Get
         /// <summary>
-        /// Action method for GetListRequest.
+        /// Action method for GetQueryRequest.
         /// </summary>
         /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
         /// <returns>A collection of models in a PagedResult.</returns>
         [HttpGet("")]
-        public virtual async Task<IActionResult> GetList([FromQuery] GetListRequest getRequest)
+        public virtual async Task<IActionResult> GetQuery([FromQuery] GetQueryParameters getRequest)
         {
-            getRequest = getRequest ?? new GetListRequest();
-            return await HandleRequestAsync(new GetListRequest<TEntity, TGetModel>
+            getRequest = getRequest ?? new GetQueryParameters();
+            return await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer  = this,
+
+                // results presentation
+                UsePaging = RestControllerOptions.UsePaging,
 
                 PageNumber          = getRequest.PageNumber,
                 NumberOfRecords     = getRequest.NumberOfRecords,
                 OrderBy             = getRequest.OrderBy,
                 Ascending           = getRequest.Ascending,
 
-                UsePaging           = RestControllerOptions.UsePaging,
+                // (optional) query parameters
+                Name                = getRequest.Name,
             });
         }
 

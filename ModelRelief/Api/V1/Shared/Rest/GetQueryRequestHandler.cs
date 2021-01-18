@@ -1,11 +1,12 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetListRequestHandler.cs" company="ModelRelief">
+// <copyright file="GetQueryRequestHandler.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -23,16 +24,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Utility;
 
     /// <summary>
-    /// Represents a handler for a GET request for a collection of models.
+    /// Represents a handler for a GET query request for a collection of models.
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO model.</typeparam>
-    public class GetListRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetListRequest<TEntity, TGetModel>, object>
+    public class GetQueryRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetQueryRequest<TEntity, TGetModel>, object>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetListRequestHandler{TEntity, TGetModel}"/> class.
+        /// Initializes a new instance of the <see cref="GetQueryRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -41,7 +42,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        public GetListRequestHandler(
+        public GetQueryRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
@@ -57,20 +58,24 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">GetListRequest.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        public override async Task<object> OnHandle(GetListRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<object> OnHandle(GetQueryRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
 
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
-                                                .Where(m => (m.UserId == user.Id));
+                        .AsEnumerable()
+                        .Where(m => (m.UserId == user.Id))
+                        .Where(m => string.IsNullOrEmpty(message.Name) ? true : m.Name.StartsWith(message.Name, true, CultureInfo.CurrentCulture))
+                        // N.B. QueryProvider does not support Async
+                        .AsQueryable();
 
             if (message.UsePaging)
             {
-                var page = await CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
+                var page = CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
                 return page;
             }
 
-            return await results.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToArrayAsync();
+            return results.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToArray();
         }
 
         /// <summary>
@@ -85,7 +90,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="orderBy">The field or property to order by.</param>
         /// <param name="ascending">Indicates whether or not the order should be ascending (true) or descending (false.)</param>
         /// <returns>Returns a paged set of results.</returns>
-        protected async Task<PagedResults<TReturn>> CreatePagedResultsAsync<T, TReturn>(
+        protected PagedResults<TReturn> CreatePagedResultsAsync<T, TReturn>(
             IQueryable<T> queryable,
             IUrlHelperContainer urlHelperContainer,
             int pageNumber,
@@ -101,8 +106,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 .Take(pageSize)
                 .ProjectTo<TReturn>(Mapper.ConfigurationProvider);
 
-            var totalNumberOfRecords = await queryable.CountAsync();
-            var results = await projection.ToListAsync();
+            var totalNumberOfRecords = queryable.Count();
+            var results = projection.ToList();
 
             var mod = totalNumberOfRecords % pageSize;
             var totalPageCount = (totalNumberOfRecords / pageSize) + (mod == 0 ? 0 : 1);

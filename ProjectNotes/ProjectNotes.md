@@ -1,8 +1,12 @@
-﻿# ASP.NETCore Migration
+﻿
 ## Commit Notes
-
+Name query supported in UI and REST
+UI: <models>/?name=<string>, <models>/details/?name=<string>
+REST: api/v1/<models>/?name=<string>
+GetListRequest -> GetQueryParameters
+GetListRequest -> GetQueryRequest
+PagedResults explicitly disabled in ViewController (no UI support)
 ### Issues
-    Implement a query controller for all models.
     Replace the ValidModel data with instances from queries.
 
     Is the depthbuffer.sdb.scaled.05 used?
@@ -19,16 +23,13 @@
 
     Write a VSCode extension for removing Working file editors.
 
-    TestDeptbuffer
-        Create a lowresolution obj model.
-        Follow "New Test Model" steps below.
-            public static DefaultReliefDimensions = 16;                    // relief dimensions
-        Why do Meshes not have a resolution?
+    Why do Meshes not have a resolution?
 
     Explorer
         Add exception handlers for input fields.
         Clean up the Explorer UI.
-
+    UI
+        Background color of Select elements matches text.
     Solver
         Use Numpy gradients and divergence.
             Change switch to "Use Difference class"

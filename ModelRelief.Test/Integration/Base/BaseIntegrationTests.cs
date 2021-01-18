@@ -76,11 +76,11 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Test that a GetList request returns the correct count of models.
+        /// Test that a GetQuery request returns the correct count of models.
         /// </summary>
         [Fact]
-        [Trait("Category", "Api GetList")]
-        public async Task GetList_ListReturnsCorrectCount()
+        [Trait("Category", "Api GetQuery")]
+        public async Task GetQuery_QueryReturnsCorrectCount()
         {
             // Arrange
 

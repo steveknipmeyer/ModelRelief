@@ -75,8 +75,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
-            // N.B. ProjectTo populates all navigation properties.
-            //      Mapper.Map<TGetModel>(newModel) would return only the primary model.
+            // fully populate return model; ProjectTo requires IQueryable<TEntity>
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                             .Where(m => (m.Id == newModel.Id));
             var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
