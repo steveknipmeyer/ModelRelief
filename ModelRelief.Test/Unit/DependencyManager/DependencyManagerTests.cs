@@ -98,22 +98,6 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
-        /// Find the primary key of a given model type by name.
-        /// </summary>
-        /// <param name="modelType">Model type</param>
-        /// <param name="name">Name pattern</param>
-        private async Task<int> FindPrimaryKeyFromName<TGetModel>(string modelType, string name)
-            where TGetModel : IModel
-        {
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"/api/v1/{modelType}/?name={name}");
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-
-            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
-            var model = pagedResults.Results.First();
-            return model.Id;
-        }
-
-        /// <summary>
         /// Finds all dependents of the Lucy Camera.
         /// </summary>
         [Fact]
@@ -121,7 +105,9 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyCameraFindsAllDependents()
         {
             // Arrange
-            var lucyCameraPrimaryKey = await FindPrimaryKeyFromName<Dto.Camera>("cameras", "Lucy");
+            var factory = new TestModels.Cameras.CameraTestModelFactory(ClassFixture);
+            var lucyCamera = await factory.FindModelByName("Lucy");
+            var lucyCameraPrimaryKey = lucyCamera.Id;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Domain.Camera), lucyCameraPrimaryKey);
@@ -142,7 +128,9 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyDepthBufferFindsOneDependent()
         {
             // Arrange
-            var lucyDepthBufferPrimaryKey = await FindPrimaryKeyFromName<Dto.DepthBuffer>("depth-buffers", "Lucy");
+            var factory = new TestModels.DepthBuffers.DepthBufferTestFileModelFactory(ClassFixture);
+            var lucyDepthBuffer = await factory.FindModelByName("Lucy");
+            var lucyDepthBufferPrimaryKey = lucyDepthBuffer.Id;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Domain.DepthBuffer), lucyDepthBufferPrimaryKey);
@@ -163,7 +151,9 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public async Task LucyModel3dHasTwoDependents()
         {
             // Arrange
-            var lucyPrimaryKey = await FindPrimaryKeyFromName<Dto.Model3d>("models", "Lucy");
+            var factory = new TestModels.Models.Model3dTestFileModelFactory(ClassFixture);
+            var lucyModel = await factory.FindModelByName("Lucy");
+            var lucyPrimaryKey = lucyModel.Id;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Domain.Model3d), lucyPrimaryKey);

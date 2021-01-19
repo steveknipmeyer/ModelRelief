@@ -16,9 +16,9 @@ namespace ModelRelief.Test.TestModels
     {
         Type Type { get; }
         Task<IModel> FindModel(int modelId);
+        Task<IModel> FindModelByName(string name);
 
         IModel ConstructValidModel();
-
         Task<IModel> PostNewModel();
         Task<IModel> PostNewModel(IModel model);
         Task<IModel> PutModel(IModel model);

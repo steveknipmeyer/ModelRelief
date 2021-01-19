@@ -28,6 +28,8 @@ namespace ModelRelief.Test.TestModels
         where TEntity : DomainModel
         where TGetModel : class, IModel, new()
     {
+        public const string RootApi = "/api/v1/";
+
         public ClassFixture ClassFixture { get; }
 
         public Type Type => typeof(TEntity);
@@ -109,8 +111,22 @@ namespace ModelRelief.Test.TestModels
 
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var existingModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            return existingModel;
+            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            return model;
+        }
+
+        /// <summary>
+        /// Find a model by name.
+        /// </summary>
+        /// <param name="name">Name pattern</param>
+        public async Task<IModel> FindModelByName(string name)
+        {
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?name={name}");
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
+            var model = pagedResults.Results.First();
+            return model;
         }
 
         /// <summary>

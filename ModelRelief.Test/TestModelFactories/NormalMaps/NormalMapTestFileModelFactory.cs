@@ -29,8 +29,8 @@ namespace ModelRelief.Test.TestModels.NormalMaps
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/normal-maps";
-            UxUrl  = "/normalmaps";
+            ApiUrl = $"{RootApi}normal-maps";
+            UxUrl = "/normalmaps";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;

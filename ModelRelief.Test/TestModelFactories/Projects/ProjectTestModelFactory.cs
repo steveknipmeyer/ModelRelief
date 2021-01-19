@@ -31,8 +31,8 @@ namespace ModelRelief.Test.TestModels.Projects
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/projects";
-            UxUrl  = "/projects";
+            ApiUrl = $"{RootApi}projects";
+            UxUrl = "/projects";
 
             ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;

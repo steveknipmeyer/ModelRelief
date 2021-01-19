@@ -1,18 +1,37 @@
 ﻿
 ## Commit Notes
-In test suite replace several hard-coded database Ids with queries
-### Issues
 
+### Issues
+    Routing
+        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
+        Change Api routing for meshtransforms to mesh-transforms.
+
+    DependencyGraph
+        Use existing instances from database.
+        TestModelFactory.
+
+        DependencyGraph.Rollback
+            Restore from baseline. No new models are added to the database.
+            Restore backing file if IFileModel.
+
+        // setup Lucy mesh instances
+        meshModel.DepthBuffer = await Utility.FindModelByName<Dto.DepthBuffer>(ClassFixture.ServerFramework, "depth-buffers", "Lucy");
+        meshModel.MeshTransform = await Utility.FindModelByName<Dto.MeshTransform>(ClassFixture.ServerFramework, "meshtransforms", "Lucy");
+
+
+    Review ConstructGraph.
+        Can this be refactored to use database instances?
     Replace the ValidModel data with instances from queries.
+        Unit Tests
+            fail: ModelRelief.Services.Jobs.Dispatcher[0]
+                stderr = /home/stephen/projects/ModelRelief/Solver/attenuation.py:75: RuntimeWarning: Mean of empty slice.
+                    mean = absolute[absolute > epsilon].mean()
 
     Is the depthbuffer.sdb.scaled.05 used?
-    Unit Tests
-        fail: ModelRelief.Services.Jobs.Dispatcher[0]
-            stderr = /home/stephen/projects/ModelRelief/Solver/attenuation.py:75: RuntimeWarning: Mean of empty slice.
-                mean = absolute[absolute > epsilon].mean()
 
     Explorer
         Model meshes are small and difficult to view.
+,m                                                              ,m  ,  ,                                                   okm,.
     DepthBuffer
         How are the directions Gx and Gy determined?
             Do they match the geometry of the model?

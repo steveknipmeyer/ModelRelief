@@ -21,6 +21,16 @@ namespace ModelRelief.Test.Integration
     public class DependencyGraph
     {
         /// <summary>
+        /// Represents the baseline of a node in the dependency graph.
+        /// Used for a rollback operation to restore state after a test.
+        /// </summary>
+        public class NodeBaseline
+        {
+            public IModel Model { get; set; }
+            public byte[] File { get; set; }
+        }
+
+        /// <summary>
         /// Represents a node in the dependency graph.
         /// A node is a model with a supporting factory for model operations.
         /// </summary>
@@ -28,6 +38,17 @@ namespace ModelRelief.Test.Integration
         {
             public ITestModelFactory Factory { get; set; }
             public IModel Model { get; set; }
+            public NodeBaseline Baseline { get; set; }
+
+            /// <summary>
+            /// Initializes a Node to an existing database instance/> class.
+            /// </summary>
+            /// <param name="name">Name of existing instance.</param>
+            public async Task<IModel> FromExistingModel(string name)
+            {
+               var model = await Factory.FindModelByName(name);
+               return model;
+            }
         }
 
         /// <summary>

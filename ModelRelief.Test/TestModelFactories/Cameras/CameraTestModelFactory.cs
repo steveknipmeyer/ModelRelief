@@ -33,8 +33,8 @@ namespace ModelRelief.Test.TestModels.Cameras
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/cameras";
-            UxUrl  = "/cameras";
+            ApiUrl = $"{RootApi}cameras";
+            UxUrl  = $"{RootApi}cameras";
 
             ReferencePropertyNames = new List<string> { "ProjectId" };
             InvalidReferenceProperty = 0;

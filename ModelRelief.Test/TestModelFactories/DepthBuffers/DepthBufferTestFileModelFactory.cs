@@ -29,8 +29,8 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = "/api/v1/depth-buffers";
-            UxUrl  = "/depthbuffers";
+            ApiUrl = $"{RootApi}depth-buffers";
+            UxUrl = "/depthbuffers";
 
             ReferencePropertyNames = new List<string> { "ProjectId", "Model3dId", "CameraId" };
             InvalidReferenceProperty = 0;
