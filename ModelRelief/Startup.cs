@@ -7,9 +7,6 @@
 namespace ModelRelief
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Autofac.Features.Variance;
@@ -29,7 +26,6 @@ namespace ModelRelief
     using ModelRelief.Services;
 
     using ModelRelief.Workbench;
-    using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {

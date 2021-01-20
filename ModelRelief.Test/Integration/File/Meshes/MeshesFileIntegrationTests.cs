@@ -6,7 +6,6 @@
 
 namespace ModelRelief.Test.Integration.Meshes
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using FluentAssertions;
@@ -15,9 +14,7 @@ namespace ModelRelief.Test.Integration.Meshes
     using ModelRelief.Test.TestModels.DepthBuffers;
     using ModelRelief.Test.TestModels.Meshes;
     using ModelRelief.Test.TestModels.MeshTransforms;
-    using ModelRelief.Test.TestModels.NormalMaps;
     using ModelRelief.Utility;
-    using Newtonsoft.Json;
     using Xunit;
 
     /// <summary>
@@ -178,65 +175,6 @@ namespace ModelRelief.Test.Integration.Meshes
                 await dependencyGraph.Rollback();
             }
         }
-        // WIP: This test has been deprecated since the Solver now returns the fully transformed mesh instead of only scaling the depth buffer values.
-        // New tests need to be created that directly test the contents of the transformed mesh.
-#if false
-        /// <summary>
-        /// Verifies that a GenerateFileRequest sets FileIsSynchronized.
-        /// </summary>
-        [Fact]
-        [Trait("Category", "Api FileRequest")]
-        public async Task FileRequest_MeshGenerateScalesDepthBufferByP1Scale()
-        {
-            var dependencyGraph = await InitializeDependencyGraph();
-            try
-            {
-                // Arrange
-                Dto.Mesh meshModel = await InitializeMesh(dependencyGraph, fileIsSynchronized: false);
-
-                // set MeshTransform scale factor
-                var meshTransformNode    = dependencyGraph.NodeCollection[typeof(Domain.MeshTransform)];
-                var meshTransformModel   = meshTransformNode.Model as Dto.MeshTransform;
-                var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
-
-                var scaleFactor = 0.5;
-                meshTransformModel.P1 = scaleFactor;
-                meshTransformModel = await meshTransformFactory.PutModel(ClassFixture, meshTransformModel) as Dto.MeshTransform;
-
-                // Act
-                // GenerateFile is triggered by the state change of FileIsSynchronized.
-                meshModel.FileIsSynchronized = true;
-                meshModel = await TestModelFactory.PutModel(ClassFixture, meshModel) as Dto.Mesh;
-
-                // Assert
-                var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequest(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{meshModel.Id}/file");
-                var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-                var encodedString = fileContentResult.GetValue("fileContents");
-                var scaledByteArray = Convert.FromBase64String(encodedString.ToString());
-
-                // compare to reference
-                var referenceScaledFloats = Utility.FloatListFromFile("depthbuffer.sdb.Scale05");
-
-                int numberFloats = referenceScaledFloats.Count;
-                for (int iFloat = 0; iFloat < numberFloats; iFloat++)
-                {
-                    int floatIndex = iFloat * 4;
-                    var scaledFloat          = BitConverter.ToDouble(scaledByteArray, floatIndex);
-                    var referenceScaledFloat = referenceScaledFloats[floatIndex];
-
-                    double tolerance = 1.0E-5;
-                    bool equalValues = Math.Abs(scaledFloat - referenceScaledFloat) <= tolerance;
-                    if (!equalValues)
-                        Assert.True(false);
-                }
-            }
-            finally
-            {
-                // Rollback
-                await dependencyGraph.Rollback();
-            }
-        }
-#endif
         #endregion
     }
 }

@@ -6,7 +6,6 @@
 
 namespace ModelRelief.Features.Home
 {
-    using System;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using ModelRelief.Settings;

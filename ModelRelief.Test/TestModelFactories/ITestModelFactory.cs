@@ -7,9 +7,7 @@
 namespace ModelRelief.Test.TestModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Dto;
 
     public interface ITestModelFactory

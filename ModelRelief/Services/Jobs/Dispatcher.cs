@@ -18,7 +18,6 @@ namespace ModelRelief.Services.Jobs
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Utility;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Dispatch manager.

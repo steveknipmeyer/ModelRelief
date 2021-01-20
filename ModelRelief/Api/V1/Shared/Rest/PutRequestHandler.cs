@@ -14,7 +14,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;

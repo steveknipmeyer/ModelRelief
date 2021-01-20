@@ -6,10 +6,6 @@
 
 namespace ModelRelief.Services
 {
-    using System.IO;
-    using Microsoft.AspNetCore.Hosting;
-    using ModelRelief.Domain;
-
     /// <summary>
     /// Application service manager.
     /// Provides service instances to contexts where DI is not available.

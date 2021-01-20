@@ -8,8 +8,6 @@ namespace ModelRelief.Infrastructure
 {
     using System;
     using System.IO;
-    using System.Reflection;
-    using CommandLine;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -17,7 +15,6 @@ namespace ModelRelief.Infrastructure
     using ModelRelief.Database;
     using ModelRelief.Services;
     using Serilog;
-    using Serilog.Events;
 
     public class Program
     {

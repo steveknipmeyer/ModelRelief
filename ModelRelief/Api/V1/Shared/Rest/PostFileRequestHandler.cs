@@ -20,9 +20,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
-    using SixLabors.ImageSharp.Processing;
 
     /// <summary>
     /// Represents a handler for a POST request to create a new model.

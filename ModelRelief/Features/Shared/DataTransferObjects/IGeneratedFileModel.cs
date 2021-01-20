@@ -6,8 +6,6 @@
 
 namespace ModelRelief.Dto
 {
-    using System;
-
     /// <summary>
     /// Common interface for all generated files (e.g. Mesh, DepthBuffer).
     /// This interface is used only for integration testing. File-backed domain models inherit from GeneratedFileDomainModel.

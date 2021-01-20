@@ -9,21 +9,16 @@ namespace ModelRelief.Test.Unit.DependencyManager
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
-    using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Settings;
     using ModelRelief.Test;
-    using ModelRelief.Utility;
-    using Newtonsoft.Json;
     using Xunit;
 
     public class DependencyManagerTests : UnitTests
@@ -55,7 +50,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
 
             var rootModel = DbContext.Models
                             .Where(m => (m.Id == rootPrimaryKey))
-                            .FirstOrDefault();
+                            .SingleOrDefault();
 
             var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
             var dependentModels = await Manager.FindDependentModels(developmentAccount.Id, rootType, rootPrimaryKey, dependentTypes);

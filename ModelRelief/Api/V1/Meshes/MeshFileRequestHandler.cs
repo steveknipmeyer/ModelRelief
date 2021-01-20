@@ -7,7 +7,6 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;

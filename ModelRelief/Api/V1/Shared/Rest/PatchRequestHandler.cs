@@ -17,7 +17,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using FluentValidation;
     using FluentValidation.Results;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;

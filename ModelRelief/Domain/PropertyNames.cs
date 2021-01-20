@@ -6,11 +6,6 @@
 
 namespace ModelRelief.Domain
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// Represents defined names of key domain model properties.
     /// </summary>

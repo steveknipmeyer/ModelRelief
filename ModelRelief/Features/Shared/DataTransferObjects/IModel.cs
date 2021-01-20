@@ -6,8 +6,6 @@
 
 namespace ModelRelief.Dto
 {
-    using System;
-
     /// <summary>
     /// Common interface for all model types.
     /// </summary>

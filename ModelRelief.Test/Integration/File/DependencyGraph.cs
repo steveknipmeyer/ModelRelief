@@ -10,13 +10,10 @@ namespace ModelRelief.Test.Integration
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Test.TestModels;
-    using ModelRelief.Utility;
     using Newtonsoft.Json;
 
     /// <summary>

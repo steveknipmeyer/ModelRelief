@@ -6,7 +6,6 @@
 
 namespace ModelRelief.Infrastructure
 {
-    using System;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 

@@ -11,7 +11,6 @@ namespace ModelRelief.Api.V1.Cameras
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
 
     /// <summary>
     /// Represents a controller to handle Camera API requests.

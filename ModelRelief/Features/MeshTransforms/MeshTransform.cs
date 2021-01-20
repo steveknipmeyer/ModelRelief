@@ -9,7 +9,6 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
-    using ModelRelief.Api.V1.Shared.Rest;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a MeshTransform.

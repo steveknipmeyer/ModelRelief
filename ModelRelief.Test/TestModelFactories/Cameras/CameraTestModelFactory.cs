@@ -7,9 +7,6 @@
 namespace ModelRelief.Test.TestModels.Cameras
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using ModelRelief.Api.V1.Shared.Rest;
-    using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Features.Settings;
 

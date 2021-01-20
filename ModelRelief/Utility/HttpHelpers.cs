@@ -6,12 +6,7 @@
 
 namespace ModelRelief.Utility
 {
-    using System.Security.Claims;
-    using System.Security.Principal;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
-    using ModelRelief.Api.V1.Shared.Errors;
-    using ModelRelief.Domain;
 
     public static class HttpHelpers
     {

@@ -9,7 +9,6 @@ namespace ModelRelief.Test.TestModels
     using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using Newtonsoft.Json;

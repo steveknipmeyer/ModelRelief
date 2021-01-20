@@ -7,16 +7,10 @@
 namespace ModelRelief.Test.Integration.NormalMaps
 {
     using System.Collections.Generic;
-    using System.Net;
     using System.Threading.Tasks;
-    using FluentAssertions;
-    using ModelRelief.Domain;
     using ModelRelief.Test.TestModels;
     using ModelRelief.Test.TestModels.Cameras;
-    using ModelRelief.Test.TestModels.Models;
     using ModelRelief.Test.TestModels.NormalMaps;
-    using Newtonsoft.Json;
-    using Xunit;
 
     /// <summary>
     /// NormalMap file integration Tests.

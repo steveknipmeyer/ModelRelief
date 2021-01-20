@@ -7,7 +7,6 @@
 namespace ModelRelief.Utility
 {
     using System.Linq;
-
     public class Strings
     {
         /// <summary>

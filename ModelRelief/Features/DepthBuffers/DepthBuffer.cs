@@ -10,7 +10,6 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
 
     /// <summary>

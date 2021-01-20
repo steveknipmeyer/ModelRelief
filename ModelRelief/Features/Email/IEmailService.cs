@@ -6,7 +6,6 @@
 
 namespace ModelRelief.Features.Email
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>

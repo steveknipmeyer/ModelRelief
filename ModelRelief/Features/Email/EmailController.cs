@@ -11,9 +11,7 @@ namespace ModelRelief.Features.Email
     using System.Net;
     using System.Net.Http;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using ModelRelief.Settings;

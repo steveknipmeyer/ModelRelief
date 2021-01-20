@@ -8,7 +8,6 @@ namespace ModelRelief.Test
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Threading;
 
     /// <summary>
     /// Helper methods for automated testing.

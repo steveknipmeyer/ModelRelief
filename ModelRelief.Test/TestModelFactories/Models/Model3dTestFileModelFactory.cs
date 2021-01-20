@@ -7,8 +7,6 @@
 namespace ModelRelief.Test.TestModels.Models
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Dto;
 
     /// <summary>

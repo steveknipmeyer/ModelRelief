@@ -7,10 +7,8 @@
 namespace ModelRelief.Test.Integration
 {
     using System;
-    using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
     using ModelRelief.Api.V1.Shared.Rest;

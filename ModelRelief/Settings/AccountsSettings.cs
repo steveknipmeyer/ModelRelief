@@ -6,11 +6,6 @@
 
 namespace ModelRelief.Settings
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// Represents test accounts in a configuration provider such as Azure Key Vault.
     /// </summary>

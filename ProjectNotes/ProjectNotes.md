@@ -1,17 +1,13 @@
 ﻿
 ## Commit Notes
 ### Issues
-    SingleorDefault vs. FirstOrDefault?
-
-    Review instances of "Lucy" (Lucy, lucy, lucy.obj, lucy.sdb, lucy.nmap)
-
-    Remove unused using statements.
-
     Routing
         Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
         Change Api routing for meshtransforms to mesh-transforms.
 
-    Is the depthbuffer.sdb.scaled.05 used?
+    Complete implementation of DependencyManager.GetAllDependencyTypes.
+        This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
+        How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
 
     Explorer
         Model meshes are small and difficult to view.
