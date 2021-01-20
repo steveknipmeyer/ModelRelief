@@ -14,7 +14,10 @@ namespace ModelRelief.Test.TestModels
 
     public interface ITestModelFactory
     {
-        Type Type { get; }
+        ClassFixture ClassFixture { get; }
+        Type TEntityType { get; }
+        Type TGetModelType { get; }
+        string ApiUrl { get; set; }
         Task<IModel> FindModel(int modelId);
         Task<IModel> FindModelByName(string name);
 

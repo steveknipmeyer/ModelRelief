@@ -44,27 +44,13 @@ namespace ModelRelief.Test.Integration.NormalMaps
             /// </summary>
             public override async Task ConstructGraph()
             {
-                // Model
-                var modelNode      = NodeCollection[typeof(Domain.Model3d)];
-                var model3dFactory = modelNode.Factory as ITestFileModelFactory;
-                modelNode.Model    = await model3dFactory.PostNewModel();
-                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "unitcube.obj");
-
                 // Camera
-                var cameraNode    = NodeCollection[typeof(Domain.Camera)];
-                var cameraFactory = cameraNode.Factory as ITestModelFactory;
-                cameraNode.Model  = await cameraFactory.PostNewModel();
+                var cameraNode = NodeCollection[typeof(Domain.Camera)];
+                await cameraNode.FromExistingModel("Lucy");
 
                 // NormalMap
-                var normalMapNode    = NodeCollection[typeof(Domain.NormalMap)];
-                var normalMapFactory = normalMapNode.Factory as ITestFileModelFactory;
-                normalMapNode.Model  = normalMapFactory.ConstructValidModel();
-
-                var normalMap       = normalMapNode.Model as Dto.NormalMap;
-                normalMap.Model3dId = modelNode.Model.Id;
-                normalMap.CameraId  = cameraNode.Model.Id;
-                normalMapNode.Model = await normalMapFactory.PostNewModel(normalMap);
-                normalMapNode.Model = await normalMapFactory.PostNewFile(normalMapNode.Model.Id, "NormalMap.sdb");
+                var depthBufferNode = NodeCollection[typeof(Domain.NormalMap)];
+                await depthBufferNode.FromExistingModel("Lucy");
             }
         }
 
@@ -85,9 +71,8 @@ namespace ModelRelief.Test.Integration.NormalMaps
         {
             var dependencyGraph = new NormalMapDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
-                new NormalMapTestFileModelFactory(ClassFixture),
-                new Model3dTestFileModelFactory(ClassFixture),
                 new CameraTestModelFactory(ClassFixture),
+                new NormalMapTestFileModelFactory(ClassFixture),
             });
             await dependencyGraph.ConstructGraph();
 

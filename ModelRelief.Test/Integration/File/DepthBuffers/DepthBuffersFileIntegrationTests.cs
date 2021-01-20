@@ -44,27 +44,13 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             /// </summary>
             public override async Task ConstructGraph()
             {
-                // Model
-                var modelNode      = NodeCollection[typeof(Domain.Model3d)];
-                var model3dFactory = modelNode.Factory as ITestFileModelFactory;
-                modelNode.Model    = await model3dFactory.PostNewModel();
-                modelNode.Model    = await model3dFactory.PostNewFile(modelNode.Model.Id, "unitcube.obj");
-
                 // Camera
-                var cameraNode    = NodeCollection[typeof(Domain.Camera)];
-                var cameraFactory = cameraNode.Factory as ITestModelFactory;
-                cameraNode.Model  = await cameraFactory.PostNewModel();
+                var cameraNode = NodeCollection[typeof(Domain.Camera)];
+                await cameraNode.FromExistingModel("Lucy");
 
                 // DepthBuffer
-                var depthBufferNode    = NodeCollection[typeof(Domain.DepthBuffer)];
-                var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-                depthBufferNode.Model  = depthBufferFactory.ConstructValidModel();
-
-                var depthBuffer       = depthBufferNode.Model as Dto.DepthBuffer;
-                depthBuffer.Model3dId = modelNode.Model.Id;
-                depthBuffer.CameraId  = cameraNode.Model.Id;
-                depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "depthbuffer.sdb");
+                var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
+                await depthBufferNode.FromExistingModel("Lucy");
             }
         }
 
@@ -85,9 +71,8 @@ namespace ModelRelief.Test.Integration.DepthBuffers
         {
             var dependencyGraph = new DepthBufferDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
-                new DepthBufferTestFileModelFactory(ClassFixture),
-                new Model3dTestFileModelFactory(ClassFixture),
                 new CameraTestModelFactory(ClassFixture),
+                new DepthBufferTestFileModelFactory(ClassFixture),
             });
             await dependencyGraph.ConstructGraph();
 

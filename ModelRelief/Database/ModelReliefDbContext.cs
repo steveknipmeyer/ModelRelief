@@ -115,6 +115,15 @@ namespace ModelRelief.Database
 
             return null;
         }
+        /// <summary>
+        /// Returns a collection of all database entity types.
+        /// https://stackoverflow.com/questions/54187848/get-list-of-entity-models-in-dbcontext-entity-framework-core-2-1
+        /// </summary>
+        public List<Type> GetAllEntityTypes()
+        {
+        var entityTypes = this.Model.GetEntityTypes().Select(t => t.ClrType).ToList();
+        return entityTypes;
+        }
 #endregion
      }
 }

@@ -32,7 +32,8 @@ namespace ModelRelief.Test.TestModels
 
         public ClassFixture ClassFixture { get; }
 
-        public Type Type => typeof(TEntity);
+        public Type TEntityType => typeof(TEntity);
+        public Type TGetModelType => typeof(TGetModel);
 
         public IEnumerable<int> IdRange  { get; set; }
 

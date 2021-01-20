@@ -48,48 +48,19 @@ namespace ModelRelief.Test.Integration.Meshes
             {
                 // Camera
                 var cameraNode = NodeCollection[typeof(Domain.Camera)];
-                var cameraFactory = cameraNode.Factory as ITestModelFactory;
-                cameraNode.Model = cameraFactory.ConstructValidModel();
-
-                var camera = cameraNode.Model as Dto.Camera;
-                cameraNode.Model = await cameraFactory.PostNewModel(camera);
-
-                // DepthBuffer
-                var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
-                var depthBufferFactory = depthBufferNode.Factory as ITestFileModelFactory;
-                depthBufferNode.Model = depthBufferFactory.ConstructValidModel();
-
-                var depthBuffer = depthBufferNode.Model as Dto.DepthBuffer;
-                depthBuffer.CameraId = cameraNode.Model.Id;
-                depthBufferNode.Model = await depthBufferFactory.PostNewModel(depthBuffer);
-                depthBufferNode.Model = await depthBufferFactory.PostNewFile(depthBufferNode.Model.Id, "depthbuffer.sdb");
-
-                // NormalMap
-                var normalMapNode = NodeCollection[typeof(Domain.NormalMap)];
-                var normalMapFactory = normalMapNode.Factory as ITestFileModelFactory;
-                normalMapNode.Model = normalMapFactory.ConstructValidModel();
-
-                var normalMap = normalMapNode.Model as Dto.NormalMap;
-                normalMap.CameraId = cameraNode.Model.Id;
-                normalMapNode.Model = await normalMapFactory.PostNewModel(normalMap);
-                normalMapNode.Model = await normalMapFactory.PostNewFile(normalMapNode.Model.Id, "normalmap.nmap");
+                await cameraNode.FromExistingModel("Lucy");
 
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
-                var meshTransformFactory = meshTransformNode.Factory as ITestModelFactory;
-                meshTransformNode.Model = await meshTransformFactory.PostNewModel();
+                await meshTransformNode.FromExistingModel("Lucy");
+
+                // DepthBuffer
+                var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
+                await depthBufferNode.FromExistingModel("Lucy");
 
                 // Mesh
                 var meshNode = NodeCollection[typeof(Domain.Mesh)];
-                var meshFactory = meshNode.Factory as ITestFileModelFactory;
-                meshNode.Model = meshFactory.ConstructValidModel();
-
-                var mesh = meshNode.Model as Dto.Mesh;
-                mesh.DepthBufferId = depthBufferNode.Model.Id;
-                mesh.NormalMapId   = normalMapNode.Model.Id;
-                mesh.MeshTransformId = meshTransformNode.Model.Id;
-                meshNode.Model = await meshFactory.PostNewModel(mesh);
-                meshNode.Model = await meshFactory.PostNewFile(meshNode.Model.Id, "mesh.sfp");
+                await meshNode.FromExistingModel("Lucy");
             }
         }
 
@@ -110,11 +81,10 @@ namespace ModelRelief.Test.Integration.Meshes
         {
             var dependencyGraph = new MeshDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
-                new MeshTestFileModelFactory(ClassFixture),
-                new DepthBufferTestFileModelFactory(ClassFixture),
-                new NormalMapTestFileModelFactory(ClassFixture),
-                new MeshTransformTestModelFactory(ClassFixture),
                 new CameraTestModelFactory(ClassFixture),
+                new MeshTransformTestModelFactory(ClassFixture),
+                new DepthBufferTestFileModelFactory(ClassFixture),
+                new MeshTestFileModelFactory(ClassFixture),
             });
             await dependencyGraph.ConstructGraph();
 

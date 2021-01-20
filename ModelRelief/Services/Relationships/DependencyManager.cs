@@ -64,7 +64,7 @@ namespace ModelRelief.Services.Relationships
         }
 
         /// <summary>
-        /// Returns a collection of dependent classes.
+        /// Returns a collection of first-level dependent classes.
         /// Dependent classes are marked with the DependentFiles attribute.
         /// </summary>
         /// <param name="classType">Type of class.</param>
@@ -79,6 +79,15 @@ namespace ModelRelief.Services.Relationships
                 dependentClasses = dependentFiles.Classes;
             }
             return dependentClasses;
+        }
+
+        /// <summary>
+        /// Returns a collection of all dependencies of a class.
+        /// </summary>
+        /// <param name="classType">Type of class.</param>
+        public static List<Type> GetAllDependencyTypes(Type classType)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
