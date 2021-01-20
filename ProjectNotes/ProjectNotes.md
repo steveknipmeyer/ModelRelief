@@ -1,9 +1,6 @@
 ﻿
 ## Commit Notes
 ### Issues
-    Extend Camera DependentFiles attribute to include NormalMap.
-        Tests do not pass.
-
     SingleorDefault vs. FirstOrDefault?
 
     Review instances of "Lucy" (Lucy, lucy, lucy.obj, lucy.sdb, lucy.nmap)

@@ -113,7 +113,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
             var dependentModels = await FindDependentModels(typeof(Domain.Camera), lucyCameraPrimaryKey);
 
             // Assert
-            dependentModels.Count.Should().Be(2);
+            dependentModels.Count.Should().Be(3);
 
             // TopCamera <= DepthBuffer("lucy.sdb") <= Mesh("lucy.sfp")
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.sdb");
@@ -170,7 +170,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public void CameraHasExpectedDependentFiles()
         {
             // Assert
-            AssertClassHasExpectedDependentFiles(typeof(Domain.Camera), typeof(Domain.DepthBuffer));
+            AssertClassHasExpectedDependentFiles(typeof(Domain.Camera), typeof(Domain.DepthBuffer), typeof(Domain.NormalMap));
         }
 
         /// <summary>

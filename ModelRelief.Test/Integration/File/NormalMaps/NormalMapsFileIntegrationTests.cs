@@ -71,6 +71,9 @@ namespace ModelRelief.Test.Integration.NormalMaps
         {
             var dependencyGraph = new NormalMapDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
+                // N.B. In order of dependencies.
+                // DependencyGraph.Rollback must restore dependents last to avoid triggering unwanted file operations.
+
                 new CameraTestModelFactory(ClassFixture),
                 new NormalMapTestFileModelFactory(ClassFixture),
             });

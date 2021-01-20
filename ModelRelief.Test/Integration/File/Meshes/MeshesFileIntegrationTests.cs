@@ -81,6 +81,9 @@ namespace ModelRelief.Test.Integration.Meshes
         {
             var dependencyGraph = new MeshDependencyGraph(ClassFixture, new List<ITestModelFactory>
             {
+                // N.B. In order of dependencies.
+                // DependencyGraph.Rollback must restore dependents last to avoid triggering unwanted file operations.
+
                 new CameraTestModelFactory(ClassFixture),
                 new MeshTransformTestModelFactory(ClassFixture),
                 new DepthBufferTestFileModelFactory(ClassFixture),

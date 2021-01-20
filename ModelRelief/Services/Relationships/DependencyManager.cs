@@ -163,6 +163,7 @@ namespace ModelRelief.Services.Relationships
                     }
                 }
             }
+            dependentModels = dependentModels.Distinct().ToList();
             return dependentModels;
         }
 

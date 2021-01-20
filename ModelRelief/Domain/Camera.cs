@@ -21,7 +21,7 @@ namespace ModelRelief.Domain
         Isometric,
     }
 
-    [DependentFiles(typeof(DepthBuffer))]
+    [DependentFiles(typeof(DepthBuffer), typeof(NormalMap))]
     public class Camera : DomainModel
     {
         [DependentFileProperty]
