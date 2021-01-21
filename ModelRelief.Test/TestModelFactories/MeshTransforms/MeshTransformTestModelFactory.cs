@@ -31,7 +31,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = $"{RootApi}meshtransforms";
+            ApiUrl = $"{RootApi}mesh-transforms";
             UxUrl = "/meshtransforms";
 
             ReferencePropertyNames = new List<string> { "ProjectId" };

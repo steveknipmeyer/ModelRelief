@@ -4,6 +4,7 @@
     Routing
         Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
         Change Api routing for meshtransforms to mesh-transforms.
+        Use Endpoint routing?
 
     Complete implementation of DependencyManager.GetAllDependencyTypes.
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.

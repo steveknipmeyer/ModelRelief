@@ -38,7 +38,7 @@ export enum ServerEndPoints {
     ApiCameras          = "api/v1/cameras",
     ApiDepthBuffers     = "api/v1/depth-buffers",
     ApiMeshes           = "api/v1/meshes",
-    ApiMeshTransforms   = "api/v1/meshtransforms",
+    ApiMeshTransforms   = "api/v1/mesh-transforms",
     ApiModels           = "api/v1/models",
     ApiNormalMaps       = "api/v1/normal-maps",
     ApiProjects         = "api/v1/projects",

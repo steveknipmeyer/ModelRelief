@@ -119,7 +119,7 @@ namespace ModelRelief.Features
         /// Action handler for a Create request.
         /// </summary>
         /// <param name="postRequest">Model to create.</param>
-        /// <returns>Index page.</returns>
+        /// <returns>Create page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Create(TRequestModel postRequest)
@@ -167,7 +167,7 @@ namespace ModelRelief.Features
         /// </summary>
         /// <param name="id">Id of model to edit.</param>
         /// <param name="postRequest">Edited model to update.</param>
-        /// <returns>Index page.</returns>
+        /// <returns>Edit page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(int id, TRequestModel postRequest)
@@ -213,7 +213,7 @@ namespace ModelRelief.Features
         /// Action handler for a Delete operation.
         /// </summary>
         /// <param name="id">Model Id to delete.</param>
-        /// <returns>Index page.</returns>
+        /// <returns>DeleteConfirmed page.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> DeleteConfirmed(int id)
