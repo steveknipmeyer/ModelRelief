@@ -47,6 +47,7 @@ a {
 }
 
 /* Ripple effect */
+/* https://codepen.io/finnhvman/post/pure-css-ripple-with-minimal-effort */
 .rippleContainer {
   position: relative;
   display: inline-block;

@@ -2,25 +2,22 @@
 ### Issues
     Write a VSCode extension for removing Working file editors.
 
-    UI
-        Confirm ripple effect is OSS and not MD.
-            https://mdbootstrap.com/docs/standard/methods/ripple/
-
     Solver
+        Hide the attenuation function in the UI and Explorer?
+        Fix to (10%, 0.9) per published research?
+
         Use Numpy gradients and divergence.
             Change switch to "Use Difference class"
 
         Handle divide by zero errors in all processing steps.
 
+
         DepthBuffer
             How are the directions Gx and Gy determined?
-
                 Do they match the geometry of the model?
+
         Review all experimental processing.
             Document Solver defaults as active settings (no Web UI).
-
-        Hide the attenuation function in the UI and Explorer?
-            Fix to (10%, 0.9) per published research?
 
         Rebuild models.
             Solver/Test
