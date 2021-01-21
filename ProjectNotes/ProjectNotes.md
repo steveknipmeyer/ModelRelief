@@ -1,12 +1,8 @@
-﻿
-## Commit Notes
+﻿## Commit Notes
 ### Issues
     Write a VSCode extension for removing Working file editors.
 
-    Explorer
-        Clean up the Explorer UI.
     UI
-        Background color of Select elements matches text.
         Confirm ripple effect is OSS and not MD.
             https://mdbootstrap.com/docs/standard/methods/ripple/
 
