@@ -8,8 +8,6 @@
     Write a VSCode extension for removing Working file editors.
 
     Explorer
-        Add exception handlers for inpu fields.
-            def handle_process(self) ->/None:
         Clean up the Explorer UI.
     UI
         Background color of Select elements matches text.

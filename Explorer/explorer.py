@@ -104,24 +104,30 @@ class Explorer(QtWidgets.QMainWindow):
         self.image_tabs[ImageType.Image7] = ImageTab(self.ui.i7Tab, ImageType.Image6, "gray", ImageTab.add_image, DataSource(self.solver.results, "i7"))
         self.image_tabs[ImageType.Image8] = ImageTab(self.ui.i8Tab, ImageType.Image6, "gray", ImageTab.add_image, DataSource(self.solver.results, "i8"))
 
+    def initialize_float_field(self, field: QtWidgets.QLineEdit, initial_value: float, minimum: float = 0.0, maximum: float = 100.0, precision: int = 2)-> None:
+        field.setText(str(initial_value))
+        field.setValidator(QtGui.QDoubleValidator(minimum, maximum, precision))
+
     def initialize_settings(self) ->None:
         mesh_transform:Dict[str, float] = self.settings['MeshTransform']
 
-        self.ui.gradientThresholdLineEdit.setText(str(mesh_transform['GradientThreshold']))
-        self.ui.attenuationFactorLineEdit.setText(str(mesh_transform['AttenuationFactor']))
-        self.ui.attenuationDecayLineEdit.setText(str(mesh_transform['AttenuationDecay']))
-        self.ui.unsharpGaussianLowLineEdit.setText(str(mesh_transform['UnsharpGaussianLow']))
-        self.ui.unsharpGaussianHighLineEdit.setText(str(mesh_transform['UnsharpGaussianHigh']))
-        self.ui.unsharpHFScaleLineEdit.setText(str(mesh_transform['UnsharpHighFrequencyScale']))
+        self.initialize_float_field(self.ui.gradientThresholdLineEdit,   mesh_transform['GradientThreshold'])
+        self.initialize_float_field(self.ui.attenuationFactorLineEdit,   mesh_transform['AttenuationFactor'])
+        self.initialize_float_field(self.ui.attenuationDecayLineEdit,    mesh_transform['AttenuationDecay'])
+        self.initialize_float_field(self.ui.unsharpGaussianLowLineEdit,  mesh_transform['UnsharpGaussianLow'])
+        self.initialize_float_field(self.ui.unsharpGaussianHighLineEdit, mesh_transform['UnsharpGaussianHigh'])
+        self.initialize_float_field(self.ui.unsharpHFScaleLineEdit,      mesh_transform['UnsharpHighFrequencyScale'])
 
-        self.ui.p1LineEdit.setText(str(mesh_transform['P1']))
-        self.ui.p2LineEdit.setText(str(mesh_transform['P2']))
-        self.ui.p3LineEdit.setText(str(mesh_transform['P3']))
-        self.ui.p4LineEdit.setText(str(mesh_transform['P4']))
-        self.ui.p5LineEdit.setText(str(mesh_transform['P5']))
-        self.ui.p6LineEdit.setText(str(mesh_transform['P6']))
-        self.ui.p7LineEdit.setText(str(mesh_transform['P7']))
-        self.ui.p8LineEdit.setText(str(mesh_transform['P8']))
+        self.initialize_float_field(self.ui.p1LineEdit, mesh_transform['P1'])
+        self.initialize_float_field(self.ui.p2LineEdit, mesh_transform['P2'])
+        self.initialize_float_field(self.ui.p3LineEdit, mesh_transform['P3'])
+        self.initialize_float_field(self.ui.p4LineEdit, mesh_transform['P4'])
+        self.initialize_float_field(self.ui.p5LineEdit, mesh_transform['P5'])
+        self.initialize_float_field(self.ui.p6LineEdit, mesh_transform['P6'])
+        self.initialize_float_field(self.ui.p7LineEdit, mesh_transform['P7'])
+        self.initialize_float_field(self.ui.p8LineEdit, mesh_transform['P8'])
+
+        self.ui.p8LineEdit.setValidator(QtGui.QDoubleValidator(0.0, 1.0, 2))
 
         checkbox_enabled = True
         self.ui.gradientThresholdCheckBox.setChecked(checkbox_enabled)
