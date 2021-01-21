@@ -1,16 +1,14 @@
 ﻿
 ## Commit Notes
 ### Issues
-    DepthBuffer
-        How are the directions Gx and Gy determined?
-            Do they match the geometry of the model?
-
     Write a VSCode extension for removing Working file editors.
 
     Explorer
         Clean up the Explorer UI.
     UI
         Background color of Select elements matches text.
+        Confirm ripple effect is OSS and not MD.
+            https://mdbootstrap.com/docs/standard/methods/ripple/
 
     Solver
         Use Numpy gradients and divergence.
@@ -18,6 +16,10 @@
 
         Handle divide by zero errors in all processing steps.
 
+        DepthBuffer
+            How are the directions Gx and Gy determined?
+
+                Do they match the geometry of the model?
         Review all experimental processing.
             Document Solver defaults as active settings (no Web UI).
 

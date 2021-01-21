@@ -20,6 +20,10 @@ input, textarea {
     color: white;
 }
 
+select.form-control {
+    background-color: #3b6176  !important;
+}
+
 .button-rounded {
     color: white;
     border-radius: 32px;
