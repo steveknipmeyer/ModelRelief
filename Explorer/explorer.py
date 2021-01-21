@@ -272,7 +272,7 @@ class Explorer(QtWidgets.QMainWindow):
 
             self.initialize_settings()
             self.calculate()
-            self.update(preserve_camera=False)
+            self.update(clear_content = True, preserve_camera=False)
 
     def calculate(self) -> None:
         """
@@ -324,11 +324,13 @@ class Explorer(QtWidgets.QMainWindow):
         for _, mesh_tab in self.mesh_tabs.items():
             mesh_tab.source.dirty = True
 
-    def update_image_tabs(self)-> None:
+    def update_image_tabs(self, clear_content: bool = False, )-> None:
         """
         Updates the tabs holding pure images.
         """
         for _, tab in self.image_tabs.items():
+            if clear_content:
+                tab.figure = None
             if tab.widget.isVisible():
                 tab.update()
 
@@ -337,19 +339,20 @@ class Explorer(QtWidgets.QMainWindow):
         Updates the tabs holding 3D meshes.
         """
         for _, tab in self.mesh_tabs.items():
-            if tab.widget.isVisible():
-                tab.mesh_widget.mesh_content.update(preserve_camera)
+            tab.mesh_widget.mesh_content.update(preserve_camera)
 
-    def update(self, preserve_camera: bool = True) -> None:
+    def update(self, clear_content: bool = False, preserve_camera: bool = True) -> None:
         """ Update the UI with the images, meshes, etc. from the calculated solution.
         Parameters
         ----------
+        clear_content
+            Clear any existing tab content
         preserve_camera
             Preserve camera settings for a view to maintain continuity across parameter changes.
         """
         self.set_busy (True)
 
-        self.update_image_tabs()
+        self.update_image_tabs(clear_content)
         self.update_mesh_tabs(preserve_camera)
 
         self.set_busy (False)

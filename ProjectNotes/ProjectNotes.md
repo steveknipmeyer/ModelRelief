@@ -1,31 +1,19 @@
 ﻿
 ## Commit Notes
 ### Issues
-    Routing
-        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
-        Change Api routing for meshtransforms to mesh-transforms.
-        Use Endpoint routing?
-
-    Complete implementation of DependencyManager.GetAllDependencyTypes.
-        This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
-        How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
-
-    Explorer
-        Model meshes are small and difficult to view.
-,m                                                              ,m  ,  ,                                                   okm,.
     DepthBuffer
         How are the directions Gx and Gy determined?
             Do they match the geometry of the model?
 
     Write a VSCode extension for removing Working file editors.
 
-    Why do Meshes not have a resolution?
-
     Explorer
-        Add exception handlers for input fields.
+        Add exception handlers for inpu fields.
+            def handle_process(self) ->/None:
         Clean up the Explorer UI.
     UI
         Background color of Select elements matches text.
+
     Solver
         Use Numpy gradients and divergence.
             Change switch to "Use Difference class"
@@ -65,6 +53,7 @@
 
     Review all Pylance lint issues with Python source.
         python.analysis.typeCheckingMode: basic or strict?
+
     Gravatar
 
     Experiment with development variations.
@@ -79,6 +68,14 @@
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
+
+    Routing
+        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
+        Use Endpoint routing?
+
+    Complete implementation of DependencyManager.GetAllDependencyTypes.
+        This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
+        How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
