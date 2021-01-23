@@ -42,11 +42,12 @@ export MRExitAfterInitialization=False
 echo "Activating Development Python environment"
 . devenv/bin/activate
 
-# include Tools folder for general utility support
+# Python
 export "PYTHONPATH=${MRSolution}Tools:${MRSolution}Solver:${MRSolution}Explorer:$PYTHONPATH"
-# MyPy Linter
-export "MYPYPATH=${MRSolution}Tools/"
 
+# PyQt5 tools
+export "PATH=${MRSolution}devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin:$PATH:"
+# ModelRelief
 export PATH="$PATH:${MRSolution}Tools:${MRSolution}Build"
 
 MRHome () {

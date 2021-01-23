@@ -72,7 +72,7 @@ class Attenuation:
 
         # average of absolute value of non-zero elements
         absolute = np.absolute(array)
-        mean = absolute[absolute > epsilon].mean()
+        mean = 0.0 if (absolute < epsilon).all() else absolute[absolute > epsilon].mean()
 
         a = (parameters.factor / 100.0) * mean
         b = parameters.decay

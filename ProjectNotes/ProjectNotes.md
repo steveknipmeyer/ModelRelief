@@ -1,16 +1,14 @@
 ﻿## Commit Notes
+Solver attenuation handles all zero gradients
+Add PyQt5 tools to PATH
 ### Issues
-    Write a VSCode extension for removing Working file editors.
-
     Solver
         Hide the attenuation function in the UI and Explorer?
         Fix to (10%, 0.9) per published research?
 
-        Use Numpy gradients and divergence.
+        Evalute NumPy gradients and divergence.
+            Why do NumPy gradients lose the ridges in the Test model?
             Change switch to "Use Difference class"
-
-        Handle divide by zero errors in all processing steps.
-
 
         DepthBuffer
             How are the directions Gx and Gy determined?
@@ -42,8 +40,6 @@
                     How was the compositing processing defined to create the depth buffer?
                     Obtain a Shockwave player for the videos.
 
-        Review Solver/Experiments.
-
     Review all Pylance lint issues with Python source.
         python.analysis.typeCheckingMode: basic or strict?
 
@@ -55,9 +51,6 @@
             Viewers/CameraControlsDevelopment.ts
 
     When does tsc use .tsconfig?
-
-    Why is QtDesigner not in the path?
-        devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts

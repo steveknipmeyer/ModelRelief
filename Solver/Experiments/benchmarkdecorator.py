@@ -25,18 +25,14 @@ class Widget:
 def multiplier (firstTerm: float, secondTerm: float)-> float :
     return firstTerm * secondTerm
 
-x = benchmark (multiplier)
 
 def main():
     result = multiplier(1.0, 3.0)
     print (f"result = {result}")
 
-    # result = x(1.0, 3.0)
-    # print (f"result = {result}")
-
     widget = Widget()
     result = widget.adder(2.0, 4.0)
     print (f"result = {result}")
 
-if __name__ == '__main__':              # if we're running file directly and not importing it
-    main()                              # run the main function
+
+main()

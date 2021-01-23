@@ -46,8 +46,8 @@ class Mask:
         """
         # copy
         mask = np.array(original)
-        mask[mask < Mask.EPSILON] = 0
-        mask[mask > Mask.EPSILON] = 1
+        mask[mask <  Mask.EPSILON] = 0
+        mask[mask >= Mask.EPSILON] = 1
         return mask
 
     def threshold (self, array: np.ndarray, threshold: float) -> np.ndarray:
