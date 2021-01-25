@@ -22,11 +22,13 @@ class UnsharpMaskParameters:
     """
     A class for holding the parameters supporting unsharp masking.
     """
-    def __init__(self, gaussian_low: float, gaussian_high: float, high_frequency_scale: float) -> None:
+    def __init__(self, enabled: bool, gaussian_low: float, gaussian_high: float, high_frequency_scale: float) -> None:
         """
         Initialize an instance of UnsharpMaskParameters.
         Parameters
         ----------
+        enabled
+            Enable unsharp mask processing.
         gaussian_low
             The Gaussian standard deviation for the low frequency pass.
         gaussian_high
@@ -35,6 +37,7 @@ class UnsharpMaskParameters:
             The scaling factor for the high frequence component when added back to the low component.
 
         """
+        self.enabled: bool = enabled
         self.gaussian_low = gaussian_low
         self.gaussian_high = gaussian_high
         self.high_frequency_scale = high_frequency_scale

@@ -75,24 +75,6 @@ class Solver:
 
         self.services = Services(self.content_folder, self.working_folder, Logger(), self.results)
 
-        # processing steps
-        self.enable_gradient_threshold = True
-        self.enable_attenuation = True
-        self.enable_unsharpmask = True
-        self.enable_unsharpmask_gaussian_high = True
-        self.enable_unsharpmask_gaussian_low = True
-        self.enable_unsharpmask_high_frequence_scale = True
-
-        # experimental
-        self.enable_p1 = True                # scale relief
-        self.enable_p2 = False               # silhoutte processing, sigma gaussian
-        self.enable_p3 = False               # silhouette processing, blurring passes
-        self.enable_p4 = True                # use composite mask in gaussian blur
-        self.enable_p5 = False               # use Numpy gradients, not Difference class
-        self.enable_p6 = False               # translate mesh Z to positive values
-        self.enable_p7 = False               # force planar by zeroing with background mask
-        self.enable_p8 = False               # use NormalMap gradients (not DepthBuffer heightfields)
-
         # file output
         self.enable_obj = True
 
@@ -143,12 +125,12 @@ class Solver:
         """
         self.load_settings(settings_file)
 
-        self.mesh = Mesh(self.settings, self.services)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.enable_p5)
-        self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
-
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         # print("%r" % self.mesh_transform)
+
+        self.mesh = Mesh(self.settings, self.services)
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.mesh_transform.p5.enabled)
+        self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
 
     @benchmark()
     def process_depth_buffer(self):
@@ -168,7 +150,7 @@ class Solver:
         The gradients are filtered by applying the composite mask.
         """
         # NormalMap gradients
-        if self.enable_p8:
+        if self.mesh_transform.p8.enabled:
             self.results.gradient_x.image = self.normal_map.gradient_x
             self.results.gradient_y.image = self.normal_map.gradient_y
         # DepthBuffer (heightfield) gradients
@@ -182,7 +164,8 @@ class Solver:
         #    A value must have a 1 in the background mask.
         #    A value must have both dI/dx <and> dI/dy that are 1 in the respective gradient masks.
         mask = Mask(self.services)
-        threshold_value = self.mesh_transform.gradient_threshold if self.enable_gradient_threshold else float("inf")
+        parameters = self.mesh_transform.gradient_threshold_parameters
+        threshold_value = parameters.threshold if parameters.enabled else float("inf")
         self.results.gradient_x_mask.image = mask.threshold(self.results.gradient_x.image, threshold_value)
         self.results.gradient_y_mask.image = mask.threshold(self.results.gradient_y.image, threshold_value)
 
@@ -201,10 +184,11 @@ class Solver:
         """
         Attenuate the gradients to dampen large values.
         """
-        if self.enable_attenuation:
+        if self.mesh_transform.attenuation_parameters.enabled:
             attenuation = Attenuation(self.services)
-            self.results.gradient_x.image = attenuation.apply(self.results.gradient_x.image, self.mesh_transform.attenuation_parameters)
-            self.results.gradient_y.image = attenuation.apply(self.results.gradient_y.image, self.mesh_transform.attenuation_parameters)
+            parameters = self.mesh_transform.attenuation_parameters
+            self.results.gradient_x.image = attenuation.apply(self.results.gradient_x.image, parameters)
+            self.results.gradient_y.image = attenuation.apply(self.results.gradient_y.image, parameters)
 
     def process_unsharpmask(self):
         """
@@ -214,15 +198,11 @@ class Solver:
         self.results.gradient_x_unsharp.image = self.results.gradient_x.image
         self.results.gradient_y_unsharp.image = self.results.gradient_y.image
 
-        if self.enable_unsharpmask:
-            gaussian_low = self.mesh_transform.unsharpmask_parameters.gaussian_low if self.enable_unsharpmask_gaussian_low else 0.0
-            gaussian_high = self.mesh_transform.unsharpmask_parameters.gaussian_high if self.enable_unsharpmask_gaussian_high else 0.0
-            high_frequency_scale = self.mesh_transform.unsharpmask_parameters.high_frequency_scale if self.enable_unsharpmask_high_frequence_scale else 1.0
-            parameters = UnsharpMaskParameters(gaussian_low, gaussian_high, high_frequency_scale)
-
+        if self.mesh_transform.unsharpmask_parameters.enabled:
+            parameters = self.mesh_transform.unsharpmask_parameters
             unsharpmask = UnsharpMask(self.services)
-            self.results.gradient_x_unsharp.image = unsharpmask.apply(self.results.gradient_x.image, self.results.combined_mask.image, parameters, self.enable_p4)
-            self.results.gradient_y_unsharp.image = unsharpmask.apply(self.results.gradient_y.image, self.results.combined_mask.image, parameters, self.enable_p4)
+            self.results.gradient_x_unsharp.image = unsharpmask.apply(self.results.gradient_x.image, self.results.combined_mask.image, parameters, self.mesh_transform.p4.enabled)
+            self.results.gradient_y_unsharp.image = unsharpmask.apply(self.results.gradient_y.image, self.results.combined_mask.image, parameters, self.mesh_transform.p4.enabled)
 
     def process_poisson(self):
         """
@@ -231,7 +211,7 @@ class Solver:
         Due to the discrete case which we are in, they are obtained by a finite difference again like in Chapter 3.1.3, but here it has to be
         the backward difffernce in order to produce a central difference like it is defined for the Laplacian.
         """
-        #if self.enable_pX:
+        #if self.mesh_transform.pX.enabled:
         #    integrator = Integrator(self.services)
         #    self.results.mesh_transformed.image = integrator.integrate_x(self.results.gradient_x_unsharp.image)
         #    self.results.mesh_transformed.image = integrator.integrate_y(self.results.gradient_y_unsharp.image)
@@ -246,19 +226,19 @@ class Solver:
         self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
 
         # apply offset
-        if self.enable_p6:
+        if self.mesh_transform.p6.enabled:
             offset = np.min(self.results.mesh_transformed.image)
             self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
 
         # apply background mask to reset background to zero
-        if self.enable_p7:
+        if self.mesh_transform.p7.enabled:
             self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
 
     def process_silhouette(self):
         """
         Process the silhouettes in the image.
         """
-        if self.enable_p2:
+        if self.mesh_transform.p2.enabled:
             silhouette = Silhouette(self.services)
             self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.p2, int(self.mesh_transform.p3))
 
@@ -267,7 +247,7 @@ class Solver:
         Scales the mesh to the final dimensions.
         """
         # linear scale original mesh
-        self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.p1
+        self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.p1.value
 
         write_file = False
         if write_file:

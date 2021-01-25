@@ -1,8 +1,9 @@
 ﻿## Commit Notes
-Solver attenuation handles all zero gradients
-Add PyQt5 tools to PATH
 ### Issues
     Solver
+        Review all experimental processing.
+            Document Solver defaults as active settings (no Web UI).
+
         Hide the attenuation function in the UI and Explorer?
         Fix to (10%, 0.9) per published research?
 
@@ -14,15 +15,9 @@ Add PyQt5 tools to PATH
             How are the directions Gx and Gy determined?
                 Do they match the geometry of the model?
 
-        Review all experimental processing.
-            Document Solver defaults as active settings (no Web UI).
-
         Rebuild models.
             Solver/Test
             Delivery
-
-        Generate a histogram of the gradient values.
-            Dynamically set gradient threshold.
 
         Why are portions of the generated mesh below the XY plane?
         Unsharp Masking seems to contribute the most valuable transform.
@@ -62,6 +57,7 @@ Add PyQt5 tools to PATH
     Complete implementation of DependencyManager.GetAllDependencyTypes.
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
+
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'

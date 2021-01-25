@@ -16,6 +16,25 @@ from typing import Dict, List, Tuple
 from difference import Difference, FiniteDifference, Axis
 from services import Services
 
+class GradientThresholdParameters:
+
+    """
+    A class for holding the parameters supporting gradient thresholding.
+    """
+    def __init__(self, enabled: bool, threshold: float) -> None:
+        """
+        Initialize an instance of GradientThresholdParameters.
+        Parameters
+        ----------
+        enabled
+            Apply gradient thresholding.
+        threshold
+            The maximum gradient value. Values larger than the threshold will be set to zero.
+
+        """
+        self.enabled = enabled
+        self.threshold = threshold
+
 class Gradient:
     """
     A class for calculating image gradients.

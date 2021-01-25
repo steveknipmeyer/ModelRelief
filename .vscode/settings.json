@@ -4,7 +4,7 @@
     // Files
     // ---------------------------------
         "files.exclude": {
-            "**/.git": false,            // this is a default value
+            "**/.git": true,            // this is a default value
 
             "**/node_modules": true,    // this excludes all folders named "node_modules" from the Explorer tree
             "devenv": true,

@@ -98,7 +98,7 @@
           </property>
           <property name="font">
            <font>
-            <pointsize>11</pointsize>
+            <pointsize>12</pointsize>
            </font>
           </property>
           <property name="focusPolicy">
@@ -398,31 +398,11 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="unsharpGaussianLowCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>32</x>
-         <y>165</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Gaussian &amp;Low</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="unsharpGaussianLowLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>157</y>
+         <y>147</y>
          <width>50</width>
          <height>28</height>
         </rect>
@@ -434,31 +414,11 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="unsharpGaussianHighCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>32</x>
-         <y>190</y>
-         <width>171</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Gaussian &amp;High</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="unsharpGaussianHighLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>188</y>
+         <y>178</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -470,31 +430,11 @@
         </size>
        </property>
       </widget>
-      <widget class="QCheckBox" name="unsharpHFScaleCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>32</x>
-         <y>218</y>
-         <width>201</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&amp;High Frequency Scaling</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="unsharpHFScaleLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>220</y>
+         <y>210</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -632,7 +572,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>137</y>
+         <y>127</y>
          <width>177</width>
          <height>24</height>
         </rect>
@@ -660,13 +600,13 @@
        <property name="font">
         <font>
          <family>MS Shell Dlg 2</family>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P1: Relief Scale</string>
+        <string>P1</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p2CheckBox">
@@ -680,13 +620,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P2 Silhouette: On/Off</string>
+        <string>P2</string>
        </property>
       </widget>
       <widget class="QLabel" name="labelExperimental">
@@ -768,13 +708,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P3 Silhouette: Iterations</string>
+        <string>P3</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p4LineEdit">
@@ -804,13 +744,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P4: Gaussian Mask</string>
+        <string>P4</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p6LineEdit">
@@ -840,13 +780,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P5: Numpy Gradients</string>
+        <string>P5</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p7LineEdit">
@@ -876,16 +816,19 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P6: Translate +Z</string>
+        <string>P6</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p8LineEdit">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>240</x>
@@ -900,6 +843,13 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
       </widget>
       <widget class="QCheckBox" name="p7CheckBox">
        <property name="geometry">
@@ -912,13 +862,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P7: Force Planar</string>
+        <string>P7</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p8CheckBox">
@@ -932,13 +882,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>P8: NormalMap Gradients</string>
+        <string>P8</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p5LineEdit">
@@ -970,31 +920,11 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;Processing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QLabel" name="labelFileOutput">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>252</y>
-         <width>168</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;File Output&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
       <widget class="QCheckBox" name="fileOBJCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>280</y>
+         <y>270</y>
          <width>165</width>
          <height>24</height>
         </rect>
@@ -1007,7 +937,72 @@
         </font>
        </property>
        <property name="text">
-        <string>Wavefront OBJ</string>
+        <string>&amp;Wavefront OBJ</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelGaussianLow">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>155</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gaussian Low</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelGaussianHigh">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>185</y>
+         <width>131</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Gaussian High</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelHighFrequencyScaling">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>212</y>
+         <width>201</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>High Frequency Scaling</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="fileOutputCheckbox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>245</y>
+         <width>177</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>File Output</string>
        </property>
       </widget>
      </widget>
@@ -1044,18 +1039,15 @@
   </action>
  </widget>
  <tabstops>
+  <tabstop>processButton</tabstop>
   <tabstop>gradientThresholdCheckBox</tabstop>
   <tabstop>gradientThresholdLineEdit</tabstop>
-  <tabstop>attenuationCheckBox</tabstop>
-  <tabstop>attenuationFactorLineEdit</tabstop>
-  <tabstop>attenuationDecayLineEdit</tabstop>
   <tabstop>unsharpMaskingCheckBox</tabstop>
-  <tabstop>unsharpGaussianLowCheckBox</tabstop>
   <tabstop>unsharpGaussianLowLineEdit</tabstop>
-  <tabstop>unsharpGaussianHighCheckBox</tabstop>
   <tabstop>unsharpGaussianHighLineEdit</tabstop>
-  <tabstop>unsharpHFScaleCheckBox</tabstop>
   <tabstop>unsharpHFScaleLineEdit</tabstop>
+  <tabstop>fileOutputCheckbox</tabstop>
+  <tabstop>fileOBJCheckBox</tabstop>
   <tabstop>p1CheckBox</tabstop>
   <tabstop>p1LineEdit</tabstop>
   <tabstop>p2CheckBox</tabstop>
@@ -1072,7 +1064,11 @@
   <tabstop>p7LineEdit</tabstop>
   <tabstop>p8CheckBox</tabstop>
   <tabstop>p8LineEdit</tabstop>
-  <tabstop>processButton</tabstop>
+  <tabstop>attenuationCheckBox</tabstop>
+  <tabstop>attenuationFactorLineEdit</tabstop>
+  <tabstop>attenuationDecayLineEdit</tabstop>
+  <tabstop>imageTabs</tabstop>
+  <tabstop>workbenchTabs</tabstop>
  </tabstops>
  <resources>
   <include location="explorer.qrc"/>

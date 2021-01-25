@@ -21,11 +21,13 @@ class AttenuationParameters:
     """
     A class for holding the parameters of an attenuation function.
     """
-    def __init__(self, factor: float, decay: float) -> None:
+    def __init__(self, enabled: bool, factor: float, decay: float) -> None:
         """
         Initialize an instance of AttenuationParameters.
         Parameters
         ----------
+        enabled
+            Enable attenuation processing.
         factor
             This is the percentage of the mean absolute value of the gradient.
             a = factor * mean(|gradient|)
@@ -36,8 +38,9 @@ class AttenuationParameters:
         b
             Controls the rate at which the attenuation curve decays.
         """
-        self.factor = factor
-        self.decay  = decay
+        self.enabled: bool = enabled
+        self.factor: float = factor
+        self.decay: float  = decay
 
 class Attenuation:
     """
