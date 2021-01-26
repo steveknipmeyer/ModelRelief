@@ -45,7 +45,6 @@ class Explorer(QtWidgets.QMainWindow):
 
         # solver instance
         self.solver = Solver(self.settings_file, self.working)
-        self.transform: MeshTransform = None
 
         self.qapp = qapp
         self.resize_timer: Optional[QtCore.QTimer] = None
@@ -164,33 +163,31 @@ class Explorer(QtWidgets.QMainWindow):
         if parameter.ui_type is bool:
             field.setVisible(False)
 
-    def initialize_settings(self) ->None:
-        self.transform = self.solver.mesh_transform
-
+    def initialize_ui_settings(self) ->None:
         # threshold
-        self.ui.gradientThresholdCheckBox.setChecked(self.transform.gradient_threshold_parameters.enabled)
-        self.initialize_float_field(self.ui.gradientThresholdLineEdit, self.transform.gradient_threshold_parameters.threshold)
+        self.ui.gradientThresholdCheckBox.setChecked(self.solver.mesh_transform.gradient_threshold_parameters.enabled)
+        self.initialize_float_field(self.ui.gradientThresholdLineEdit, self.solver.mesh_transform.gradient_threshold_parameters.threshold)
 
         # attenuation
-        self.ui.attenuationCheckBox.setChecked(self.transform.attenuation_parameters.enabled)
-        self.initialize_float_field(self.ui.attenuationFactorLineEdit,   self.transform.attenuation_parameters.factor)
-        self.initialize_float_field(self.ui.attenuationDecayLineEdit,    self.transform.attenuation_parameters.decay)
+        self.ui.attenuationCheckBox.setChecked(self.solver.mesh_transform.attenuation_parameters.enabled)
+        self.initialize_float_field(self.ui.attenuationFactorLineEdit,   self.solver.mesh_transform.attenuation_parameters.factor)
+        self.initialize_float_field(self.ui.attenuationDecayLineEdit,    self.solver.mesh_transform.attenuation_parameters.decay)
 
         # unsharp masking
-        self.ui.unsharpMaskingCheckBox.setChecked(self.transform.unsharpmask_parameters.enabled)
-        self.initialize_float_field(self.ui.unsharpGaussianLowLineEdit,  self.transform.unsharpmask_parameters.gaussian_low)
-        self.initialize_float_field(self.ui.unsharpGaussianHighLineEdit, self.transform.unsharpmask_parameters.gaussian_high)
-        self.initialize_float_field(self.ui.unsharpHFScaleLineEdit,      self.transform.unsharpmask_parameters.high_frequency_scale)
+        self.ui.unsharpMaskingCheckBox.setChecked(self.solver.mesh_transform.unsharpmask_parameters.enabled)
+        self.initialize_float_field(self.ui.unsharpGaussianLowLineEdit,  self.solver.mesh_transform.unsharpmask_parameters.gaussian_low)
+        self.initialize_float_field(self.ui.unsharpGaussianHighLineEdit, self.solver.mesh_transform.unsharpmask_parameters.gaussian_high)
+        self.initialize_float_field(self.ui.unsharpHFScaleLineEdit,      self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale)
 
         # experimental
-        self.initialize_experimental_parameter(self.transform.p1)
-        self.initialize_experimental_parameter(self.transform.p2)
-        self.initialize_experimental_parameter(self.transform.p3)
-        self.initialize_experimental_parameter(self.transform.p4)
-        self.initialize_experimental_parameter(self.transform.p5)
-        self.initialize_experimental_parameter(self.transform.p6)
-        self.initialize_experimental_parameter(self.transform.p7)
-        self.initialize_experimental_parameter(self.transform.p8)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p1)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p2)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p3)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p4)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p5)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p6)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p7)
+        self.initialize_experimental_parameter(self.solver.mesh_transform.p8)
 
     @benchmark()
     def initialize_ui(self)-> None:
@@ -200,7 +197,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui:Ui_MainWindow = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.initialize_settings()
+        self.initialize_ui_settings()
 
         # solve
         self.calculate()
@@ -218,7 +215,7 @@ class Explorer(QtWidgets.QMainWindow):
         self.set_busy (True)
 
         self.invalidate()
-        self.update()
+        self.update_ui()
 
         self.set_busy (False)
 
@@ -250,7 +247,7 @@ class Explorer(QtWidgets.QMainWindow):
         """
         Event handler for a tab selected event.
         """
-        self.update()
+        self.update_ui()
 
     def initialize_handlers(self)-> None:
         """ Initialize event handlers """
@@ -273,57 +270,74 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.labelProcessing.setVisible(enable)
         self.ui.labelProcessing.repaint()
 
-    def handle_process(self) ->None:
+    def update_solver_settings(self) ->None:
         """
-        Recalculates the views.
+        Updates the mesh generation settings used in the Solver.
         """
         # threshold
-        self.transform.gradient_threshold_parameters.enabled = self.ui.gradientThresholdCheckBox.isChecked()
-        self.transform.gradient_threshold_parameters.threshold = float(self.ui.gradientThresholdLineEdit.text())
+        self.solver.mesh_transform.gradient_threshold_parameters.enabled = self.ui.gradientThresholdCheckBox.isChecked()
+        self.solver.mesh_transform.gradient_threshold_parameters.threshold = float(self.ui.gradientThresholdLineEdit.text())
 
         # attenuation
-        self.transform.attenuation_parameters.enabled = self.ui.attenuationCheckBox.isChecked()
-        self.transform.attenuation_parameters.factor = float(self.ui.attenuationFactorLineEdit.text())
-        self.transform.attenuation_parameters.decay = float(self.ui.attenuationDecayLineEdit.text())
+        self.solver.mesh_transform.attenuation_parameters.enabled = self.ui.attenuationCheckBox.isChecked()
+        self.solver.mesh_transform.attenuation_parameters.factor = float(self.ui.attenuationFactorLineEdit.text())
+        self.solver.mesh_transform.attenuation_parameters.decay = float(self.ui.attenuationDecayLineEdit.text())
 
         # unsharp masking
-        self.transform.unsharpmask_parameters.enabled = self.ui.unsharpMaskingCheckBox.isChecked()
-        self.transform.unsharpmask_parameters.gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
-        self.transform.unsharpmask_parameters.gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
-        self.transform.unsharpmask_parameters.high_frequency_scale = float(self.ui.unsharpHFScaleLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.enabled = self.ui.unsharpMaskingCheckBox.isChecked()
+        self.solver.mesh_transform.unsharpmask_parameters.gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
+        self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale = float(self.ui.unsharpHFScaleLineEdit.text())
 
         # experimental
-        self.transform.p1.enabled = self.ui.p1CheckBox.isChecked()
-        self.transform.p1.value = float(self.ui.p1LineEdit.text())
+        self.solver.mesh_transform.p1.enabled = self.ui.p1CheckBox.isChecked()
+        self.solver.mesh_transform.p1.value = float(self.ui.p1LineEdit.text())
 
-        self.transform.p2.enabled = self.ui.p2CheckBox.isChecked()
-        self.transform.p2.value = float(self.ui.p2LineEdit.text())
+        self.solver.mesh_transform.p2.enabled = self.ui.p2CheckBox.isChecked()
+        self.solver.mesh_transform.p2.value = float(self.ui.p2LineEdit.text())
 
-        self.transform.p3.enabled = self.ui.p3CheckBox.isChecked()
-        self.transform.p3.value = float(self.ui.p3LineEdit.text())
+        self.solver.mesh_transform.p3.enabled = self.ui.p3CheckBox.isChecked()
+        self.solver.mesh_transform.p3.value = float(self.ui.p3LineEdit.text())
 
-        self.transform.p4.enabled = self.ui.p4CheckBox.isChecked()
-        self.transform.p4.value = float(self.ui.p4LineEdit.text())
+        self.solver.mesh_transform.p4.enabled = self.ui.p4CheckBox.isChecked()
+        self.solver.mesh_transform.p4.value = float(self.ui.p4LineEdit.text())
 
-        self.transform.p5.enabled = self.ui.p5CheckBox.isChecked()
-        self.transform.p5.value = float(self.ui.p5LineEdit.text())
+        self.solver.mesh_transform.p5.enabled = self.ui.p5CheckBox.isChecked()
+        self.solver.mesh_transform.p5.value = float(self.ui.p5LineEdit.text())
 
-        self.transform.p6.enabled = self.ui.p6CheckBox.isChecked()
-        self.transform.p6.value = float(self.ui.p6LineEdit.text())
+        self.solver.mesh_transform.p6.enabled = self.ui.p6CheckBox.isChecked()
+        self.solver.mesh_transform.p6.value = float(self.ui.p6LineEdit.text())
 
-        self.transform.p7.enabled = self.ui.p7CheckBox.isChecked()
-        self.transform.p7.value = float(self.ui.p7LineEdit.text())
+        self.solver.mesh_transform.p7.enabled = self.ui.p7CheckBox.isChecked()
+        self.solver.mesh_transform.p7.value = float(self.ui.p7LineEdit.text())
 
-        self.transform.p8.enabled = self.ui.p8CheckBox.isChecked()
-        self.transform.p8.value = float(self.ui.p8LineEdit.text())
+        self.solver.mesh_transform.p8.enabled = self.ui.p8CheckBox.isChecked()
+        self.solver.mesh_transform.p8.value = float(self.ui.p8LineEdit.text())
+
+        # file output
+        self.solver.enable_obj = self.ui.fileOBJCheckBox.isChecked()
 
         # write the modified JSON mesh file
-        self.transform.update_settings()
+        self.solver.mesh_transform.update_settings()
         with open(self.settings_file, 'w') as json_file:
             json.dump(self.solver.settings, json_file, indent=4)
 
+    def handle_process(self, clear_content: bool = False, preserve_camera: bool = True) -> None:
+        """
+        Event handlers for Process button.
+        Updates settings, calculates the new mesh and updates the UI.
+        Parameters
+        ----------
+        clear_content
+            Clear any existing tab content
+        preserve_camera
+            Preserve camera settings for a view to maintain continuity across parameter changes.
+        """
+        self.solver.initialize(self.settings_file)
+        self.update_solver_settings()
+
         self.calculate()
-        self.update(preserve_camera=True)
+        self.update_ui(clear_content, preserve_camera)
 
     def handle_open_settings(self) ->None:
         """
@@ -339,18 +353,15 @@ class Explorer(QtWidgets.QMainWindow):
             self.settings = self.load_settings(filenames[0])
 
             self.solver.initialize(self.settings_file)
-            self.initialize_settings()
-            self.calculate()
-            self.update(clear_content = True, preserve_camera=False)
+            self.initialize_ui_settings()
+
+            self.handle_process(clear_content = True, preserve_camera=False)
 
     def calculate(self) -> None:
         """
         Transfor the active model using the MeshTransform.
         """
         self.set_busy (True)
-
-        # file output
-        self.solver.enable_obj = self.ui.fileOBJCheckBox.isChecked()
 
         # solve
         self.solver.transform()
@@ -391,7 +402,7 @@ class Explorer(QtWidgets.QMainWindow):
         for _, tab in self.mesh_tabs.items():
             tab.mesh_widget.mesh_content.update(preserve_camera)
 
-    def update(self, clear_content: bool = False, preserve_camera: bool = True) -> None:
+    def update_ui(self, clear_content: bool = False, preserve_camera: bool = True) -> None:
         """ Update the UI with the images, meshes, etc. from the calculated solution.
         Parameters
         ----------

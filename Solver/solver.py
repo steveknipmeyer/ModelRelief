@@ -126,8 +126,6 @@ class Solver:
         self.load_settings(settings_file)
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
-        # print("%r" % self.mesh_transform)
-
         self.mesh = Mesh(self.settings, self.services)
         self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.mesh_transform.p5.enabled)
         self.normal_map = NormalMap(self.settings['NormalMap'], self.services)

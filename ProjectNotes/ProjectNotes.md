@@ -1,39 +1,42 @@
 ﻿## Commit Notes
 ### Issues
-    Solver
-        Review all experimental processing.
+#### Solver
+    Move P1 (Relief Scale) out of ExperimentalParameters.
 
-        Evalute NumPy gradients and divergence.
-            Why do NumPy gradients lose the ridges in the Test model?
-            Change switch to "Use Difference class"
+    Review all experimental processing.
 
-        DepthBuffer
-            How are the directions Gx and Gy determined?
-                Do they match the geometry of the model?
+    Evalute NumPy gradients and divergence.
+        Why do NumPy gradients lose the ridges in the Test model?
+        Change switch to "Use Difference class"
 
-        Rebuild models.
-            Solver/Test
-            Delivery
+    DepthBuffer
+        How are the directions Gx and Gy determined?
+            Do they match the geometry of the model?
 
-        Why are portions of the generated mesh below the XY plane?
-        Unsharp Masking seems to contribute the most valuable transform.
+    Rebuild models.
+        Solver/Test
+        Delivery
 
-        Poisson Solver
-            How should the boundary conditions be handled?
-            Are there alternate Poisson equation solvers available?
-                https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
-                https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
+    Why are portions of the generated mesh below the XY plane?
+    Unsharp Masking seems to contribute the most valuable transform.
 
-                Blender
-                    https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
-                    What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
-                    Generate a test Blender depth buffer.
-                    How was the compositing processing defined to create the depth buffer?
-                    Obtain a Shockwave player for the videos.
+    Poisson Solver
+        How should the boundary conditions be handled?
+        Are there alternate Poisson equation solvers available?
+            https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
+            https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
 
+            Blender
+                https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
+                What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
+                Generate a test Blender depth buffer.
+                How was the compositing processing defined to create the depth buffer?
+                Obtain a Shockwave player for the videos.
+
+#### Python
     Review all Pylance lint issues with Python source.
         python.analysis.typeCheckingMode: basic or strict?
-
+#### General
     Gravatar
 
     Experiment with development variations.
@@ -45,7 +48,7 @@
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
-
+#### Enhancements
     Routing
         Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
         Use Endpoint routing?
@@ -55,30 +58,30 @@
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
 
     Provide a histogram in the web UI representing the distribution of gradients.
-### Jupyter
-    https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
-        error: invalid command 'bdist_wheel'
-        ----------------------------------------
-        ERROR: Failed building wheel for pandocfilters
+#### Jupyter
+        https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
+            error: invalid command 'bdist_wheel'
+            ----------------------------------------
+            ERROR: Failed building wheel for pandocfilters
 
-    Create an (incremental) Python requirements file for the Jupyter notebooks.
-        pip3 install ipykernel
-        pip install scikit-image
-        pip3 install pandas
-        pip3 install nbconvert
-        sudo apt-get install python3-tk
-
-### Build
-    Prove with clean Ubuntu installation!
-        Add a test account.
-    Convert Alpha to a Linux server.
-
+        Create an (incremental) Python requirements file for the Jupyter notebooks.
+            pip3 install ipykernel
+            pip install scikit-image
+            pip3 install pandas
+            pip3 install nbconvert
+            sudo apt-get install python3-tk
+#### WebGL2
     WebGL2 Support
         https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
 
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
+#### Build
+    Prove with clean Ubuntu installation!
+        Add a test account.
+
+    Convert Alpha to a Linux server.
 
     Nginx
         python Build\builder.py --target nginx --deploy True
@@ -272,8 +275,6 @@
             Pegasys
             David
             https://archive3d.net/?category=31
-
-
 ### Short Term
 
 #### Database
