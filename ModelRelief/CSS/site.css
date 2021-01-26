@@ -135,6 +135,11 @@ input[type=checkbox]:checked + label:before {
     background-color: #000000;
 }
 
+/* Solver uses standard value (a = 10% <|Gradient|>) for all models */
+#attenuationFactorControl {
+    display:none;
+}
+
 .fa-camera, .fa-expand-arrows-alt {
   color: cyan !important;
 }
@@ -306,6 +311,7 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #B8A9A9;
 }
+
 /* ----------------------
     Progress
 ------------------------*/

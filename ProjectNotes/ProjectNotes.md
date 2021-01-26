@@ -2,10 +2,6 @@
 ### Issues
     Solver
         Review all experimental processing.
-            Document Solver defaults as active settings (no Web UI).
-
-        Hide the attenuation function in the UI and Explorer?
-        Fix to (10%, 0.9) per published research?
 
         Evalute NumPy gradients and divergence.
             Why do NumPy gradients lose the ridges in the Test model?
@@ -58,6 +54,7 @@
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
 
+    Provide a histogram in the web UI representing the distribution of gradients.
 ### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'
@@ -71,7 +68,7 @@
         pip3 install nbconvert
         sudo apt-get install python3-tk
 
-    ### Build
+### Build
     Prove with clean Ubuntu installation!
         Add a test account.
     Convert Alpha to a Linux server.
@@ -96,13 +93,6 @@
         Runtime error does not propagate back to UI.
             The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
             Should the GeneratedFile be deleted if the Solver fails?
-
-    Explorer
-        Refactor the UI layout.
-
-        qdarkstyle introduced several issues in a recent update.
-            There is clipping in the labels.
-            The font size of the image tabs is small.
 
         A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it
 
@@ -139,6 +129,7 @@
             diags[s] = 0
         (Hidden) DepthBufferView and NormalMapView
         Desmos attenuation graph
+        Document Solver defaults as active settings (no Web UI).
 
     Remove References
         *.exe
