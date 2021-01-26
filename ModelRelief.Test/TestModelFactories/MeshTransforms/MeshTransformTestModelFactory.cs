@@ -56,6 +56,7 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             meshTransformModel.Depth = 1.0;
             meshTransformModel.GradientThreshold = 5.0;
             meshTransformModel.UnsharpHighFrequencyScale = 1.0;
+            meshTransformModel.ReliefScale = 0.03;
 
             return meshTransformModel;
         }

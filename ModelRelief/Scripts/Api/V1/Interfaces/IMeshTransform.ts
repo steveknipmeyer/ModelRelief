@@ -31,6 +31,8 @@ export interface IMeshTransform extends IModel {
     unsharpGaussianLow?: number;            // unsharp masking Gaussian low
     unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
     unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
+    reliefScale?:number;                    // relief scale (% of original model)
+
     p1?: number;                            // placeholder
     p2?: number;                            // placeholder
     p3?: number;                            // placeholder

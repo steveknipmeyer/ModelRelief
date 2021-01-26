@@ -62,6 +62,7 @@ class MeshTransform:
         self.gradient_threshold_parameters: GradientThresholdParameters = GradientThresholdParameters(True, float(settings['GradientThreshold']))
         self.attenuation_parameters:        AttenuationParameters       = AttenuationParameters(True, float(settings['AttenuationFactor']), float(settings['AttenuationDecay']))
         self.unsharpmask_parameters:        UnsharpMaskParameters       = UnsharpMaskParameters(True, float(settings['UnsharpGaussianLow']), float(settings['UnsharpGaussianHigh']), float(settings['UnsharpHighFrequencyScale']))
+        self.relief_scale :                 float                       = float(settings['ReliefScale'])
 
         # -------------------------------------- Experimenta; --------------------------------------
         # The Solver can be configured with several optional experimental processing steps.
@@ -109,6 +110,8 @@ class MeshTransform:
         self.settings['UnsharpGaussianLow'] = self.unsharpmask_parameters.gaussian_low
         self.settings['UnsharpGaussianHigh'] = self.unsharpmask_parameters.gaussian_high
         self.settings['UnsharpHighFrequencyScale'] = self.unsharpmask_parameters.high_frequency_scale
+
+        self.settings['ReliefScale'] = self.relief_scale
 
         self.settings['P1'] = self.p1.value
         self.settings['P2'] = self.p2.value

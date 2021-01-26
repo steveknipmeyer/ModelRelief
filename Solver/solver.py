@@ -245,7 +245,7 @@ class Solver:
         Scales the mesh to the final dimensions.
         """
         # linear scale original mesh
-        self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.p1.value
+        self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.relief_scale
 
         write_file = False
         if write_file:

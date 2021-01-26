@@ -179,6 +179,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.initialize_float_field(self.ui.unsharpGaussianHighLineEdit, self.solver.mesh_transform.unsharpmask_parameters.gaussian_high)
         self.initialize_float_field(self.ui.unsharpHFScaleLineEdit,      self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale)
 
+        # relief scale
+        self.initialize_float_field(self.ui.reliefScaleLineEdit,  self.solver.mesh_transform.relief_scale)
+
         # experimental
         self.initialize_experimental_parameter(self.solver.mesh_transform.p1)
         self.initialize_experimental_parameter(self.solver.mesh_transform.p2)
@@ -288,6 +291,9 @@ class Explorer(QtWidgets.QMainWindow):
         self.solver.mesh_transform.unsharpmask_parameters.gaussian_low = float(self.ui.unsharpGaussianLowLineEdit.text())
         self.solver.mesh_transform.unsharpmask_parameters.gaussian_high = float(self.ui.unsharpGaussianHighLineEdit.text())
         self.solver.mesh_transform.unsharpmask_parameters.high_frequency_scale = float(self.ui.unsharpHFScaleLineEdit.text())
+
+        # relief scale
+        self.solver.mesh_transform.relief_scale = float(self.ui.reliefScaleLineEdit.text())
 
         # experimental
         self.solver.mesh_transform.p1.enabled = self.ui.p1CheckBox.isChecked()

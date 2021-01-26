@@ -57,10 +57,10 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Description property is required.");
 
             RuleFor(m => m.Width)
-                .GreaterThan(0.0).WithMessage("The Width property must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Width property must be greater than zero.");
 
             RuleFor(m => m.Height)
-                .GreaterThan(0.0).WithMessage("The Height property must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Height property must be greater than zero.");
 
             RuleFor(m => m.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");

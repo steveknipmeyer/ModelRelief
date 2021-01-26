@@ -32,6 +32,7 @@ namespace ModelRelief.Domain
         public double UnsharpGaussianHigh { get; set; }
         [DependentFileProperty]
         public double UnsharpHighFrequencyScale { get; set; }
+        public double ReliefScale { get; set; }
 
         [DependentFileProperty]
         public double P1 { get; set; }

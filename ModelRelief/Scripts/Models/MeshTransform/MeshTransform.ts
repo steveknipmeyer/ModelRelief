@@ -60,6 +60,8 @@ export class MeshTransform extends Model {
         meshTransform.unsharpGaussianLow        = dtoMeshTransform.unsharpGaussianLow;
         meshTransform.unsharpGaussianHigh       = dtoMeshTransform.unsharpGaussianHigh;
         meshTransform.unsharpHighFrequencyScale = dtoMeshTransform.unsharpHighFrequencyScale;
+        meshTransform.reliefScale               = dtoMeshTransform.reliefScale;
+
         meshTransform.p1                        = dtoMeshTransform.p1;
         meshTransform.p2                        = dtoMeshTransform.p2;
         meshTransform.p3                        = dtoMeshTransform.p3;
@@ -84,6 +86,7 @@ export class MeshTransform extends Model {
     public unsharpGaussianLow: number;
     public unsharpGaussianHigh: number;
     public unsharpHighFrequencyScale: number;
+    public reliefScale: number;
     public p1: number;
     public p2: number;
     public p3: number;
@@ -139,6 +142,7 @@ export class MeshTransform extends Model {
             unsharpGaussianLow         : this.unsharpGaussianLow,
             unsharpGaussianHigh        : this.unsharpGaussianHigh,
             unsharpHighFrequencyScale  : this.unsharpHighFrequencyScale,
+            reliefScale                : this.reliefScale,
             p1                         : this.p1,
             p2                         : this.p2,
             p3                         : this.p3,

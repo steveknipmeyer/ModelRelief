@@ -628,6 +628,8 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
     public unsharpGaussianLow?: number;            // unsharp masking Gaussian low
     public unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
     public unsharpHighFrequencyScale?: number;     // unsharp masking high frequency scaling
+    public reliefScale?: number;                   // relief scale (% of original model)
+
     public p1?: number;                            // placeholder
     public p2?: number;                            // placeholder
     public p3?: number;                            // placeholder
@@ -662,6 +664,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
             unsharpGaussianLow,
             unsharpGaussianHigh,
             unsharpHighFrequencyScale,
+            reliefScale,
             p1,
             p2,
             p3,
@@ -686,6 +689,7 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         this.unsharpGaussianLow        = unsharpGaussianLow;
         this.unsharpGaussianHigh       = unsharpGaussianHigh;
         this.unsharpHighFrequencyScale = unsharpHighFrequencyScale;
+        this.reliefScale               = reliefScale;
         this.p1                        = p1;
         this.p2                        = p2;
         this.p3                        = p3;

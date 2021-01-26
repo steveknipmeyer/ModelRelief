@@ -34,6 +34,7 @@ namespace ModelRelief.Dto
         public double UnsharpGaussianLow { get; set; }
         public double UnsharpGaussianHigh { get; set; }
         public double UnsharpHighFrequencyScale { get; set; }
+        public double ReliefScale { get; set; }
 
         public double P1 { get; set; }
         public double P2 { get; set; }
@@ -60,13 +61,16 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Name property is required.");
 
             RuleFor(m => m.Width)
-                .GreaterThan(0.0).WithMessage("The Width property must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Width property must be greater than zero.");
 
             RuleFor(m => m.Height)
-                .GreaterThan(0.0).WithMessage("The Height property must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Height property must be greater than zero.");
 
             RuleFor(m => m.Depth)
-                .GreaterThan(0.0).WithMessage("The Depth property must be greated than zero.");
+                .GreaterThan(0.0).WithMessage("The Depth property must be greater than zero.");
+
+            RuleFor(m => m.ReliefScale)
+                .GreaterThan(0.0).WithMessage("The Relief Scale property must be greater than zero.");
         }
     }
 
