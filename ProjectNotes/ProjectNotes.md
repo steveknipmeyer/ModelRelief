@@ -1,7 +1,14 @@
 ﻿## Commit Notes
 ### Issues
-#### Schema
-    Add Scale(P1) to MeshTransform.
+#### General
+    Gravatar
+
+    Experiment with development variations.
+            CameraTest.ts
+            Viewers/CameraControlsDevelopment.ts
+
+    Class Diagram
+        https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
 #### Solver
     How is a (lucy) 1025 KB mesh ever written?
 
@@ -38,18 +45,6 @@
 #### Python
     Review all Pylance lint issues with Python source.
         python.analysis.typeCheckingMode: basic or strict?
-#### General
-    Gravatar
-
-    Experiment with development variations.
-            CameraTest.ts
-            Viewers/ModelViewerControlsDevelopment.ts
-            Viewers/CameraControlsDevelopment.ts
-
-    When does tsc use .tsconfig?
-
-    Class Diagram
-        https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
 #### Enhancements
     Routing
         Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
@@ -135,7 +130,9 @@
         (Hidden) DepthBufferView and NormalMapView
         Desmos attenuation graph
         Document Solver defaults as active settings (no Web UI).
-
+        SystemSettings.json
+            logging
+            developmentgui
     Remove References
         *.exe
         ModelRelief.dgml (Linux?)
