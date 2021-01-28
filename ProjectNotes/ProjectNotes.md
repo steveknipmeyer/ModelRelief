@@ -1,11 +1,15 @@
 ﻿## Commit Notes
+Add extended CameraControls enabled by developmentUI JSON setting
+Synchronize CameraControls after applying a StandardView
 ### Issues
 #### General
     Gravatar
 
     Experiment with development variations.
-            CameraTest.ts
-            Viewers/CameraControlsDevelopment.ts
+        CameraControls
+            Should the CameraHelper be a toggle?
+
+        CameraTest.ts
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts

@@ -52,6 +52,10 @@ export class MeshViewerControls {
 
         this._meshViewerSettings = new MeshViewerSettings();
 
+        // early exit if no controls
+        if (Object.keys(this._meshViewerSettings).length === 0)
+            return;
+
         // Init dat.gui and controls for the UI
         const gui = new dat.GUI({
             autoPlace: false,
@@ -59,8 +63,9 @@ export class MeshViewerControls {
         });
         gui.domElement.id = ElementIds.MeshViewerControls;
 
-        const containerDiv = document.getElementById(this._meshViewer.containerId);
-        containerDiv.appendChild(gui.domElement);
+        // insert controls <after> Viewer container; class 'container-fluid' impacts layout
+        const viewContainerDiv = document.getElementById(this._meshViewer.viewContainerId);
+        viewContainerDiv.parentNode.insertBefore(gui.domElement, viewContainerDiv.nextSibling);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   MeshViewer                                                                 //

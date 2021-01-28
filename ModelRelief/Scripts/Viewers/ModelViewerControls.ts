@@ -62,10 +62,9 @@ export class ModelViewerControls {
         });
         gui.domElement.id = ElementIds.ModelViewerControls;
 
-        const containerDiv = document.getElementById(this._modelViewer.containerId);
-        // WIP: insert <after> ModelView container; class 'container-fluid' impacts layout
-        // containerDiv.appendChild(gui.domElement);
-        containerDiv.parentNode.insertBefore(gui.domElement, containerDiv.nextSibling);
+        // insert controls <after> Viewer container; class 'container-fluid' impacts layout
+        const viewContainerDiv = document.getElementById(this._modelViewer.viewContainerId);
+        viewContainerDiv.parentNode.insertBefore(gui.domElement, viewContainerDiv.nextSibling);
 
         // ---------------------------------------------------------------------------------------------------------------------------------------------//
         //                                                                   ModelViewer                                                                //

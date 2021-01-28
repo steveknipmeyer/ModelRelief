@@ -68,8 +68,6 @@ export class Viewer {
 
         this._model = model;
         this.initialize();
-
-//      this.animate();
     }
 
 //#region Properties
@@ -451,13 +449,15 @@ export class Viewer {
      * @description Sets the view camera properties to the given view.
      * @param {StandardView} standardView Standard camera view to apply.
      */
-    public setCameraToStandardView(standardView: StandardView): void {
+    public setCameraToStandardView(standardView: StandardView): IThreeBaseCamera {
 
         const standardViewCamera = CameraHelper.getStandardViewCamera(standardView, this.camera, this.aspectRatio, this.modelGroup);
 
         this.camera = standardViewCamera;
 
         this.eventManager.dispatchEvent(this, EventType.ViewerCameraStandardView, standardView);
+
+        return this.camera;
     }
 
     /**

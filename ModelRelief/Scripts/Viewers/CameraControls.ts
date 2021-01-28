@@ -4,7 +4,7 @@
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
-
+import * as dat from "dat.gui";
 import * as THREE from "three";
 
 import { StandardView } from "Scripts/Api/V1/Interfaces/ICamera";
@@ -15,7 +15,8 @@ import { CameraFactory } from "Scripts/Models/Camera/CameraFactory";
 import { CameraHelper } from "Scripts/Models/Camera/CameraHelper";
 import { DefaultCameraSettings } from "Scripts/Models/Camera/DefaultCameraSettings";
 import { EventType, IMREvent } from "Scripts/System/EventManager";
-import { ElementClasses } from "Scripts/System/Html";
+import { ElementAttributes, ElementClasses, ElementIds } from "Scripts/System/Html";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 import { Viewer } from "Scripts/Viewers/Viewer";
 
 /**
@@ -68,6 +69,14 @@ export class CameraControls {
 
     public viewer: Viewer;                          // associated viewer
     public settings: CameraControlsSettings;        // UI settings
+    // N.B. Controls are instance members so they can be explicitly synchronized when an associated setting has changed.
+    //      The dat.GUI API listen method can synchronize a control with it's setting data structure
+    //      however it blocks the text field of a slider from being updated manually so listen is not used.
+    //      https://github.com/dataarts/dat.gui/issues/179
+    private _controlNearClippingPlane: dat.GUIController;
+    private _controlFarClippingPlane: dat.GUIController;
+    private _controlIsPerspective: dat.GUIController;
+    private _controlFieldOfView: dat.GUIController;
 
     /**
      * Creates an instance of CameraControls.
@@ -145,8 +154,9 @@ export class CameraControls {
         this.viewer.camera.far = clippingPlanes.far;
         this.viewer.camera.updateProjectionMatrix();
 
-        // synchronize UI controls
-        // WIP
+        // UI controls
+        this._controlNearClippingPlane.setValue(clippingPlanes.near);
+        this._controlFarClippingPlane.setValue(clippingPlanes.far);
     }
 
     //#endregion
@@ -176,7 +186,9 @@ export class CameraControls {
                 anchorElement.addEventListener("click", (clickEvent) => {
                     const targetElement : HTMLElement = <HTMLElement> clickEvent.target;
                     const standardView = parseInt(targetElement.getAttribute("data-view"), 10);
-                    viewer.setCameraToStandardView(standardView);
+                    const newCamera = viewer.setCameraToStandardView(standardView);
+
+                    this.synchronizeSettingsFromViewCamera(newCamera);
                 }, false);
 
                 standardViewControl.appendChild(anchorElement) ;
@@ -206,6 +218,94 @@ export class CameraControls {
 
         // Standard View
         this.initializeStandardView();
+
+        // Development UI Controls
+        if (SystemSettings.developmentUI) {
+
+            // Init dat.gui and controls for the UI
+            const gui = new dat.GUI({
+                autoPlace: false,
+                width: ElementAttributes.DatGuiWidth,
+            });
+            gui.domElement.id = ElementIds.CameraControls;
+
+            let minimum: number;
+            let maximum: number;
+            let stepSize: number;
+
+            // insert controls <after> Viewer container; class 'container-fluid' impacts layout
+            const viewContainerDiv = document.getElementById(this.viewer.viewContainerId);
+            viewContainerDiv.parentNode.insertBefore(gui.domElement, viewContainerDiv.nextSibling);
+
+            // ---------------------------------------------------------------------------------------------------------------------------------------------//
+            //                                                                     Camera                                                                   //
+            // ---------------------------------------------------------------------------------------------------------------------------------------------//
+            const cameraOptions = gui.addFolder("Camera Options");
+
+
+            // Clipping
+            if (showClippingControls) {
+                // Near Clipping Plane
+                minimum = 0.1;
+                maximum = DefaultCameraSettings.FarClippingPlane;
+                stepSize = 0.1;
+                this._controlNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize);
+                this._controlNearClippingPlane.onChange((value) => {
+
+                    this.viewer.camera.near = value;
+                    this.viewer.camera.updateProjectionMatrix();
+                });
+
+                // Far Clipping Plane
+                minimum = 1;
+                maximum = DefaultCameraSettings.FarClippingPlane;
+                stepSize = 0.1;
+                this._controlFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize);
+                this._controlFarClippingPlane.onChange((value) => {
+
+                    this.viewer.camera.far = value;
+                    this.viewer.camera.updateProjectionMatrix();
+                });
+
+                // Bound Clipping Planes
+                const controlBoundClippingPlanes = cameraOptions.add(this, "boundClippingPlanes").name("Bound Clipping Planes");
+            }
+
+            // CameraHelper
+            if (showCameraHelper) {
+                const controlCameraHelper = cameraOptions.add(this, "addCameraHelper").name("Camera Helper");
+            }
+
+            // Perspective
+            this._controlIsPerspective = cameraOptions.add(this.settings, "isPerspective").name("Perspective");
+            this._controlIsPerspective.onChange((value) => {
+
+                // toggle projection
+                const newCamera: IThreeBaseCamera = CameraFactory.constructViewCameraOppositeProjection(this.viewer.camera);
+
+                // update Viewer
+                this.viewer.camera = newCamera;
+                this.viewer.fitView();
+
+                // synchronize UI settings
+                this.synchronizeSettingsFromViewCamera(newCamera);
+            });
+
+            // Field of View
+            if (showFieldOfView) {
+                minimum = 25;
+                maximum = 75;
+                stepSize = 1;
+                this._controlFieldOfView = cameraOptions.add(this.settings, "fieldOfView").name("Field of View").min(minimum).max(maximum).step(stepSize);
+                this._controlFieldOfView.onChange((value) => {
+                    if (this.viewer.camera instanceof THREE.PerspectiveCamera) {
+                        this.viewer.camera.fov = value;
+                        this.viewer.camera.updateProjectionMatrix();
+                    }
+                });
+            }
+            cameraOptions.open();
+        }
     }
 
     /**
@@ -222,6 +322,7 @@ export class CameraControls {
 
         if (control.getValue() !== value)
             control.setValue(value);
+        control.updateDisplay();
     }
 
     /**
@@ -232,14 +333,19 @@ export class CameraControls {
     private synchronizeSettingsFromViewCamera(camera: IThreeBaseCamera): void {
 
         this.settings.near = camera.near;
+        this.updateUIControl(this._controlNearClippingPlane, this.settings.near);
+
         this.settings.far = camera.far;
+        this.updateUIControl(this._controlFarClippingPlane, this.settings.far);
 
         this.settings.isPerspective = camera instanceof THREE.PerspectiveCamera;
+        this.updateUIControl(this._controlIsPerspective, this.settings.isPerspective);
+
         if (this.settings.isPerspective) {
             const perspectiveCamera = camera as THREE.PerspectiveCamera;
             this.settings.fieldOfView = perspectiveCamera.fov;
+            this.updateUIControl(this._controlFieldOfView, this.settings.fieldOfView);
         }
-
         this.settings.standardView = StandardView.None;
 
         // synchronize UI controls
