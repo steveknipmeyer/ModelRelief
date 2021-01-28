@@ -29,6 +29,7 @@ class CameraControlsSettings {
     public far: number;
     public isPerspective: boolean;
     public fieldOfView: number;
+    public cameraHelper: boolean;
 
     public standardView: StandardView = StandardView.Front;
 
@@ -44,6 +45,7 @@ class CameraControlsSettings {
         this.far = baseCamera.far;
         this.isPerspective = camera instanceof THREE.PerspectiveCamera;
         this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView;
+        this.cameraHelper = false;
 
         this.standardView = StandardView.None;
     }
@@ -77,6 +79,7 @@ export class CameraControls {
     private _controlFarClippingPlane: dat.GUIController;
     private _controlIsPerspective: dat.GUIController;
     private _controlFieldOfView: dat.GUIController;
+    private _controlCameraHelper: dat.GUIController;
 
     /**
      * Creates an instance of CameraControls.
@@ -127,6 +130,8 @@ export class CameraControls {
 
         // remove existing
         Graphics.removeAllByName(this.viewer.scene, ObjectNames.CameraHelper);
+        if (!this.settings.cameraHelper)
+            return;
 
         // World
         Graphics.addCameraHelper(this.viewer.camera, this.viewer.scene, this.viewer.modelGroup);
@@ -242,7 +247,6 @@ export class CameraControls {
             // ---------------------------------------------------------------------------------------------------------------------------------------------//
             const cameraOptions = gui.addFolder("Camera Options");
 
-
             // Clipping
             if (showClippingControls) {
                 // Near Clipping Plane
@@ -269,11 +273,6 @@ export class CameraControls {
 
                 // Bound Clipping Planes
                 const controlBoundClippingPlanes = cameraOptions.add(this, "boundClippingPlanes").name("Bound Clipping Planes");
-            }
-
-            // CameraHelper
-            if (showCameraHelper) {
-                const controlCameraHelper = cameraOptions.add(this, "addCameraHelper").name("Camera Helper");
             }
 
             // Perspective
@@ -304,6 +303,15 @@ export class CameraControls {
                     }
                 });
             }
+
+            // CameraHelper
+            if (showCameraHelper) {
+                this._controlCameraHelper = cameraOptions.add(this.settings, "cameraHelper").name("Camera Helper");
+                this._controlCameraHelper.onChange((value) => {
+                    this.addCameraHelper();
+                });
+            }
+
             cameraOptions.open();
         }
     }

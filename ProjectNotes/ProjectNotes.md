@@ -5,10 +5,6 @@ Synchronize CameraControls after applying a StandardView
 #### General
     Gravatar
 
-    Experiment with development variations.
-        CameraControls
-            Should the CameraHelper be a toggle?
-
         CameraTest.ts
 
     Class Diagram

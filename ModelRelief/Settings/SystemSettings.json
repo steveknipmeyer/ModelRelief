@@ -1,4 +1,4 @@
 {
     "LoggingEnabled": true,
-    "DevelopmentUI": false
+    "DevelopmentUI": true
 }
