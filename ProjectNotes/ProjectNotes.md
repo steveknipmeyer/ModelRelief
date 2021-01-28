@@ -230,7 +230,7 @@ Synchronize CameraControls after applying a StandardView
         sudo cp nginx/default /etc/nginx/sites-available/default
 
         sudo service nginx start
-        source ./linux/ModelReliefStart.sh
+        source Tools/StartModelRelief.sh
 
         Start browser using https://localhost:443
 

@@ -56,7 +56,6 @@ namespace ModelRelief.Services.Jobs
 
         /// <summary>
         /// Returns the path of the Python interpreter.
-        /// WIP: Create a virtual environment to host the python tools.
         /// </summary>
         private string GetPythonInterpreterPath()
         {
@@ -156,7 +155,7 @@ namespace ModelRelief.Services.Jobs
             string jsonFile = SerializeModelToWorkingStorage(expandedMesh);
             string jsonFileArgument = $"-s \"{jsonFile}\"";
 
-            string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}/";
+            string workingFolder = $"{StorageManager.WorkingStorageFolder(mesh.UserId)}";
             string workingFolderArgument = $"-w \"{workingFolder}\"";
 
             string solverPath = GetSolverPath();
