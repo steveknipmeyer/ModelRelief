@@ -9,10 +9,14 @@ namespace ModelRelief.Features.Workbench
     using System;
     using System.IO;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
+    using ModelRelief.Services;
     using ModelRelief.Workbench;
 
     public class WorkbenchController : Controller
         {
+        private IStorageManager StorageManager { get; set; }
+
         private F<int, int>             _fInteger;
         private F<double, int>          _fDoubleInteger;
         private IFunctionOne<int>       _iInt;
@@ -23,17 +27,21 @@ namespace ModelRelief.Features.Workbench
         public IFunctionOne<int> IInt { get => _iInt; set => _iInt = value; }
         public IFunctionTwo<double> IDouble { get => _iDouble; set => _iDouble = value; }
 
-        public WorkbenchController(F<int, int> fInteger, F<double, int> fDoubleInteger, IFunctionOne<int> iInt, IFunctionTwo<double> iDouble)
+        public WorkbenchController(IServiceProvider services, F<int, int> fInteger, F<double, int> fDoubleInteger, IFunctionOne<int> iInt, IFunctionTwo<double> iDouble)
         {
-        _fInteger           = fInteger;
-        _fDoubleInteger     = fDoubleInteger;
+        StorageManager = services.GetRequiredService<IStorageManager>();
+        if (StorageManager == null)
+            throw new ArgumentNullException(nameof(StorageManager));
+
+        _fInteger          = fInteger;
+        _fDoubleInteger    = fDoubleInteger;
         IInt               = iInt;
         IDouble            = iDouble;
         }
 
-#region DepthBufferTest
+#region ImageTest
         // GET: /<controller>/
-        public IActionResult DepthBufferTest()
+        public IActionResult ImageTest()
             {
             return View();
             }
@@ -41,7 +49,7 @@ namespace ModelRelief.Features.Workbench
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("[controller]/[action]")]
-        public IActionResult DepthBufferTest(DepthBufferTestViewModel viewModel)
+        public IActionResult ImageTest(ImageTestViewModel viewModel)
             {
             if (!ModelState.IsValid)
                 {
@@ -49,29 +57,18 @@ namespace ModelRelief.Features.Workbench
                 return View();
                 }
 
-            var imageUrl = viewModel.ImageUrl;
-            SaveImage(imageUrl);
+            var base64Image = viewModel.Base64Image;
+            SaveImage(base64Image);
 
             return View();
             }
-
-        public bool SaveImage(string imageUrl)
+        public bool SaveImage(string base64Image)
             {
-            string imageData = imageUrl.Substring("data:image/png;base64,".Length);
-            string imagePath = Path.Combine(@"D:\Users\Steve Knipmeyer\Documents\GitHub\ModelRelief\ModelRelief\wwwroot\temp", "DepthBuffer.png");
-
-            byte[] imageBytes = Convert.FromBase64String(imageData);
+            string imagePath = Path.Combine(StorageManager.ContentRootPath, "wwwroot/images/base64Image.png");
+            byte[] imageBytes = Convert.FromBase64String(base64Image);
             System.IO.File.WriteAllBytes(imagePath, imageBytes);
 
             return true;
-            }
-#endregion
-
-#region InheritanceTest
-        // GET: /<controller>/
-        public IActionResult InheritanceTest()
-            {
-            return View();
             }
 #endregion
 

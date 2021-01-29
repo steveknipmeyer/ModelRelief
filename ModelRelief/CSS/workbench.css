@@ -1,16 +1,26 @@
-﻿
-
-/* ----------------------    
+﻿/* ------------------------------
     Workbench (Experimental)
-------------------------*/
+--------------------------------*/
 
 /*Bootstrap override*/
 .container {
     width : 1800px;
 }
 
+/* ----------------------
+    ImageTest Viewer
+------------------------*/
+#imageElement {
+    height: 256px;
+    width: 256px;
+}
 
-/* ----------------------    
+#base64Image {
+    width: 256px;
+    color: black;
+}
+
+/* ----------------------
     CameraTest Viewer
 ------------------------*/
 #cameraContainer {

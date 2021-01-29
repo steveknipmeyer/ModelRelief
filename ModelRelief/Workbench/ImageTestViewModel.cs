@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="DepthBufferTestViewModel.cs" company="ModelRelief">
+// <copyright file="ImageTestViewModel.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -8,9 +8,9 @@ namespace ModelRelief.Features.Workbench
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class DepthBufferTestViewModel
+    public class ImageTestViewModel
         {
         [Required]
-        public string ImageUrl { get; set; }
+        public string Base64Image { get; set; }
         }
     }

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+
     // Compiler
     "target": "es6",
     "lib": [ "es6", "es2015", "dom" ], // assume availability of these libraries
@@ -12,30 +13,16 @@
     "allowJs": true,
 
     // Modules
-    "module": "amd",                    // generate AMD (Asynchronous Module Definition code for modules
-                                        // N.B. Only AMD and System are supported alongside outfile.
-    "moduleResolution": "node",         // include node_modules in search paths
-    "traceResolution": false,           // show search paths when resolving modules
-
+    "module": "amd",                  // generate AMD (Asynchronous Module Definition code for modules
+                                      // N.B. Only AMD and System are supported alongside outfile.
+    "moduleResolution": "node",       // include node_modules in search paths
+    "traceResolution": false,         // debug; show search paths when resolving modules
     "baseUrl": ".",
-    "paths": { // search path for module resolution; include project client libraries
-      "*": [
-        "*",
-        "Scripts/*"
-      ]
-    },
   },
 
   "exclude": [ // folders <not> included in compilation
     "node_modules",
     "wwwroot",                  // Scott Allen : NDC Opinionated View of ASPNET Core
     "**/*.js",                  // JavaScript
-    "Scripts/Workbench/*"       // test
   ]
 }
-/*
-    "strictNullChecks": true,
-    // never allow null of undefined to be assigned to types by default
-    let modelNameElement : HTMLElement = window.document.getElementById('modelName');         // error
-    let modelNameElement : HTMLElement | null = window.document.getElementById('modelName');  // OK
-*/

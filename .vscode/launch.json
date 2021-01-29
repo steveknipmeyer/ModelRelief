@@ -176,6 +176,13 @@
             "program": "${file}",
         },
         {
+            "name": "npx ts-node (TypeScript active file)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/ts-node/dist/bin.js",
+            "args": ["${file}"],
+        },
+        {
             "name": "gulp Debug",
             "type": "node",
             "request": "launch",

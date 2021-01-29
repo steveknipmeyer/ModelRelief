@@ -3,11 +3,23 @@
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-
 namespace ModelRelief.Workbench
 {
+    using Autofac;
+
     public class AutofacExperiments
     {
+        public static void Register(ContainerBuilder builder)
+        {
+            // See Workbench/DI for experiment.
+
+            // generic types: Are these needed? It seems AF will discover all implmentations of interfaces in a module.
+            builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(F<,>));
+
+            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
+            builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
+        }
     }
 
     public interface IFunctionOne<T>

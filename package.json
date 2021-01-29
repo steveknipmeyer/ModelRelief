@@ -59,6 +59,7 @@
     "string-width": "^1.0.2",
     "strip-ansi": "^3.0.1",
     "three": "^0.124.0",
+    "ts-node": "^9.1.1",
     "typescript": "^3.9.7",
     "uglify-js": "^3.4.9",
     "wrappy": "^1.0.2",

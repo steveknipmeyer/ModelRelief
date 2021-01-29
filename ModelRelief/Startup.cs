@@ -24,7 +24,6 @@ namespace ModelRelief
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services;
-
     using ModelRelief.Workbench;
 
     public class Startup
@@ -61,15 +60,8 @@ namespace ModelRelief
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
 
-#if !AutofacExperiments
-#if true
-            // generic types: Are these needed? It seems AF will discover all implmentations of interfaces in a module.
-            builder.RegisterGeneric(typeof(F<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(F<,>));
-#endif
-            builder.RegisterType<F<int, double>>().As<IFunctionOne<int>>();         // provide F<int, double> instance when an IFunctionOne<int> is required
-            builder.RegisterType<FConcretePrime>().As<IFunctionTwo<double>>();      // provide FConcrete instance when an IFunctionTwo<double> is required
-#endif
+            AutofacExperiments.Register(builder);
+
             // generics
             // WIP Why is AsImplementedInterfaces required for the Handlers?
             builder.RegisterGeneric(typeof(FileRequest<>));

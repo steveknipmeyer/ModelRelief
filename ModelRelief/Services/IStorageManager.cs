@@ -17,9 +17,10 @@ namespace ModelRelief.Services
     {
         IConfigurationProvider ConfigurationProvider { get; }
         IWebHostEnvironment HostingEnvironment { get; }
+        string ContentRootPath { get; }
 
-        string GetAbsolutePath(string path);
         string GetRelativePath(string path);
+        string GetAbsolutePath(string path);
 
         string DefaultModelStorageFolder<TEntity>(TEntity model)
             where TEntity : DomainModel;

@@ -1,11 +1,14 @@
 ﻿## Commit Notes
-Add extended CameraControls enabled by developmentUI JSON setting
-Synchronize CameraControls after applying a StandardView
 ### Issues
+Refactor Workbench controller and experiments
+Remove exclusion for Scripts/Workbench
+Add launch configuration for 'npx ts-node'
 #### General
     Gravatar
 
-        CameraTest.ts
+    chai: assert rating
+    UnitTests.ts
+    CameraTest.ts
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
@@ -93,8 +96,6 @@ Synchronize CameraControls after applying a StandardView
         Runtime error does not propagate back to UI.
             The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
             Should the GeneratedFile be deleted if the Solver fails?
-
-        A Segmentation fault happens on exit. Bypassing the relief C++ extensions or pyamg does not resolve it
 
 ### Security
     Remove steve@knipmeyer.org.
@@ -229,11 +230,10 @@ Synchronize CameraControls after applying a StandardView
 
         sudo cp nginx/default /etc/nginx/sites-available/default
 
-        sudo service nginx start
         source Tools/StartModelRelief.sh
 
-        Start browser using https://localhost:443
-
+        Start browser using https://localhost:80
+            Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
 #### Privacy Page
     Add a Privacy page.
         The page exists populate it.

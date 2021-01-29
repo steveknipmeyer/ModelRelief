@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+
+        // Compiler
+        "target": "es6",
+        "lib": [
+            "es6",
+            "es2015",
+            "dom"
+        ], // assume availability of these libraries
+
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "outDir": "../../wwwroot/test",
+        "experimentalDecorators": true,
+        "allowJs": true,
+
+        // Modules
+        "module": "commonjs",                   // node
+        "moduleResolution": "node",             // include node_modules in search paths
+        "traceResolution": false,               // debug; show search paths when resolving modules
+        "baseUrl": "../../../ModelRelief",
+        }
+}

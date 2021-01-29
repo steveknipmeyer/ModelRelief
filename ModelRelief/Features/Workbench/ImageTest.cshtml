@@ -1,22 +1,18 @@
-﻿@model ModelRelief.Features.Workbench.DepthBufferTestViewModel
+﻿@model ModelRelief.Features.Workbench.ImageTestViewModel
 
 <body>
-    <div id="depthBufferContainer">
-        <canvas id="modelCanvas" class="depth"></canvas>
-        <canvas id="meshCanvas" class="depth"></canvas>
-    </div>
-    <button type="button" id="camera">Take Photograph</button>
     <div>
+        <img id="imageElement" src="~/images/3DModel.png" class="card-img-top" alt="">
+
         <form method="post" asp-antiforgery="true">
             <div asp-validation-summary="All"></div>
-
             <div>
-                <label asp-for="ImageUrl" />
-                <input asp-for="ImageUrl" />
-                <span asp-validation-for="ImageUrl" />
+                <label asp-for="Base64Image" />
+                <input id=base64Image asp-for="Base64Image" />
+                <span asp-validation-for="Base64Image" />
             </div>
             <div>
-                <input type="submit" value="Save" />#
+                <input type="submit" class="actionButton button-rounded btn" value="Save" />
             </div>
         </form>
     </div>
@@ -34,7 +30,7 @@
             requirejs.config({
                 baseUrl: '.',
                 paths: {
-                    'Workbench/DepthBufferTest': '/js/modelrelief',
+                    'Workbench/ImageTest': '/js/modelrelief',
 
                     chai: '/lib/chai/chai',
                     three: '/lib/threejs/three',
@@ -42,7 +38,7 @@
                 }
             });
             window.onload = function () {
-                requirejs(['Workbench/DepthBufferTest']);
+                requirejs(['Workbench/ImageTest']);
             }
         </script>
     }
