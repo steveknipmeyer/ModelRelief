@@ -2,10 +2,7 @@
 ### Issues
 #### General
 
-    CameraTest
     UnitTest
-        Use logging instead of bare console output.
-        Rationalize variants of camera roundtripping tests.
 
     Create Workbench page with test links.
         ImageTest

@@ -40,11 +40,13 @@ enum MessageClass {
  */
 export class ConsoleLogger implements ILogger {
 
+    _defaultStyle: string = "";
+
     /**
      * @constructor
      */
     constructor() {
-        // NOP
+        this._defaultStyle = "font-family : monospace; color : white; font-size : 12px";
     }
 
     /**
@@ -53,7 +55,7 @@ export class ConsoleLogger implements ILogger {
      * @param messageClass Message class.
      * @param style Optional style.
      */
-    public addMessageEntry(message: string, messageClass: MessageClass, style?: string): void {
+    public addMessageEntry(message: string, messageClass: MessageClass, style: string = this._defaultStyle): void {
         if (!SystemSettings.loggingEnabled)
             return;
 

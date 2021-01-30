@@ -35,20 +35,18 @@ class ViewerControls {
         this._viewer = viewer;
     }
 
-    public cameraRoundTrip(): void {
-        UnitTests.cameraRoundTrip();
+    public randomizedRoundTripCamera(): void {
+        UnitTests.randomizedRoundTripCamera();
     }
     public roundTripCamera(): void {
         UnitTests.roundTripCamera(this._viewer);
     }
+
     public roundTripCameraX(): void {
         UnitTests.roundTripCameraX(this._viewer);
     }
     public roundTripCameraY(): void {
         UnitTests.roundTripCameraY(this._viewer);
-    }
-    public roundTripCameraZ(): void {
-        UnitTests.roundTripCameraZ(this._viewer);
     }
 
     public debugCamera(): void {
@@ -98,16 +96,15 @@ export class App {
         settingsDiv.appendChild(gui.domElement);
         const folderOptions = gui.addFolder("CameraTest Options");
 
-        // Camera Roundtrip
-        const cameraRoundTrip = folderOptions.add(this._viewerControls, "cameraRoundTrip").name("cameraRoundTrip");
-        // Round Trip Camera
-        const roundTripCamera = folderOptions.add(this._viewerControls, "roundTripCamera").name("roundTripCamera");
+        // Randomized Round Trip Camera
+        const randomizedRoundTripCamera = folderOptions.add(this._viewerControls, "randomizedRoundTripCamera").name("Random RoundTrip");
+        // Roundtrip Camera
+        const roundTripCamera = folderOptions.add(this._viewerControls, "roundTripCamera").name("RoundTrip");
+
         // Round Trip Camera X
         const roundTripCameraX = folderOptions.add(this._viewerControls, "roundTripCameraX").name("roundTripCameraX");
         // Round Trip Camera Y
         const roundTripCameraY = folderOptions.add(this._viewerControls, "roundTripCameraY").name("roundTripCameraY");
-        // Round Trip Camera Y
-        const roundTripCameraZ = folderOptions.add(this._viewerControls, "roundTripCameraZ").name("roundTripCameraZ");
 
         // Debug Camera
         const debugCamera = folderOptions.add(this._viewerControls, "debugCamera").name("debugCamera");
