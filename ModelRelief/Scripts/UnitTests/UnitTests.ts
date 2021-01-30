@@ -12,10 +12,13 @@ import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {Image} from "Scripts/System/Image";
 import {Services} from "Scripts/System/Services";
+import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
+import {Viewer} from "Scripts/Viewers/Viewer";
 
 /**
  * @description Unit test harness.
@@ -24,7 +27,7 @@ import {Services} from "Scripts/System/Services";
  */
 export class UnitTests {
 
-    public static DefaultTolerance = 0.001;
+    private static DefaultTolerance = 0.001;
 
     /**
      * @description Determines whether two matrices are equal within the given tolerance.
@@ -34,7 +37,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`;
@@ -57,7 +60,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
     }
@@ -70,7 +73,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private  static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`;
@@ -87,7 +90,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    public static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance): void {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`;
@@ -103,7 +106,7 @@ export class UnitTests {
      * @param {number} scale The range of the scalar. (default = 1).
      * @returns {number}
      */
-    public static generateScalar(scale = 1): number {
+    private static generateScalar(scale = 1): number {
 
         const scalar = Math.random() * scale;
         return scalar;
@@ -115,7 +118,7 @@ export class UnitTests {
      * @param {number} scale The range of a coordinate. (default = 1).
      * @returns {THREE.Vector3}
      */
-    public static generateVector3(scale: number = 1): THREE.Vector3 {
+    private static generateVector3(scale: number = 1): THREE.Vector3 {
 
         const vector = new THREE.Vector3(Math.random() * scale, Math.random() * scale, Math.random() * scale);
         return vector;
@@ -126,7 +129,7 @@ export class UnitTests {
      * @static
      * @returns {THREE.Quaternion}
      */
-    public static generateQuaternion(): THREE.Quaternion {
+    private static generateQuaternion(): THREE.Quaternion {
 
         const quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
         return quaternion;
@@ -138,7 +141,7 @@ export class UnitTests {
      * @param {THREE.PerspectiveCamera} c1 First camera to compare.
      * @param {THREE.PerspectiveCamera} c2 Second camera to compare.
      */
-    public static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera): void {
+    private static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera): void {
 
         try {
             this.scalarsEqualWithinTolerance(c1.fov, c2.fov, "fov");
@@ -161,56 +164,6 @@ export class UnitTests {
 
         } catch (exception) {
             Services.defaultLogger.addErrorMessage(`Cameras are not equal: ${exception.message}`);
-        }
-    }
-
-    /**
-     * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
-     * @static
-     */
-    public static cameraRoundTrip(): void {
-
-        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
-
-        const trials = 10;
-        for (let iTrial = 0; iTrial < trials; iTrial++) {
-
-            // construct random PerspectiveCamera
-            const fieldOfView       = this.generateScalar(50);
-            const aspect            = this.generateScalar(1.0);
-            const nearClippingPlane = this.generateScalar(10);
-            const farClippingPlane  = nearClippingPlane + this.generateScalar(DefaultCameraSettings.FarClippingPlane);
-
-            const perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
-
-            const position    = this.generateVector3(500);
-            const quaternion  = this.generateQuaternion();
-            const scale       = this.generateVector3();
-            const up          = this.generateVector3();
-            perspectiveCamera.matrix.compose(position, quaternion, scale);
-            perspectiveCamera.up.copy(up);
-
-            // set position/rotation/scale attributes
-            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
-
-            perspectiveCamera.updateMatrix();
-            perspectiveCamera.updateMatrixWorld(true);
-            perspectiveCamera.updateProjectionMatrix();
-
-            // constructor
-            const camera = new PerspectiveCamera ({
-                id          : 1,
-                name        : "Perspective Camera",
-                description : "This camera has random properties.",
-            }, perspectiveCamera);
-
-            const cameraModel = camera.toDtoModel();
-            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
-                const c1 = camera.viewCamera;
-                const c2 = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
-
-                this.comparePerspectiveCameras(c1, c2);
-            });
         }
     }
 
@@ -320,6 +273,173 @@ export class UnitTests {
 
         index = image.getModelVertexIndex(center, boundingBox);
         assert.equal(index, centerIndex);
+    }
+
+    /**
+     * @description Debug a camera.
+     */
+    public static debugCamera(viewer: Viewer): void {
+        CameraHelper.debugCameraProperties(viewer.camera, viewer.modelGroup, "debugCamera");
+    }
+
+    /**
+     * @description Debug an IInputController.
+     */
+    public static debugInputController(viewer: Viewer): void {
+        InputControllerHelper.debugInputControllerProperties(viewer.name, viewer.controls, viewer.scene, viewer.camera);
+    }
+
+    /**
+     * @description Round trip a Viewer camera through the DTO model.
+     */
+    public static roundTripCamera(viewer: Viewer): void {
+
+        if (viewer.camera instanceof THREE.PerspectiveCamera) {
+
+            UnitTests.cameraRoundTrip();
+
+            const camera = new PerspectiveCamera({}, viewer.camera);
+            const cameraModel = camera.toDtoModel();
+            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+                const perspectiveCameraRoundTrip = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
+                UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
+
+                viewer.camera = cameraRoundtrip.viewCamera;
+            });
+        }
+    }
+
+    /**
+     * @description Tests whether a Perspective camera can be re-constructed from the DTO Camera properties.
+     * @static
+     */
+    public static cameraRoundTrip(): void {
+
+        // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
+
+        const trials = 10;
+        for (let iTrial = 0; iTrial < trials; iTrial++) {
+
+            // construct random PerspectiveCamera
+            const fieldOfView = this.generateScalar(50);
+            const aspect = this.generateScalar(1.0);
+            const nearClippingPlane = this.generateScalar(10);
+            const farClippingPlane = nearClippingPlane + this.generateScalar(DefaultCameraSettings.FarClippingPlane);
+
+            const perspectiveCamera = new THREE.PerspectiveCamera(fieldOfView, aspect, nearClippingPlane, farClippingPlane);
+
+            const position = this.generateVector3(500);
+            const quaternion = this.generateQuaternion();
+            const scale = this.generateVector3();
+            const up = this.generateVector3();
+            perspectiveCamera.matrix.compose(position, quaternion, scale);
+            perspectiveCamera.up.copy(up);
+
+            // set position/rotation/scale attributes
+            perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
+
+            perspectiveCamera.updateMatrix();
+            perspectiveCamera.updateMatrixWorld(true);
+            perspectiveCamera.updateProjectionMatrix();
+
+            // constructor
+            const camera = new PerspectiveCamera({
+                id: 1,
+                name: "Perspective Camera",
+                description: "This camera has random properties.",
+            }, perspectiveCamera);
+
+            const cameraModel = camera.toDtoModel();
+            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+                const c1 = camera.viewCamera;
+                const c2 = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
+
+                this.comparePerspectiveCameras(c1, c2);
+            });
+        }
+    }
+
+
+    /**
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
+     */
+    public static roundTripCameraX(viewer: Viewer): void {
+
+        // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
+
+        const originalCamera = viewer.camera as THREE.PerspectiveCamera;
+        const originalCameraMatrixArray = originalCamera.matrix.toArray();
+
+        const newCamera = new THREE.PerspectiveCamera();
+        newCamera.matrix.fromArray(originalCameraMatrixArray);
+        newCamera.up.copy(originalCamera.up);
+
+        // get back position/rotation/scale attributes
+        newCamera.matrix.decompose(newCamera.position, newCamera.quaternion, newCamera.scale);
+
+        newCamera.fov = originalCamera.fov;
+        newCamera.near = originalCamera.near;
+        newCamera.far = originalCamera.far;
+
+        newCamera.updateProjectionMatrix();
+
+        viewer.camera = newCamera;
+    }
+
+    /**
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
+     */
+    public static roundTripCameraY(viewer: Viewer): void {
+
+        // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
+
+        const originalCamera = viewer.camera as THREE.PerspectiveCamera;
+
+        const position = new THREE.Vector3();
+        const quaternion = new THREE.Quaternion();
+        const scale = new THREE.Vector3();
+        let up = new THREE.Vector3();
+        originalCamera.matrix.decompose(position, quaternion, scale);
+        up = originalCamera.up;
+
+        const newCamera = new THREE.PerspectiveCamera();
+        newCamera.matrix.compose(position, quaternion, scale);
+        newCamera.up.copy(up);
+
+        // set position/rotation/scale attributes
+        newCamera.matrix.decompose(newCamera.position, newCamera.quaternion, newCamera.scale);
+
+        newCamera.fov = originalCamera.fov;
+        newCamera.near = originalCamera.near;
+        newCamera.far = originalCamera.far;
+
+        newCamera.updateProjectionMatrix();
+
+        viewer.camera = newCamera;
+    }
+
+    /**
+     * @description Roundtrip a PerspectiveCamera through the DTO model.
+     */
+    public static roundTripCameraZ(viewer: Viewer): void {
+
+        // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
+        const camera = new PerspectiveCamera({}, viewer.camera as THREE.PerspectiveCamera);
+        const cameraModel = camera.toDtoModel();
+        CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
+
+            const perspectiveCameraRoundTrip = cameraRoundtrip as PerspectiveCamera;
+            const distortCamera = false;
+            if (distortCamera) {
+                const deltaPosition: THREE.Vector3 = new THREE.Vector3();
+                deltaPosition.copy(cameraRoundtrip.viewCamera.position);
+                const delta = 0.5;
+                cameraRoundtrip.viewCamera.position.set(deltaPosition.x + delta, deltaPosition.y, deltaPosition.z);
+            }
+            viewer.camera = cameraRoundtrip.viewCamera;
+
+            UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip.viewCamera);
+        });
     }
 
     /**

@@ -145,7 +145,6 @@ export class ComposerView {
             }
             modelLoadedPromise.then ((theModel: THREE.Group) => {
                 this._modelView.modelViewer.setModelGroup(theModel);
-                // this._modelView.modelViewer.enableProgressBar(false);
             });
 
             // Mesh

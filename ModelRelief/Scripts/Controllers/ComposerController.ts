@@ -11,9 +11,7 @@ import * as THREE from "three";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
-import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
-import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
@@ -24,10 +22,7 @@ import {NormalMapFactory} from "Scripts/Models/NormalMap/NormalMapFactory";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
-import {SystemSettings} from "Scripts/System/SystemSettings";
-import {UnitTests} from "Scripts/UnitTests/UnitTests";
 import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
-import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
@@ -339,37 +334,6 @@ export class ComposerController {
 
         return updatedMeshModel;
     }
-
-    /**
-     * @description Saves the relief.
-     */
-    public saveReliefDebug(): void {
-        CameraHelper.debugCameraProperties(this.modelViewer.camera, this.modelViewer.modelGroup, "saveRelief");
-        InputControllerHelper.debugInputControllerProperties(this.modelViewer.name, this.modelViewer.controls, this.modelViewer.scene, this.modelViewer.camera);
-    }
-
-    /**
-     * @description Saves the relief.
-     */
-    public saveRelief(): void {
-        // WIP: Save the Mesh as an OBJ format file?
-        // It may be more efficient to maintain Meshes in raw format since the size is substantially smaller.
-
-        if (this.modelViewer.camera instanceof THREE.PerspectiveCamera) {
-
-            UnitTests.cameraRoundTrip();
-
-            const camera = new PerspectiveCamera({}, this.modelViewer.camera);
-            const cameraModel = camera.toDtoModel();
-            CameraFactory.constructFromDtoModelAsync(cameraModel).then((cameraRoundtrip) => {
-                const perspectiveCameraRoundTrip = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
-                UnitTests.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
-
-                this.modelViewer.camera = cameraRoundtrip.viewCamera;
-            });
-        }
-    }
-
     //#endregion
 
     /**

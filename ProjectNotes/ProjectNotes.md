@@ -1,14 +1,20 @@
 ﻿## Commit Notes
 ### Issues
-Refactor Workbench controller and experiments
-Remove exclusion for Scripts/Workbench
-Add launch configuration for 'npx ts-node'
 #### General
-    Gravatar
 
-    chai: assert rating
-    UnitTests.ts
-    CameraTest.ts
+    CameraTest
+    UnitTest
+        Use logging instead of bare console output.
+        Rationalize variants of camera roundtripping tests.
+
+    Create Workbench page with test links.
+        ImageTest
+        CameraTest
+        UnitTest
+        DI
+        AutoFac
+
+    Gravatar
 
     Class Diagram
         https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts

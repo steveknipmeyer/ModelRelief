@@ -23,17 +23,6 @@
 /* ----------------------
     CameraTest Viewer
 ------------------------*/
-#cameraContainer {
-    position : relative;
-    width:  512px;
-}
-
-#viewerCanvas{
-    width:  768px;
-    height: 768px;
-    background-color: #000000;
-}
-
 #cameraTestControls {
     float: left
 }

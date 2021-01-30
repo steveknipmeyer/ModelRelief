@@ -41,7 +41,6 @@
             "**/devenv": true,
             "**/node_modules": true,
             "**/Publish/**/*": true,
-            "**/[Ww]ork*/**/*": true,
             "**/wwwroot/**/*": true,
             "**/lib/**/*": true,
             "**/Jupyter/**/*": false,
