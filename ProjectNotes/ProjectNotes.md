@@ -2,12 +2,7 @@
 ### Issues
 #### General
     Gravatar
-
-    Class Diagram
-        https://marketplace.visualstudio.com/items?itemName=AlexShen.classdiagram-ts
 #### Solver
-    How is a (lucy) 1025 KB mesh ever written?
-
     Review all experimental processing.
 
     Evalute NumPy gradients and divergence.
@@ -37,39 +32,6 @@
                 Generate a test Blender depth buffer.
                 How was the compositing processing defined to create the depth buffer?
                 Obtain a Shockwave player for the videos.
-
-#### Python
-    Review all Pylance lint issues with Python source.
-        python.analysis.typeCheckingMode: basic or strict?
-#### Enhancements
-    Routing
-        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
-        Use Endpoint routing?
-
-    Complete implementation of DependencyManager.GetAllDependencyTypes.
-        This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
-        How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
-
-    Provide a histogram in the web UI representing the distribution of gradients.
-#### Jupyter
-        https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
-            error: invalid command 'bdist_wheel'
-            ----------------------------------------
-            ERROR: Failed building wheel for pandocfilters
-
-        Create an (incremental) Python requirements file for the Jupyter notebooks.
-            pip3 install ipykernel
-            pip install scikit-image
-            pip3 install pandas
-            pip3 install nbconvert
-            sudo apt-get install python3-tk
-#### WebGL2
-    WebGL2 Support
-        https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
-
-        shaders
-            GLSL 300 es
-            https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
 #### Build
     Prove with clean Ubuntu installation!
         Add a test account.
@@ -83,13 +45,11 @@
     Python
         Why does venv not add the Python 3.8 include files?
         Why does the 1st mayavi install fail with a vtk module error?
-
 ### Runtime
     Solver
         Runtime error does not propagate back to UI.
             The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
             Should the GeneratedFile be deleted if the Solver fails?
-
 ### Security
     Remove steve@knipmeyer.org.
     Azure Key Secrets
@@ -97,12 +57,8 @@
         Mock azurekeysecrets.json.
             Move to a new settings file?
             How should the contact e-mail address be defined?
-### Publish
-
 ### UI
     Add landing page video.
-
-### Test
 ### Refactoring
     Review all casing of files and directories.
     Tools -> bin
@@ -141,6 +97,36 @@
         Vectrix
         3D Printing
         HackerNews
+#### Enhancements
+    Routing
+        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
+        Use Endpoint routing?
+
+    Complete implementation of DependencyManager.GetAllDependencyTypes.
+        This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
+        How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
+
+    Provide a histogram in the web UI representing the distribution of gradients.
+#### Jupyter
+        https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
+            error: invalid command 'bdist_wheel'
+            ----------------------------------------
+            ERROR: Failed building wheel for pandocfilters
+
+        Create an (incremental) Python requirements file for the Jupyter notebooks.
+            pip3 install ipykernel
+            pip install scikit-image
+            pip3 install pandas
+            pip3 install nbconvert
+            sudo apt-get install python3-tk
+#### WebGL2
+    WebGL2 Support
+        https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
+
+        shaders
+            GLSL 300 es
+            https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
+
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
