@@ -446,7 +446,7 @@ export class Camera extends Model<Camera> implements ICamera {
         viewCamera.matrix.compose(position, quaternion, scale);
         viewCamera.up.copy(up);
 
-        // set position/rotation/scale attributes
+        // set position/quaternion/scale attributes
         viewCamera.matrix.decompose(viewCamera.position, viewCamera.quaternion, viewCamera.scale);
 
         viewCamera.near   = this.near;

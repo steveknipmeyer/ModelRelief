@@ -54,7 +54,7 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    private static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static matricesEqualWithinTolerance(m1: THREE.Matrix, m2: THREE.Matrix, property: string, tolerance = UnitTests.DefaultTolerance): boolean{
 
         const formatTag = "TAG";
         const errorMessage = `${property}: M[${formatTag}] of the matrices are not equal within ${tolerance}`;
@@ -65,8 +65,15 @@ export class UnitTests {
 
         const length = m1Elements.length;
         for (let iElement = 0; iElement < length; iElement++) {
-            assert.closeTo(m1Elements[iElement], m2Elements[iElement], tolerance, errorMessage.replace(formatTag, iElement.toString()));
+            try {
+                assert.closeTo(m1Elements[iElement], m2Elements[iElement], tolerance, errorMessage.replace(formatTag, iElement.toString()));
+            }
+            catch (exception) {
+                Services.defaultLogger.addMessage(`Matrix elements are not equal: ${exception.message}`, this._failStyle);
+                return false;
+            }
         }
+        return true;
     }
 
     /**
@@ -77,9 +84,16 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    private static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static scalarsEqualWithinTolerance(s1: number, s2: number, property: string, tolerance = UnitTests.DefaultTolerance): boolean {
 
-        assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
+        try {
+            assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
+        }
+        catch (exception) {
+            Services.defaultLogger.addMessage(`Scalars are not equal: ${exception.message}`, this._failStyle);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -90,13 +104,20 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    private  static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private  static vectorsEqualWithinTolerance(v1: THREE.Vector3, v2: THREE.Vector3, property: string, tolerance = UnitTests.DefaultTolerance): boolean {
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the vectors are not equal within ${tolerance}`;
-        assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, "X"));
-        assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, "Y"));
-        assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, "Z"));
+        try {
+            assert.closeTo(v1.x, v2.x, tolerance, errorMessage.replace(formatTag, "X"));
+            assert.closeTo(v1.y, v2.y, tolerance, errorMessage.replace(formatTag, "Y"));
+            assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, "Z"));
+        }
+        catch (exception) {
+            Services.defaultLogger.addMessage(`Vectors are not equal: ${exception.message}`, this._failStyle);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -107,14 +128,21 @@ export class UnitTests {
      * @param {string} property Property name.
      * @param {number} [tolerance=UnitTests.DefaultVectorTolerance] Tolerance.
      */
-    private static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance): void {
+    private static quaternionsEqualWithinTolerance(q1: THREE.Quaternion, q2: THREE.Quaternion, property: string, tolerance = UnitTests.DefaultTolerance): boolean{
 
         const formatTag = "TAG";
         const errorMessage = `${property}: The ${formatTag} values of the quaternions are not equal within ${tolerance}`;
-        assert.closeTo(q1.x, q2.x, tolerance, errorMessage.replace(formatTag, "X"));
-        assert.closeTo(q1.y, q2.y, tolerance, errorMessage.replace(formatTag, "Y"));
-        assert.closeTo(q1.z, q2.z, tolerance, errorMessage.replace(formatTag, "Z"));
-        assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, "W"));
+        try {
+            assert.closeTo(q1.x, q2.x, tolerance, errorMessage.replace(formatTag, "X"));
+            assert.closeTo(q1.y, q2.y, tolerance, errorMessage.replace(formatTag, "Y"));
+            assert.closeTo(q1.z, q2.z, tolerance, errorMessage.replace(formatTag, "Z"));
+            assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, "W"));
+        }
+        catch (exception) {
+            Services.defaultLogger.addMessage(`Quaternions are not equal: ${exception.message}`, this._failStyle);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -149,6 +177,7 @@ export class UnitTests {
     private static generateQuaternion(): THREE.Quaternion {
 
         const quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
+        quaternion.normalize();
         return quaternion;
     }
 
@@ -161,24 +190,25 @@ export class UnitTests {
     private static comparePerspectiveCameras(c1: THREE.PerspectiveCamera, c2: THREE.PerspectiveCamera): boolean {
 
         try {
-            this.scalarsEqualWithinTolerance(c1.fov, c2.fov, "fov");
-            this.scalarsEqualWithinTolerance(c1.aspect, c2.aspect, "aspect");
-            this.scalarsEqualWithinTolerance(c1.near, c2.near, "near");
-            this.scalarsEqualWithinTolerance(c1.far, c2.far, "far");
+            let result:boolean = true;
+            result = this.scalarsEqualWithinTolerance(c1.fov, c2.fov, "fov") && result;
+            result = this.scalarsEqualWithinTolerance(c1.aspect, c2.aspect, "aspect") && result;
+            result = this.scalarsEqualWithinTolerance(c1.near, c2.near, "near") && result;
+            result = this.scalarsEqualWithinTolerance(c1.far, c2.far, "far") && result;
 
-            this.vectorsEqualWithinTolerance(c1.position, c2.position, "position");
+            result = this.vectorsEqualWithinTolerance(c1.position, c2.position, "position") && result;
 
-            this.matricesEqualWithinTolerance(c1.matrix, c2.matrix, "matrix");
-            this.matricesEqualWithinTolerance(c1.projectionMatrix, c2.projectionMatrix, "projectionMatrix");
+            result = this.matricesEqualWithinTolerance(c1.matrix, c2.matrix, "matrix") && result;
+            result = this.matricesEqualWithinTolerance(c1.projectionMatrix, c2.projectionMatrix, "projectionMatrix") && result;
 
-            this.vectorsEqualWithinTolerance(c1.scale, c2.scale, "scale");
+            result = this.vectorsEqualWithinTolerance(c1.scale, c2.scale, "scale") && result;
 
-            this.vectorsEqualWithinTolerance(c1.up, c2.up, "up");
+            result = this.vectorsEqualWithinTolerance(c1.up, c2.up, "up") && result;
+            result = this.vectorsEqualWithinTolerance(c1.getWorldDirection(new THREE.Vector3), c2.getWorldDirection(new THREE.Vector3), "worldDirection") && result;
 
-            // WIP: These camera properties do not roundtrip however the matrix and projectionMatrix do roundtrip correctly.
-            // this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, 'quaternion');
-            // this.vectorsEqualWithinTolerance(c1.getWorldDirection(), c2.getWorldDirection(), 'worldDirection');
-            return true;
+            result = this.quaternionsEqualWithinTolerance(c1.quaternion, c2.quaternion, "quaternion") && result;
+
+            return result;
         }
         catch (exception) {
             Services.defaultLogger.addMessage(`Cameras are not equal: ${exception.message}`, this._failStyle);
@@ -316,7 +346,7 @@ export class UnitTests {
 
         // WIP: Randomly generated cameras do not roundtrip the matrix property. However, cameras created and manipulated through views work fine.
 
-        const trials = 5;
+        const trials = 10;
         for (let iTrial = 0; iTrial < trials; iTrial++) {
 
             // construct random PerspectiveCamera
@@ -334,11 +364,8 @@ export class UnitTests {
             perspectiveCamera.matrix.compose(position, quaternion, scale);
             perspectiveCamera.up.copy(up);
 
-            // set position/rotation/scale attributes
             perspectiveCamera.matrix.decompose(perspectiveCamera.position, perspectiveCamera.quaternion, perspectiveCamera.scale);
 
-            perspectiveCamera.updateMatrix();
-            perspectiveCamera.updateMatrixWorld(true);
             perspectiveCamera.updateProjectionMatrix();
 
             // constructor
@@ -382,7 +409,7 @@ export class UnitTests {
                 const result = this.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
                 viewer.camera = cameraRoundtrip.viewCamera;
 
-                this.logResult("Round Trip Camera Z", result);
+                this.logResult("Round Trip Camera", result);
             });
         }
     }

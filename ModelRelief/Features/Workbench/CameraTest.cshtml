@@ -1,50 +1,52 @@
 ﻿<body>
-    <!-- Model View -->
-    <div id="modelView" class="container-fluid">
-        <div class="row">
-            <div class="col">
+    <div id=cameraTestContainer>
+        <!-- Model View -->
+        <div id="modelView" class="container-fluid">
+            <div class="row">
+                <div class="col">
 
-                <!-- Model Card -->
-                <div class="card card-cascade">
+                    <!-- Model Card -->
+                    <div class="card card-cascade">
 
-                    <!-- Header -->
-                    <div class="view-controls d-flex justify-content-between py-2">
+                        <!-- Header -->
+                        <div class="view-controls d-flex justify-content-between py-2">
 
-                        <!--Camera (StandardView)-->
-                        <div>
-                            <!--StandardView Trigger-->
-                            <button class="standardViewButton btn btn-sm dropdown-toggle m-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-camera"></i>
-                            </button>
+                            <!--Camera (StandardView)-->
+                            <div>
+                                <!--StandardView Trigger-->
+                                <button class="standardViewButton btn btn-sm dropdown-toggle m-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-camera"></i>
+                                </button>
 
-                            <!--Menu-->
-                            <div class="standardViewMenu dropdown-menu">
+                                <!--Menu-->
+                                <div class="standardViewMenu dropdown-menu">
+                                </div>
                             </div>
+
+                            <h5 class="mt-2">Model</h5>
+                            <button type="button" class="fitViewButton btn btn-sm m-2">
+                                <i class="fas fa-expand-arrows-alt"></i>
+                            </button>
                         </div>
+                        <!-- /Header -->
+                        <!-- Body -->
+                        <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
+                            <canvas id="modelCanvas" class="embed-responsive-item" tabindex='2'></canvas>
+                        </div>
+                        <!-- /Body -->
 
-                        <h5 class="mt-2">Model</h5>
-                        <button type="button" class="fitViewButton btn btn-sm m-2">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                        </button>
                     </div>
-                    <!-- /Header -->
-                    <!-- Body -->
-                    <div id="modelViewCardBody" class="card-body embed-responsive embed-responsive-1by1">
-                        <canvas id="modelCanvas" class="embed-responsive-item" tabindex='2'></canvas>
+                    <!-- /Model Card -->
+
+                    <div id="progressBar" class="progress">
+                        <div>Working...</div>
                     </div>
-                    <!-- /Body -->
-
-                </div>
-                <!-- /Model Card -->
-
-                <div id="progressBar" class="progress">
-                    <div>Working...</div>
                 </div>
             </div>
         </div>
+        <div id="cameraTestControls"></div>
+        <!-- /Model View -->
     </div>
-     <div id="cameraTestControls"></div>
-    <!-- /Model View -->
 
     @section scripts {
         <!--******************************************************************************************-->

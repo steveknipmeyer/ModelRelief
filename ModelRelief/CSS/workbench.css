@@ -23,6 +23,9 @@
 /* ----------------------
     CameraTest Viewer
 ------------------------*/
+#cameraTestContainer {
+    width: 512px;
+}
 #cameraTestControls {
     float: left
 }
