@@ -1,13 +1,6 @@
 ﻿## Commit Notes
 ### Issues
 #### General
-    Create Workbench page with test links.
-        ImageTest
-        CameraTest
-        UnitTest
-        DI
-        AutoFac
-
     Gravatar
 
     Class Diagram

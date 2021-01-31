@@ -39,7 +39,21 @@ namespace ModelRelief.Features.Workbench
         IDouble            = iDouble;
         }
 
-#region ImageTest
+        // ---------------------------------- Index ------------------------------------------ //
+        // GET: Default
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        // ------------------------------- Camera Test -------------------------------------- //
+        // GET: /<controller>/
+        public IActionResult CameraTest()
+        {
+            return View();
+        }
+
+        // ------------------------------- Image Test -------------------------------------- //
         // GET: /<controller>/
         public IActionResult ImageTest()
             {
@@ -70,17 +84,8 @@ namespace ModelRelief.Features.Workbench
 
             return true;
             }
-#endregion
 
-#region CameraTest
-        // GET: /<controller>/
-        public IActionResult CameraTest()
-            {
-            return View();
-            }
-#endregion
-
-#region Autofac Dependency Injection
+        // ------------------------------- Autofac -------------------------------------- //
         // GET: /<controller>/
         // Model bind to Interface via DI
         // https://github.com/aspnet/Mvc/issues/6014
@@ -94,6 +99,5 @@ namespace ModelRelief.Features.Workbench
 
             return resultF1;
             }
-#endregion
         }
     }

@@ -16,6 +16,7 @@ import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {PerspectiveCamera} from "Scripts/Models/Camera/PerspectiveCamera";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {Image} from "Scripts/System/Image";
+import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {InputControllerHelper} from "Scripts/Viewers/InputControllerHelper";
 import {Viewer} from "Scripts/Viewers/Viewer";
@@ -32,6 +33,8 @@ export class UnitTests {
     private static _passStyle = "font-family : monospace; color : SpringGreen; font-size : 12px";
     private static _failStyle = "font-family : monospace; color : Red; font-size : 12px";
 
+    public static logger: ILogger = Services.consoleLogger;
+
     /**
      * @description Logs a test result.
      * @private
@@ -43,7 +46,7 @@ export class UnitTests {
 
         const message = `${test}: ${result ? "Pass" : "Fail"}`;
         const style = result ? this._passStyle : this._failStyle;
-        Services.defaultLogger.addMessage(message, style);
+        this.logger.addMessage(message, style);
     }
 
     /**
@@ -69,7 +72,7 @@ export class UnitTests {
                 assert.closeTo(m1Elements[iElement], m2Elements[iElement], tolerance, errorMessage.replace(formatTag, iElement.toString()));
             }
             catch (exception) {
-                Services.defaultLogger.addMessage(`Matrix elements are not equal: ${exception.message}`, this._failStyle);
+                this.logResult(`Matrix elements are not equal: ${exception.message}`, false);
                 return false;
             }
         }
@@ -90,7 +93,7 @@ export class UnitTests {
             assert.closeTo(s1, s2, tolerance, `${property}: The values of the scalars are not equal within ${tolerance}`);
         }
         catch (exception) {
-            Services.defaultLogger.addMessage(`Scalars are not equal: ${exception.message}`, this._failStyle);
+            this.logResult(`Scalars are not equal: ${exception.message}`, false);
             return false;
         }
         return true;
@@ -114,7 +117,7 @@ export class UnitTests {
             assert.closeTo(v1.z, v2.z, tolerance, errorMessage.replace(formatTag, "Z"));
         }
         catch (exception) {
-            Services.defaultLogger.addMessage(`Vectors are not equal: ${exception.message}`, this._failStyle);
+            this.logResult(`Vectors are not equal: ${exception.message}`, false);
             return false;
         }
         return true;
@@ -139,7 +142,7 @@ export class UnitTests {
             assert.closeTo(q1.w, q2.w, tolerance, errorMessage.replace(formatTag, "W"));
         }
         catch (exception) {
-            Services.defaultLogger.addMessage(`Quaternions are not equal: ${exception.message}`, this._failStyle);
+            this.logResult(`Quaternions are not equal: ${exception.message}`, false);
             return false;
         }
         return true;
@@ -211,7 +214,7 @@ export class UnitTests {
             return result;
         }
         catch (exception) {
-            Services.defaultLogger.addMessage(`Cameras are not equal: ${exception.message}`, this._failStyle);
+            this.logResult(`Cameras are not equal: ${exception.message}`, false);
             return false;
         }
     }
@@ -328,14 +331,14 @@ export class UnitTests {
      * @description Debug a camera.
      */
     public static debugCamera(viewer: Viewer): void {
-        CameraHelper.debugCameraProperties(viewer.camera, viewer.modelGroup, "debugCamera");
+        CameraHelper.debugCameraProperties(this.logger, viewer.camera, viewer.modelGroup, "debugCamera");
     }
 
     /**
      * @description Debug an IInputController.
      */
     public static debugInputController(viewer: Viewer): void {
-        InputControllerHelper.debugInputControllerProperties(viewer.name, viewer.controls, viewer.scene, viewer.camera);
+        InputControllerHelper.debugInputControllerProperties(this.logger, viewer.name, viewer.controls, viewer.scene, viewer.camera);
     }
 
     /**
@@ -381,7 +384,7 @@ export class UnitTests {
                 const c2 = cameraRoundtrip.viewCamera as THREE.PerspectiveCamera;
 
                 const result = this.comparePerspectiveCameras(c1, c2);
-                this.logResult("Randomized Round Trip Camera", result);
+                this.logResult("Randomized", result);
             });
         }
     }
@@ -409,7 +412,7 @@ export class UnitTests {
                 const result = this.comparePerspectiveCameras(camera.viewCamera, perspectiveCameraRoundTrip);
                 viewer.camera = cameraRoundtrip.viewCamera;
 
-                this.logResult("Round Trip Camera", result);
+                this.logResult("DTO Model", result);
             });
         }
     }
@@ -442,7 +445,7 @@ export class UnitTests {
         const result = this.comparePerspectiveCameras(originalCamera, newCamera);
         viewer.camera = newCamera;
 
-        this.logResult("Round Trip Camera Matrix Copy", result);
+        this.logResult("Matrix Copy", result);
     }
 
     /**
@@ -476,7 +479,7 @@ export class UnitTests {
         const result = this.comparePerspectiveCameras(originalCamera, newCamera);
         viewer.camera = newCamera;
 
-        this.logResult("Round Trip Camera Matrix Reconstruction", result);
+        this.logResult("Matrix Reconstruction", result);
     }
 
     /**

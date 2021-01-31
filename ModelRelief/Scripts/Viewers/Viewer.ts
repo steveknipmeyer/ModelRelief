@@ -399,7 +399,7 @@ export class Viewer {
 
         const interval = 1000;
         window.setTimeout(() => {
-            InputControllerHelper.debugInputControllerProperties(this.name, this.controls, this.scene, this.camera);
+            InputControllerHelper.debugInputControllerProperties(this._logger, this.name, this.controls, this.scene, this.camera);
             // loop
             // this.initializeDiagnostics();
         }, interval);

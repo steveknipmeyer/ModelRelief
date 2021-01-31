@@ -106,19 +106,20 @@ export class App {
         roundTripOptions.add(this._viewerControls, "roundTripCameraMatrixReconstruction").name("Matrix Reconstruction");
         roundTripOptions.open();
 
-        const otherOptions = gui.addFolder("Other");
+        const debugOptions = gui.addFolder("Debug");
         // Debug Camera
-        otherOptions.add(this._viewerControls, "debugCamera").name("Debug Camera");
+        debugOptions.add(this._viewerControls, "debugCamera").name("Camera");
         // Debug InputController
-        otherOptions.add(this._viewerControls, "debugInputController").name("Debug InputController");
-        otherOptions.open();
+        debugOptions.add(this._viewerControls, "debugInputController").name("InputController");
+        debugOptions.open();
     }
 
     /**
      * @description Main
      */
     public run(): void {
-        this._logger = Services.defaultLogger;
+        this._logger = Services.htmlLogger;
+        UnitTests.logger = this._logger;
 
         Initializer.initialize().then((status: boolean) => {
 
@@ -126,9 +127,10 @@ export class App {
             const testModel: Model3d = new Model3d();
             this._modelView = new ModelView(ElementIds.ModelView, testModel);
 
-            const modelLoadedPromise: Promise<THREE.Group> = this._loader.loadParametricTestModelAsync(TestModel.Checkerboard);
+            const modelLoadedPromise: Promise<THREE.Group> = this._loader.loadParametricTestModelAsync(TestModel.Torus);
             modelLoadedPromise.then((theModel: THREE.Group) => {
                 this._modelView.modelViewer.setModelGroup(theModel);
+                this._modelView.modelViewer.fitView();
 
                 // start render loop
                 this._modelView.modelViewer.animate();

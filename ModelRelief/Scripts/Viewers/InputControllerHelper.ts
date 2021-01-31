@@ -8,7 +8,7 @@ import * as THREE from "three";
 
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {Format} from "Scripts/System/Format";
-import {ConsoleLogger} from "Scripts/System/Logger";
+import {ILogger} from "Scripts/System/Logger";
 
 /**
  * @description Input Controller
@@ -54,22 +54,22 @@ export class InputControllerHelper {
     /**
      * @description Diagnostic tool for the input controller.
      * @static
+     * @param {ILogger} logger Logger to use.
      * @param {string} controllerName Controller name.
      * @param {IInputController} controller Active controller.
      * @param {THREE.Scene} scene Active scene.
      * @param {THREE.Camera} camera Active camera.
      */
-    public static debugInputControllerProperties(controllerName: string, controller: IInputController, scene: THREE.Scene, camera: THREE.Camera): void {
+    public static debugInputControllerProperties(logger: ILogger, controllerName: string, controller: IInputController, scene: THREE.Scene, camera: THREE.Camera): void {
 
-        const consoleLogger: ConsoleLogger = new ConsoleLogger();
         const headerStyle   = "font-family : monospace; font-weight : bold; color : cyan; font-size : 14px";
         const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
 
-        consoleLogger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
-        consoleLogger.addMessage("Note: Target + Eye = Camera.Position", messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Camera.Position", camera.position)}`, messageStyle);
+        logger.addMessage(`${controllerName}: Input Controller Properties`, headerStyle);
+        logger.addMessage(`${Format.formatVector3("Target", controller.target)}`, messageStyle);
+        logger.addMessage(`${Format.formatVector3("Eye", controller.eye)}`, messageStyle);
+        logger.addMessage("Note: Target + Eye = Camera.Position", messageStyle);
+        logger.addMessage(`${Format.formatVector3("Camera.Position", camera.position)}`, messageStyle);
 
         // construct root object of the helper
         const controllerHelper  = new THREE.Group();

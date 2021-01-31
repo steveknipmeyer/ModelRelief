@@ -11,7 +11,7 @@ import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {DefaultCameraSettings, IOrthographicFrustum} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {Format} from "Scripts/System/Format";
-import {ConsoleLogger} from "Scripts/System/Logger";
+import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -320,44 +320,43 @@ export class CameraHelper {
 
     /**
      * @description Debug support for displaying the properties of a camera.
+     * @param {ILogger} logger Logger to use.
      * @param {IThreeBaseCamera} camera Target camera.
      * @param {THREE.Group} modelGroup Active model.
      * @param {string} tag Debug label.
      */
-    public static debugCameraProperties(camera: IThreeBaseCamera, modelGroup: THREE.Group, tag: string): void {
+    public static debugCameraProperties(logger: ILogger, camera: IThreeBaseCamera, modelGroup: THREE.Group, tag: string): void {
 
-        const consoleLogger: ConsoleLogger = new ConsoleLogger();
         const headerStyle   = "font-family : monospace; font-weight : bold; color : yellow; font-size : 16px";
         const messageStyle  = "font-family : monospace; color : white; font-size : 12px";
         const isPerspective = camera instanceof THREE.PerspectiveCamera;
         const cameraType = isPerspective ? "Perspective" : "Orthographic";
 
-        consoleLogger.addMessage(`${tag}: Camera Properties`, headerStyle);
-        consoleLogger.addMessage(`Type = ${cameraType}`, messageStyle);
-        // consoleLogger.addMessage(`Near Plane = ${camera.near}`, messageStyle);
-        // consoleLogger.addMessage(`Far Plane = ${camera.far}`, messageStyle);
-        // consoleLogger.addEmptyLine();
+        logger.addMessage(`${tag}: Camera Properties`, headerStyle);
+        logger.addMessage(`Type = ${cameraType}`, messageStyle);
+        // logger.addMessage(`Near Plane = ${camera.near}`, messageStyle);
+        // logger.addMessage(`Far Plane = ${camera.far}`, messageStyle);
+        // logger.addEmptyLine();
 
         // if (isPerspective) {
         //     const perspectiveCamera = camera as THREE.PerspectiveCamera;
-        //     consoleLogger.addMessage(`Field Of View = ${perspectiveCamera.fov}`, messageStyle);
-        //     consoleLogger.addMessage(`Aspect Ratio = ${perspectiveCamera.aspect}`, messageStyle);
+        //     logger.addMessage(`Field Of View = ${perspectiveCamera.fov}`, messageStyle);
+        //     logger.addMessage(`Aspect Ratio = ${perspectiveCamera.aspect}`, messageStyle);
         // } else {
         //     const orthographicCamera = camera as THREE.OrthographicCamera;
-        //     consoleLogger.addMessage(`Left = ${Format.formatNumber(orthographicCamera.left)}`, messageStyle);
-        //     consoleLogger.addMessage(`Right = ${Format.formatNumber(orthographicCamera.right)}`, messageStyle);
-        //     consoleLogger.addMessage(`Top = ${Format.formatNumber(orthographicCamera.top)}`, messageStyle);
-        //     consoleLogger.addMessage(`Bottom = ${Format.formatNumber(orthographicCamera.bottom)}`, messageStyle);
+        //     logger.addMessage(`Left = ${Format.formatNumber(orthographicCamera.left)}`, messageStyle);
+        //     logger.addMessage(`Right = ${Format.formatNumber(orthographicCamera.right)}`, messageStyle);
+        //     logger.addMessage(`Top = ${Format.formatNumber(orthographicCamera.top)}`, messageStyle);
+        //     logger.addMessage(`Bottom = ${Format.formatNumber(orthographicCamera.bottom)}`, messageStyle);
         // }
-        // consoleLogger.addEmptyLine();
+        // logger.addEmptyLine();
 
-        consoleLogger.addMessage(`${Format.formatVector3("Position", camera.position)}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("LookAt", CameraHelper.getLookAt(camera, modelGroup))}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector3("Up", camera.up)}`, messageStyle);
-        consoleLogger.addMessage(`${Format.formatVector4("Q", new THREE.Vector4(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w))}`, messageStyle);
-        consoleLogger.addEmptyLine();
+        logger.addMessage(`${Format.formatVector3("Position", camera.position)}`, messageStyle);
+        logger.addMessage(`${Format.formatVector3("LookAt", CameraHelper.getLookAt(camera, modelGroup))}`, messageStyle);
+        logger.addMessage(`${Format.formatVector3("Up", camera.up)}`, messageStyle);
+        logger.addMessage(`${Format.formatVector4("Q", new THREE.Vector4(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w))}`, messageStyle);
 
-        // consoleLogger.addMessage(`${Format.formatVector3("Scale", camera.scale)}`, messageStyle);
+        // logger.addMessage(`${Format.formatVector3("Scale", camera.scale)}`, messageStyle);
     }
 //#endregion
 }
