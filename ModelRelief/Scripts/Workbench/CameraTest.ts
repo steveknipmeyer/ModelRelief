@@ -42,11 +42,11 @@ class ViewerControls {
         UnitTests.roundTripCamera(this._viewer);
     }
 
-    public roundTripCameraX(): void {
-        UnitTests.roundTripCameraX(this._viewer);
+    public roundTripCameraMatrixCopy(): void {
+        UnitTests.roundTripCameraMatrixCopy(this._viewer);
     }
-    public roundTripCameraY(): void {
-        UnitTests.roundTripCameraY(this._viewer);
+    public roundTripCameraMatrixReconstruction(): void {
+        UnitTests.roundTripCameraMatrixReconstruction(this._viewer);
     }
 
     public debugCamera(): void {
@@ -94,24 +94,24 @@ export class App {
 
         const settingsDiv = document.getElementById("cameraTestControls");
         settingsDiv.appendChild(gui.domElement);
-        const folderOptions = gui.addFolder("CameraTest Options");
 
+        const roundTripOptions = gui.addFolder("Round Trip");
         // Randomized Round Trip Camera
-        const randomizedRoundTripCamera = folderOptions.add(this._viewerControls, "randomizedRoundTripCamera").name("Random RoundTrip");
+        roundTripOptions.add(this._viewerControls, "randomizedRoundTripCamera").name("Random");
         // Roundtrip Camera
-        const roundTripCamera = folderOptions.add(this._viewerControls, "roundTripCamera").name("RoundTrip");
+        roundTripOptions.add(this._viewerControls, "roundTripCamera").name("DTO");
+        // Round Trip Camera Matrix Copy
+        roundTripOptions.add(this._viewerControls, "roundTripCameraMatrixCopy").name("Matrix Copy");
+        // Round Trip Camera Matrix Reconstruction
+        roundTripOptions.add(this._viewerControls, "roundTripCameraMatrixReconstruction").name("Matrix Reconstruction");
+        roundTripOptions.open();
 
-        // Round Trip Camera X
-        const roundTripCameraX = folderOptions.add(this._viewerControls, "roundTripCameraX").name("roundTripCameraX");
-        // Round Trip Camera Y
-        const roundTripCameraY = folderOptions.add(this._viewerControls, "roundTripCameraY").name("roundTripCameraY");
-
+        const otherOptions = gui.addFolder("Other");
         // Debug Camera
-        const debugCamera = folderOptions.add(this._viewerControls, "debugCamera").name("debugCamera");
+        otherOptions.add(this._viewerControls, "debugCamera").name("Debug Camera");
         // Debug InputController
-        const debugInputController = folderOptions.add(this._viewerControls, "debugInputController").name("debugInputController");
-
-        folderOptions.open();
+        otherOptions.add(this._viewerControls, "debugInputController").name("Debug InputController");
+        otherOptions.open();
     }
 
     /**

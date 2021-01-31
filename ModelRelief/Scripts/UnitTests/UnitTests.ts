@@ -177,7 +177,7 @@ export class UnitTests {
     private static generateQuaternion(): THREE.Quaternion {
 
         const quaternion = new THREE.Quaternion(Math.random(), Math.random(), Math.random(), Math.random());
-        quaternion.normalize();
+        quaternion.normalize();     // important!
         return quaternion;
     }
 
@@ -417,7 +417,7 @@ export class UnitTests {
     /**
      * @description Roundtrip a PerspectiveCamera through matrix copy.
      */
-    public static roundTripCameraX(viewer: Viewer): void {
+    public static roundTripCameraMatrixCopy(viewer: Viewer): void {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
@@ -442,13 +442,13 @@ export class UnitTests {
         const result = this.comparePerspectiveCameras(originalCamera, newCamera);
         viewer.camera = newCamera;
 
-        this.logResult("Round Trip Camera X", result);
+        this.logResult("Round Trip Camera Matrix Copy", result);
     }
 
     /**
      * @description Roundtrip a PerspectiveCamera through matrix reconstruction.
      */
-    public static roundTripCameraY(viewer: Viewer): void {
+    public static roundTripCameraMatrixReconstruction(viewer: Viewer): void {
 
         // https://stackoverflow.com/questions/29221795/serializing-camera-state-in-threejs
 
@@ -476,7 +476,7 @@ export class UnitTests {
         const result = this.comparePerspectiveCameras(originalCamera, newCamera);
         viewer.camera = newCamera;
 
-        this.logResult("Round Trip Camera Y", result);
+        this.logResult("Round Trip Camera Matrix Reconstruction", result);
     }
 
     /**

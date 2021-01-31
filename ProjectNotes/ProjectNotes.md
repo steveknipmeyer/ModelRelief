@@ -1,12 +1,6 @@
 ﻿## Commit Notes
 ### Issues
 #### General
-    CamearaTest
-        Improve test names.
-        Do the camera tests belong in CameraTests rather than UnitTests?
-
-    UnitTest
-
     Create Workbench page with test links.
         ImageTest
         CameraTest
