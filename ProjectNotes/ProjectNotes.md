@@ -5,13 +5,14 @@
 #### Solver
     Review all experimental processing.
 
-    Evalute NumPy gradients and divergence.
-        Why do NumPy gradients lose the ridges in the Test model?
-        Change switch to "Use Difference class"
-
-    DepthBuffer
-        How are the directions Gx and Gy determined?
-            Do they match the geometry of the model?
+    Gradients
+        Group NumPy and Normal Gradients in the UI.
+        Evalute NumPy gradients and divergence.
+            NumPy gradients are 1/2 the actual values at the edges. It is "blending".
+            Review Difference handling of edges.
+                lowresolution
+                test
+            Change switch to "Use Difference class"
 
     Rebuild models.
         Solver/Test

@@ -127,7 +127,7 @@ class Solver:
 
         self.mesh_transform = MeshTransform(self.settings['MeshTransform'])
         self.mesh = Mesh(self.settings, self.services)
-        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services, self.mesh_transform.p5.enabled)
+        self.depth_buffer = DepthBuffer(self.settings['DepthBuffer'], self.services)
         self.normal_map = NormalMap(self.settings['NormalMap'], self.services)
 
     @benchmark()
@@ -153,8 +153,8 @@ class Solver:
             self.results.gradient_y.image = self.normal_map.gradient_y
         # DepthBuffer (heightfield) gradients
         else:
-            self.results.gradient_x.image = self.depth_buffer.gradient_x
-            self.results.gradient_y.image = self.depth_buffer.gradient_y
+            self.results.gradient_x.image = self.depth_buffer.gradient_x(self.mesh_transform.p5.enabled)
+            self.results.gradient_y.image = self.depth_buffer.gradient_y(self.mesh_transform.p5.enabled)
 
         # experimental
 
@@ -172,7 +172,7 @@ class Solver:
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # WIP: What is the impact? If gradients typically span many pixels, what is the significance of omitting the first gradient in a range?
         #      If the gradient is purely vertical (one pixel span) then it should be skipped.
-        self.results.combined_mask.image = self.results.combined_mask.image * self.depth_buffer.background_mask
+        # self.results.combined_mask.image = self.results.combined_mask.image * self.depth_buffer.background_mask
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
         self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image

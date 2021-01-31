@@ -54,7 +54,7 @@ class DepthBuffer:
     """
     SINGLE_PRECISION = 4
 
-    def __init__(self, settings: dict, services : Services, use_np_gradient: bool) -> None:
+    def __init__(self, settings: dict, services : Services) -> None:
         """
         Initialize an instance of a DepthBuffer.
         Parameters:
@@ -63,8 +63,6 @@ class DepthBuffer:
             The DepthBuffer JSON definition.
         services
             Service support for logging, timers, etc.
-        use_np_gradient
-            User Numpy gradient method.
         """
         self.debug = False
         self.use_test_buffer = False
@@ -73,7 +71,6 @@ class DepthBuffer:
 
         self.settings = settings
         self.services = services
-        self.use_np_gradient = use_np_gradient
 
         self.path = os.path.join(self.services.content_folder,  settings['RelativeFileName'])
         self._width = int(settings['Width']) if not self.use_test_buffer else self.test_buffer.width
@@ -201,35 +198,6 @@ class DepthBuffer:
         return self._floats
 
     @property
-    def gradients(self) -> Dict[Tuple[int, int], float]:
-        """
-        Returns the XY gradients of the DB.
-        """
-        # cached?
-        if (len(self._gradients) > 0):
-            return self._gradients
-
-        floats_array = self.floats
-        gradient = Gradient(self.services)
-        self._gradients = gradient.calculate(floats_array, self.use_np_gradient)
-
-        return self._gradients
-
-    @property
-    def gradient_x(self):
-        """
-        Returns the X gradient of the DB.
-        """
-        return self.gradients[1]
-
-    @property
-    def gradient_y(self):
-        """
-        Returns the Y gradient of the DB.
-        """
-        return self.gradients[0]
-
-    @property
     def background_mask(self) -> np.ndarray:
         """
         Returns the background mask of the DepthBuffer.
@@ -238,6 +206,40 @@ class DepthBuffer:
         b_mask = mask.background_from_depth_buffer(self.floats)
 
         return b_mask
+
+    def gradient_x(self, use_np_gradient: bool):
+        """
+        Returns the X gradient of the DB.
+        Parameters:
+        ----------
+        use_np_gradient
+            Use NumPy gradients (not Difference class)
+        """
+        return self.gradients(use_np_gradient)[1]
+
+    def gradient_y(self, use_np_gradient: bool):
+        """
+        Returns the Y gradient of the DB.
+        Parameters:
+        ----------
+        use_np_gradient
+            Use NumPy gradients (not Difference class)
+        """
+        return self.gradients(use_np_gradient)[0]
+
+    def gradients(self, use_np_gradient: bool) -> Dict[Tuple[int, int], float]:
+        """
+        Returns the XY gradients of the DB.
+        Parameters:
+        ----------
+        use_np_gradient
+            Use NumPy gradients (not Difference class)
+        """
+        floats_array = self.floats
+        gradient = Gradient(self.services)
+        self._gradients = gradient.calculate(floats_array, use_np_gradient)
+
+        return self._gradients
 
     def normalized_to_model_depth_unit_differential (self, value, scale):
         """
