@@ -25,14 +25,14 @@ class ImageTransform:
         """
 
     @staticmethod
-    def gaussian (image: np.ndarray, mask: np.ndarray, sigma: float, use_mask: bool)->np.ndarray:
+    def gaussian (image: np.ndarray, sigma: float, mask: np.ndarray, use_mask: bool)->np.ndarray:
         """
         image
             Input image.
-        mask
-            Mask of valid image elements.
         sigma
             Standard deviation of gaussian blur.
+        mask
+            Mask of valid image elements.
         use_mask
             Use composite mask to exclude thresholded elements and background
         """
@@ -41,7 +41,7 @@ class ImageTransform:
         if use_relief_extensions:
             # algorithm = BoxIndependent (4) or BoxIndependentMask (5)
             algorithm = 5 if use_mask else 4
-            result = relief.gaussian_filter(image, mask, sigma, algorithm)
+            result = relief.gaussian_filter(image, sigma, mask, algorithm)
         else:
             # SciPy
             result = gaussian_filter(image, sigma, order=0, output=None, mode='nearest', cval=0.0, truncate=4.0)

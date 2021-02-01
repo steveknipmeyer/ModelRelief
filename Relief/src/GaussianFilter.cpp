@@ -30,7 +30,7 @@ namespace ModelRelief {
  * @param mask NumPy mask. Only unmasked image elements are included in the filter.
  * @param sigma Standard deviation.
  */
-GaussianFilter::GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma) : m_image(image), m_mask(mask), m_defaultKernel(new GaussianKernel(sigma))
+GaussianFilter::GaussianFilter(NPDoubleArray &image, double sigma, NPDoubleArray &mask) : m_image(image), m_mask(mask), m_defaultKernel(new GaussianKernel(sigma))
 {
     m_sigma = sigma;
     InitializeNative(image, mask);
@@ -370,7 +370,7 @@ NPDoubleArray GaussianFilter::Calculate(int algorithm)
             break;
 
         case 5:
-            //cout << "BoxIndependentDeltaMask" << endl;
+            //cout << "BoxIndependentMask" << endl;
             BoxIndependentMask(pResult, m_pImage, m_pMask, m_rows, m_columns, m_sigma);
             break;
     }

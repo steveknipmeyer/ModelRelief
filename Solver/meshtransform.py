@@ -72,15 +72,15 @@ class MeshTransform:
         # -----------------------------------------------------------------------------------------------
 
         # scale relief
-        self.p1: ExperimentalParameter = ExperimentalParameter(True, float(settings['P1']), 'Relief Scale', float, 'p1')
+        self.p1: ExperimentalParameter = ExperimentalParameter(False, float(settings['P1']), '', float, 'p1')
 
         # silhoutte processing, sigma gaussian
         self.p2: ExperimentalParameter = ExperimentalParameter(False, float(settings['P2']), 'Silhouette: Sigma', float, 'p2')
         # silhouette processing, blurring passes
         self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), 'Silhouette: Passes', int, 'p3')
 
-        # use composite mask in gaussian blur
-        self.p4: ExperimentalParameter = ExperimentalParameter(True, float(settings['P4']), 'Composite Mask Blur', float, 'p4')
+        # use composite mask in unsharp gaussian blur
+        self.p4: ExperimentalParameter = ExperimentalParameter(True, float(settings['P4']), 'Composite Mask', float, 'p4')
 
         # use Numpy gradients, not Difference class
         self.p5: ExperimentalParameter = ExperimentalParameter(False, float(settings['P5']), 'Numpy Gradients', bool, 'p5')

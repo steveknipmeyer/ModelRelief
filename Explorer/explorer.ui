@@ -359,8 +359,8 @@
       <widget class="QCheckBox" name="gradientThresholdCheckBox">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>89</y>
+         <x>32</x>
+         <y>151</y>
          <width>188</width>
          <height>24</height>
         </rect>
@@ -374,19 +374,19 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
-        <string>&amp;Gradient Threshold</string>
+        <string>&amp;Threshold</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="gradientThresholdLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>88</y>
+         <y>150</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -402,7 +402,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>147</y>
+         <y>212</y>
          <width>50</width>
          <height>28</height>
         </rect>
@@ -418,7 +418,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>178</y>
+         <y>243</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -434,7 +434,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>210</y>
+         <y>275</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -450,7 +450,7 @@
        <property name="geometry">
         <rect>
          <x>200</x>
-         <y>30</y>
+         <y>5</y>
          <width>75</width>
          <height>27</height>
         </rect>
@@ -468,8 +468,8 @@
       <widget class="QCheckBox" name="attenuationCheckBox">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>634</y>
+         <x>32</x>
+         <y>344</y>
          <width>210</width>
          <height>24</height>
         </rect>
@@ -477,8 +477,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -489,7 +489,7 @@
        <property name="geometry">
         <rect>
          <x>-1</x>
-         <y>35</y>
+         <y>10</y>
          <width>181</width>
          <height>21</height>
         </rect>
@@ -512,7 +512,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>690</y>
+         <y>400</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -522,7 +522,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>658</y>
+         <y>368</y>
          <width>50</width>
          <height>28</height>
         </rect>
@@ -531,9 +531,9 @@
       <widget class="QLabel" name="labelAttenuationFactor">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>662</y>
-         <width>171</width>
+         <x>50</x>
+         <y>372</y>
+         <width>181</width>
          <height>24</height>
         </rect>
        </property>
@@ -551,8 +551,8 @@
       <widget class="QLabel" name="labelAttenuationDecay">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>692</y>
+         <x>50</x>
+         <y>402</y>
          <width>191</width>
          <height>24</height>
         </rect>
@@ -571,8 +571,8 @@
       <widget class="QCheckBox" name="unsharpMaskingCheckBox">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>127</y>
+         <x>32</x>
+         <y>182</y>
          <width>177</width>
          <height>24</height>
         </rect>
@@ -580,8 +580,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -592,7 +592,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>395</y>
+         <y>867</y>
          <width>165</width>
          <height>24</height>
         </rect>
@@ -602,8 +602,12 @@
          <family>MS Shell Dlg 2</family>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P1</string>
@@ -613,7 +617,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>423</y>
+         <y>464</y>
          <width>204</width>
          <height>24</height>
         </rect>
@@ -622,8 +626,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P2</string>
@@ -633,7 +641,7 @@
        <property name="geometry">
         <rect>
          <x>18</x>
-         <y>367</y>
+         <y>839</y>
          <width>157</width>
          <height>22</height>
         </rect>
@@ -641,8 +649,8 @@
        <property name="font">
         <font>
          <pointsize>13</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <weight>50</weight>
+         <bold>false</bold>
         </font>
        </property>
        <property name="text">
@@ -653,7 +661,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>388</y>
+         <y>860</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -669,7 +677,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>418</y>
+         <y>459</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -685,7 +693,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>447</y>
+         <y>490</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -701,7 +709,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>452</y>
+         <y>493</y>
          <width>201</width>
          <height>24</height>
         </rect>
@@ -710,8 +718,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P3</string>
@@ -721,7 +733,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>477</y>
+         <y>307</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -736,9 +748,9 @@
       <widget class="QCheckBox" name="p4CheckBox">
        <property name="geometry">
         <rect>
-         <x>32</x>
-         <y>482</y>
-         <width>191</width>
+         <x>50</x>
+         <y>308</y>
+         <width>151</width>
          <height>24</height>
         </rect>
        </property>
@@ -746,8 +758,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P4</string>
@@ -757,7 +773,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>538</y>
+         <y>580</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -773,7 +789,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>512</y>
+         <y>90</y>
          <width>190</width>
          <height>24</height>
         </rect>
@@ -782,8 +798,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P5</string>
@@ -793,7 +813,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>569</y>
+         <y>547</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -809,7 +829,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>542</y>
+         <y>583</y>
          <width>158</width>
          <height>24</height>
         </rect>
@@ -818,8 +838,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P6</string>
@@ -832,7 +856,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>600</y>
+         <y>118</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -855,7 +879,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>572</y>
+         <y>552</y>
          <width>187</width>
          <height>24</height>
         </rect>
@@ -864,8 +888,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P7</string>
@@ -875,7 +903,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>602</y>
+         <y>120</y>
          <width>221</width>
          <height>24</height>
         </rect>
@@ -884,8 +912,12 @@
         <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
+         <italic>true</italic>
          <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>P8</string>
@@ -895,7 +927,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>508</y>
+         <y>86</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -911,10 +943,18 @@
        <property name="geometry">
         <rect>
          <x>9</x>
-         <y>-2</y>
+         <y>30</y>
          <width>141</width>
          <height>32</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;Processing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -924,14 +964,14 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>310</y>
+         <y>700</y>
          <width>165</width>
          <height>24</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <bold>false</bold>
         </font>
@@ -943,11 +983,18 @@
       <widget class="QLabel" name="labelGaussianLow">
        <property name="geometry">
         <rect>
-         <x>32</x>
-         <y>155</y>
+         <x>50</x>
+         <y>216</y>
          <width>131</width>
-         <height>16</height>
+         <height>24</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Gaussian Low</string>
@@ -956,11 +1003,18 @@
       <widget class="QLabel" name="labelGaussianHigh">
        <property name="geometry">
         <rect>
-         <x>32</x>
-         <y>185</y>
+         <x>50</x>
+         <y>250</y>
          <width>131</width>
          <height>18</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>Gaussian High</string>
@@ -969,10 +1023,10 @@
       <widget class="QLabel" name="labelHighFrequencyScaling">
        <property name="geometry">
         <rect>
-         <x>32</x>
-         <y>212</y>
-         <width>201</width>
-         <height>18</height>
+         <x>50</x>
+         <y>279</y>
+         <width>191</width>
+         <height>22</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -980,6 +1034,13 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
        </property>
        <property name="text">
         <string>High Frequency Scaling</string>
@@ -989,7 +1050,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>288</y>
+         <y>675</y>
          <width>177</width>
          <height>24</height>
         </rect>
@@ -1009,7 +1070,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>248</y>
+         <y>630</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1025,7 +1086,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>250</y>
+         <y>633</y>
          <width>201</width>
          <height>18</height>
         </rect>
@@ -1051,13 +1112,91 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>340</y>
+         <y>820</y>
          <width>271</width>
          <height>16</height>
         </rect>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelGradients">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>201</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Gradients</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSilhouettes">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>448</y>
+         <width>201</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Silhouettes</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelGeometry">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>530</y>
+         <width>201</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Geometry</string>
        </property>
       </widget>
      </widget>

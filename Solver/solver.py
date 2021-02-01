@@ -238,7 +238,7 @@ class Solver:
         """
         if self.mesh_transform.p2.enabled:
             silhouette = Silhouette(self.services)
-            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.p2, int(self.mesh_transform.p3))
+            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.p2.value, int(self.mesh_transform.p3.value))
 
     def process_scale(self):
         """

@@ -1,6 +1,6 @@
 /**
  * @brief ModelRelief Python C++ extensions.
- * 
+ *
  * @file ModelRelief.h
  * @author Steve Knipmeyer
  * @date 2018-09-03
@@ -24,7 +24,7 @@ using NPDoubleArray = py::array_t<double>;
 //-------------------------------------------------------------------------------------------------//
 NPDoubleArray add_arrays(NPDoubleArray input1, NPDoubleArray input2);
 NPDoubleArray& fill(NPDoubleArray& input, double value);
-NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, int algorithm);
+NPDoubleArray gaussian_filter(NPDoubleArray &image, double sigma, NPDoubleArray &mask, int algorithm);
 
 int kernelTest();
 }

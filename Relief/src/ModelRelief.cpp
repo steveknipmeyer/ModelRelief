@@ -98,16 +98,16 @@ NPDoubleArray& fill(NPDoubleArray& input, double value)
  * @brief Perform a Gaussian filter on an image.
  *
  * @param image NumPy image.
- * @param mask NumPy mask. Only unmasked image elements are included in the filter.
  * @param sigma Standard deviation.
+ * @param mask NumPy mask. Only unmasked image elements are included in the filter.
  * @param algorithm Filter algorithm to use.
  * @return NPDoubleArray&
  */
-NPDoubleArray gaussian_filter(NPDoubleArray& image, NPDoubleArray& mask, double sigma, const int algorithm)
+NPDoubleArray gaussian_filter(NPDoubleArray &image, double sigma, NPDoubleArray &mask, const int algorithm)
 {
     try
     {
-        GaussianFilter filter(image, mask, sigma);
+        GaussianFilter filter(image, sigma, mask);
         NPDoubleArray filteredImage = filter.Calculate(algorithm);
         return filteredImage;
     }

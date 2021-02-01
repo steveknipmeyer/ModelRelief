@@ -1,12 +1,24 @@
 ﻿## Commit Notes
+Group all Explorer settings by processing step
+Reorder gaussian_filter parameters( optional mask processing)
 ### Issues
 #### General
     Gravatar
 #### Solver
     Review all experimental processing.
 
+    gaussian_filter
+        Reverse mask and sigma as mask is optional.
+
     Gradients
+        Why are portions of the generated mesh below the XY plane?
+            Gradient Threshold introduces the below plane results!
+            Add a means to visualize the impact of Gradient Thresholds.
+                Workbench Images
+
         Group NumPy and Normal Gradients in the UI.
+        Remove Experimental Relief Scale .
+
         Evalute NumPy gradients and divergence.
             NumPy gradients are 1/2 the actual values at the edges. It is "blending".
             Review Difference handling of edges.
@@ -18,7 +30,6 @@
         Solver/Test
         Delivery
 
-    Why are portions of the generated mesh below the XY plane?
     Unsharp Masking seems to contribute the most valuable transform.
 
     Poisson Solver
@@ -127,7 +138,10 @@
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
-
+#### Explorer
+    Explorer throws segmentation fault.
+        Execution from command line.
+        A new tab has been selected.
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04

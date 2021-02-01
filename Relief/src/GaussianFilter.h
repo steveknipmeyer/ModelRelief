@@ -58,18 +58,18 @@ class GaussianFilter {
         void BoxPassVMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma, int radius);
 
 public:
-        GaussianFilter(NPDoubleArray& image, NPDoubleArray& mask, double sigma);
-        ~GaussianFilter();
+    GaussianFilter(NPDoubleArray &image, double sigma, NPDoubleArray &mask);
+    ~GaussianFilter();
 
-        void Baseline(double* pResult, double* pSource, int width, int height, double sigma);
+    void Baseline(double *pResult, double *pSource, int width, int height, double sigma);
 
-        void Gaussian(double* pResult, double* pSource, int width, int height, double sigma);
-        void GaussianCached(double* pResult, double* pSource, int width, int height, double sigma);
-        void Box(double* pResult, double* pSource, int width, int height, double sigma);
-        void BoxIndependent(double* pResult, double* pSource, int width, int height, double sigma);
-        void BoxIndependentDelta(double* pResult, double* pSource, int width, int height, double sigma);
-        void BoxIndependentMask(double* pResult, double* pSource, double* pMask, int width, int height, double sigma);
+    void Gaussian(double *pResult, double *pSource, int width, int height, double sigma);
+    void GaussianCached(double *pResult, double *pSource, int width, int height, double sigma);
+    void Box(double *pResult, double *pSource, int width, int height, double sigma);
+    void BoxIndependent(double *pResult, double *pSource, int width, int height, double sigma);
+    void BoxIndependentDelta(double *pResult, double *pSource, int width, int height, double sigma);
+    void BoxIndependentMask(double *pResult, double *pSource, double *pMask, int width, int height, double sigma);
 
-        NPDoubleArray Calculate(int algorithm);
+    NPDoubleArray Calculate(int algorithm);
 };
 }
