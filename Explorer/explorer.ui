@@ -402,7 +402,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>212</y>
+         <y>335</y>
          <width>50</width>
          <height>28</height>
         </rect>
@@ -418,7 +418,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>243</y>
+         <y>366</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -434,7 +434,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>275</y>
+         <y>398</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -469,7 +469,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>344</y>
+         <y>184</y>
          <width>210</width>
          <height>24</height>
         </rect>
@@ -512,7 +512,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>400</y>
+         <y>240</y>
          <width>50</width>
          <height>29</height>
         </rect>
@@ -522,7 +522,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>368</y>
+         <y>208</y>
          <width>50</width>
          <height>28</height>
         </rect>
@@ -532,7 +532,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>372</y>
+         <y>212</y>
          <width>181</width>
          <height>24</height>
         </rect>
@@ -552,7 +552,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>402</y>
+         <y>242</y>
          <width>191</width>
          <height>24</height>
         </rect>
@@ -572,7 +572,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>182</y>
+         <y>270</y>
          <width>177</width>
          <height>24</height>
         </rect>
@@ -592,7 +592,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>867</y>
+         <y>817</y>
          <width>165</width>
          <height>24</height>
         </rect>
@@ -637,31 +637,11 @@
         <string>P2</string>
        </property>
       </widget>
-      <widget class="QLabel" name="labelExperimental">
-       <property name="geometry">
-        <rect>
-         <x>18</x>
-         <y>839</y>
-         <width>157</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Experimental</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="p1LineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>860</y>
+         <y>810</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -709,7 +689,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>493</y>
+         <y>840</y>
          <width>201</width>
          <height>24</height>
         </rect>
@@ -733,7 +713,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>307</y>
+         <y>300</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -749,7 +729,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>308</y>
+         <y>303</y>
          <width>151</width>
          <height>24</height>
         </rect>
@@ -984,7 +964,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>216</y>
+         <y>339</y>
          <width>131</width>
          <height>24</height>
         </rect>
@@ -1004,7 +984,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>250</y>
+         <y>373</y>
          <width>131</width>
          <height>18</height>
         </rect>
@@ -1024,7 +1004,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>279</y>
+         <y>402</y>
          <width>191</width>
          <height>22</height>
         </rect>
@@ -1108,19 +1088,6 @@
         <string>Relief Scale (%)</string>
        </property>
       </widget>
-      <widget class="Line" name="line">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>820</y>
-         <width>271</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
       <widget class="QLabel" name="labelGradients">
        <property name="geometry">
         <rect>
@@ -1197,6 +1164,33 @@
        </property>
        <property name="text">
         <string>Geometry</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSilhouettPasses">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>490</y>
+         <width>191</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <italic>true</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Blurring Passes</string>
        </property>
       </widget>
      </widget>

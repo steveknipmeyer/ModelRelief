@@ -1,23 +1,20 @@
 ﻿## Commit Notes
-Group all Explorer settings by processing step
-Reorder gaussian_filter parameters( optional mask processing)
+
 ### Issues
 #### General
     Gravatar
 #### Solver
     Review all experimental processing.
 
-    gaussian_filter
-        Reverse mask and sigma as mask is optional.
+    Defaults
+        Planar Background
+        Translate Mesh +Z
+    Web UI
+        Add Silhouette parameters.
 
     Gradients
         Why are portions of the generated mesh below the XY plane?
             Gradient Threshold introduces the below plane results!
-            Add a means to visualize the impact of Gradient Thresholds.
-                Workbench Images
-
-        Group NumPy and Normal Gradients in the UI.
-        Remove Experimental Relief Scale .
 
         Evalute NumPy gradients and divergence.
             NumPy gradients are 1/2 the actual values at the edges. It is "blending".

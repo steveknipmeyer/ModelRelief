@@ -152,8 +152,11 @@ class Explorer(QtWidgets.QMainWindow):
         field: QtWidgets.QLineEdit = getattr(self.ui, parameter.ui_field)
 
         # checkbox
-        checkbox.setChecked(parameter.enabled)
-        checkbox.setText(parameter.label)
+        if (not parameter.label):
+            checkbox.setVisible(False)
+        else:
+            checkbox.setChecked(parameter.enabled)
+            checkbox.setText(parameter.label)
 
         self.initialize_float_field(field, parameter.value)
         if parameter.ui_type is int:
