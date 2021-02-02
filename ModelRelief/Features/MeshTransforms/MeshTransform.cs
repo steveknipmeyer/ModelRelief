@@ -26,23 +26,42 @@ namespace ModelRelief.Dto
         public double Height { get; set; }
         public double Depth { get; set; }
 
+        public bool GradientThresholdEnabled { get; set; }
         public double GradientThreshold { get; set; }
 
+        public bool AttenuationEnabled { get; set; }
         public double AttenuationFactor { get; set; }
         public double AttenuationDecay { get; set; }
 
+        public bool UnsharpMaskingEnabled { get; set; }
         public double UnsharpGaussianLow { get; set; }
         public double UnsharpGaussianHigh { get; set; }
         public double UnsharpHighFrequencyScale { get; set; }
+
+        public bool PlanarBackground { get; set; }
+        public bool TranslateMeshZPositive { get; set; }
+
+        public bool SilhouetteEnabled { get; set; }
+        public double SilhouetteSigma { get; set; }
+        public int SilhouettePasses { get; set; }
+
         public double ReliefScale { get; set; }
 
+        public bool P1Enabled { get; set; }
         public double P1 { get; set; }
+        public bool P2Enabled { get; set; }
         public double P2 { get; set; }
+        public bool P3Enabled { get; set; }
         public double P3 { get; set; }
+        public bool P4Enabled { get; set; }
         public double P4 { get; set; }
+        public bool P5Enabled { get; set; }
         public double P5 { get; set; }
+        public bool P6Enabled { get; set; }
         public double P6 { get; set; }
+        public bool P7Enabled { get; set; }
         public double P7 { get; set; }
+        public bool P8Enabled { get; set; }
         public double P8 { get; set; }
 
         // Navigation Properties
@@ -68,6 +87,21 @@ namespace ModelRelief.Dto
 
             RuleFor(m => m.Depth)
                 .GreaterThan(0.0).WithMessage("The Depth property must be greater than zero.");
+
+            RuleFor(m => m.GradientThreshold)
+                .GreaterThan(0.0).WithMessage("The Gradient Threshold property must be greater than zero.");
+
+            RuleFor(m => m.UnsharpGaussianLow)
+                .GreaterThan(0.0).WithMessage("The Unsharp Gaussian Low property must be greater than zero.");
+            RuleFor(m => m.UnsharpGaussianHigh)
+                .GreaterThan(0.0).WithMessage("The Unsharp Gaussian High property must be greater than zero.");
+            RuleFor(m => m.UnsharpHighFrequencyScale)
+                .GreaterThan(0.0).WithMessage("The Unsharp HighFrequency Scale property must be greater than zero.");
+
+            RuleFor(m => m.SilhouetteSigma)
+                .GreaterThan(0.0).WithMessage("The Silhouette Sigmaproperty must be greater than zero.");
+            RuleFor(m => m.SilhouettePasses)
+                .GreaterThan(0).WithMessage("The Silhouette Sigmaproperty must be greater than zero.");
 
             RuleFor(m => m.ReliefScale)
                 .GreaterThan(0.0).WithMessage("The Relief Scale property must be greater than zero.");

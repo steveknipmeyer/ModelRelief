@@ -1,5 +1,9 @@
 ﻿## Commit Notes
-
+Defaults
+    Planar Background
+    Translate Mesh +Z
+Silhouettes
+Geometry
 ### Issues
 #### General
     Gravatar
@@ -10,15 +14,18 @@
         Plunderbuss
         House
 
+    Check order of geometry constraints.
+        PlanarBackground
+        TranslateMeshZPositive
+
+    Explorer tab order for UI controls
+
+    Schema Changes
+        .cshtml pages
+        Explorer UI
+        Composer UI
+
     Review all experimental processing.
-
-    Defaults
-        Planar Background
-        Translate Mesh +Z
-
-    Web UI
-        Make all processing steps configurable.
-        Add Silhouette parameters.
 
     Gradients
         Why are portions of the generated mesh below the XY plane?
@@ -277,7 +284,7 @@
 
 #### Database
 
-    Update database schema diagram.
+    Update database diagram.
 
 #### NormalMaps
     It appears that NormalMap gradients lose some high frequency detail.
@@ -531,35 +538,29 @@ Perspective <-> Orthographic
 - [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
 - [X] Add the new properties to the Graphic classes, eg. DepthBuffer.
 - [X] Modify the graphics class methods fromDto and toDto.
-- [X] Razor Pages
-- [X] Include the new (required) properties in any POST requests.
-- [X] Extend the Composer UI to include the new properties.
+- [] Razor Pages
+- [] Include the new (required) properties in any POST requests.
+- [] Extend the Composer UI to include the new properties.
+
 #### Back End
 ##### Domain Models
-- [X] Add new properties to the class in the Domain folder.
-
+- [x] Add new properties to the class in the Domain folder.
 ##### DTO Models (Features\\\<Models>)
-- [X] Add new properties to the class.
-- [X] Extend the AbstractValidator\\\<Model> to add new validation rules for the properties.
-
+- [x] Add new properties to the class.
+- [x] Extend the AbstractValidator\<Model\> to add new validation rules for the properties.
 ##### DbInitializer
 - [] Add the properties to the instance initializers of the Add\<Model> methods.
 OR
 - [X] Add the properties to the JSON initialize files in Test/Data/Users/<model>
-
 ##### Explorer (MeshTransform only)
 - [X] Add the new MeshTransform properties to the UI.
-- [X] Extend the relevant Python class (e.g. DepthBuffer) to include the new properties
 - [X] Extend Explorer to process the new property in initialization, settings update, etc.
-
 ##### Solver (MeshTransform only)
-- [X] Add the enable<Property> settings to allow the property to be enabled or disabled during processing.
-
+- [X] Extend the relevant Python class (e.g. DepthBuffer) to include the new properties
 ##### Testing
-- [] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
+- [X] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
 - [] Run the unit tests.
 - [] Update the Solver\Test JSON files using MRUpdateSeedData.
-
 ##### Schema
 - [] Update ModelRelief.dgml schema diagram.
 ___

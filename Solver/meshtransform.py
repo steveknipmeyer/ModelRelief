@@ -14,6 +14,7 @@
 """
 from gradient import GradientThresholdParameters
 from attenuation import AttenuationParameters
+from silhouette import SilhouetteParameters
 from unsharpmask import UnsharpMaskParameters
 
 class ExperimentalParameter:
@@ -59,9 +60,12 @@ class MeshTransform:
         self.settings = settings
         self.debug = True
 
-        self.gradient_threshold_parameters: GradientThresholdParameters = GradientThresholdParameters(True, float(settings['GradientThreshold']))
-        self.attenuation_parameters:        AttenuationParameters       = AttenuationParameters(True, float(settings['AttenuationFactor']), float(settings['AttenuationDecay']))
-        self.unsharpmask_parameters:        UnsharpMaskParameters       = UnsharpMaskParameters(True, float(settings['UnsharpGaussianLow']), float(settings['UnsharpGaussianHigh']), float(settings['UnsharpHighFrequencyScale']))
+        self.gradient_threshold_parameters: GradientThresholdParameters = GradientThresholdParameters(bool(settings['GradientThresholdEnabled']), float(settings['GradientThreshold']))
+        self.attenuation_parameters:        AttenuationParameters       = AttenuationParameters(bool(settings['AttenuationEnabled']), float(settings['AttenuationFactor']), float(settings['AttenuationDecay']))
+        self.unsharpmask_parameters:        UnsharpMaskParameters       = UnsharpMaskParameters(bool(settings['UnsharpMaskingEnabled']), float(settings['UnsharpGaussianLow']), float(settings['UnsharpGaussianHigh']), float(settings['UnsharpHighFrequencyScale']))
+        self.planarBackground:              bool                        = bool(settings['PlanarBackground'])
+        self.translateMeshZPositive:        bool                        = bool(settings['TranslateMeshZPositive'])
+        self.silhouette_parameters:         SilhouetteParameters        = SilhouetteParameters(bool(settings['SilhouetteEnabled']), float(settings['SilhouetteSigma']), int(settings['SilhouettePasses']))
         self.relief_scale :                 float                       = float(settings['ReliefScale'])
 
         # -------------------------------------- Experimenta; --------------------------------------
@@ -71,13 +75,9 @@ class MeshTransform:
         # N.B. The values below are the web defaults. The Explorer settings will override these values.
         # -----------------------------------------------------------------------------------------------
 
-        # scale relief
-        self.p1: ExperimentalParameter = ExperimentalParameter(False, float(settings['P1']), '', float, 'p1')
-
-        # silhoutte processing, sigma gaussian
-        self.p2: ExperimentalParameter = ExperimentalParameter(False, float(settings['P2']), 'Silhouette: Sigma', float, 'p2')
-        # silhouette processing, blurring passes
-        self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), '', int, 'p3')
+        self.p1: ExperimentalParameter = ExperimentalParameter(False, float(settings['P1']), '', bool, 'p1')
+        self.p2: ExperimentalParameter = ExperimentalParameter(False, float(settings['P2']), '', bool, 'p2')
+        self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), '', bool, 'p3')
 
         # use composite mask in unsharp gaussian blur
         self.p4: ExperimentalParameter = ExperimentalParameter(True, float(settings['P4']), 'Composite Mask', float, 'p4')
@@ -85,11 +85,8 @@ class MeshTransform:
         # use Numpy gradients, not Difference class
         self.p5: ExperimentalParameter = ExperimentalParameter(False, float(settings['P5']), 'Numpy Gradients', bool, 'p5')
 
-        # translate mesh Z to positive values
-        self.p6: ExperimentalParameter = ExperimentalParameter(False, float(settings['P6']), 'Translate Mesh Z+', bool, 'p6')
-
-        # force planar background by zeroing with background mask
-        self.p7: ExperimentalParameter = ExperimentalParameter(False, float(settings['P7']), 'Planar Background', bool, 'p7')
+        self.p6: ExperimentalParameter = ExperimentalParameter(False, float(settings['P6']), '', bool, 'p6')
+        self.p7: ExperimentalParameter = ExperimentalParameter(False, float(settings['P7']), '', bool, 'p7')
 
         # use NormalMap gradients (not DepthBuffer heightfields)
         self.p8: ExperimentalParameter = ExperimentalParameter(False, float(settings['P8']), 'NormalMap Gradients', bool, 'p8')
@@ -102,22 +99,40 @@ class MeshTransform:
         Update the backing settings structure.
         """
 
+        self.settings['GradientThresholdEnabled'] = self.gradient_threshold_parameters.enabled
         self.settings['GradientThreshold'] = self.gradient_threshold_parameters.threshold
 
+        self.settings['AttenuationEnabled'] = self.attenuation_parameters.enabled
         self.settings['AttenuationFactor'] = self.attenuation_parameters.factor
         self.settings['AttenuationDecay'] = self.attenuation_parameters.decay
 
+        self.settings['UnsharpMaskingEnabled'] = self.unsharpmask_parameters.enabled
         self.settings['UnsharpGaussianLow'] = self.unsharpmask_parameters.gaussian_low
         self.settings['UnsharpGaussianHigh'] = self.unsharpmask_parameters.gaussian_high
         self.settings['UnsharpHighFrequencyScale'] = self.unsharpmask_parameters.high_frequency_scale
 
+        self.settings['PlanarBackground'] = self.planarBackground
+        self.settings['TranslateMeshZPositive'] = self.translateMeshZPositive
+
+        self.settings['SilhouetteEnabled'] = self.silhouette_parameters.enabled
+        self.settings['SilhouetteSigma'] = self.silhouette_parameters.sigma
+        self.settings['SilhouettePasses'] = self.silhouette_parameters.passes
+
         self.settings['ReliefScale'] = self.relief_scale
 
+        self.settings['P1Enabled'] = self.p1.enabled
         self.settings['P1'] = self.p1.value
+        self.settings['P2Enabled'] = self.p2.enabled
         self.settings['P2'] = self.p2.value
+        self.settings['P3Enabled'] = self.p3.enabled
         self.settings['P3'] = self.p3.value
+        self.settings['P4Enabled'] = self.p4.enabled
         self.settings['P4'] = self.p4.value
+        self.settings['P5Enabled'] = self.p5.enabled
         self.settings['P5'] = self.p5.value
+        self.settings['P6Enabled'] = self.p6.enabled
         self.settings['P6'] = self.p6.value
+        self.settings['P7Enabled'] = self.p7.enabled
         self.settings['P7'] = self.p7.value
+        self.settings['P8Enabled'] = self.p8.enabled
         self.settings['P8'] = self.p8.value

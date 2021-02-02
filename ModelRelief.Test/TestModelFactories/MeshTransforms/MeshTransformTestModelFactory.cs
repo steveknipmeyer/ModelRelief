@@ -54,8 +54,19 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             meshTransformModel.Width = 100;
             meshTransformModel.Height = 100;
             meshTransformModel.Depth = 1.0;
+
+            meshTransformModel.GradientThresholdEnabled = true;
             meshTransformModel.GradientThreshold = 5.0;
+
+            meshTransformModel.UnsharpMaskingEnabled = true;
+            meshTransformModel.UnsharpGaussianLow = 4.0;
+            meshTransformModel.UnsharpGaussianHigh = 1.0;
             meshTransformModel.UnsharpHighFrequencyScale = 1.0;
+
+            meshTransformModel.SilhouetteEnabled = true;
+            meshTransformModel.SilhouetteSigma = 4.0;
+            meshTransformModel.SilhouettePasses = 2;
+
             meshTransformModel.ReliefScale = 0.03;
 
             return meshTransformModel;

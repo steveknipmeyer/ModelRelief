@@ -9,42 +9,75 @@
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
- /**
-  *  Represents a DTO for a MeshTransform.
-  *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
-  *  @description Settings that transform a DepthBuffer to a Mesh.
-  *  @interface
-  */
+/**
+ *  Represents a DTO for a MeshTransform.
+ *  N.B. All properties in the interface are optional so that an initialization object can be used to construct the concrete class.
+ *  @description Settings that transform a DepthBuffer to a Mesh.
+ *  @interface
+ */
 export interface IMeshTransform extends IModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
+  id?: number;
+  name?: string;
+  description?: string;
 
-    width?: number;
-    height?: number;
-    depth?: number;
+  width?: number;
+  height?: number;
+  depth?: number;
 
-    gradientThreshold?: number;             // gradient threshold
-    attenuationFactor?: number;             // gradient attenuation (~a)
-    attenuationDecay?: number;              // gradient attenuation decay (b)
-    unsharpGaussianLow?: number;            // unsharp masking Gaussian low
-    unsharpGaussianHigh?: number;           // unsharp masking Gaussian high
-    unsharpHighFrequencyScale?: number;     // Unsharp masking high frequency scaling
-    reliefScale?:number;                    // relief scale (% of original model)
+  // Gradient Threshold
+  gradientThresholdEnabled?: boolean
+  gradientThreshold?: number;
 
-    p1?: number;                            // placeholder
-    p2?: number;                            // placeholder
-    p3?: number;                            // placeholder
-    p4?: number;                            // placeholder
-    p5?: number;                            // placeholder
-    p6?: number;                            // placeholder
-    p7?: number;                            // placeholder
-    p8?: number;                            // placeholder
+  // Gradient Attenuation
+  attenuationEnabled?: boolean;
+  attenuationFactor?:   number;             // attenuation (~a)
+  attenuationDecay?: number;                // attenuation decay (b)
 
-    // Navigation Properties
-    projectId?: number;
-    project?: IProject;
+  // Unsharp Masking
+  unsharpMaskingEnabled?: boolean;
+  unsharpGaussianLow?: number;              // Gaussian low
+  unsharpGaussianHigh?: number;             // Gaussian high
+  unsharpHighFrequencyScale?: number;       // high frequency scaling
+
+  // Geometry
+  planarBackground?: boolean;               // force background to zero
+  translateMeshZPositive?: boolean;         // force all mesh points to Z+
+
+  // Silhouette Processing
+  silhouetteEnabled?: boolean;
+  silhouetteSigma?: boolean;                // Gaussian blur
+  silhouettePasses?: number;                // number of passes
+
+  // Final Scale
+  reliefScale?: number;                     // relief scale (% of original model)
+
+  // P1 (placeholder)
+  p1Enabled?: boolean;
+  p1?: number;
+  // P2 (placeholder)
+  p2Enabled?: boolean;
+  p2?: number;
+  // P3 (placeholder)
+  p3Enabled?: boolean;
+  p3?: number;
+  // P4 (placeholder)
+  p4Enabled?: boolean;
+  p4?: number;
+  // P5 (placeholder)
+  p5Enabled?: boolean;
+  p5?: number;
+  // P6 (placeholder)
+  p6Enabled?: boolean;
+  p6?: number;
+  // P7 (placeholder)
+  p7Enabled?: boolean;
+  p7?: number;
+  // P8 (placeholder)
+  p8Enabled?: boolean;
+  p8?: number;
+
+  // Navigation Properties
+  projectId?: number;
+  project?: IProject;
 }
-
-

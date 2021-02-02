@@ -16,6 +16,27 @@ from scipy.ndimage import gaussian_filter
 from mask import Mask
 from services import Services
 from results import Results
+class SilhouetteParameters:
+
+    """
+    A class for holding the parameters supporting silhoette processing.
+    """
+    def __init__(self, enabled: bool, sigma: float, passes: int) -> None:
+        """
+        Initialize an instance of SilhouetteParameters.
+        Parameters
+        ----------
+        enabled
+            Apply gradient thresholding.
+        sigma
+            The gaussian distribution for the blurring operation.
+        passes
+            The number of blurring passes.
+
+        """
+        self.enabled = enabled
+        self.sigma = sigma
+        self.passes = passes
 
 class Silhouette:
     """

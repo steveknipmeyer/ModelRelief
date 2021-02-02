@@ -374,8 +374,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -477,8 +477,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -580,8 +580,8 @@
        <property name="font">
         <font>
          <pointsize>11</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -592,7 +592,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>817</y>
+         <y>757</y>
          <width>165</width>
          <height>24</height>
         </rect>
@@ -617,7 +617,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>464</y>
+         <y>785</y>
          <width>204</width>
          <height>24</height>
         </rect>
@@ -641,7 +641,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>810</y>
+         <y>750</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -657,7 +657,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>459</y>
+         <y>780</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -669,11 +669,11 @@
         </size>
        </property>
       </widget>
-      <widget class="QLineEdit" name="p3LineEdit">
+      <widget class="QLineEdit" name="silhouettePassesLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>490</y>
+         <y>600</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -689,7 +689,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>840</y>
+         <y>810</y>
          <width>201</width>
          <height>24</height>
         </rect>
@@ -749,22 +749,6 @@
         <string>P4</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="p6LineEdit">
-       <property name="geometry">
-        <rect>
-         <x>240</x>
-         <y>580</y>
-         <width>50</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>373</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
       <widget class="QCheckBox" name="p5CheckBox">
        <property name="geometry">
         <rect>
@@ -789,36 +773,20 @@
         <string>P5</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="p7LineEdit">
-       <property name="geometry">
-        <rect>
-         <x>240</x>
-         <y>547</y>
-         <width>50</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>373</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="p6CheckBox">
+      <widget class="QCheckBox" name="translateMeshZPositiveCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>583</y>
-         <width>158</width>
+         <y>493</y>
+         <width>171</width>
          <height>24</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
          <weight>50</weight>
-         <italic>true</italic>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -826,7 +794,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>P6</string>
+        <string>Translate Mesh  Z+</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="p8LineEdit">
@@ -855,20 +823,20 @@
         </font>
        </property>
       </widget>
-      <widget class="QCheckBox" name="p7CheckBox">
+      <widget class="QCheckBox" name="planarBackgroundCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>552</y>
+         <y>462</y>
          <width>187</width>
          <height>24</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
          <weight>50</weight>
-         <italic>true</italic>
+         <italic>false</italic>
          <bold>false</bold>
         </font>
        </property>
@@ -876,7 +844,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>P7</string>
+        <string>Planar Background</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="p8CheckBox">
@@ -944,7 +912,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>700</y>
+         <y>710</y>
          <width>165</width>
          <height>24</height>
         </rect>
@@ -1030,7 +998,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>675</y>
+         <y>685</y>
          <width>177</width>
          <height>24</height>
         </rect>
@@ -1050,7 +1018,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>630</y>
+         <y>640</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1066,7 +1034,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>633</y>
+         <y>643</y>
          <width>201</width>
          <height>18</height>
         </rect>
@@ -1118,7 +1086,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>448</y>
+         <y>528</y>
          <width>201</width>
          <height>18</height>
         </rect>
@@ -1137,14 +1105,14 @@
         </font>
        </property>
        <property name="text">
-        <string>Silhouettes</string>
+        <string>Silhouette</string>
        </property>
       </widget>
       <widget class="QLabel" name="labelGeometry">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>530</y>
+         <y>440</y>
          <width>201</width>
          <height>18</height>
         </rect>
@@ -1170,7 +1138,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>490</y>
+         <y>600</y>
          <width>191</width>
          <height>22</height>
         </rect>
@@ -1183,14 +1151,178 @@
        </property>
        <property name="font">
         <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Blurring Passes</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="silhouetteSigmaLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>570</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelSilhouetteSigma">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>570</y>
+         <width>191</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Gaussian Sigma</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="silhouetteCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>547</y>
+         <width>131</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>MS Shell Dlg 2</family>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Enabled</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p3LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>810</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p6CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>840</y>
+         <width>201</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
          <pointsize>10</pointsize>
          <weight>50</weight>
          <italic>true</italic>
          <bold>false</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="text">
-        <string>Blurring Passes</string>
+        <string>P6</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p6LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>840</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="p7LineEdit">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>870</y>
+         <width>50</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="p7CheckBox">
+       <property name="geometry">
+        <rect>
+         <x>32</x>
+         <y>860</y>
+         <width>201</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
+         <italic>true</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>P7</string>
        </property>
       </widget>
      </widget>
@@ -1241,15 +1373,13 @@
   <tabstop>p2CheckBox</tabstop>
   <tabstop>p2LineEdit</tabstop>
   <tabstop>p3CheckBox</tabstop>
-  <tabstop>p3LineEdit</tabstop>
+  <tabstop>silhouettePassesLineEdit</tabstop>
   <tabstop>p4CheckBox</tabstop>
   <tabstop>p4LineEdit</tabstop>
   <tabstop>p5CheckBox</tabstop>
   <tabstop>p5LineEdit</tabstop>
-  <tabstop>p6CheckBox</tabstop>
-  <tabstop>p6LineEdit</tabstop>
-  <tabstop>p7CheckBox</tabstop>
-  <tabstop>p7LineEdit</tabstop>
+  <tabstop>translateMeshZPositiveCheckBox</tabstop>
+  <tabstop>planarBackgroundCheckBox</tabstop>
   <tabstop>p8CheckBox</tabstop>
   <tabstop>p8LineEdit</tabstop>
   <tabstop>attenuationCheckBox</tabstop>

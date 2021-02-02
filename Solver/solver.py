@@ -223,22 +223,26 @@ class Solver:
         poisson = Poisson(self.services)
         self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
 
+    def process_geometry(self):
+        """
+        Enforce geometry constraints.
+        """
         # apply offset
-        if self.mesh_transform.p6.enabled:
+        if self.mesh_transform.translateMeshZPositive:
             offset = np.min(self.results.mesh_transformed.image)
             self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
 
         # apply background mask to reset background to zero
-        if self.mesh_transform.p7.enabled:
+        if self.mesh_transform.planarBackground:
             self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
 
     def process_silhouette(self):
         """
         Process the silhouettes in the image.
         """
-        if self.mesh_transform.p2.enabled:
+        if self.mesh_transform.silhouette_parameters.enabled:
             silhouette = Silhouette(self.services)
-            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.p2.value, int(self.mesh_transform.p3.value))
+            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.silhouette_parameters.sigma, int(self.mesh_transform.silhouette_parameters.passes))
 
     def process_scale(self):
         """
@@ -330,6 +334,7 @@ class Solver:
         self.process_attenuation()
         self.process_unsharpmask()
         self.process_poisson()
+        self.process_geometry()
         self.process_silhouette()
         self.process_scale()
         self.write_mesh()
