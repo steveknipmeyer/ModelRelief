@@ -77,7 +77,7 @@ class MeshTransform:
         # silhoutte processing, sigma gaussian
         self.p2: ExperimentalParameter = ExperimentalParameter(False, float(settings['P2']), 'Silhouette: Sigma', float, 'p2')
         # silhouette processing, blurring passes
-        self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), 'Silhouette: Passes', int, 'p3')
+        self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), '', int, 'p3')
 
         # use composite mask in unsharp gaussian blur
         self.p4: ExperimentalParameter = ExperimentalParameter(True, float(settings['P4']), 'Composite Mask', float, 'p4')

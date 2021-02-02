@@ -7,6 +7,28 @@
     "extends": [
         "eslint:recommended"
     ],
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-unused-vars": "off"
+    },
     "overrides": [
         {
             "files": [
@@ -43,30 +65,9 @@
                 ],
                 "@typescript-eslint/no-explicit-any": "off",
                 "@typescript-eslint/no-inferrable-types": "off",
-                "@typescript-eslint/no-unused-vars": "off"
+                "@typescript-eslint/no-unused-vars": "off",
+                "@typescript-eslint/no-empty-function": "off"
             }
         }
-    ],
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-unused-vars": "off"
-    }
+    ]
 }

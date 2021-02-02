@@ -4,12 +4,20 @@
 #### General
     Gravatar
 #### Solver
+    Electron platform?
+
+    OBJ viewer has missing polygons.
+        Plunderbuss
+        House
+
     Review all experimental processing.
 
     Defaults
         Planar Background
         Translate Mesh +Z
+
     Web UI
+        Make all processing steps configurable.
         Add Silhouette parameters.
 
     Gradients

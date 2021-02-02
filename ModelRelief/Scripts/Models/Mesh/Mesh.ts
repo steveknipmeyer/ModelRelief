@@ -74,7 +74,7 @@ export class Mesh extends GeneratedFileModel {
             id          : dtoMesh.id,
             name        : dtoMesh.name,
             description : dtoMesh.description,
-            },
+        },
         );
 
         mesh.fileTimeStamp      = dtoMesh.fileTimeStamp;
