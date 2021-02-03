@@ -3,19 +3,28 @@
 #### General
     Gravatar
 #### Solver
+    Silhouette
+        https://stackoverflow.com/questions/55066764/how-to-blur-feather-the-edges-of-an-object-in-an-image-using-opencv
+        https://stackoverflow.com/questions/55039717/how-to-blur-the-image-according-to-segmentation-map/55047704#55047704
+        Holes are not processed.
+            https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
+        Workbench images do not update if they are selected during Process.
+        Add helper functions for RGB array conversionb.
+        Parameters
+            Edge width?
+            Sigma
+            Passes
+
     Electron platform?
 
     OBJ viewer has missing polygons.
         Plunderbuss
         House
 
-    Add Workbench images for silhouette processing.
-
     Explorer tab order for UI controls
 
     Schema Changes
         .cshtml pages
-        Explorer UI
         Composer UI
 
     Review all processing steps.

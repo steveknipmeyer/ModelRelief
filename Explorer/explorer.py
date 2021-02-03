@@ -39,8 +39,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.debug = True
 
-        self.settings_file = ''
-        self.settings = self.load_settings(settings_file)
+        self.settings_file = settings_file
         self.working = working
 
         # solver instance
@@ -60,20 +59,6 @@ class Explorer(QtWidgets.QMainWindow):
     # ------------------------------------------#
     #             Initialization                #
     # ------------------------------------------#
-
-    def load_settings(self, settings_file: str)->Dict[str, Any]:
-        """
-        Loads the JSON mesh settings file.
-        Parameters
-        ----------
-        settings_file
-            The absolute path of the settings file.
-        """
-        self.settings_file = settings_file
-        with open(self.settings_file) as json_file:
-            settings = json.load(json_file)
-        return settings
-
     def construct_tabs(self) -> None:
         """
         Construct the result tabs with the images, meshes, etc. from the calculated solution.
@@ -377,7 +362,7 @@ class Explorer(QtWidgets.QMainWindow):
 
         if dialog.exec_():
             filenames = dialog.selectedFiles()
-            self.settings = self.load_settings(filenames[0])
+            self.settings_file = filenames[0]
 
             self.solver.initialize(self.settings_file)
             self.initialize_ui_settings()
