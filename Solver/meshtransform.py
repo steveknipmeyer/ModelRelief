@@ -75,21 +75,21 @@ class MeshTransform:
         # N.B. The values below are the web defaults. The Explorer settings will override these values.
         # -----------------------------------------------------------------------------------------------
 
-        self.p1: ExperimentalParameter = ExperimentalParameter(False, float(settings['P1']), '', bool, 'p1')
-        self.p2: ExperimentalParameter = ExperimentalParameter(False, float(settings['P2']), '', bool, 'p2')
-        self.p3: ExperimentalParameter = ExperimentalParameter(False, float(settings['P3']), '', bool, 'p3')
+        self.p1: ExperimentalParameter = ExperimentalParameter(bool(settings['P1Enabled']), float(settings['P1']), '', bool, 'p1')
+        self.p2: ExperimentalParameter = ExperimentalParameter(bool(settings['P2Enabled']), float(settings['P2']), '', bool, 'p2')
+        self.p3: ExperimentalParameter = ExperimentalParameter(bool(settings['P3Enabled']), float(settings['P3']), '', bool, 'p3')
 
         # use composite mask in unsharp gaussian blur
-        self.p4: ExperimentalParameter = ExperimentalParameter(True, float(settings['P4']), 'Composite Mask', float, 'p4')
+        self.p4: ExperimentalParameter = ExperimentalParameter(bool(settings['P4Enabled']), float(settings['P4']), 'Composite Mask', float, 'p4')
 
         # use Numpy gradients, not Difference class
-        self.p5: ExperimentalParameter = ExperimentalParameter(False, float(settings['P5']), 'Numpy Gradients', bool, 'p5')
+        self.p5: ExperimentalParameter = ExperimentalParameter(bool(settings['P5Enabled']), float(settings['P5']), 'Numpy Gradients', bool, 'p5')
 
-        self.p6: ExperimentalParameter = ExperimentalParameter(False, float(settings['P6']), '', bool, 'p6')
-        self.p7: ExperimentalParameter = ExperimentalParameter(False, float(settings['P7']), '', bool, 'p7')
+        self.p6: ExperimentalParameter = ExperimentalParameter(bool(settings['P6Enabled']), float(settings['P6']), '', bool, 'p6')
+        self.p7: ExperimentalParameter = ExperimentalParameter(bool(settings['P7Enabled']), float(settings['P7']), '', bool, 'p7')
 
         # use NormalMap gradients (not DepthBuffer heightfields)
-        self.p8: ExperimentalParameter = ExperimentalParameter(False, float(settings['P8']), 'NormalMap Gradients', bool, 'p8')
+        self.p8: ExperimentalParameter = ExperimentalParameter(bool(settings['P8Enabled']), float(settings['P8']), 'NormalMap Gradients', bool, 'p8')
 
     def __repr__(self):
         return f'Gradient Threshold = {self.gradient_threshold_parameters.value},  Attenuation: Factor = {self.attenuation_parameters.factor} Decay = {self.attenuation_parameters.decay} UnsharpMask: Low = {self.unsharpmask_parameters.gaussian_low} High = {self.unsharpmask_parameters.gaussian_high}, HF = {self.unsharpmask_parameters.high_frequency_scale}, P1 = {self.p1}, P2 = {self.p2}'
