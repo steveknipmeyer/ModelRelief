@@ -11,10 +11,6 @@
 
     Add Workbench images for silhouette processing.
 
-    Check order of geometry constraints.
-        PlanarBackground
-        TranslateMeshZPositive
-
     Explorer tab order for UI controls
 
     Schema Changes
@@ -22,7 +18,13 @@
         Explorer UI
         Composer UI
 
-    Review all experimental processing.
+    Review all processing steps.
+
+    Rebuild models.
+        Solver/Test
+        Delivery
+
+    Unsharp Masking seems to contribute the most valuable transform.
 
     Gradients
         Why are portions of the generated mesh below the XY plane?
@@ -34,12 +36,6 @@
                 lowresolution
                 test
             Change switch to "Use Difference class"
-
-    Rebuild models.
-        Solver/Test
-        Delivery
-
-    Unsharp Masking seems to contribute the most valuable transform.
 
     Poisson Solver
         How should the boundary conditions be handled?

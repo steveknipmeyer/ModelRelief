@@ -272,7 +272,6 @@ class Explorer(QtWidgets.QMainWindow):
         self.ui.overallTabsContainer.currentChanged.connect(self.tab_selected)
 
         self.ui.processButton.clicked.connect(self.handle_process)
-        self.ui.saveButton.clicked.connect(self.handle_save)
         self.ui.actionOpen.triggered.connect(self.handle_open_settings)
 
     def set_busy(self, enable: bool)-> None:
@@ -367,15 +366,6 @@ class Explorer(QtWidgets.QMainWindow):
         self.calculate()
         self.update_ui(clear_content, preserve_camera)
 
-    def handle_save(self) -> None:
-        """
-        Event handlers for Save button.
-        Writes the selected file types to the same output folder as the Mesh.
-        If the MRTemp environment variable is defined, the file is copied for easier access by desktop applications.
-        """
-        if self.ui.fileOBJCheckBox.isChecked():
-            self.solver.write_obj()
-
     def handle_open_settings(self) ->None:
         """
         Opens a new settings file.
@@ -403,8 +393,9 @@ class Explorer(QtWidgets.QMainWindow):
 
         # solve
         self.solver.transform()
-        self.invalidate()
+        self.save_mesh()
 
+        self.invalidate()
         self.set_busy (False)
 
     # ------------------------------------------#
@@ -456,6 +447,16 @@ class Explorer(QtWidgets.QMainWindow):
 
         self.set_busy (False)
 
+    # ------------------------------------------#
+    #                 Utility                   #
+    # ------------------------------------------#
+    def save_mesh(self) -> None:
+        """
+        Writes the selected file types to the same output folder as the Mesh.
+        If the MRTemp environment variable is defined, the file is copied for easier access by desktop applications.
+        """
+        if self.ui.fileOBJCheckBox.isChecked():
+            self.solver.write_obj()
 
 def main():
     """

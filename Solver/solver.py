@@ -169,11 +169,12 @@ class Solver:
         #      The derivates are forward differences so they are defined (along +X, +Y) in the XY region <outside> the background mask.
         # WIP: What is the impact? If gradients typically span many pixels, what is the significance of omitting the first gradient in a range?
         #      If the gradient is purely vertical (one pixel span) then it should be skipped.
-        # self.results.combined_mask.image = self.results.combined_mask.image * self.depth_buffer.background_mask
+        if False:
+            self.results.combined_mask.image *= self.depth_buffer.background_mask
 
         # Modify gradient by applying threshold, setting values above threshold to zero.
-        self.results.gradient_x.image = self.results.gradient_x.image * self.results.combined_mask.image
-        self.results.gradient_y.image = self.results.gradient_y.image * self.results.combined_mask.image
+        self.results.gradient_x.image *= self.results.combined_mask.image
+        self.results.gradient_y.image *= self.results.combined_mask.image
 
     def process_attenuation(self):
         """
@@ -227,11 +228,11 @@ class Solver:
         # apply offset
         if self.mesh_transform.translateMeshZPositive:
             offset = np.min(self.results.mesh_transformed.image)
-            self.results.mesh_transformed.image = self.results.mesh_transformed.image - offset
+            self.results.mesh_transformed.image -= offset
 
         # apply background mask to reset background to zero
         if self.mesh_transform.planarBackground:
-            self.results.mesh_transformed.image = self.results.mesh_transformed.image * self.results.depth_buffer_mask.image
+            self.results.mesh_transformed.image *= self.results.depth_buffer_mask.image
 
     def process_silhouette(self):
         """
@@ -266,7 +267,7 @@ class Solver:
             self.services.logger.logError (f"Solver: A mesh of height {current_height} was generated.")
         factor = 1.0 if not validMeshHeight else (target_height / current_height)
 
-        self.results.mesh_transformed.image = self.results.mesh_transformed.image * factor
+        self.results.mesh_transformed.image *= factor
 
     def write_mesh(self):
         """

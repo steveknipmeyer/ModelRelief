@@ -612,10 +612,6 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.labelFileOutput.setFont(font)
         self.labelFileOutput.setObjectName("labelFileOutput")
-        self.saveButton = QtWidgets.QPushButton(self.settingsContainer)
-        self.saveButton.setGeometry(QtCore.QRect(200, 680, 75, 27))
-        self.saveButton.setMaximumSize(QtCore.QSize(373, 16777215))
-        self.saveButton.setObjectName("saveButton")
         self.gridLayout_2.addWidget(self.settingsContainer, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralWidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -725,7 +721,6 @@ class Ui_MainWindow(object):
         self.p6CheckBox.setText(_translate("MainWindow", "P6"))
         self.p7CheckBox.setText(_translate("MainWindow", "P7"))
         self.labelFileOutput.setText(_translate("MainWindow", "File Output"))
-        self.saveButton.setText(_translate("MainWindow", "&Save"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
 import explorer_rc
