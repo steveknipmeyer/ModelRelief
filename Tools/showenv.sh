@@ -17,5 +17,8 @@ echo MRUpdateSeedData=$MRUpdateSeedData
 echo MRInitializeDatabase=$MRInitializeDatabase
 echo MRSeedDatabase=$MRSeedDatabase
 echo MRExitAfterInitialization=$MRExitAfterInitialization
+
+printf "\n"
+echo MRTemp=$MRTemp
 #reset
 printf  "\e[0m"

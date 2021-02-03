@@ -994,26 +994,6 @@
         <string>High Frequency Scaling</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="fileOutputCheckbox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>685</y>
-         <width>177</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>File Output</string>
-       </property>
-      </widget>
       <widget class="QLineEdit" name="reliefScaleLineEdit">
        <property name="geometry">
         <rect>
@@ -1325,6 +1305,51 @@
         <string>P7</string>
        </property>
       </widget>
+      <widget class="QLabel" name="labelFileOutput">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>690</y>
+         <width>201</width>
+         <height>18</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>File Output</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="saveButton">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>680</y>
+         <width>75</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>373</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&amp;Save</string>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1366,7 +1391,6 @@
   <tabstop>unsharpGaussianLowLineEdit</tabstop>
   <tabstop>unsharpGaussianHighLineEdit</tabstop>
   <tabstop>unsharpHFScaleLineEdit</tabstop>
-  <tabstop>fileOutputCheckbox</tabstop>
   <tabstop>fileOBJCheckBox</tabstop>
   <tabstop>p1CheckBox</tabstop>
   <tabstop>p1LineEdit</tabstop>

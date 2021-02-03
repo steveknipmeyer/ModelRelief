@@ -94,7 +94,7 @@ class MeshTransform:
     def __repr__(self):
         return f'Gradient Threshold = {self.gradient_threshold_parameters.value},  Attenuation: Factor = {self.attenuation_parameters.factor} Decay = {self.attenuation_parameters.decay} UnsharpMask: Low = {self.unsharpmask_parameters.gaussian_low} High = {self.unsharpmask_parameters.gaussian_high}, HF = {self.unsharpmask_parameters.high_frequency_scale}, P1 = {self.p1}, P2 = {self.p2}'
 
-    def update_settings(self):
+    def update_json_settings(self):
         """
         Update the backing settings structure.
         """

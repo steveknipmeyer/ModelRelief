@@ -1,9 +1,4 @@
 ﻿## Commit Notes
-Defaults
-    Planar Background
-    Translate Mesh +Z
-Silhouettes
-Geometry
 ### Issues
 #### General
     Gravatar
@@ -13,6 +8,8 @@ Geometry
     OBJ viewer has missing polygons.
         Plunderbuss
         House
+
+    Add Workbench images for silhouette processing.
 
     Check order of geometry constraints.
         PlanarBackground
