@@ -46,8 +46,8 @@ export interface IMeshTransform extends IModel {
 
   // Silhouette Processing
   silhouetteEnabled?: boolean;
+  silhouetteEdgeWidth?: number;             // edge width of contours
   silhouetteSigma?: boolean;                // Gaussian blur
-  silhouettePasses?: number;                // number of passes
 
   // Final Scale
   reliefScale?: number;                     // relief scale (% of original model)

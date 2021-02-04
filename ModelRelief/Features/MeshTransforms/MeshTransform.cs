@@ -42,8 +42,8 @@ namespace ModelRelief.Dto
         public bool TranslateMeshZPositive { get; set; }
 
         public bool SilhouetteEnabled { get; set; }
+        public int SilhouetteEdgeWidth { get; set; }
         public double SilhouetteSigma { get; set; }
-        public int SilhouettePasses { get; set; }
 
         public double ReliefScale { get; set; }
 
@@ -98,10 +98,10 @@ namespace ModelRelief.Dto
             RuleFor(m => m.UnsharpHighFrequencyScale)
                 .GreaterThan(0.0).WithMessage("The Unsharp HighFrequency Scale property must be greater than zero.");
 
+            RuleFor(m => m.SilhouetteEdgeWidth)
+                .GreaterThan(0).WithMessage("The Silhouette Edge Width property must be greater than zero.");
             RuleFor(m => m.SilhouetteSigma)
-                .GreaterThan(0.0).WithMessage("The Silhouette Sigmaproperty must be greater than zero.");
-            RuleFor(m => m.SilhouettePasses)
-                .GreaterThan(0).WithMessage("The Silhouette Sigmaproperty must be greater than zero.");
+                .GreaterThan(0.0).WithMessage("The Silhouette Sigma property must be greater than zero.");
 
             RuleFor(m => m.ReliefScale)
                 .GreaterThan(0.0).WithMessage("The Relief Scale property must be greater than zero.");

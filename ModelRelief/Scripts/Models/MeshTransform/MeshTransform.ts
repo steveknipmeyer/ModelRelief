@@ -70,8 +70,8 @@ export class MeshTransform extends Model {
         meshTransform.translateMeshZPositive = dtoMeshTransform.translateMeshZPositive;
 
         meshTransform.silhouetteEnabled         = dtoMeshTransform.silhouetteEnabled;
+        meshTransform.silhouetteEdgeWidth       = dtoMeshTransform.silhouetteEdgeWidth;
         meshTransform.silhouetteSigma           = dtoMeshTransform.silhouetteSigma;
-        meshTransform.silhouettePasses          = dtoMeshTransform.silhouettePasses;
 
         meshTransform.reliefScale               = dtoMeshTransform.reliefScale;
 
@@ -122,8 +122,8 @@ export class MeshTransform extends Model {
 
     // Silhouette Processing
     public silhouetteEnabled: boolean;
+    public silhouetteEdgeWidth: number;             // edge width of contours
     public silhouetteSigma: boolean;                // Gaussian blur
-    public silhouettePasses: number;                // number of passes
 
     // Final Scale
     public reliefScale: number;                     // relief scale (% of original model)
@@ -209,8 +209,8 @@ export class MeshTransform extends Model {
             translateMeshZPositive: this.translateMeshZPositive,
 
             silhouetteEnabled           : this.silhouetteEnabled,
+            silhouetteEdgeWidth         : this.silhouetteEdgeWidth,
             silhouetteSigma             : this.silhouetteSigma,
-            silhouettePasses            : this.silhouettePasses,
 
             reliefScale                 : this.reliefScale,
 

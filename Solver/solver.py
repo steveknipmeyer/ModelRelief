@@ -240,7 +240,7 @@ class Solver:
         """
         if self.mesh_transform.silhouette_parameters.enabled:
             silhouette = Silhouette(self.services)
-            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.silhouette_parameters.sigma, int(self.mesh_transform.silhouette_parameters.passes))
+            self.results.mesh_transformed.image = silhouette.process(self.results.mesh_transformed.image, self.results.depth_buffer_mask.image, self.mesh_transform.silhouette_parameters.edge_width, self.mesh_transform.silhouette_parameters.sigma)
 
     def process_scale(self):
         """

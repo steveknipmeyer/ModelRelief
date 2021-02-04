@@ -64,8 +64,8 @@ namespace ModelRelief.Test.TestModels.MeshTransforms
             meshTransformModel.UnsharpHighFrequencyScale = 1.0;
 
             meshTransformModel.SilhouetteEnabled = true;
+            meshTransformModel.SilhouetteEdgeWidth = 5;
             meshTransformModel.SilhouetteSigma = 4.0;
-            meshTransformModel.SilhouettePasses = 2;
 
             meshTransformModel.ReliefScale = 0.03;
 

@@ -24,22 +24,22 @@ class SilhouetteParameters:
     """
     A class for holding the parameters supporting silhoette processing.
     """
-    def __init__(self, enabled: bool, sigma: float, passes: int) -> None:
+    def __init__(self, enabled: bool, edge_width: int, sigma: float) -> None:
         """
         Initialize an instance of SilhouetteParameters.
         Parameters
         ----------
         enabled
             Apply gradient thresholding.
+        edge_width
+            Edge width (pixels) for contour processing
         sigma
             The gaussian distribution for the blurring operation.
-        passes
-            The number of blurring passes.
 
         """
         self.enabled = enabled
+        self.edge_width = edge_width
         self.sigma = sigma
-        self.passes = passes
 
 class Silhouette:
     """
@@ -56,7 +56,7 @@ class Silhouette:
         self.debug = True
         self.services = services
 
-    def process (self, image: np.ndarray, background: np.ndarray, sigma: float, iterations: int) -> np.ndarray:
+    def process (self, image: np.ndarray, background: np.ndarray, edge_width: int, sigma: float) -> np.ndarray:
         """
         Process the silhouette of an mesh image array.
                     sudo apt-get install python3-tk
@@ -69,10 +69,10 @@ class Silhouette:
             The image array to process the silhouettes.
         background
             The image background mask.
+        edge_width
+            Countour edge width (pixels)
         sigma:
             The standard deviation used in the Gaussian blur of the image.
-        iterations:
-            The number of time to apply the blur.
         """
 
         # 8 bit grayscale -> contours
@@ -81,7 +81,6 @@ class Silhouette:
         contours, hierarchy = cv2.findContours(background_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # draw contours into RGB mask
-        edge_width = iterations
         mask = np.zeros((image.shape[0], image.shape[1], 3), np.uint8)
         cv2.drawContours(mask, contours, -1, (255,255,255), edge_width)
 

@@ -669,11 +669,11 @@
         </size>
        </property>
       </widget>
-      <widget class="QLineEdit" name="silhouettePassesLineEdit">
+      <widget class="QLineEdit" name="silhouetteEdgeWidthLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>600</y>
+         <y>570</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1114,11 +1114,11 @@
         <string>Geometry</string>
        </property>
       </widget>
-      <widget class="QLabel" name="labelSilhouettPasses">
+      <widget class="QLabel" name="labelSilhouettEdgeWidth">
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>600</y>
+         <y>574</y>
          <width>191</width>
          <height>22</height>
         </rect>
@@ -1138,14 +1138,14 @@
         </font>
        </property>
        <property name="text">
-        <string>Blurring Passes</string>
+        <string>Edge Width</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="silhouetteSigmaLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>570</y>
+         <y>880</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1161,7 +1161,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>570</y>
+         <y>606</y>
          <width>191</width>
          <height>22</height>
         </rect>
@@ -1269,7 +1269,7 @@
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>870</y>
+         <y>600</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1378,7 +1378,7 @@
   <tabstop>p2CheckBox</tabstop>
   <tabstop>p2LineEdit</tabstop>
   <tabstop>p3CheckBox</tabstop>
-  <tabstop>silhouettePassesLineEdit</tabstop>
+  <tabstop>silhouetteEdgeWidthLineEdit</tabstop>
   <tabstop>p4CheckBox</tabstop>
   <tabstop>p4LineEdit</tabstop>
   <tabstop>p5CheckBox</tabstop>

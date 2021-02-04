@@ -49,7 +49,7 @@ namespace ModelRelief.Domain
         [DependentFileProperty]
         public double SilhouetteSigma { get; set; }
         [DependentFileProperty]
-        public int SilhouettePasses { get; set; }
+        public int SilhouetteEdgeWidth { get; set; }
 
         public double ReliefScale { get; set; }
 

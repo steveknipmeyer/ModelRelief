@@ -173,8 +173,8 @@ class Explorer(QtWidgets.QMainWindow):
 
         # silhouettes
         self.ui.silhouetteCheckBox.setChecked(self.solver.mesh_transform.silhouette_parameters.enabled)
+        self.initialize_int_field(self.ui.silhouetteEdgeWidthLineEdit, self.solver.mesh_transform.silhouette_parameters.edge_width)
         self.initialize_float_field(self.ui.silhouetteSigmaLineEdit,  self.solver.mesh_transform.silhouette_parameters.sigma)
-        self.initialize_int_field(self.ui.silhouettePassesLineEdit, self.solver.mesh_transform.silhouette_parameters.passes)
 
         # relief scale
         self.initialize_float_field(self.ui.reliefScaleLineEdit,  self.solver.mesh_transform.relief_scale)
@@ -295,8 +295,8 @@ class Explorer(QtWidgets.QMainWindow):
 
         # silhouettes
         self.solver.mesh_transform.silhouette_parameters.enabled = self.ui.silhouetteCheckBox.isChecked()
+        self.solver.mesh_transform.silhouette_parameters.edge_width = int(self.ui.silhouetteEdgeWidthLineEdit.text())
         self.solver.mesh_transform.silhouette_parameters.sigma = float(self.ui.silhouetteSigmaLineEdit.text())
-        self.solver.mesh_transform.silhouette_parameters.passes = int(self.ui.silhouettePassesLineEdit.text())
 
         # relief scale
         self.solver.mesh_transform.relief_scale = float(self.ui.reliefScaleLineEdit.text())

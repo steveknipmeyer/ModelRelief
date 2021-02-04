@@ -65,7 +65,7 @@ class MeshTransform:
         self.unsharpmask_parameters:        UnsharpMaskParameters       = UnsharpMaskParameters(bool(settings['UnsharpMaskingEnabled']), float(settings['UnsharpGaussianLow']), float(settings['UnsharpGaussianHigh']), float(settings['UnsharpHighFrequencyScale']))
         self.planarBackground:              bool                        = bool(settings['PlanarBackground'])
         self.translateMeshZPositive:        bool                        = bool(settings['TranslateMeshZPositive'])
-        self.silhouette_parameters:         SilhouetteParameters        = SilhouetteParameters(bool(settings['SilhouetteEnabled']), float(settings['SilhouetteSigma']), int(settings['SilhouettePasses']))
+        self.silhouette_parameters:         SilhouetteParameters        = SilhouetteParameters(bool(settings['SilhouetteEnabled']), int(settings['SilhouetteEdgeWidth']), float(settings['SilhouetteSigma']))
         self.relief_scale :                 float                       = float(settings['ReliefScale'])
 
         # -------------------------------------- Experimenta; --------------------------------------
@@ -115,8 +115,8 @@ class MeshTransform:
         self.settings['TranslateMeshZPositive'] = self.translateMeshZPositive
 
         self.settings['SilhouetteEnabled'] = self.silhouette_parameters.enabled
+        self.settings['SilhouetteEdgeWidth'] = self.silhouette_parameters.edge_width
         self.settings['SilhouetteSigma'] = self.silhouette_parameters.sigma
-        self.settings['SilhouettePasses'] = self.silhouette_parameters.passes
 
         self.settings['ReliefScale'] = self.relief_scale
 

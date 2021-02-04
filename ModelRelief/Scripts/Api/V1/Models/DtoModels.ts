@@ -643,8 +643,8 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
 
     // Silhouette Processing
     silhouetteEnabled?: boolean;
+    silhouetteEdgeWidth?: number;             // edge width of contours
     silhouetteSigma?: boolean;                // Gaussian blur
-    silhouettePasses?: number;                // number of passes
 
     // Final Scale
     reliefScale?: number;                     // relief scale (% of original model)
@@ -710,8 +710,8 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
             translateMeshZPositive,
 
             silhouetteEnabled,
+            silhouetteEdgeWidth,
             silhouetteSigma,
-            silhouettePasses,
 
             reliefScale,
 
@@ -757,8 +757,8 @@ export class MeshTransform extends Model<MeshTransform> implements IMeshTransfor
         this.translateMeshZPositive = translateMeshZPositive;
 
         this.silhouetteEnabled = silhouetteEnabled;
+        this.silhouetteEdgeWidth = silhouetteEdgeWidth;
         this.silhouetteSigma = silhouetteSigma;
-        this.silhouettePasses = silhouettePasses;
 
         this.reliefScale = reliefScale;
 
