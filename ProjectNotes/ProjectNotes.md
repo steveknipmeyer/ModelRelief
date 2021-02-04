@@ -1,5 +1,4 @@
 ﻿## Commit Notes
-Add helper functions for RGB array conversionb.
 ### Issues
 #### General
     Gravatar
@@ -8,11 +7,6 @@ Add helper functions for RGB array conversionb.
     Silhouette
         Holes are not processed.
             https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
-
-        Parameters
-            Edge width = Passes
-            Sigma
-            Passes
 
     Schema Changes
         .cshtml pages
@@ -268,22 +262,23 @@ Add helper functions for RGB array conversionb.
     Create a video or an animation?
 
 #### Models
-        Lucy
-        House
         Dragon
         Horse
-        Scallop
+        House
+        Lucy
         Plunderbuss Pete
+        Scallop
 
         Not Used
-            Tyrannosaurus
             Armadillo
-            Roadster
-            Bunny
-            Statue
-            Dolphin
             Buddha
+            Bunny
+            Dolphin
+            LowResolution
+            Roadster
+            Statue
             Test
+            Tyrannosaurus
 
         Thingiverse Sculpture
         Archive 3D

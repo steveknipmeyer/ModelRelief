@@ -44,7 +44,7 @@
       "Description": "Statue Model (development@modelrelief.com)"
     },
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-02-04T13:58:35.9267201",
+    "FileTimeStamp": "2021-02-04T14:21:37.5486052",
     "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/13/statue.sdb",
     "Id": 13,
     "Name": "statue.sdb",
@@ -63,7 +63,7 @@
     "CameraId": 15,
     "Camera": null,
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-02-04T13:58:36.3504014",
+    "FileTimeStamp": "2021-02-04T14:21:37.9495263",
     "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/13/statue.nmap",
     "Id": 13,
     "Name": "statue.nmap",
@@ -112,7 +112,7 @@
     "Description": "Statue transform (development@modelrelief.com)"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-02-04T13:58:36.8267527",
+  "FileTimeStamp": "2021-02-04T14:21:38.4338866",
   "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/13/statue.sfp",
   "Id": 13,
   "Name": "statue.sfp",
