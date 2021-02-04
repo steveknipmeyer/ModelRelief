@@ -11,6 +11,8 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 """
 import numpy as np
+from numpy.core.defchararray import array
+from numpy.lib.index_tricks import nd_grid
 from scipy.ndimage import gaussian_filter
 
 import relief
@@ -48,3 +50,50 @@ class ImageTransform:
 
         return result
 
+    @staticmethod
+    def normalize (a: np.ndarray)->np.ndarray:
+        """
+        Normalize a positive 2D array to [0..1]
+        Parameters
+        ----------
+        a
+            2D float array
+        """
+        max = a.max()
+        normalized = a / max
+
+        return normalized
+
+    @staticmethod
+    def grayscale_to_rgb (grayscale: np.ndarray)->np.ndarray:
+        """
+        Convert a 2D array of (grayscale [0..1]) floats to RGB triplets
+            0.0 -> [0, 0, 0]
+            1.0 -> [255, 255, 255]
+        Parameters
+        ----------
+        grayscale
+            Input image.
+        """
+        rgb = np.zeros((grayscale.shape[0], grayscale.shape[1], 3), 'uint32')
+        rgb[:,:,0] = grayscale[:,:] * 255
+        rgb[:,:,1] = grayscale[:,:] * 255
+        rgb[:,:,2] = grayscale[:,:] * 255
+
+        return rgb
+
+    @staticmethod
+    def rgb_to_grayscale (rgb: np.ndarray)->np.ndarray:
+        """
+        Convert a 2D array of grayscale RGB triplets to floats
+            [0, 0, 0] -> 0.0
+            [255, 255, 255] -> 1.0
+        Parameters
+        ----------
+        rgb
+            Input image.
+        """
+        grayscale = np.zeros(rgb.shape, 'float64')
+        grayscale = rgb[:, :, 0] / 255
+
+        return grayscale

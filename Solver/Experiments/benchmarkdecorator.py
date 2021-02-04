@@ -11,9 +11,6 @@
 .. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
 
 """
-import os
-import sys                                      # We need sys so that we can pass argv to QApplication
-
 from stopwatch import benchmark
 
 class Widget:

@@ -1,31 +1,35 @@
 ﻿## Commit Notes
+Add helper functions for RGB array conversionb.
 ### Issues
 #### General
     Gravatar
 #### Solver
+
     Silhouette
-        https://stackoverflow.com/questions/55066764/how-to-blur-feather-the-edges-of-an-object-in-an-image-using-opencv
-        https://stackoverflow.com/questions/55039717/how-to-blur-the-image-according-to-segmentation-map/55047704#55047704
         Holes are not processed.
             https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
-        Workbench images do not update if they are selected during Process.
-        Add helper functions for RGB array conversionb.
+
         Parameters
-            Edge width?
+            Edge width = Passes
             Sigma
             Passes
-
-    Electron platform?
-
-    OBJ viewer has missing polygons.
-        Plunderbuss
-        House
-
-    Explorer tab order for UI controls
 
     Schema Changes
         .cshtml pages
         Composer UI
+
+    Explorer
+        Workbench tabs do not always respond to arrow keys.
+        Add active file name to UI.
+        Mayavi Pipeline dialog box no longer opens.
+            The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
+            opencv-python-headless
+            Adobe
+        Explorer tab order for UI controls
+
+    OBJ viewer has missing polygons.
+        Plunderbuss
+        House
 
     Review all processing steps.
 
@@ -59,8 +63,15 @@
                 How was the compositing processing defined to create the depth buffer?
                 Obtain a Shockwave player for the videos.
 #### Build
+    Review target=nginx handling in Builder.py.
+        Can the Nginx configuration be accomplished only through /etc/nginx/sites-available/default?
+
     Prove with clean Ubuntu installation!
         Add a test account.
+        Python requirements
+            Rebuild requirements files.
+                VSCode Jupyter
+                Explorer
 
     Convert Alpha to a Linux server.
 
@@ -124,6 +135,8 @@
         3D Printing
         HackerNews
 #### Enhancements
+    Electron platform?
+
     Routing
         Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
         Use Endpoint routing?
@@ -138,13 +151,6 @@
             error: invalid command 'bdist_wheel'
             ----------------------------------------
             ERROR: Failed building wheel for pandocfilters
-
-        Create an (incremental) Python requirements file for the Jupyter notebooks.
-            pip3 install ipykernel
-            pip install scikit-image
-            pip3 install pandas
-            pip3 install nbconvert
-            sudo apt-get install python3-tk
 #### WebGL2
     WebGL2 Support
         https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
@@ -202,6 +208,8 @@
         sudo apt-get install python3-venv
         sudo apt install python3-pip
         pip3 install wheel
+        # Jupyter
+        sudo apt-get install python3-tk
 
     Node
         sudo apt install nodejs
