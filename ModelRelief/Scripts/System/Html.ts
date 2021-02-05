@@ -31,6 +31,7 @@ export enum ElementIds {
     AttenuationFactor           = "attenuationFactor",
     UnsharpGaussianLow          = "unsharpGaussianLow",
     UnsharpHighFrequencyScale   = "unsharpHighFrequencyScale",
+    SilhouetteEdgeWidth         = "silhouetteEdgeWidth",
     MeshScale                   = "meshScale",
 
     GenerateMesh                = "generateMesh",

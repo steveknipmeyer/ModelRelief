@@ -4,19 +4,12 @@
     Gravatar
 #### Solver
 
-    Silhouette
-        Holes are not processed.
-            https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
-
-    Schema Changes
-        .cshtml pages
-        Composer UI
-
     Explorer
         Workbench tabs do not always respond to arrow keys.
         Add active file name to UI.
         Mayavi Pipeline dialog box no longer opens.
             The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
+            libpng warning: iCCP: known incorrect sRGB profile
             opencv-python-headless
             Adobe
         Explorer tab order for UI controls
@@ -27,11 +20,13 @@
 
     Review all processing steps.
 
-    Rebuild models.
-        Solver/Test
-        Delivery
+    Silhouette
+        Blend profile into mesh form.
+        Zero leads to an exception.
+            Add a check in the silhouette processing step.
 
-    Unsharp Masking seems to contribute the most valuable transform.
+        Holes are not processed.
+            https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
 
     Gradients
         Why are portions of the generated mesh below the XY plane?
@@ -56,6 +51,22 @@
                 Generate a test Blender depth buffer.
                 How was the compositing processing defined to create the depth buffer?
                 Obtain a Shockwave player for the videos.
+#### UI
+        Why is Sigma Low hidden?
+        Add enabling checkboxes.
+        Add switch for Development controls. (Settings Gear?)
+        Create a graphic image for the silhouette profile.
+
+        .cshtml pages
+            MeshTransform
+                Create
+                Delete
+                Details
+                Edit
+                Index
+                    Enable
+                    Silhouette
+                    Geometry
 #### Build
     Review target=nginx handling in Builder.py.
         Can the Nginx configuration be accomplished only through /etc/nginx/sites-available/default?
@@ -94,6 +105,10 @@
     Review all casing of files and directories.
     Tools -> bin
 ### Project
+    Rebuild models to final optimizations.
+        Solver/Test
+        Delivery
+
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Review ProjectNotes

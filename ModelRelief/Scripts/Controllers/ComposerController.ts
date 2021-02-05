@@ -365,6 +365,7 @@ export class ComposerController {
         this.initializeSliderControl(`${ElementIds.AttenuationFactor}`, this._composerViewSettings.meshTransform, "attenuationFactor");
         this.initializeSliderControl(`${ElementIds.UnsharpGaussianLow}`, this._composerViewSettings.meshTransform, "unsharpGaussianLow");
         this.initializeSliderControl(`${ElementIds.UnsharpHighFrequencyScale}`, this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale");
+        this.initializeSliderControl(`${ElementIds.SilhouetteEdgeWidth}`, this._composerViewSettings.meshTransform, "silhouetteEdgeWidth");
         this.initializeSliderControl(`${ElementIds.MeshScale}`, this._composerViewSettings.meshTransform, "reliefScale");
 
         // Generate Mesh
