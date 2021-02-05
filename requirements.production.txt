@@ -2,10 +2,19 @@
 #
 # sudo apt-get install python3-venv
 # sudo apt install python3-pip
+#
+# source devenv/bin/activate
 
-# python3 -m venv --clear mrenv
-# source mrenv/bin/activate
-
+# ---------------------- Core ----------------------
+# pip3 install wheel
+# pip3 install numpy
+# pip3 install scipy
+# pip3 install pyamg
+# pip3 install matplotlib
+# pip3 install pybind11
+# pip3 install imageio
+# pips install opencv-python-headless
+#
 # ---------------------- Core ----------------------
 # pip3 install wheel
 # pip3 install numpy
@@ -38,6 +47,7 @@ pybind11==2.6.1
 pyparsing==2.4.7
 pytest==6.2.1
 python-dateutil==2.8.1
+relief==0.1
 scipy==1.5.4
 six==1.15.0
 toml==0.10.2

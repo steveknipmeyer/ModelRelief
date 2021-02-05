@@ -13,7 +13,7 @@
             opencv-python-headless
             Adobe
         Explorer tab order for UI controls
-
+        segmentation fa
     OBJ viewer has missing polygons.
         Plunderbuss
         House
@@ -73,10 +73,6 @@
 
     Prove with clean Ubuntu installation!
         Add a test account.
-        Python requirements
-            Rebuild requirements files.
-                VSCode Jupyter
-                Explorer
 
     Convert Alpha to a Linux server.
 
@@ -171,6 +167,8 @@
     Explorer throws segmentation fault.
         Execution from command line.
         A new tab has been selected.
+    View Pipeline no longer opens.
+        libpng warning: iCCP: known incorrect sRGB profile
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
@@ -214,11 +212,7 @@
             git submodule update
 
     Python (3.8.5)
-        sudo apt-get install python3-venv
-        sudo apt install python3-pip
-        pip3 install wheel
-        # Jupyter
-        sudo apt-get install python3-tk
+        Eee requirements.development.txt.For setup instructions.
 
     Node
         sudo apt install nodejs
