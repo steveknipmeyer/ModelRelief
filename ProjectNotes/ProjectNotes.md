@@ -10,10 +10,13 @@
         Mayavi Pipeline dialog box no longer opens.
             The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
             libpng warning: iCCP: known incorrect sRGB profile
-            opencv-python-headless
-            Adobe
+            Delta intallations?
+                opencv-python-headless
+                Adobe
+            https://github.com/enthought/mayavi/issues
         Explorer tab order for UI controls
-        segmentation fa
+        segmentation fault on exit
+
     OBJ viewer has missing polygons.
         Plunderbuss
         House
@@ -52,21 +55,11 @@
                 How was the compositing processing defined to create the depth buffer?
                 Obtain a Shockwave player for the videos.
 #### UI
+        Verify e-mail (info@modelrelief.com -> steve@knipmeyer.org)
         Why is Sigma Low hidden?
         Add enabling checkboxes.
         Add switch for Development controls. (Settings Gear?)
         Create a graphic image for the silhouette profile.
-
-        .cshtml pages
-            MeshTransform
-                Create
-                Delete
-                Details
-                Edit
-                Index
-                    Enable
-                    Silhouette
-                    Geometry
 #### Build
     Review target=nginx handling in Builder.py.
         Can the Nginx configuration be accomplished only through /etc/nginx/sites-available/default?
