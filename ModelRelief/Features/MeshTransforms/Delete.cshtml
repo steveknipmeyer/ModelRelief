@@ -50,10 +50,23 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.GradientThresholdEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GradientThresholdEnabled)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.GradientThreshold)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.GradientThreshold)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AttenuationEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AttenuationEnabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.AttenuationFactor)
@@ -66,6 +79,13 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.AttenuationDecay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnsharpMaskingEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnsharpMaskingEnabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.UnsharpGaussianLow)
@@ -85,11 +105,62 @@
         <dd>
             @Html.DisplayFor(model => model.UnsharpHighFrequencyScale)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PlanarBackground)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlanarBackground)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TranslateMeshZPositive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TranslateMeshZPositive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SilhouetteEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SilhouetteEnabled)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SilhouetteSigma)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SilhouetteSigma)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SilhouetteEdgeWidth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SilhouetteEdgeWidth)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReliefScale)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReliefScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.P1Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P1Enabled)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.P1)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.P1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.P2Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P2Enabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.P2)
@@ -98,10 +169,22 @@
             @Html.DisplayFor(model => model.P2)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.P3Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P3Enabled)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.P3)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.P3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.P4Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P4Enabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.P4)
@@ -110,10 +193,22 @@
             @Html.DisplayFor(model => model.P4)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.P5Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P5Enabled)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.P5)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.P5)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.P6Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P6Enabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.P6)
@@ -122,10 +217,22 @@
             @Html.DisplayFor(model => model.P6)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.P7Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P7Enabled)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.P7)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.P7)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.P8Enabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.P8Enabled)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.P8)
@@ -134,7 +241,7 @@
             @Html.DisplayFor(model => model.P8)
         </dd>
     </dl>
-    
+
     <form asp-action="DeleteConfirmed">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |

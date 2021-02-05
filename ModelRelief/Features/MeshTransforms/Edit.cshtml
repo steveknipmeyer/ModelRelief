@@ -12,7 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Edit" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -45,9 +44,20 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="GradientThresholdEnabled" class="control-label"></label>
+                <input type="checkbox" asp-for="GradientThresholdEnabled" class="form-control" />
+                <span asp-validation-for="GradientThresholdEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="GradientThreshold" class="control-label"></label>
                 <input asp-for="GradientThreshold" class="form-control" />
                 <span asp-validation-for="GradientThreshold" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AttenuationEnabled" class="control-label"></label>
+                <input type="checkbox" asp-for="AttenuationEnabled" class="form-control" />
+                <span asp-validation-for="AttenuationEnabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AttenuationFactor" class="control-label"></label>
@@ -58,6 +68,12 @@
                 <label asp-for="AttenuationDecay" class="control-label"></label>
                 <input asp-for="AttenuationDecay" class="form-control" />
                 <span asp-validation-for="AttenuationDecay" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UnsharpMaskingEnabled" class="control-label"></label>
+                <input type="checkbox" asp-for="UnsharpMaskingEnabled" class="form-control" />
+                <span asp-validation-for="UnsharpMaskingEnabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UnsharpGaussianLow" class="control-label"></label>
@@ -74,10 +90,44 @@
                 <input asp-for="UnsharpHighFrequencyScale" class="form-control" />
                 <span asp-validation-for="UnsharpHighFrequencyScale" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="PlanarBackground" class="control-label"></label>
+                <input type="checkbox" asp-for="PlanarBackground" class="form-control" />
+                <span asp-validation-for="PlanarBackground" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TranslateMeshZPositive" class="control-label"></label>
+                <input type="checkbox" asp-for="TranslateMeshZPositive" class="form-control" />
+                <span asp-validation-for="TranslateMeshZPositive" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SilhouetteEnabled" class="control-label"></label>
+                <input type="checkbox" asp-for="SilhouetteEnabled" class="form-control" />
+                <span asp-validation-for="SilhouetteEnabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SilhouetteEdgeWidth" class="control-label"></label>
+                <input asp-for="SilhouetteEdgeWidth" class="form-control" />
+                <span asp-validation-for="SilhouetteEdgeWidth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SilhouetteSigma" class="control-label"></label>
+                <input asp-for="SilhouetteSigma" class="form-control" />
+                <span asp-validation-for="SilhouetteSigma" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ReliefScale" class="control-label"></label>
                 <input asp-for="ReliefScale" class="form-control" />
                 <span asp-validation-for="ReliefScale" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="P1Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P1Enabled" class="form-control" />
+                <span asp-validation-for="P1Enabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="P1" class="control-label"></label>
@@ -85,9 +135,19 @@
                 <span asp-validation-for="P1" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="P2Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P2Enabled" class="form-control" />
+                <span asp-validation-for="P2Enabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="P2" class="control-label"></label>
                 <input asp-for="P2" class="form-control" />
                 <span asp-validation-for="P2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="P3Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P3Enabled" class="form-control" />
+                <span asp-validation-for="P3Enabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="P3" class="control-label"></label>
@@ -95,9 +155,19 @@
                 <span asp-validation-for="P3" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="P4Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P4Enabled" class="form-control" />
+                <span asp-validation-for="P4Enabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="P4" class="control-label"></label>
                 <input asp-for="P4" class="form-control" />
                 <span asp-validation-for="P4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="P5Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P5Enabled" class="form-control" />
+                <span asp-validation-for="P5Enabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="P5" class="control-label"></label>
@@ -105,14 +175,29 @@
                 <span asp-validation-for="P5" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="P6Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P6Enabled" class="form-control" />
+                <span asp-validation-for="P6Enabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="P6" class="control-label"></label>
                 <input asp-for="P6" class="form-control" />
                 <span asp-validation-for="P6" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="P7Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P7Enabled" class="form-control" />
+                <span asp-validation-for="P7Enabled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="P7" class="control-label"></label>
                 <input asp-for="P7" class="form-control" />
                 <span asp-validation-for="P7" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="P8Enabled" class="control-label"></label>
+                <input type="checkbox" asp-for="P8Enabled" class="form-control" />
+                <span asp-validation-for="P8Enabled" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="P8" class="control-label"></label>

@@ -33,13 +33,23 @@
             </th>
 
             <th>
+                @Html.DisplayNameFor(model => model.GradientThresholdEnabled)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.GradientThreshold)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AttenuationEnabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AttenuationFactor)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AttenuationDecay)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.UnsharpMaskingEnabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UnsharpGaussianLow)
@@ -50,26 +60,71 @@
             <th>
                 @Html.DisplayNameFor(model => model.UnsharpHighFrequencyScale)
             </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.PlanarBackground)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TranslateMeshZPositive)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.SilhouetteEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SilhouetteEdgeWidth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SilhouetteSigma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReliefScale)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.P1Enabled)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.P1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P2Enabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.P2)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.P3Enabled)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.P3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P4Enabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.P4)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.P5Enabled)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.P5)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P6Enabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.P6)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.P7Enabled)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.P7)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.P8Enabled)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.P8)
@@ -99,14 +154,26 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Depth)
             </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.GradientThresholdEnabled)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GradientThreshold)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AttenuationEnabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AttenuationFactor)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AttenuationDecay)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UnsharpMaskingEnabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UnsharpGaussianLow)
@@ -117,26 +184,72 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UnsharpHighFrequencyScale)
             </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanarBackground)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TranslateMeshZPositive)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.SilhouetteEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SilhouetteEdgeWidth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SilhouetteSigma)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ReliefScale)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.P1Enabled)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.P1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P2Enabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.P2)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.P3Enabled)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.P3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P4Enabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.P4)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.P5Enabled)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.P5)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P6Enabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.P6)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.P7Enabled)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.P7)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.P8Enabled)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.P8)
