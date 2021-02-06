@@ -4,26 +4,13 @@
     Gravatar
 #### Solver
 
-    Silhouette
-        Blend profile into mesh form.
-        Zero leads to an exception.
-            Add a check in the silhouette processing step.
-
-        Holes are not processed.
-            https://stackoverflow.com/questions/37160143/how-can-i-extract-internal-contours-holes-with-python-opencv
-
     Explorer
         Workbench tabs do not always respond to arrow keys.
         Add active file name to UI.
         Explorer tab order for UI controls
 
-        Mayavi Pipeline dialog box no longer opens.
+        Intermittently, the Mayavi Pipeline dialog box opens as a blank window.
             The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
-            libpng warning: iCCP: known incorrect sRGB profile
-            Delta intallations?
-                opencv-python-headless
-                Adobe
-            https://github.com/enthought/mayavi/issues
         segmentation fault on exit
 
     OBJ viewer has missing polygons.
@@ -31,6 +18,9 @@
         House
 
     Review all processing steps.
+
+    Silhouette
+        Blend profile into mesh form.
 
     Gradients
         Why are portions of the generated mesh below the XY plane?

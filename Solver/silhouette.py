@@ -73,10 +73,11 @@ class Silhouette:
         sigma:
             The standard deviation used in the Gaussian blur of the image.
         """
+        edge_width = max(1, edge_width)
 
         # 8 bit grayscale -> contours
         background_gray = np.zeros(background.shape, 'uint8')
-        background_gray[:,:] = background*255
+        background_gray[:,:] = background * 255
         contours, hierarchy = cv2.findContours(background_gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         # draw contours into RGB mask
