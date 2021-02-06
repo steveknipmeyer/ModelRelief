@@ -40,7 +40,6 @@ class SilhouetteParameters:
         self.enabled = enabled
         self.edge_width = edge_width
         self.sigma = sigma
-
 class Silhouette:
     """
     A class for processing image silhouettes.
@@ -78,7 +77,7 @@ class Silhouette:
         # 8 bit grayscale -> contours
         background_gray = np.zeros(background.shape, 'uint8')
         background_gray[:,:] = background*255
-        contours, hierarchy = cv2.findContours(background_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(background_gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
         # draw contours into RGB mask
         mask = np.zeros((image.shape[0], image.shape[1], 3), np.uint8)
