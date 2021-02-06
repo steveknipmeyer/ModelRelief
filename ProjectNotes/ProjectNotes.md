@@ -1,14 +1,11 @@
 ﻿## Commit Notes
+
 ### Issues
 #### General
     Gravatar
 #### Solver
 
     Explorer
-        Workbench tabs do not always respond to arrow keys.
-        Add active file name to UI.
-        Explorer tab order for UI controls
-
         Intermittently, the Mayavi Pipeline dialog box opens as a blank window.
             The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
         segmentation fault on exit

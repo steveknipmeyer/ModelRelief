@@ -152,6 +152,10 @@ class Explorer(QtWidgets.QMainWindow):
             field.setVisible(False)
 
     def initialize_ui_settings(self) ->None:
+
+        # main window
+        self.update_window_title()
+
         # threshold
         self.ui.gradientThresholdCheckBox.setChecked(self.solver.mesh_transform.gradient_threshold_parameters.enabled)
         self.initialize_float_field(self.ui.gradientThresholdLineEdit, self.solver.mesh_transform.gradient_threshold_parameters.threshold)
@@ -398,6 +402,13 @@ class Explorer(QtWidgets.QMainWindow):
         #meshes
         for _, mesh_tab in self.mesh_tabs.items():
             mesh_tab.source.dirty = True
+
+    def update_window_title(self )-> None:
+        """
+        Updates the main window title with the active file name
+        """
+        filename = os.path.basename(self.settings_file)
+        self.setWindowTitle(f'Explorer: {filename}')
 
     def update_image_tabs(self, clear_content: bool = False, )-> None:
         """

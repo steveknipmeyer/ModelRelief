@@ -66,7 +66,7 @@
        </font>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::StrongFocus</enum>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::East</enum>
@@ -229,7 +229,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="modelTabs">
           <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="currentIndex">
            <number>0</number>
@@ -269,6 +269,9 @@
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <widget class="QTabWidget" name="workbenchTabs">
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -1141,11 +1144,11 @@
         <string>Edge Width</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="silhouetteSigmaLineEdit">
+      <widget class="QLineEdit" name="p7LineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>880</y>
+         <y>870</y>
          <width>50</width>
          <height>27</height>
         </rect>
@@ -1265,7 +1268,7 @@
         </size>
        </property>
       </widget>
-      <widget class="QLineEdit" name="p7LineEdit">
+      <widget class="QLineEdit" name="silhouetteSigmaLineEdit">
        <property name="geometry">
         <rect>
          <x>240</x>
@@ -1285,7 +1288,7 @@
        <property name="geometry">
         <rect>
          <x>32</x>
-         <y>860</y>
+         <y>870</y>
          <width>201</width>
          <height>24</height>
         </rect>
@@ -1366,30 +1369,38 @@
  </widget>
  <tabstops>
   <tabstop>processButton</tabstop>
+  <tabstop>p5CheckBox</tabstop>
+  <tabstop>p5LineEdit</tabstop>
+  <tabstop>p8CheckBox</tabstop>
+  <tabstop>p8LineEdit</tabstop>
   <tabstop>gradientThresholdCheckBox</tabstop>
   <tabstop>gradientThresholdLineEdit</tabstop>
+  <tabstop>attenuationCheckBox</tabstop>
+  <tabstop>attenuationFactorLineEdit</tabstop>
+  <tabstop>attenuationDecayLineEdit</tabstop>
   <tabstop>unsharpMaskingCheckBox</tabstop>
+  <tabstop>p4CheckBox</tabstop>
+  <tabstop>p4LineEdit</tabstop>
   <tabstop>unsharpGaussianLowLineEdit</tabstop>
   <tabstop>unsharpGaussianHighLineEdit</tabstop>
   <tabstop>unsharpHFScaleLineEdit</tabstop>
+  <tabstop>planarBackgroundCheckBox</tabstop>
+  <tabstop>translateMeshZPositiveCheckBox</tabstop>
+  <tabstop>silhouetteCheckBox</tabstop>
+  <tabstop>silhouetteEdgeWidthLineEdit</tabstop>
+  <tabstop>silhouetteSigmaLineEdit</tabstop>
+  <tabstop>reliefScaleLineEdit</tabstop>
   <tabstop>fileOBJCheckBox</tabstop>
   <tabstop>p1CheckBox</tabstop>
   <tabstop>p1LineEdit</tabstop>
   <tabstop>p2CheckBox</tabstop>
   <tabstop>p2LineEdit</tabstop>
   <tabstop>p3CheckBox</tabstop>
-  <tabstop>silhouetteEdgeWidthLineEdit</tabstop>
-  <tabstop>p4CheckBox</tabstop>
-  <tabstop>p4LineEdit</tabstop>
-  <tabstop>p5CheckBox</tabstop>
-  <tabstop>p5LineEdit</tabstop>
-  <tabstop>translateMeshZPositiveCheckBox</tabstop>
-  <tabstop>planarBackgroundCheckBox</tabstop>
-  <tabstop>p8CheckBox</tabstop>
-  <tabstop>p8LineEdit</tabstop>
-  <tabstop>attenuationCheckBox</tabstop>
-  <tabstop>attenuationFactorLineEdit</tabstop>
-  <tabstop>attenuationDecayLineEdit</tabstop>
+  <tabstop>p3LineEdit</tabstop>
+  <tabstop>p6CheckBox</tabstop>
+  <tabstop>p6LineEdit</tabstop>
+  <tabstop>p7CheckBox</tabstop>
+  <tabstop>p7LineEdit</tabstop>
   <tabstop>imageTabs</tabstop>
   <tabstop>workbenchTabs</tabstop>
  </tabstops>
