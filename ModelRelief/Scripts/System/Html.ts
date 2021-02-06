@@ -27,10 +27,14 @@ export enum ElementIds {
 
     ProgressBar                 = "progressBar",
 
+    GradientThresholdEnabled    = "gradientThresholdEnabled",
     GradientThreshold           = "gradientThreshold",
+    AttenuationEnabled          = "attenuationEnabled",
     AttenuationFactor           = "attenuationFactor",
+    UnsharpMaskingEnabled       = "unsharpMaskingEnabled",
     UnsharpGaussianLow          = "unsharpGaussianLow",
     UnsharpHighFrequencyScale   = "unsharpHighFrequencyScale",
+    SilhouetteEnabled           = "silhouetteEnabled",
     SilhouetteEdgeWidth         = "silhouetteEdgeWidth",
     MeshScale                   = "meshScale",
 

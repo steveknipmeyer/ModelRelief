@@ -157,8 +157,21 @@ input[type=checkbox]:checked + label:before {
     margin-top: 10px;
 }
 
+.nestedControlContainer {
+    margin-left: 15px;
+}
+
 .controlHeading {
     font-size: 12pt;
+}
+
+.controlHeadingDivider {
+    border-color: darkgray;
+    margin-top: 0;
+}
+
+.nestedControlHeadingDivider {
+    border-color: rgb(117, 115, 115);
 }
 
 .controlHeadingDivider {

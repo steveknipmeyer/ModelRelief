@@ -361,11 +361,19 @@ export class ComposerController {
         this._composerViewSettings = new ComposerViewSettings(this.activeMeshTransform);
 
         // Settings
+        this.initializeCheckboxControl(`${ElementIds.GradientThresholdEnabled}`, this._composerViewSettings.meshTransform, "gradientThresholdEnabled");
         this.initializeSliderControl (`${ElementIds.GradientThreshold}`, this._composerViewSettings.meshTransform, "gradientThreshold");
+
+        this.initializeCheckboxControl(`${ElementIds.AttenuationEnabled}`, this._composerViewSettings.meshTransform, "attenuationEnabled");
         this.initializeSliderControl(`${ElementIds.AttenuationFactor}`, this._composerViewSettings.meshTransform, "attenuationFactor");
+
+        this.initializeCheckboxControl(`${ElementIds.UnsharpMaskingEnabled}`, this._composerViewSettings.meshTransform, "unsharpMaskingEnabled");
         this.initializeSliderControl(`${ElementIds.UnsharpGaussianLow}`, this._composerViewSettings.meshTransform, "unsharpGaussianLow");
         this.initializeSliderControl(`${ElementIds.UnsharpHighFrequencyScale}`, this._composerViewSettings.meshTransform, "unsharpHighFrequencyScale");
+
+        this.initializeCheckboxControl(`${ElementIds.SilhouetteEnabled}`, this._composerViewSettings.meshTransform, "silhouetteEnabled");
         this.initializeSliderControl(`${ElementIds.SilhouetteEdgeWidth}`, this._composerViewSettings.meshTransform, "silhouetteEdgeWidth");
+
         this.initializeSliderControl(`${ElementIds.MeshScale}`, this._composerViewSettings.meshTransform, "reliefScale");
 
         // Generate Mesh
@@ -391,6 +399,23 @@ export class ComposerController {
         control.value = setting[propertyName];
         control.addEventListener("change", (changeEvent) => {
             setting[propertyName] = control.value;
+        });
+    }
+
+    /**
+     * @description Initialize a checkbox control.
+     * @private
+     * @param {string} elementId HTML Id of checkbox control.
+     * @param {any} setting Setting.
+     * @param {string} propertyName Setting property name.
+     */
+    private initializeCheckboxControl(elementId: string, setting: any, propertyName: string): void {
+
+        const control = document.querySelector(`#${elementId}`) as HTMLInputElement;
+
+        control.checked = setting[propertyName];
+        control.addEventListener("change", (changeEvent) => {
+            setting[propertyName] = control.checked;
         });
     }
 

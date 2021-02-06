@@ -1,52 +1,42 @@
 ﻿## Commit Notes
 
 ### Issues
+    How does lucy.sfp get corrupted?
+    -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
+    -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
-    Gravatar
-#### Solver
+    Documentation
+    Settings Page
+    Upload
+    Hosting
+    Solver Generate result
+        Result
+        Processing time
+        Polygons
 
-    Explorer
-        Intermittently, the Mayavi Pipeline dialog box opens as a blank window.
-            The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
-        segmentation fault on exit
+    Gravatar
+#### Models
+    Review all mesh generation settings for delivered models.
+    Attenuation Decay.
+        It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
+#### UI
+        Why is Sigma Low hidden?
+
+        Add enabling checkboxes.
+        Add switch for Development controls. (Settings Gear?)
+        Create a graphic image for the silhouette profile.
+#### Solver
+    Runtime error does not propagate back to UI.
+        The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
+            The Solver could mark the output mesh has invalid amd emcode the status result in the contents.
+        Should the GeneratedFile be deleted if the Solver fails?
 
     OBJ viewer has missing polygons.
         Plunderbuss
         House
 
-    Review all processing steps.
-
     Silhouette
         Blend profile into mesh form.
-
-    Gradients
-        Why are portions of the generated mesh below the XY plane?
-            Gradient Threshold introduces the below plane results!
-
-        Evalute NumPy gradients and divergence.
-            NumPy gradients are 1/2 the actual values at the edges. It is "blending".
-            Review Difference handling of edges.
-                lowresolution
-                test
-            Change switch to "Use Difference class"
-
-    Poisson Solver
-        How should the boundary conditions be handled?
-        Are there alternate Poisson equation solvers available?
-            https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
-            https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
-
-            Blender
-                https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
-                What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
-                Generate a test Blender depth buffer.
-                How was the compositing processing defined to create the depth buffer?
-                Obtain a Shockwave player for the videos.
-#### UI
-        Why is Sigma Low hidden?
-        Add enabling checkboxes.
-        Add switch for Development controls. (Settings Gear?)
-        Create a graphic image for the silhouette profile.
 #### Build
     Review target=nginx handling in Builder.py.
         Can the Nginx configuration be accomplished only through /etc/nginx/sites-available/default?
@@ -64,10 +54,6 @@
         Why does venv not add the Python 3.8 include files?
         Why does the 1st mayavi install fail with a vtk module error?
 ### Runtime
-    Solver
-        Runtime error does not propagate back to UI.
-            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
-            Should the GeneratedFile be deleted if the Solver fails?
 ### Security
     Remove steve@knipmeyer.org.
     Azure Key Secrets
@@ -147,8 +133,8 @@
     Explorer throws segmentation fault.
         Execution from command line.
         A new tab has been selected.
-    View Pipeline no longer opens.
-        libpng warning: iCCP: known incorrect sRGB profile
+    Intermittently, the Mayavi Pipeline dialog box opens as a blank window.
+        The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
 
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
@@ -158,12 +144,7 @@
     Replace copyright headers with MIT license notice.
 
 #### Today
-
     How can Python binary extensions be resolved (e.g. sys, time)?
-
-    Review all mesh generation settings for delivered models.
-        Attenuation Decay.
-            It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #####  Linux Setup
 
@@ -321,8 +302,6 @@
         Review the Blender implementation.
             What were the pre-processing steps that were done to prepare the data for the Poisson solver?
         Review the technical papers.
-        Review ZSurf.
-        Review ArtCAM.
 
     Explore
         Awesome Bump
@@ -347,26 +326,16 @@
 
     Clipping planes are not preserved when a Composer view is initialized.
 
-    Visually examine randomly-generated cameras that have been round-tripped.
-
-    Experiment with Poisson solutions of images that have not been attenuated/processed.
-
     Develop test models to test the gaussian filter mask processing.
         The model should contain details near the edges (adjacent to the background) and near thresholded regions.
             Spheres (Positive, Negative)
             Cubes
             Architectural
-
-    Silhouette
-        https://stackoverflow.com/questions/17161088/how-to-refine-or-blur-or-smooth-just-the-edges
-
-    Runtime Settings
-        https://medium.freecodecamp.org/environment-settings-in-javascript-apps-c5f9744282b6
-        minifiedExtension
-
 #### Explorer
 
     devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
+
+    Meshes are not oriented correctly in Mayavi Isometric views.
 
     Build a Python installer package for Explorer.
 
@@ -374,7 +343,6 @@
 
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-
 #### Three.js
     Update OBJLoader.ts.
 
@@ -387,7 +355,28 @@
 #### Solver
     Should the Python image masks be integers or booleans (instead of doubles)?
 
-    Meshes are not oriented correctly in Mayavi Isometric views.
+    Gradients
+        Why are portions of the generated mesh below the XY plane?
+            Gradient Threshold introduces the below plane results!
+
+        Evalute NumPy gradients and divergence.
+            NumPy gradients are 1/2 the actual values at the edges. It is "blending".
+            Review Difference handling of edges.
+                lowresolution
+                test
+            Change switch to "Use Difference class"
+
+    Poisson Solver
+        How should the boundary conditions be handled?
+        Are there alternate Poisson equation solvers available?
+            https://hplgit.github.io/fenics-tutorial/pub/sphinx1/._ftut1003.html
+            https://my.ece.utah.edu/~ece6340/LECTURES/Feb1/Nagel%202012%20-%20Solving%20the%20Generalized%20Poisson%20Equation%20using%20FDM.pdf
+
+            Blender
+                https://github.com/vilemduha/blendercam/blob/master/scripts/addons/basrelief.py
+                What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
+                Generate a test Blender depth buffer.
+                How was the compositing processing defined to create the depth buffer?
 
 #### Python
     Explore Python unit tests.
@@ -1274,18 +1263,12 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
 
 #### TypeScript
-    TypeScript Installations
-        VSCode
-        TypeScript SDK
-        node-typescript
-
     How can a subclass call the property (method) of a super class?
         https://github.com/Microsoft/TypeScript/issues/4465
         ModelViewer extends Viewer
             set model (model : THREE.Object) {
                 super.model(model);     // not valid
             }
-
 
         var uint8Array = new Uint8Array((<any>fileDataObj.target).result);
             EventTarget does not contain a member result.

@@ -124,6 +124,7 @@
 
                     <!-- Gradient Threshold -->
                     <div id=gradientThresholdControl class=" controlContainer">
+                        <input type="checkbox" class="form-check-input" id="gradientThresholdEnabled" value="GradientThresholdEnabled">
                         <span class="controlHeading">Slope Threshold</span>
                         <hr class="controlHeadingDivider">
 
@@ -148,6 +149,7 @@
 
                     <!-- Attenuation Factor -->
                     <div id=attenuationFactorControl class="controlContainer">
+                        <input type="checkbox" class="form-check-input" id="attenuationEnabled" value="AttenuationEnabled">
                         <span class="controlHeading">Slope Attenuation</span>
                         <hr class="controlHeadingDivider">
 
@@ -170,49 +172,56 @@
                         </div>
                     </div>
 
-                    <!-- Unsharp Gaussian Low -->
-                    <div id=unsharpMaskingLowControl class="controlContainer">
-                        <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                    <!-- Unsharp Masking -->
+                    <div id=unsharpMaskingContainer class="controlContainer">
+                        <input type="checkbox" class="form-check-input" id="unsharpMaskingEnabled" value="UnsharpMaskingEnabled">
+                        <span class="controlHeading">Unsharp Masking</span>
                         <hr class="controlHeadingDivider">
 
-                        <div class="row">
-                            <div class="col-md-6 controlDescription">
-                                <span>This setting separates detail from the larger features of the model so that it may be amplified.</span>
-                            </div>
-                            <div class="col-md-3">
-                                <img src="~/images/UnsharpMask.png" class="card-img-top" alt="">
-                            </div>
-                            <div class="col">
-                                <div class="d-flex my-1 sliderControl controlText">
-                                    <span class="mr-2 mt-1">0</span>
-                                    <form class="w-100">
-                                        <input id="unsharpGaussianLow" class="border-0" type="range" min="0" max="5" step="0.1" />
-                                    </form>
-                                    <span class="ml-2 mt-1">5</span>
+                        <!-- Unsharp Gaussian Low -->
+                        <div id=unsharpMaskingLowControl class="nestedControlContainer">
+                            <span class="controlHeading">Gaussian Blur (Unsharp)</span>
+                            <hr class="nestedControlHeadingDivider">
+
+                            <div class="row">
+                                <div class="col-md-6 controlDescription">
+                                    <span>This setting separates detail from the larger features of the model so that it may be amplified.</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="~/images/UnsharpMask.png" class="card-img-top" alt="">
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="w-100">
+                                            <input id="unsharpGaussianLow" class="border-0" type="range" min="0" max="5" step="0.1" />
+                                        </form>
+                                        <span class="ml-2 mt-1">5</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Unsharp High Frequency Scale -->
-                    <div id=unsharpMaskingHighControl class="controlContainer">
-                        <span class="controlHeading">High Frequency Detail</span>
-                        <hr class="controlHeadingDivider">
+                        <!-- Unsharp High Frequency Scale -->
+                        <div id=unsharpMaskingHighControl class="nestedControlContainer">
+                            <span class="controlHeading">High Frequency Detail</span>
+                            <hr class="nestedControlHeadingDivider">
 
-                        <div class="row">
-                            <div class="col-md-6 controlDescription">
-                                <span>This setting controls the amplification of the detail separated by the above Gaussian Blue (Unsharp) step.</span>
-                            </div>
-                            <div class="col-md-3">
-                                <img src="~/images/HighFrequencyScale.png" class="card-img-top" alt="">
-                            </div>
-                            <div class="col">
-                                <div class="d-flex my-1 sliderControl controlText">
-                                    <span class="mr-2 mt-1">0</span>
-                                    <form class="w-100">
-                                        <input id="unsharpHighFrequencyScale" class="border-0" type="range" min="0" max="5" step="0.1" />
-                                    </form>
-                                    <span class="ml-2 mt-1">5</span>
+                            <div class="row">
+                                <div class="col-md-6 controlDescription">
+                                    <span>This setting controls the amplification of the detail separated by the above Gaussian Blue (Unsharp) step.</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="~/images/HighFrequencyScale.png" class="card-img-top" alt="">
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex my-1 sliderControl controlText">
+                                        <span class="mr-2 mt-1">0</span>
+                                        <form class="w-100">
+                                            <input id="unsharpHighFrequencyScale" class="border-0" type="range" min="0" max="5" step="0.1" />
+                                        </form>
+                                        <span class="ml-2 mt-1">5</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -220,13 +229,14 @@
 
                     <!-- Silhouete -->
                     <div id=silhouetteEdgeWidthControl class="controlContainer">
+                        <input type="checkbox" class="form-check-input" id="silhouetteEnabled" value="SilhouetteEnabled">
                         <span class="controlHeading">Silhouette Edge Width</span>
                         <hr class="controlHeadingDivider">
 
-                        <div class="form-check">
+                        <!-- <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="silhouetteEnabled" value="SilhouetteEnabled">
                             <label for="silhouetteEnabled" class="form-check-label">Enabled</label>
-                        </div>
+                        </div> -->
 
                         <div class="row">
                             <div class="col-md-6 controlDescription">
