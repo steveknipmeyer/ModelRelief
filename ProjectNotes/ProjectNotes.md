@@ -2,8 +2,9 @@
 
 ### Issues
     How does lucy.sfp get corrupted?
-    -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
-    -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
+        -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
+        -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
+
 #### General
     Documentation
     Settings Page
@@ -22,9 +23,7 @@
 #### UI
         Why is Sigma Low hidden?
 
-        Add enabling checkboxes.
         Add switch for Development controls. (Settings Gear?)
-        Create a graphic image for the silhouette profile.
 #### Solver
     Runtime error does not propagate back to UI.
         The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
