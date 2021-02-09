@@ -1,0 +1,105 @@
+# Issues
+#### Jupyter
+    https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
+        error: invalid command 'bdist_wheel'
+        ----------------------------------------
+        ERROR: Failed building wheel for pandocfilters
+
+#### Explorer
+    Explorer throws segmentation fault.
+        Execution from command line.
+        A new tab has been selected.
+    Intermittently, the Mayavi Pipeline dialog box opens as a blank window.
+        The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
+   
+    Meshes are not oriented correctly in Mayavi Isometric views.
+
+#### NormalMaps
+    It appears that NormalMap gradients lose some high frequency detail.
+
+#### Solver
+    A default relief size of 1024 leads to a Chrome exception.
+
+    Orthogonal planes (e.g. House) do not generate constant Z depths.
+    
+    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
+
+#### Relief Size
+    Review Mesh, DepthBuffer and NormalMap properties:
+        Width
+        Height
+
+    DepthBuffer
+        Width, Height : Should this be a calculated property based on the image/ raw file format?
+    
+    MeshTransform
+        Height : Should this be a calculated property?
+            Height = Width * (DepthBuffer aspect ratio)?
+        Depth : What is the relationship of this property to LambdaLinearScaling?
+
+#### Composer
+    How should the initial camera of the ModelViewer be defined in a ComposerView?
+        Mesh.DepthBuffer.Camera is used.
+        Mesh.NormalMap.Camera is equivalent.  
+    
+    Clipping planes are not preserved when a Composer view is initialized.
+
+#### StandardView
+    When the view camera is interactively changed, it should invalidate the StandardView in the UI.
+    Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
+
+##### Camera
+Perspective <-> Orthographic
+    The new view does not match the previous view.
+    Fit View is used after the conversion.
+
+##### Clipping Planes
+
+    Investigate why the clipping plane CameraControls are not editable.
+        Could the events be intercepted by the TrackBall?
+    Does repeated adjustment of the clipping planes leads to bad mesh results?
+    Should the near clipping plane always be adjusted to the front extent?
+
+#### Routing
+    FE uses depthbuffers while API uses depth-buffers.
+
+#### Entity Framework
+How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?
+
+#### .NET Core
+Replace DateTime with a type that has more resolution.
+
+#### API
+The Project is populating the object graph too deeply.
+
+A Put (File) request returns Created instead of OK. The file is correctly replaced but the status should be OK.
+
+#### Model Loaders
+    The OBJLoader does not handle Bones.
+        Could this be resolved in a later version of Three.js?
+
+#### VSCode Issues
+    How can the C# style checker be manually run in VSCode?
+        https://github.com/OmniSharp/omnisharp-vscode/issues/43
+    
+    Why does the VSCode Python debugger not find modules in other folders?
+        This happens only in the debugger.
+        Adding .env to the workspace root resolves the issue.
+            PYTHONPATH=.
+                The causes the entire OS env PYTHONPATH to be added to the search path.
+    
+    Investigate workspaces in VSCode.
+        Why is the second workspace unnamed?
+
+#### Exception handling
+    The ApiValidationResult exposes too much about internals in the developer message (RequestType).
+    
+    How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+    https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
+    Concurrency exceptions?
+    
+    SqliteException: SQLite Error 5: 'database is locked'.
+        PostFileRequestHandler : DbContext.SaveChanges();
+    
+    Throwing policy.
+        https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception
