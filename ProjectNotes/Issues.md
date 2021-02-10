@@ -22,7 +22,7 @@
 
     Orthogonal planes (e.g. House) do not generate constant Z depths.
     
-    Close in Orthogonal views of House (Lambda: Documents\Temp\MalformedHouse) yield malformed meshes.
+    Close in Orthogonal views of House yield malformed meshes.
 
 #### Relief Size
     Review Mesh, DepthBuffer and NormalMap properties:
@@ -103,3 +103,6 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
     
     Throwing policy.
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception
+#### Python
+    Why does venv not add the Python 3.8 include files?
+    Why does the 1st mayavi install fail with a vtk module error?

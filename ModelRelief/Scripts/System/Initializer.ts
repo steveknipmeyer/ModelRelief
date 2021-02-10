@@ -26,7 +26,7 @@ export class Initializer  {
     private static async initializeSystemSettings(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}settings/system`;
+        const endPoint = `${HttpLibrary.HostRoot}settings/type/system`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const systemSettings: ISystemSettings = JSON.parse(result.contentString) as unknown as ISystemSettings;
 

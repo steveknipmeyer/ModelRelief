@@ -58,7 +58,7 @@ Electron platform?
             http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
     
         RenderDoc
-            "c:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
+            chrome --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 #### Three.js
     Update OBJLoader.ts.
 

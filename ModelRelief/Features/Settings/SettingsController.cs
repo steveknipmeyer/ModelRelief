@@ -4,12 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Features.Home
+namespace ModelRelief.Features.Settings
 {
+    using System.Net;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using ModelRelief.Features.Settings;
+    using ModelRelief.Services;
     using Newtonsoft.Json;
 
     public class SettingsController : Controller
@@ -33,13 +34,24 @@ namespace ModelRelief.Features.Home
         }
 
         /// <summary>
+        /// Action method for settings.
+        /// </summary>
+        public IActionResult Index()
+        {
+            ViewBag.Environment = HostingEnvironment.EnvironmentName;
+            ViewBag.ASPNETCORE_URLS = ConfigurationProvider.GetSetting(ConfigurationSettings.URLS);
+
+            return View();
+        }
+
+        /// <summary>
         /// Returns the JSON settings file by category (e.g. camera).
         /// </summary>
         /// <param name="settingsType">JSON settings file type (e.g. camera).</param>
         /// <returns>JSON settings file.</returns>
-        [Route("settings/{settingsType}")]
+        [Route("settings/type/{settingsType}")]
         [HttpGet]
-        public ContentResult GetFile([FromRoute]string settingsType)
+        public ContentResult GetType([FromRoute]string settingsType)
         {
             var settingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider);
             var settingsObject = settingsManager.GetSettings(settingsType);

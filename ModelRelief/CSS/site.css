@@ -409,10 +409,6 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 10pt;
 }
 
-.creditTable a:hover {
-    color: darkturquoise;
-}
-
 .creditTable a:link {
     color: white;
 }
@@ -427,6 +423,56 @@ input[type=range]:focus::-ms-fill-upper {
 
 .creditTable a:active {
     color: blue;
+}
+
+/* ----------------------
+    Workbench
+------------------------*/
+.workbenchTable {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.workbenchHeading {
+    font-size: 16pt;
+    color: lightgray;
+}
+
+.workbenchItem {
+    font-size: 12pt;
+}
+
+.workbenchItemDescription {
+    font-size: 10pt;
+}
+
+.workbenchTable a:link {
+    color: white;
+}
+
+.workbenchTable a:visited {
+    color: white;
+}
+
+.workbenchTable a:hover {
+    color: cyan;
+}
+
+.creditTable a:active {
+    color: blue;
+}
+
+/* ----------------------
+    Settings
+------------------------*/
+.settingsTable {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.settingsHeading {
+    font-size: 16pt;
+    color: lightgray;
 }
 
 /* ----------------------

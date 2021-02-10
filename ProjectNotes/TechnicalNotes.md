@@ -116,7 +116,6 @@ Domain models are in an inheritance chain so they can share common functionality
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
 
-
 |DTO (HTTP)||Abstract Domain (DB)|
 |--|--|--|
 |||Domain.DomainModel|
@@ -155,7 +154,7 @@ public class NormalMap : IGeneratedFileModel
 public class Project : IModel
 ```
 **Domain**
- ModelRelief\Domain
+ ModelRelief/Domain
 ```csharp
 public class Camera : DomainModel
 public class DepthBuffer  : GeneratedFileDomainModel
@@ -754,18 +753,12 @@ https://semver.npmjs.com/
     npm install -g npm-install-missing
     npm install --global --production npm-windows-upgrade
 
-#### Publish and Deploy
-    Environment variables must be set.
-        (?) ASPNETCORE_ENVIRONMENT      Production
-        PATH                            C:\modelrelief\mrenv
-        PYTHONPATH                      C:\modelrelief\Tools; C:\modelrelief\Solver;
-    
+#### Publish and Deploy   
         The insecure and secure  ports must be configured.
-                (insecure) HTTP: The insecure port (typically, 80 in production and 5000 in development).
-                (secure)  HTTPS: The secure port where the client is redirected (typically, 443 in production and 5001 in development).
+            (insecure) HTTP: The insecure port (typically, 80 in production and 5000 in development).
+            (secure)  HTTPS: The secure port where the client is redirected (typically, 443 in production and 5001 in development).
     
-        MRUrls https://localhost:5001/;http://localhost:5000/
-        MRUrls https://localhost:443/;http://localhost:80/
+        export ASPNETCORE_URLS="https://localhost:5001/;http://localhost:5000/"
     
     azurekeyvault.json must be copied to the root folder.
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
@@ -825,12 +818,12 @@ Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwine
 https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
 
 #### Material Frameworks
-Materialize : http://materializecss.com
-Material Design Lite : https://getmdl.io
-MUI : https://www.muicss.com
-Material Foundation : https://eucalyptuss.github.io/materia...
-Material : http://daemonite.github.io/material
-Lumx : http://ui.lumapps.com
+    Materialize : http://materializecss.com
+    Material Design Lite : https://getmdl.io
+    MUI : https://www.muicss.com
+    Material Foundation : https://eucalyptuss.github.io/materia...
+    Material : http://daemonite.github.io/material
+    Lumx : http://ui.lumapps.com
 
 #### Favicon
         https://realfavicongenerator.net/
@@ -840,15 +833,10 @@ Lumx : http://ui.lumapps.com
 #### Swagger
     API authentication must include  the type "Bearer":   
         Bearer <JWT>
-
-#### ANSI Command Shell Sequences
-    [HKEY_CURRENT_USER\Console]
-    "VirtualTerminalLevel"=dword:**00000001**
-
 #### Pyamg
     https://github.com/pyamg/pyamg/commit/a188d5b8c03337018d8fe4f8bb883a8decc95bb5
     This warning has been resolved in the tip of Pyamg but a new version (4.0.0+) has not been distributed.
-    devenv\lib\site-packages\pyamg\gallery\stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+    devenv/lib/site-packages/pyamg/gallery/stencil.py:114: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
         diag[s] = 0
 
 #### Auth0
@@ -934,7 +922,7 @@ Lumx : http://ui.lumapps.com
 A Cmake Release build includes the 'O2' optimization flags. It is not necessary to define CXXFLAGS with additional switches.
 
 np_fill, relief_fill
-    The order of np_fill and releif_fill is critical. When np_fill follows relief_fill and the \<array target is the same\>, there is optimization which makes it much faster (8X).
+    The order of np_fill and releif_fill is critical. When np_fill follows relief_fill and the /<array target is the same/>, there is optimization which makes it much faster (8X).
     If the array targets are different, there is no performance difference.
 
 #### Circular Dependencies
@@ -944,7 +932,7 @@ np_fill, relief_fill
     
     Madge
         https://github.com/pahen/madge
-        madge --warning --circular --extensions ts ModelRelief\Scripts
+        madge --warning --circular --extensions ts ModelRelief/Scripts
 
 #### FileGenerateRequest
     A GenerateFileRequest is queued when:
@@ -1016,5 +1004,19 @@ np_fill, relief_fill
             Light ID
             A supporting join table is needed to connect a lighting configuration with the individual lights.
 
-
-
+#### HTML ContentResult
+```csharp
+/// <summary>
+/// Action method for settings.
+/// </summary>
+public ContentResult Index()
+{
+    return new ContentResult
+    {
+        ContentType = "text/html",
+        StatusCode = (int)HttpStatusCode.OK,
+        Content = $"Environment = {HostingEnvironment.EnvironmentName}<br>" +
+        $"ASPNETCORE_URLS = {ConfigurationProvider.GetSetting(ConfigurationSettings.URLS)}<br>",
+    };
+}
+'''

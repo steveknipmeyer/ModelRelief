@@ -34,6 +34,7 @@ namespace ModelRelief.Features.Home
         /// <summary>
         /// Action method for Home page.
         /// </summary>
+        [HttpGet]
         public IActionResult Index()
             {
             var siteKey = HttpHelpers.RequestIsLocal(this.Request) ? _reCAPTCHASettings.localhostModelRelief.Site : _reCAPTCHASettings.ModelRelief.Site;
@@ -41,6 +42,16 @@ namespace ModelRelief.Features.Home
 
             return View();
             }
+
+        /// <summary>
+        /// Action method for settings.
+        /// </summary>
+        [Route("about")]
+        [HttpGet]
+        public IActionResult About()
+        {
+            return View();
+        }
 
         /// <summary>
         /// Action method for Privacy page.
@@ -58,6 +69,17 @@ namespace ModelRelief.Features.Home
         public IActionResult Credits()
         {
             return View();
+        }
+
+        /// <summary>
+        /// Action method for route testing.
+        /// </summary>
+        /// <param name="id">Placeholder.</param>
+        [Route("special/{id?}")]
+        [HttpGet]
+        public IActionResult Special(int id)
+        {
+            return Content($"Id = {id}");
         }
     }
 }

@@ -59,7 +59,7 @@ export class DefaultCameraSettings  {
     public static async initialize(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}settings/camera`;
+        const endPoint = `${HttpLibrary.HostRoot}settings/type/camera`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 

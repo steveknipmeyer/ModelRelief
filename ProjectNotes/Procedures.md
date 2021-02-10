@@ -89,29 +89,29 @@
 - [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
 - [X] **dotnet ef migrations add InitialCreate**
 #### Test Files
-- [X] Add the new model folder type to Test\Data\Users including at least one placeholder file to ensure the output folder will be created.
+- [X] Add the new model folder type to Test/Data/Users including at least one placeholder file to ensure the output folder will be created.
 #### Api
-- [X] Add request handlers to the V1 folder (e.g. Api\V1\NormalMaps)
+- [X] Add request handlers to the V1 folder (e.g. Api/V1/NormalMaps)
 - [X] Add API definitions for the new model to ApiErros.cs.
 #### Features
-- [X] Add the new controller. (e.g. Features\NormalMaps\NormalMapsController.cs)
+- [X] Add the new controller. (e.g. Features/NormalMaps/NormalMapsController.cs)
 - [X] Add the new DTO model (e.g. NormalMap.cs)
 - [X] Add the supporting Razor pages (e.g. Create.cshtml)
 - [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
 #### Scripts
-- [X] Add the interface to Api\V1\Interfaces (e.g. INormalMap.ts).
+- [X] Add the interface to Api/V1/Interfaces (e.g. INormalMap.ts).
 - [X] Add the new concrete class implementing the interface to DtoModels.ts.
-- [X] Add the necessary application graphics model to Models (e.g. Models\NormalMap\NormalMap.ts).
+- [X] Add the necessary application graphics model to Models (e.g. Models/NormalMap/NormalMap.ts).
 <br>*If the entity is graphical:*
-- [X] Add a new viewer to Viewers (e.g. Viewers\NormalMapViewer.ts)
-- [X] Add an MVC View to Views (e.g. Views\NormalMapView.ts)
-- [X] Add the HTML View to Composer\Edit.cshtml.
+- [X] Add a new viewer to Viewers (e.g. Viewers/NormalMapViewer.ts)
+- [X] Add an MVC View to Views (e.g. Views/NormalMapView.ts)
+- [X] Add the HTML View to Composer/Edit.cshtml.
 - [ ] Create the factory (e.g. NormalMapFactory) to construct the entity.
 - [ ] Extend ComposerController to add support for generating the new entity.
 
 #### XUnit Integration Tests
-- [X] Add the model Base support to Integration\Base (e.g. NormalMapsBaseIntegration.cs)
-- [X] Add the model File support to Integration\File (e.g. NormalMapsFileIntegration.cs)
+- [X] Add the model Base support to Integration/Base (e.g. NormalMapsBaseIntegration.cs)
+- [X] Add the model File support to Integration/File (e.g. NormalMapsFileIntegration.cs)
 - [X] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
 #### TypeScript Unit Tests
 - [ ] Add tests supporting the new entity to UnitTests.ts.
@@ -131,7 +131,7 @@
             Development             python Build/Builder.py --target local
              Nginx                  python Build/builder.py --target nginx --deploy True
         Postman
-        Explorer                    python.exe Explorer/explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
+        Explorer                    python Explorer/explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
         Solver                      python Solver/solver.py --s "Test/House.json" --w "Test/Working"
 
 ### dotnet run
@@ -152,11 +152,11 @@ The ordering in launchSettings.json controls whether the configuratIon is 'Produ
 #### Back End
 ##### Domain Models
 - [x] Add new properties to the class in the Domain folder.
-##### DTO Models (Features\\\<Models>)
+##### DTO Models (Features/<Models>)
 - [x] Add new properties to the class.
-- [x] Extend the AbstractValidator\<Model\> to add new validation rules for the properties.
+- [x] Extend the AbstractValidator/<Model> to add new validation rules for the properties.
 ##### DbInitializer
-- [ ] Add the properties to the instance initializers of the Add\<Model> methods.
+- [ ] Add the properties to the instance initializers of the Add/<Model> methods.
 OR
 - [X] Add the properties to the JSON initialize files in Test/Data/Users/<model>
 ##### Explorer (MeshTransform only)
@@ -165,9 +165,9 @@ OR
 ##### Solver (MeshTransform only)
 - [X] Extend the relevant Python class (e.g. DepthBuffer) to include the new properties
 ##### Testing
-- [X] Add the new properties to the ConstructValidModel method of the \<Model>TestModelFactory class.
+- [X] Add the new properties to the ConstructValidModel method of the /<Model>TestModelFactory class.
 - [ ] Run the unit tests.
-- [ ] Update the Solver\Test JSON files using MRUpdateSeedData.
+- [ ] Update the Solver/Test JSON files using MRUpdateSeedData.
 ##### Schema
 - [ ] Update ModelRelief.dgml schema diagram.
 
@@ -200,8 +200,8 @@ OR
         [X] Camera.json (placeholder, values not important)
         [X] MeshTransform.json (placeholder, values not important)
     
-    Copy an existing mesh file to create a placeholder in Test\Data\Users\meshes.
+    Copy an existing mesh file to create a placeholder in Test/Data/Users/meshes.
     
     In ModelRelief, open the new model and generate a relief.
-    Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief\Test.
-    Update the Solver\Test JSON files using MRUpdateSeedData.
+    Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief/Test.
+    Update the Solver/Test JSON files using MRUpdateSeedData.
