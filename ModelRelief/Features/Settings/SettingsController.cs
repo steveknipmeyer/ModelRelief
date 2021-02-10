@@ -36,7 +36,9 @@ namespace ModelRelief.Features.Settings
         /// <summary>
         /// Action method for settings.
         /// </summary>
-        public IActionResult Index()
+        [Route("settings")]
+        [HttpGet]
+        public IActionResult Editor()
         {
             ViewBag.Environment = HostingEnvironment.EnvironmentName;
             ViewBag.ASPNETCORE_URLS = ConfigurationProvider.GetSetting(ConfigurationSettings.URLS);

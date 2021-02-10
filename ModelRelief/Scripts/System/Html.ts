@@ -7,6 +7,7 @@
 
 export enum ElementIds {
 
+    // Composer
     Root                = "rootContainer",
     ComposerView        = "composerView",
     ModelView           = "modelView",
@@ -27,6 +28,7 @@ export enum ElementIds {
 
     ProgressBar                 = "progressBar",
 
+    // MeshTransform
     GradientThresholdEnabled    = "gradientThresholdEnabled",
     GradientThreshold           = "gradientThreshold",
     AttenuationEnabled          = "attenuationEnabled",
@@ -39,6 +41,9 @@ export enum ElementIds {
     MeshScale                   = "meshScale",
 
     GenerateMesh                = "generateMesh",
+
+    // Settings
+    ExtendedCameraControls     = "extendedCameraControls",
 
     // Workbench
     CameraTestControls  = "cameraTestControls",

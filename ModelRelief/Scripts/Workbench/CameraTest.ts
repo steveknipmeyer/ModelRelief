@@ -61,9 +61,9 @@ class ViewerControls {
 /**
  * @description Test application.
  * @export
- * @class App
+ * @class CameraTest
  */
-export class App {
+class CameraTest {
 
     public _logger: ILogger;
     public _loader: Loader;
@@ -71,7 +71,7 @@ export class App {
     public _viewerControls: ViewerControls;
 
     /**
-     * Creates an instance of App.
+     * Creates an instance of CameraTest.
      */
     constructor() {
         this._loader = new Loader();
@@ -143,5 +143,5 @@ export class App {
     }
 }
 
-const app = new App();
-app.run();
+const cameraTest = new CameraTest();
+cameraTest.run();
