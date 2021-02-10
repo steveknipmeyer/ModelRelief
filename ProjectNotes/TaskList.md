@@ -1,9 +1,5 @@
 ## Commit Notes
-
 #### Issues
-    btn-default
-    About Settings
-
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp

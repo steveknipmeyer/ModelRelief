@@ -16,12 +16,8 @@ hr {
     border-color: gray;
 }
 
-input, textarea {
+.btn-default {
     color: white;
-}
-
-select.form-control {
-    background-color: #3b6176  !important;
 }
 
 .button-rounded {
@@ -29,9 +25,24 @@ select.form-control {
     border-radius: 32px;
 }
 
+input, textarea {
+    color: white;
+}
+
+input[type="checkbox"] {
+    height: 24px;
+}
+
+select.form-control {
+    background-color: #3b6176  !important;
+}
+
 a {
     color: white;
     font-weight: lighter;
+}
+a:hover {
+    color: cyan;
 }
 
 .card {
@@ -426,43 +437,6 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 /* ----------------------
-    Workbench
-------------------------*/
-.workbenchTable {
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
-.workbenchHeading {
-    font-size: 16pt;
-    color: lightgray;
-}
-
-.workbenchItem {
-    font-size: 12pt;
-}
-
-.workbenchItemDescription {
-    font-size: 10pt;
-}
-
-.workbenchTable a:link {
-    color: white;
-}
-
-.workbenchTable a:visited {
-    color: white;
-}
-
-.workbenchTable a:hover {
-    color: cyan;
-}
-
-.creditTable a:active {
-    color: blue;
-}
-
-/* ----------------------
     Settings
 ------------------------*/
 .settingsTable {
@@ -499,6 +473,43 @@ input[type=range]:focus::-ms-fill-upper {
 
 .logInfo {
     color: rgb(255, 255, 255);
+}
+
+/* ----------------------
+    Workbench
+------------------------*/
+.workbenchTable {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.workbenchHeading {
+    font-size: 16pt;
+    color: lightgray;
+}
+
+.workbenchItem {
+    font-size: 12pt;
+}
+
+.workbenchItemDescription {
+    font-size: 10pt;
+}
+
+.workbenchTable a:link {
+    color: white;
+}
+
+.workbenchTable a:visited {
+    color: white;
+}
+
+.workbenchTable a:hover {
+    color: cyan;
+}
+
+.creditTable a:active {
+    color: blue;
 }
 
 /* ----------------------
