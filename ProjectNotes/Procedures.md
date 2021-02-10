@@ -75,7 +75,7 @@
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 
 #### Documentation
-- [X] Update the class hierarchies in ProjectNotes.
+- [X] Update the class hierarchies in TechnicalNotes.md.
 #### Configuration
 - [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
 #### Dispatcher
@@ -87,12 +87,11 @@
 - [X] Delete the existing databases
 - [X] Add the new entity type to ModelReliefDbContext.cs.
 - [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
-- [X] **dotnet ef migrations add InitialCreate**
 #### Test Files
 - [X] Add the new model folder type to Test/Data/Users including at least one placeholder file to ensure the output folder will be created.
 #### Api
 - [X] Add request handlers to the V1 folder (e.g. Api/V1/NormalMaps)
-- [X] Add API definitions for the new model to ApiErros.cs.
+- [X] Add API definitions for the new model to ApiErrors.cs.
 #### Features
 - [X] Add the new controller. (e.g. Features/NormalMaps/NormalMapsController.cs)
 - [X] Add the new DTO model (e.g. NormalMap.cs)

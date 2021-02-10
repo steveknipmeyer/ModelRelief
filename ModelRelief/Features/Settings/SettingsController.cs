@@ -51,7 +51,7 @@ namespace ModelRelief.Features.Settings
         /// <returns>JSON settings file.</returns>
         [Route("settings/type/{settingsType}")]
         [HttpGet]
-        public ContentResult GetType([FromRoute]string settingsType)
+        public ContentResult GetSettingsByType([FromRoute]string settingsType)
         {
             var settingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider);
             var settingsObject = settingsManager.GetSettings(settingsType);
