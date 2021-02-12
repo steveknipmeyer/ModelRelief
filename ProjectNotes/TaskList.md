@@ -1,11 +1,21 @@
 ## Commit Notes
+
 #### Issues
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
-    Documentation
     Settings Page
+        Consolidate SystemSettings with Settings.
+            How can Settings be exposed in (Composer) Edit?
+                SystemSettings
+                    Refactor SystemSettings to initialize settings (defaults or user query) and do not use static properties.
+                        Remove the initialization step in Initializer. The settings are instantiated when  needed.
+                        Provide defaults if the user is not logged in.
+                        Query the Settings table for the User.
+                    Inject the SystemSettings structure as ViewBag before the View is rendered.                   
+
+    Documentation
     Upload
 #### Models
     OBJ viewer has missing polygons.
@@ -17,11 +27,11 @@
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #### UI
-        Add switch for Development controls. (Settings Gear?)
+    Add switch for Development controls. (Settings Gear?)
 
-        Create a video or an animation?
-        Workflow page
-            Illustrate with images from Explorer!
+    Create a video or an animation?
+    Workflow page
+        Illustrate with images from Explorer!
 
 #### Solver
     Runtime error does not propagate back to UI.
