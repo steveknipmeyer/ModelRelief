@@ -40,7 +40,7 @@ export class DepthBufferViewerControls {
         this._depthBufferViewer = depthBufferViewer;
 
         // UI Controls
-        if (SystemSettings.developmentUI)
+        if (SystemSettings.depthBufferViewVisible)
             this.initializeControls();
     }
 

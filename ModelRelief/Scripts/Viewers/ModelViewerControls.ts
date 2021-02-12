@@ -41,7 +41,7 @@ export class ModelViewerControls {
         this._modelViewer = modelViewer;
 
         // UI Controls
-        if (SystemSettings.developmentUI)
+        if (SystemSettings.modelViewerExtendedControls)
             this.initializeControls();
     }
 

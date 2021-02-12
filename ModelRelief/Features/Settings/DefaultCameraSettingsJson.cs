@@ -7,9 +7,9 @@
 namespace ModelRelief.Features.Settings
 {
     /// <summary>
-    /// Shared camera settings.
+    /// Shared defaul camera settings.
     /// These settings are shared between the backend and frontend through JSON.
-    /// N.B. Newtonsoft.JSON cannot deserialize into an interface so this is a concrete class.
+    /// N.B. Newtonsoft.JSON cannot deserialize using an interface so this is a concrete class.
     ///      The front end (FE) uses an interface IDefaultCameraSettings with JSON.parse.
     /// </summary>
     public class DefaultCameraSettingsJson

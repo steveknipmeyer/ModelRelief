@@ -1,4 +1,11 @@
 {
     "LoggingEnabled": true,
-    "DevelopmentUI": true
+    "DevelopmentUI": true,
+
+    "ModelViewerExtendedControls": true,
+    "MeshViewerExtendedControls": true,
+    "ExtendedCameraControls": true,
+
+    "DepthBufferViewVisible": true,
+    "NormalMapViewVisible": true
 }

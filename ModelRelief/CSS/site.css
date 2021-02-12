@@ -236,7 +236,7 @@ input[type=checkbox]:checked + label:before {
     border-radius: 24px;
 }
 
-/* Extended dat.gui Controls (developmentUI JSON setting */
+/* Extended dat.gui Controls (extended controls user setting */
 .dg.main {
     margin-left: 15px;
     margin-bottom: 25px;

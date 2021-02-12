@@ -5,6 +5,8 @@
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
+    Perspective control order
+    
     Settings Page
         Consolidate SystemSettings with Settings.
             How can Settings be exposed in (Composer) Edit?

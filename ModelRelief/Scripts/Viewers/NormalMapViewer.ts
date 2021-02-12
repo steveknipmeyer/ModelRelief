@@ -43,7 +43,7 @@ export class NormalMapViewer extends ImageViewer {
     /**
      * @description UI controls initialization.
      */
-    public initializeUIControls() {
+    public initializeUIControls(): void{
 
         this._normalMapViewerControls = new NormalMapViewerControls(this);
     }
@@ -55,7 +55,7 @@ export class NormalMapViewer extends ImageViewer {
      * @param row Image row.
      * @param column Image column.
      */
-    public analyzePixel(row: number, column: number) {
+    public analyzePixel(row: number, column: number): void {
 
         const normalMap = this.imageModel as NormalMap;
         const normalVector: THREE.Vector3 = normalMap.normal(row, column);

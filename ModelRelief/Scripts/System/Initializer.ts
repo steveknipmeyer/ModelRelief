@@ -7,8 +7,7 @@
 import {WebGLDetector} from "Scripts/Graphics/WebGLDetector";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {ElementIds} from "Scripts/System/Html";
-import {ContentType, HttpLibrary, MethodType} from "Scripts/System/Http";
-import {ISystemSettings, SystemSettings} from "Scripts/System/SystemSettings";
+import {SystemSettings} from "Scripts/System/SystemSettings";
 
 /**
  * @description CameraSettings
@@ -17,22 +16,6 @@ import {ISystemSettings, SystemSettings} from "Scripts/System/SystemSettings";
  */
 export class Initializer  {
 
-    /**
-     * @description Initialize the system settings variables.
-     * @private
-     * @static
-     * @returns {Promise<void>}
-     */
-    private static async initializeSystemSettings(): Promise<void> {
-
-        // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}settings/type/system`;
-        const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
-        const systemSettings: ISystemSettings = JSON.parse(result.contentString) as unknown as ISystemSettings;
-
-        SystemSettings.loggingEnabled = systemSettings.LoggingEnabled;
-        SystemSettings.developmentUI  = systemSettings.DevelopmentUI;
-    }
 
     /**
      * @description Performs system initialization.
@@ -52,7 +35,7 @@ export class Initializer  {
         await DefaultCameraSettings.initialize();
 
         // shared System settings with backend
-        await this.initializeSystemSettings();
+        await SystemSettings.initialize();
 
         return true;
     }

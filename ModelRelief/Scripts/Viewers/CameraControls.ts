@@ -224,8 +224,8 @@ export class CameraControls {
         // Standard View
         this.initializeStandardView();
 
-        // Development UI Controls
-        if (SystemSettings.developmentUI) {
+        // Extended Controls
+        if (SystemSettings.extendedCameraControls) {
 
             // Init dat.gui and controls for the UI
             const gui = new dat.GUI({

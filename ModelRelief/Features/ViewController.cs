@@ -22,7 +22,7 @@ namespace ModelRelief.Features
         where TSingleGetModel : IModel
     {
         public ViewControllerOptions ViewControllerOptions { get; }
-        public new ILogger           Logger { get; }                // base class Logger category is UxController
+        public new ILogger Logger { get; }                // base class Logger category is UxController
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TSingleGetModel, TRequestModel}"/> class.

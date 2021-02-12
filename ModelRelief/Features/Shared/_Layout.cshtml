@@ -56,7 +56,12 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                @if (SystemSettings.DevelopmentUI)
+                @{
+                    var developmentUI = true;
+                    var user = User;
+                    var systemSettings = new SystemSettings(User);
+                }
+                @if (developmentUI)
                 {
                     <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
 

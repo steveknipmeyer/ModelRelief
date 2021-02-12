@@ -55,8 +55,7 @@ namespace ModelRelief.Features.Settings
         [HttpGet]
         public ContentResult GetSettingsByType([FromRoute]string settingsType)
         {
-            var settingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider);
-            var settingsObject = settingsManager.GetSettings(settingsType);
+            var settingsObject = SettingsManager.GetSettings(settingsType);
             var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

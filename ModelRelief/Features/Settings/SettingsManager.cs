@@ -16,17 +16,17 @@ namespace ModelRelief.Features.Settings
     /// Shared settings manager.
     /// Provides initialization of settings shared between the front end (FE) and backend (BE) through JSON.
     /// </summary>
-    public class SettingsManager
+    public static class SettingsManager
     {
         public const string CameraType = "camera";
         public const string SystemType = "system";
 
-        public IWebHostEnvironment HostingEnvironment { get; }
-        public IConfigurationProvider ConfigurationProvider { get; }
+        public static IWebHostEnvironment HostingEnvironment { get; set; }
+        public static IConfigurationProvider ConfigurationProvider { get; set; }
 
-        public SettingsManager(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        public static void Initialize(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
         {
-            HostingEnvironment = hostingEnvironment;
+            SettingsManager.HostingEnvironment = hostingEnvironment;
             ConfigurationProvider = configurationProvider;
         }
 
@@ -35,7 +35,7 @@ namespace ModelRelief.Features.Settings
         /// </summary>
         /// <param name="settingsType">Settings type (e.g. camera)</param>
         /// <returns>Settings object read from JSON.</returns>
-        public object GetSettings(string settingsType)
+        public static object GetSettings(string settingsType)
         {
             var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
             var settingsFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
