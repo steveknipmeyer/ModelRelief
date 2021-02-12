@@ -7,7 +7,10 @@
 namespace ModelRelief.Features.Settings
 {
     using System.IO;
+    using System.Security.Claims;
     using Microsoft.AspNetCore.Hosting;
+    using ModelRelief.Database;
+    using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
@@ -16,18 +19,39 @@ namespace ModelRelief.Features.Settings
     /// Shared settings manager.
     /// Provides initialization of settings shared between the front end (FE) and backend (BE) through JSON.
     /// </summary>
-    public static class SettingsManager
+    public class SettingsManager : ISettingsManager
     {
         public const string CameraType = "camera";
-        public const string SystemType = "system";
+        public const string UserType = "user";
 
-        public static IWebHostEnvironment HostingEnvironment { get; set; }
-        public static IConfigurationProvider ConfigurationProvider { get; set; }
+        public  IWebHostEnvironment HostingEnvironment { get; set; }
+        public  IConfigurationProvider ConfigurationProvider { get; set; }
+        public  ModelReliefDbContext DbContext { get; set; }
 
-        public static void Initialize(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        public Settings UserSettings { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsManager"/> class.
+        /// Constructor.
+        /// </summary>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="dbContext">ModelReliefDBContext</param>
+        public SettingsManager(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ModelReliefDbContext dbContext)
         {
-            SettingsManager.HostingEnvironment = hostingEnvironment;
-            ConfigurationProvider = configurationProvider;
+            this.HostingEnvironment = hostingEnvironment;
+            this.ConfigurationProvider = configurationProvider;
+
+            this.UserSettings = new Settings();
+        }
+
+        /// <summary>
+        /// Assign the user settings from the active user (if defined)
+        /// </summary>
+        /// <param name="user">Active user</param>
+        public void InitializeUserSettingsFromUser(ClaimsPrincipal user)
+        {
+            var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -35,21 +59,20 @@ namespace ModelRelief.Features.Settings
         /// </summary>
         /// <param name="settingsType">Settings type (e.g. camera)</param>
         /// <returns>Settings object read from JSON.</returns>
-        public static object GetSettings(string settingsType)
+        public object GetSettings(string settingsType)
         {
-            var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
-            var settingsFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
-            settingsFile = Path.GetFullPath(settingsFile);
-
             switch (settingsType.ToLower())
             {
                 case CameraType:
+                    var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
+                    var settingsFile = $"{this.HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
+                    settingsFile = Path.GetFullPath(settingsFile);
+
                     var defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettingsJson>(System.IO.File.ReadAllText(settingsFile));
                     return defaultCameraSettings;
 
-                case SystemType:
-                    var systemSettings = JsonConvert.DeserializeObject<SystemSettingsJson>(System.IO.File.ReadAllText(settingsFile));
-                    return systemSettings;
+                case UserType:
+                    return this.UserSettings;
 
                 default:
                     return null;

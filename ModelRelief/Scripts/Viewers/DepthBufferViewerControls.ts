@@ -6,7 +6,7 @@
 "use strict";
 
 import * as dat from "dat.gui";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
@@ -40,7 +40,7 @@ export class DepthBufferViewerControls {
         this._depthBufferViewer = depthBufferViewer;
 
         // UI Controls
-        if (SystemSettings.depthBufferViewVisible)
+        if (SettingsManager.userSettings.DepthBufferViewVisible)
             this.initializeControls();
     }
 

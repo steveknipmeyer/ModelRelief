@@ -158,7 +158,7 @@ namespace ModelRelief.Services
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddSingleton<IDispatcher, Dispatcher>();
-            services.AddSingleton<ISystemSettings, SystemSettings>();
+            services.AddSingleton<ISettingsManager, SettingsManager>();
 
             services.AddTransient<IEmailService, EmailService>();
         }

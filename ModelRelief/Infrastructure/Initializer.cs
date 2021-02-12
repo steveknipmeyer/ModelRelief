@@ -51,9 +51,8 @@ namespace ModelRelief.Database
         /// </summary>
         public void InitializeSharedSettings()
         {
-            SettingsManager.Initialize(HostingEnvironment, ConfigurationProvider);
-
-            var defaultCameraSettings = SettingsManager.GetSettings(SettingsManager.CameraType) as DefaultCameraSettingsJson;
+            var settingsManager = new SettingsManager(this.HostingEnvironment, this.ConfigurationProvider, null);
+            var defaultCameraSettings = settingsManager.GetSettings(SettingsManager.CameraType) as DefaultCameraSettingsJson;
             DefaultCameraSettings.Initialize(defaultCameraSettings);
         }
 

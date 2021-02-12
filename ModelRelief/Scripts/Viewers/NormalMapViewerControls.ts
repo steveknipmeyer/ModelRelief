@@ -6,7 +6,7 @@
 "use strict";
 
 import * as dat from "dat.gui";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
 
 /**
@@ -40,7 +40,7 @@ export class NormalMapViewerControls {
         this._normalMapViewer = normalMapViewer;
 
         // UI Controls
-        if (SystemSettings.normalMapViewVisible)
+        if (SettingsManager.userSettings.NormalMapViewVisible)
             this.initializeControls();
     }
 

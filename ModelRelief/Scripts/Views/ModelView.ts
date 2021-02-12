@@ -8,7 +8,7 @@
 
 import {FileModel} from "Scripts/Api/V1/Models/FileModel";
 import {ElementIds} from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 import {ModelViewerControls} from "Scripts/Viewers/ModelViewerControls";
@@ -73,7 +73,7 @@ export class ModelView {
 
         // Camera Controls
         const cameraControlsOptions: ICameraControlsOptions = {
-            cameraHelper     : SystemSettings.developmentUI ? true : false,
+            cameraHelper: SettingsManager.userSettings.DevelopmentUI ? true : false,
         };
         this._cameraControls = new CameraControls(this._modelViewer, cameraControlsOptions);
 

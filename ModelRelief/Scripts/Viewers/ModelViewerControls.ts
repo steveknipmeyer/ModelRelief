@@ -7,7 +7,7 @@
 
 import * as dat from "dat.gui";
 import {ElementAttributes, ElementIds} from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 
 /**
@@ -41,7 +41,7 @@ export class ModelViewerControls {
         this._modelViewer = modelViewer;
 
         // UI Controls
-        if (SystemSettings.modelViewerExtendedControls)
+        if (SettingsManager.userSettings.ModelViewerExtendedControls)
             this.initializeControls();
     }
 

@@ -16,7 +16,7 @@ import { CameraHelper } from "Scripts/Models/Camera/CameraHelper";
 import { DefaultCameraSettings } from "Scripts/Models/Camera/DefaultCameraSettings";
 import { EventType, IMREvent } from "Scripts/System/EventManager";
 import { ElementAttributes, ElementClasses, ElementIds } from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import { Viewer } from "Scripts/Viewers/Viewer";
 
 /**
@@ -225,7 +225,7 @@ export class CameraControls {
         this.initializeStandardView();
 
         // Extended Controls
-        if (SystemSettings.extendedCameraControls) {
+        if (SettingsManager.userSettings.ExtendedCameraControls) {
 
             // Init dat.gui and controls for the UI
             const gui = new dat.GUI({

@@ -7,7 +7,7 @@
 import {WebGLDetector} from "Scripts/Graphics/WebGLDetector";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {ElementIds} from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 
 /**
  * @description CameraSettings
@@ -34,8 +34,8 @@ export class Initializer  {
         // shared Camera settings with backend
         await DefaultCameraSettings.initialize();
 
-        // shared System settings with backend
-        await SystemSettings.initialize();
+        // user settings
+        await SettingsManager.initialize();
 
         return true;
     }

@@ -7,7 +7,7 @@
 
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {ElementIds} from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
 
 /**
@@ -67,7 +67,7 @@ export class DepthBufferView {
         // DepthBuffer Viewer
         this._depthBufferViewer = new DepthBufferViewer("DepthBufferViewer", ElementIds.DepthBufferCanvas, depthBuffer);
 
-        if (!SystemSettings.depthBufferViewVisible) {
+        if (!SettingsManager.userSettings.DepthBufferViewVisible) {
             const depthBufferViewerElement = document.getElementById(ElementIds.DepthBufferCanvas);
             depthBufferViewerElement.style.display = "none";
         }

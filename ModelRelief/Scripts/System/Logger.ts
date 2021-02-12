@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 
 /**
  * @description Diagnostic logging.
@@ -56,7 +56,7 @@ export class ConsoleLogger implements ILogger {
      * @param style Optional style.
      */
     public addMessageEntry(message: string, messageClass: MessageClass, style: string = this._defaultStyle): void {
-        if (!SystemSettings.loggingEnabled)
+        if (!SettingsManager.userSettings.LoggingEnabled)
             return;
 
         const prefix = "MR: ";

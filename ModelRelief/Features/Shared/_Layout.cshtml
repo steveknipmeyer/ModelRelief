@@ -1,7 +1,7 @@
 ﻿@using ModelRelief.Features.Settings
 
-@inject ISystemSettings UserSettings;
-@{ UserSettings.InitializeFromUser(User); }
+@inject ISettingsManager settingsManager;
+@{ settingsManager.InitializeUserSettingsFromUser(User); }
 
 <!DOCTYPE html>
 
@@ -59,7 +59,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                @if (UserSettings.DevelopmentUI)
+                @if (settingsManager.UserSettings.DevelopmentUI)
                 {
                     <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
 

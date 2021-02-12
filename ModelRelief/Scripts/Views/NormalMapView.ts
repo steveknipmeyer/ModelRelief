@@ -7,7 +7,7 @@
 
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {ElementIds} from "Scripts/System/Html";
-import {SystemSettings} from "Scripts/System/SystemSettings";
+import {SettingsManager} from "Scripts/System/SettingsManager";
 import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
 
 /**
@@ -67,7 +67,7 @@ export class NormalMapView {
         // NormalMap Viewer
         this._normalMapViewer = new NormalMapViewer("NormalMapViewer", ElementIds.NormalMapCanvas, normalMap);
 
-        if (!SystemSettings.normalMapViewVisible) {
+        if (!SettingsManager.userSettings.NormalMapViewVisible) {
             const normalMapViewerElement = document.getElementById(ElementIds.NormalMapCanvas);
             normalMapViewerElement.style.display = "none";
         }

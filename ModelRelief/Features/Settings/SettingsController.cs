@@ -18,6 +18,7 @@ namespace ModelRelief.Features.Settings
         public ILogger Logger { get; }
         public IWebHostEnvironment HostingEnvironment { get; }
         public Services.IConfigurationProvider ConfigurationProvider { get; }
+        public ISettingsManager SettingsManager { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
@@ -26,11 +27,13 @@ namespace ModelRelief.Features.Settings
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="hostingEnvironment">IWebHostEnvironment</param>
         /// <param name="configurationProvider">IConfigurationProvider</param>
-        public SettingsController(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+        /// <param name="settingsManager">ISettingsManager</param>
+        public SettingsController(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ISettingsManager settingsManager)
         {
             Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger<SettingsController>();
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
+            SettingsManager = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace ModelRelief.Features.Settings
         [HttpGet]
         public ContentResult GetSettingsByType([FromRoute]string settingsType)
         {
-            var settingsObject = SettingsManager.GetSettings(settingsType);
+            var settingsObject = this.SettingsManager.GetSettings(settingsType);
             var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
