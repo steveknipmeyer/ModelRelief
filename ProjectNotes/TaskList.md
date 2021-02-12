@@ -5,18 +5,10 @@
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
-    Perspective control order
     
     Settings Page
-        Consolidate SystemSettings with Settings.
-            How can Settings be exposed in (Composer) Edit?
-                SystemSettings
-                    Refactor SystemSettings to initialize settings (defaults or user query) and do not use static properties.
-                        Remove the initialization step in Initializer. The settings are instantiated when  needed.
-                        Provide defaults if the user is not logged in.
-                        Query the Settings table for the User.
-                    Inject the SystemSettings structure as ViewBag before the View is rendered.                   
-
+        SystemSettings -> UserSettings?
+        
     Documentation
     Upload
 #### Models

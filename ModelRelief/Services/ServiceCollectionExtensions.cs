@@ -23,6 +23,7 @@ namespace ModelRelief.Services
     using ModelRelief.Database;
     using ModelRelief.Features.Email;
     using ModelRelief.Features.Errors;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Infrastructure;
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
@@ -157,6 +158,7 @@ namespace ModelRelief.Services
             services.AddSingleton<IStorageManager, StorageManager>();
             services.AddSingleton<IDependencyManager, DependencyManager>();
             services.AddSingleton<IDispatcher, Dispatcher>();
+            services.AddSingleton<ISystemSettings, SystemSettings>();
 
             services.AddTransient<IEmailService, EmailService>();
         }
