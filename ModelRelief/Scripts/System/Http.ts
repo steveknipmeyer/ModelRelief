@@ -42,6 +42,7 @@ export enum ServerEndPoints {
     ApiModels           = "api/v1/models",
     ApiNormalMaps       = "api/v1/normal-maps",
     ApiProjects         = "api/v1/projects",
+    ApiSettings         = "api/v1/settings/type",
 }
 
 /**

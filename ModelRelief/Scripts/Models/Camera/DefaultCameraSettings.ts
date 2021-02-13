@@ -5,8 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import { ContentType, HttpLibrary, MethodType } from "Scripts/System/Http";
-
+import {ContentType, HttpLibrary, MethodType, ServerEndPoints } from "Scripts/System/Http";
 /**
  * @description The frustum planes of an orthographic camera.
  * @export
@@ -59,7 +58,7 @@ export class DefaultCameraSettings  {
     public static async initialize(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}settings/type/camera`;
+        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettings}/camera`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 

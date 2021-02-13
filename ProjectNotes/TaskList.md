@@ -4,7 +4,6 @@
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
-    
     Review (View) SettingsController.
 
     Why are validators listed twice in request processing?
