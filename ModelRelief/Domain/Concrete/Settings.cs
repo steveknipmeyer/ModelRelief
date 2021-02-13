@@ -6,7 +6,7 @@
 
 namespace ModelRelief.Domain
 {
-    public class Settings
+    public class Settings : DomainModel
     {
         public bool LoggingEnabled { get; set; }
         public bool DevelopmentUI { get; set; }

@@ -4,8 +4,12 @@
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
-    export static class?
-    Where does the FE Setttings class belong?
+    FooterViewComponent
+        Default
+
+    Settings
+        Implement SettingsManager.InitializeUserSettingsFromUser
+        Refactor Settings/Editor to use SettingsManager (not window.localstorage)
 
     Documentation
     Upload

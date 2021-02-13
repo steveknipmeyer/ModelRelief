@@ -93,25 +93,27 @@ export class Project extends Model<Project> implements IProject
 ```
 
 ___
-### Back End (NET Core)
+## Back End (NET Core)
 
-#### Interfaces
-
+### Interfaces
+---
 |DTO (HTTP)||Domain (DB)|
 |---|---|---|
 |Dto.IModel|||
 |Dto.IFileModel|
 |Dto.IGeneratedFileModel|
 
-**DTO**
+**DTO**  
+ModelRelief/Features/Shared/DataTransferObjects
 ```csharp
 public interface IModel
 public interface IFileModel : IModel
 public interface IGeneratedFileModel : IFileModel
 ```
 
-#### Base Classes
-Domain models are in an inheritance chain so they can share common functionality such as file operations.
+### Base Classes
+---
+Domain models are in an inheritance chain so they can share common functionality such as file operations.  
 <span style="color:red">
 Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
 </span>
@@ -123,15 +125,16 @@ Implementing a hierarchy of DTO models creates potential issues with DataAnnotat
 |||Domain.GeneratedFileDomainModel|
 
 
-**Domain**
+**Domain**  
+ModelRelief/Domain/Abstract
 ```csharp
 public abstract class DomainModel
 public abstract class FileDomainModel : DomainModel
 public abstract class GeneratedFileDomainModel : FileDomainModel
 ```
-#### Concrete Classes
-
-|DTO (HTTP) |Implementation|Notes||Domain Models (DB) |Implementation|
+### Concrete Classes
+---
+|DTO (HTTP) |Implements|Notes||Domain Models (DB) |Inherits|
 |---|---|---|---|---|---|
 |Dto.Camera|Dto.IModel|||Domain.Camera|DomainModel|
 |Dto.DepthBuffer|Dto.IGeneratedFileModel|||Domain.DepthBuffer|GeneratedFileDomainModel|
@@ -140,10 +143,11 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 |Dto.Model3d|Dto.IFileModel|||Domain.Model3d|FileDomainModel|
 |Dto.NormalMap|Dto.IGeneratedFileModel|||Domain.NormalMap|GeneratedFileDomainModel|
 |Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
+|Dto.Settings|Dto.IModel|||Domain.Settings|DomainModel|
 |||||
 
-**DTO**
-ModelReliefFeatures
+**DTO**  
+ModelRelief/Features
 ```csharp
 public class Camera : IModel
 public class DepthBuffer : IGeneratedFileModel
@@ -153,8 +157,8 @@ public class Model3d : IFileModel
 public class NormalMap : IGeneratedFileModel
 public class Project : IModel
 ```
-**Domain**
- ModelRelief/Domain
+**Domain**  
+ ModelRelief/Domain/Concrete
 ```csharp
 public class Camera : DomainModel
 public class DepthBuffer  : GeneratedFileDomainModel

@@ -15,7 +15,7 @@ import {Settings} from "Scripts/Models/Settings/Settings";
  */
 export class SettingsManager  {
 
-    public static userSettings: Settings = new Settings();
+    public static userSettings: ISettings;
 
     /**
      * @description Initialize the system settings variables.
@@ -30,14 +30,6 @@ export class SettingsManager  {
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const settings: ISettings = JSON.parse(result.contentString) as unknown as ISettings;
 
-        this.userSettings.LoggingEnabled = settings.LoggingEnabled;
-        this.userSettings.DevelopmentUI = settings.DevelopmentUI;
-
-        this.userSettings.ModelViewerExtendedControls = settings.ModelViewerExtendedControls;
-        this.userSettings.MeshViewerExtendedControls = settings.MeshViewerExtendedControls;
-        this.userSettings.ExtendedCameraControls = settings.ExtendedCameraControls;
-
-        this.userSettings.DepthBufferViewVisible = settings.DepthBufferViewVisible;
-        this.userSettings.NormalMapViewVisible = settings.NormalMapViewVisible;
+        this.userSettings = settings;
     }
 }
