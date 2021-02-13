@@ -1,25 +1,25 @@
 // -----------------------------------------------------------------------
-// <copyright file="ProjectTestModelFactory.cs" company="ModelRelief">
+// <copyright file="SettingsTestModelFactory.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Test.TestModels.Projects
+namespace ModelRelief.Test.TestModels.Settings
 {
     using System.Collections.Generic;
     using ModelRelief.Dto;
 
     /// <summary>
-    /// Project test model.
+    /// Settings test model.
     /// </summary>
-    public class ProjectTestModelFactory : TestModelFactory<Domain.Project, Dto.Project>
+    public class SettingsTestModelFactory : TestModelFactory<Domain.Settings, Dto.Settings>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectTestModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="SettingsTestModelFactory"/> class.
         /// Constructor
         /// </summary>
         /// <param name="classFixture">Test fixture instantiated before any test methods are executed.</param>
-        public ProjectTestModelFactory(ClassFixture classFixture)
+        public SettingsTestModelFactory(ClassFixture classFixture)
             : base(classFixture)
         {
         }
@@ -29,10 +29,10 @@ namespace ModelRelief.Test.TestModels.Projects
         /// </summary>
         public override void Initialize()
         {
-            ApiUrl = $"{RootApi}projects";
-            UxUrl = "/projects";
+            ApiUrl = $"{RootApi}settings";
+            UxUrl = "/settings";
 
-            ReferencePropertyNames = new List<string> { "SettingsId" };
+            ReferencePropertyNames = new List<string>();
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 
@@ -46,7 +46,7 @@ namespace ModelRelief.Test.TestModels.Projects
         public override IModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel();
-            validModel.Name = "TestProject";
+            validModel.Name = "TestSettings";
 
             return validModel;
         }

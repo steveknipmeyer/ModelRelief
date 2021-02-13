@@ -21,6 +21,10 @@ namespace ModelRelief.Dto
         [Display(Name = "Project Name")]
         public string Name { get; set; }
         public string Description { get; set; }
+
+        // Navigation Properties
+        public int? SettingsId { get; set; }
+        public Dto.Settings Settings { get; set; }
     }
 
     /// <summary>

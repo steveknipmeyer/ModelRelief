@@ -41,6 +41,14 @@ namespace ModelRelief.Database
         private string SqlitePath { get; set; }
 
         /// <summary>
+        /// Test Settings Names
+        /// </summary>
+        private class SettingsNames
+        {
+            public static readonly string Default = "ModelRelief Settings";
+        }
+
+        /// <summary>
         /// Test Project Names
         /// </summary>
         private class ProjectNames
@@ -273,6 +281,7 @@ namespace ModelRelief.Database
         public void SeedDatabaseForUser(ApplicationUser user)
         {
             // database
+            AddSettings(user);
             AddProjects(user);
             AddCameras(user);                   // JSON
             AddModels(user);
@@ -352,6 +361,26 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Add test settings.
+        /// </summary>
+        /// <param name="user">Owning user.</param>
+        private void AddSettings(ApplicationUser user)
+        {
+            var settings = new Settings[]
+            {
+                new Settings { Name = SettingsNames.Default, Description = "User interface and project settings", UserId = user.Id },
+            };
+
+            foreach (var item in settings)
+            {
+                DbContext.Add(item);
+                DbContext.SaveChanges();
+            }
+
+            QualifyDescription<Settings>(user);
+        }
+
+        /// <summary>
         /// Add test projects.
         /// </summary>
         /// <param name="user">Owning user.</param>
@@ -359,10 +388,10 @@ namespace ModelRelief.Database
         {
             var projects = new Project[]
             {
-                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", UserId = user.Id },
-                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", UserId = user.Id },
-                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", UserId = user.Id },
-                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", UserId = user.Id },
+                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
+                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
+                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
+                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
             };
 
             foreach (var project in projects)
@@ -410,17 +439,17 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "armadillo.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Isometric Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Isometric Camera"),
                 },
                 new Model3d
                 {
                     Name = "buddha.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "bunny.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -430,7 +459,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "dragon.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -450,7 +479,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -470,7 +499,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "statue.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -480,7 +509,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"), Camera = FindByName<Camera>(user, "Isometric Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Isometric Camera"),
                 },
             };
 
@@ -533,7 +562,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -541,7 +570,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -549,7 +578,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -565,7 +594,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -597,7 +626,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -629,7 +658,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new DepthBuffer
                 {
@@ -645,7 +674,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = DepthBufferFormat.SDB,
                     Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
             };
 
@@ -783,7 +812,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -791,7 +820,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -799,7 +828,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -815,7 +844,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -847,7 +876,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -879,7 +908,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
                 new NormalMap
                 {
@@ -895,7 +924,7 @@ namespace ModelRelief.Database
                     Width = 512, Height = 512,
                     Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
                     Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
-                    UserId = user.Id, Project = FindByName<Project>(user, "Stanford"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
                 },
             };
 
