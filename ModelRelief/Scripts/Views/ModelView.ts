@@ -6,7 +6,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {ElementIds} from "Scripts/System/Html";
 import {SettingsManager} from "Scripts/System/SettingsManager";
 import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";

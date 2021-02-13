@@ -8,7 +8,7 @@ import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
-import {Model} from "Scripts/Api/V1/Models/Model";
+import {Model} from "Scripts/Models/Base/Model";
 
 /**
  * @description Base class for a file-backed FE models.

@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {ElementIds} from "Scripts/System/Html";
 import {CameraControls, ICameraControlsOptions} from "Scripts/Viewers/CameraControls";
 import {MeshViewer} from "Scripts/Viewers/MeshViewer";

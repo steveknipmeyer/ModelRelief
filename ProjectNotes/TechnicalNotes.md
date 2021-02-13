@@ -2,9 +2,9 @@
 
 <div style="font-size:9pt">
 
-### Front End (JavaScript)
+### Front End (TypeScript)
 
-#### Interfaces
+#### DTO Interfaces
 
 The FE DTO interfaces are used to facilitate construction of DTO models from HTTP.
 
@@ -13,6 +13,7 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 |||IModel||
 |||IFileModel||
 |||IGeneratedFileModel||
+|||||
 |||ICamera||
 |||IDepthBuffer||
 |||IMesh||
@@ -20,8 +21,8 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 |||IModel3d||
 |||INormalMap||
 |||IProject||
+|||ISettings||
 
-**DTO**
 ```javascript
 export interface IModel
 export interface IFileModel extends IModel
@@ -34,6 +35,7 @@ export interface IMeshTransform extends IModel
 export interface IModel3d extends IFileModel
 export interface INormalMap extends IGeneratedFileModel
 export interface IProject extends IModel
+export interface ISettings extends IModel
 ```
 
 #### Base Classes
@@ -48,8 +50,8 @@ DTO models are in an inheritance chain so they can share common functionality su
 **Graphics**
 ```javascript
 export class Model implements IModel
-export class FileModel extends Model<T> implements IFileModel
-export class GeneratedFileModel extends FileModel<T> implements IGeneratedFileModel
+export class FileModel extends Model implements IFileModel
+export class GeneratedFileModel extends FileModel implements IGeneratedFileModel
 ```
 **DTO**
 ```javascript
@@ -104,7 +106,7 @@ ___
 |Dto.IGeneratedFileModel|
 
 **DTO**  
-ModelRelief/Features/Shared/DataTransferObjects
+ModelRelief/Features/Dto
 ```csharp
 public interface IModel
 public interface IFileModel : IModel

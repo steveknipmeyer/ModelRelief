@@ -5,12 +5,12 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
-import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
+import {GeneratedFileModel} from "Scripts/Models/Base/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";

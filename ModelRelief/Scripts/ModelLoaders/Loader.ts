@@ -8,7 +8,7 @@ import * as THREE from "three";
 
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
 import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IMeshGenerateParameters} from "Scripts/Graphics/Mesh3d";
 import {OBJLoader} from "Scripts/ModelLoaders/OBJLoader";

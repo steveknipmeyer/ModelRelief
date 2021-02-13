@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Api.V1.Settings
 {
+    using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace ModelRelief.Api.V1.Settings
     /// <summary>
     /// Represents a controller to handle Settings API requests.
     /// </summary>
-    // [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]")]
     public class SettingsController : RestController<Domain.Settings, Dto.Settings, Dto.Settings, Dto.Settings, Dto.PostFile>
     {
         public ISettingsManager SettingsManager { get; }
@@ -38,15 +39,35 @@ namespace ModelRelief.Api.V1.Settings
         }
 
         /// <summary>
-        /// Returns the JSON settings file by category (e.g. camera).
+        /// Returns the JSON settings for the default camera.
         /// </summary>
-        /// <param name="settingsType">JSON settings file type (e.g. camera).</param>
-        /// <returns>JSON settings file.</returns>
-        [Route("api/v1/settings/type/{settingsType}")]
+        /// <returns>JSON settings.</returns>
+        [Route("camera")]
         [HttpGet]
-        public ContentResult GetSettingsByType([FromRoute] string settingsType)
+        public ContentResult Camera()
         {
-            var settingsObject = this.SettingsManager.GetSettings(settingsType);
+            var settingsObject = this.SettingsManager.GetSettings("camera");
+            var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            });
+
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = serializedContent,
+            };
+        }
+
+        /// <summary>
+        /// Returns the JSON settings for the user.
+        /// </summary>
+        /// <returns>JSON settings.</returns>
+        [Route("user")]
+        [HttpGet]
+        public ContentResult UserSettings()
+        {
+            var settingsObject = this.SettingsManager.GetSettings("user");
             var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

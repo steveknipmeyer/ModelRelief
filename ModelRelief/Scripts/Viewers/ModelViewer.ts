@@ -7,7 +7,7 @@
 
 import * as THREE from "three";
 
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {EventType} from "Scripts/System/EventManager";
 import {Viewer} from "Scripts/Viewers/Viewer";

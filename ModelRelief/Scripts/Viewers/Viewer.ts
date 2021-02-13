@@ -7,7 +7,7 @@
 import * as THREE from "three";
 
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";

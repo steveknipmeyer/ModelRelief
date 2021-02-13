@@ -5,13 +5,13 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {assert} from "chai";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {NormalMapFormat} from "Scripts/Api/V1/Interfaces/INormalMap";
-import {GeneratedFileModel} from "Scripts/Api/V1/Models/GeneratedFileModel";
+import {GeneratedFileModel} from "Scripts/Models/Base/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {IImageModel} from "Scripts/Models/Interfaces/IImageModel";

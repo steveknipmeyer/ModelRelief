@@ -21,6 +21,16 @@ namespace ModelRelief.Dto
         [Display(Name = "Setings Name")]
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public bool LoggingEnabled { get; set; }
+        public bool DevelopmentUI { get; set; }
+
+        public bool ModelViewerExtendedControls { get; set; }
+        public bool MeshViewerExtendedControls { get; set; }
+        public bool ExtendedCameraControls { get; set; }
+
+        public bool DepthBufferViewVisible { get; set; }
+        public bool NormalMapViewVisible { get; set; }
     }
 
     /// <summary>

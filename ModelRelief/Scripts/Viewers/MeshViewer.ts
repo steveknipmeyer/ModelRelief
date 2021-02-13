@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {Mesh3d} from "Scripts/Graphics/Mesh3d";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";

@@ -6,7 +6,7 @@
 "use strict";
 
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 
 /**
  * @description Base class for a generated file-backed DTO model.

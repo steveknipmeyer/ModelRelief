@@ -5,11 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
 import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
-import {FileModel} from "Scripts/Api/V1/Models/FileModel";
+import {FileModel} from "Scripts/Models/Base/FileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {Project} from "Scripts/Models/Project/Project";

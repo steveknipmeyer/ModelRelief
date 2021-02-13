@@ -6,11 +6,11 @@
 "use strict";
 
 import {assert} from "chai";
-import * as Dto from "Scripts/Api/V1//Models/DtoModels";
+import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
-import {Model} from "Scripts/Api/V1/Models/Model";
+import {Model} from "Scripts/Models/Base/Model";
 import {Graphics} from "Scripts/Graphics/Graphics";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
