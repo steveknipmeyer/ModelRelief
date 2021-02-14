@@ -12,13 +12,13 @@
  */
 export class Settings {
 
-    public LoggingEnabled: boolean;
-    public DevelopmentUI: boolean;
+    public loggingEnabled: boolean;
+    public developmentUI: boolean;
 
-    public ModelViewerExtendedControls: boolean;
-    public MeshViewerExtendedControls: boolean;
-    public ExtendedCameraControls: boolean;
+    public modelViewerExtendedControls: boolean;
+    public meshViewerExtendedControls: boolean;
+    public extendedCameraControls: boolean;
 
-    public DepthBufferViewVisible: boolean;
-    public NormalMapViewVisible: boolean;
+    public depthBufferViewVisible: boolean;
+    public normalMapViewVisible: boolean;
 }

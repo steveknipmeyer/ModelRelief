@@ -5,10 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
 import {Model3dFormat} from "Scripts/Api/V1/Interfaces/IModel3d";
+import {DtoModel3d} from "Scripts/Api/V1/Models/DtoModel3d";
 import {FileModel} from "Scripts/Models/Base/FileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -33,7 +32,7 @@ export class Model3d extends FileModel {
         if (!id)
             return undefined;
 
-        const model3d = new Dto.Model3d ({
+        const model3d = new DtoModel3d ({
             id,
         });
         const model3dModel = await model3d.getAsync();
@@ -44,7 +43,7 @@ export class Model3d extends FileModel {
      * @description Constructs an instance from a DTO model.
      * @returns {Model3d}
      */
-    public static async fromDtoModelAsync(dtoModel3d: Dto.Model3d): Promise<Model3d> {
+    public static async fromDtoModelAsync(dtoModel3d: DtoModel3d): Promise<Model3d> {
 
         // constructor
         const model3d = new Model3d ({
@@ -91,11 +90,11 @@ export class Model3d extends FileModel {
 
     /**
      * @description Returns a DTO Model3d from the instance.
-     * @returns {Dto.Model3d}
+     * @returns {DtoModel3d}
      */
-    public toDtoModel(): Dto.Model3d {
+    public toDtoModel(): DtoModel3d {
 
-        const model3d = new Dto.Model3d({
+        const model3d = new DtoModel3d({
             id              : this.id,
             name            : this.name,
             description     : this.description,

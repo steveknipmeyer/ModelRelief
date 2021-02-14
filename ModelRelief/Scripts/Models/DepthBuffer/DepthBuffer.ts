@@ -5,12 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-import * as THREE from "three";
-
-import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
+import {DtoDepthBuffer} from "Scripts/Api/V1/Models/DtoDepthBuffer";
 import {GeneratedFileModel} from "Scripts/Models/Base/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -37,7 +34,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
         if (!id)
             return undefined;
 
-        const depthBuffer = new Dto.DepthBuffer ({
+        const depthBuffer = new DtoDepthBuffer ({
             id,
         });
         const depthBufferModel = await depthBuffer.getAsync();
@@ -48,7 +45,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
      * @description Constructs an instance from a DTO model.
      * @returns {DepthBuffer}
      */
-    public static async fromDtoModelAsync(dtoDepthBuffer: Dto.DepthBuffer): Promise<DepthBuffer> {
+    public static async fromDtoModelAsync(dtoDepthBuffer: DtoDepthBuffer): Promise<DepthBuffer> {
 
         // constructor
         const depthBuffer = new DepthBuffer({
@@ -257,11 +254,11 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
 
     /**
      * @description Returns a DTO DepthBuffer from the instance.
-     * @returns {Dto.DepthBuffer}
+     * @returns {DtoDepthBuffer}
      */
-    public toDtoModel(): Dto.DepthBuffer {
+    public toDtoModel(): DtoDepthBuffer {
 
-        const model = new Dto.DepthBuffer({
+        const model = new DtoDepthBuffer({
             id              : this.id,
             name            : this.name,
             description     : this.description,

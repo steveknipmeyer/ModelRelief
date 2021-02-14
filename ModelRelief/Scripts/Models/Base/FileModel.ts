@@ -4,7 +4,8 @@
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
+
+import {DtoFileModel} from "Scripts/Api/V1/Base/DtoFileModel";
 
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
 import {Model} from "Scripts/Models/Base/Model";
@@ -39,9 +40,9 @@ export class FileModel extends Model implements IFileModel {
     /**
      * @description Returns a DTO model from the instance.
      * WIP: Can the return value be strongly typed?
-     * @returns {Dto.FileModel}
+     * @returns {DtoFileModel}
      */
-    public toDtoModel(): Dto.FileModel<any> {
+    public toDtoModel(): DtoFileModel<any> {
         return undefined;
     }
 }

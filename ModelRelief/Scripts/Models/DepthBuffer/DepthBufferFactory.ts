@@ -5,9 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
+import {DtoDepthBuffer} from "Scripts/Api/V1/Models/DtoDepthBuffer";
 import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IImageFactoryParameters, ImageFactory} from "Scripts/Graphics/ImageFactory";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -50,7 +50,7 @@ export class DepthBufferFactory extends ImageFactory {
 
         const imageBuffer = this.createImageBuffer();
 
-        const dtoDepthBuffer = new Dto.DepthBuffer({
+        const dtoDepthBuffer = new DtoDepthBuffer({
 
             id          : 0,
             name        : "Unnamed",

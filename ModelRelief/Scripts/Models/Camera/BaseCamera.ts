@@ -5,10 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {assert} from "chai";
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
+import {DtoCamera} from "Scripts/Api/V1/Models/DtoCamera";
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
 import {Model} from "Scripts/Models/Base/Model";
 import {Graphics} from "Scripts/Graphics/Graphics";
@@ -126,10 +125,10 @@ export abstract class BaseCamera extends Model {
         const farPlane  = -boundingBoxView.min.z;
 
         // validate near plane
-        const validNearPlane: boolean = nearPlane >= DefaultCameraSettings.NearClippingPlane;
+        const validNearPlane: boolean = nearPlane >= DefaultCameraSettings.nearClippingPlane;
         if (!validNearPlane) {
             console.log(`getBoundingClippingPlanes: nearPlane = ${nearPlane}`);
-            nearPlane = DefaultCameraSettings.NearClippingPlane;
+            nearPlane = DefaultCameraSettings.nearClippingPlane;
         }
         const clippingPlanes: IClippingPlanes = {
 
@@ -146,7 +145,7 @@ export abstract class BaseCamera extends Model {
      */
     public finalizeClippingPlanes(modelGroup: THREE.Group): void {
 
-        const setNear = (this.viewCamera.near === DefaultCameraSettings.NearClippingPlane);
+        const setNear = (this.viewCamera.near === DefaultCameraSettings.nearClippingPlane);
         const setFar  = (this.viewCamera.far === DefaultCameraSettings.FarClippingPlane);
 
         const clippingPlanes: IClippingPlanes = this.getBoundingClippingPlanes(modelGroup);
@@ -162,9 +161,9 @@ export abstract class BaseCamera extends Model {
 
     /**
      * @description Returns a DTO Camera model from the instance.
-     * @returns {Dto.Camera}
+     * @returns {DtoCamera}
      */
-    public toDtoModel(): Dto.Camera {
+    public toDtoModel(): DtoCamera {
 
         const isPerspective  = this.isPerspective;
         const isOrthographic = this.viewCamera instanceof THREE.OrthographicCamera;
@@ -176,7 +175,7 @@ export abstract class BaseCamera extends Model {
         this.viewCamera.matrix.decompose(position, quaternion, scale);
         up = this.viewCamera.up;
 
-        const camera = new Dto.Camera({
+        const camera = new DtoCamera({
             id              : this.id,
             name            : this.name,
             description     : this.description,
@@ -191,14 +190,14 @@ export abstract class BaseCamera extends Model {
             up,
 
             // Perspective
-            fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView,
+            fieldOfView     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.fieldOfView,
             aspectRatio     : isPerspective ? (this.viewCamera as THREE.PerspectiveCamera).aspect : 1.0,
 
             // Orthographic
-            left            : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).left   : DefaultCameraSettings.LeftPlane,
-            right           : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).right  : DefaultCameraSettings.RightPlane,
-            top             : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).top    : DefaultCameraSettings.TopPlane,
-            bottom          : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).bottom : DefaultCameraSettings.BottomPlane,
+            left            : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).left   : DefaultCameraSettings.leftPlane,
+            right           : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).right  : DefaultCameraSettings.rightPlane,
+            top             : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).top    : DefaultCameraSettings.topPlane,
+            bottom          : isOrthographic ? (this.viewCamera as THREE.OrthographicCamera).bottom : DefaultCameraSettings.bottomPlane,
 
             projectId       : this.project ? this.project.id : undefined,
         });

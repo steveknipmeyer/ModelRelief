@@ -6,6 +6,7 @@
 "use strict";
 import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";
 import {ISettings} from "Scripts/Api/V1/Interfaces/ISettings";
+import {DtoSettings} from "Scripts/Api/V1/Models/DtoSettings";
 
 /**
  * @description SettingsManager
@@ -27,7 +28,7 @@ export class SettingsManager  {
         // Populate the shared settings from the JSON file.
         const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettings}/user`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
-        const settings: ISettings = JSON.parse(result.contentString) as unknown as ISettings;
+        const settings = new DtoSettings(JSON.parse(result.contentString));
 
         this.userSettings = settings;
     }

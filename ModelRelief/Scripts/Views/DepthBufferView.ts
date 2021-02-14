@@ -67,7 +67,7 @@ export class DepthBufferView {
         // DepthBuffer Viewer
         this._depthBufferViewer = new DepthBufferViewer("DepthBufferViewer", ElementIds.DepthBufferCanvas, depthBuffer);
 
-        if (!SettingsManager.userSettings.DepthBufferViewVisible) {
+        if (!SettingsManager.userSettings.depthBufferViewVisible) {
             const depthBufferViewerElement = document.getElementById(ElementIds.DepthBufferCanvas);
             depthBufferViewerElement.style.display = "none";
         }

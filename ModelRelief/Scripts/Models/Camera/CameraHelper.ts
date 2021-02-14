@@ -36,7 +36,7 @@ export class CameraHelper {
      */
     public static setDefaultClippingPlanes(camera: IThreeBaseCamera): void {
 
-        camera.near = DefaultCameraSettings.NearClippingPlane;
+        camera.near = DefaultCameraSettings.nearClippingPlane;
         camera.far  = DefaultCameraSettings.FarClippingPlane;
     }
 //#endregion
@@ -243,10 +243,10 @@ export class CameraHelper {
 
         let defaultCamera;
         if (perspectiveCamera) {
-            defaultCamera = new THREE.PerspectiveCamera(DefaultCameraSettings.FieldOfView, viewAspect, DefaultCameraSettings.NearClippingPlane, DefaultCameraSettings.FarClippingPlane);
+            defaultCamera = new THREE.PerspectiveCamera(DefaultCameraSettings.fieldOfView, viewAspect, DefaultCameraSettings.nearClippingPlane, DefaultCameraSettings.FarClippingPlane);
         } else {
             const frustum: IOrthographicFrustum = this.getDefaultOrthographicFrustum(viewAspect);
-            defaultCamera = new THREE.OrthographicCamera(frustum.left, frustum.right, frustum.top, frustum.bottom, DefaultCameraSettings.NearClippingPlane, DefaultCameraSettings.FarClippingPlane);
+            defaultCamera = new THREE.OrthographicCamera(frustum.left, frustum.right, frustum.top, frustum.bottom, DefaultCameraSettings.nearClippingPlane, DefaultCameraSettings.FarClippingPlane);
         }
 
         defaultCamera.position.copy (new THREE.Vector3 (0, 0, 0));
@@ -267,10 +267,10 @@ export class CameraHelper {
      */
     public static getDefaultOrthographicFrustum(viewAspect: number = 1.0): IOrthographicFrustum {
         const frustum: IOrthographicFrustum = {
-            left:   -DefaultCameraSettings.OrthographicFrustumPlaneOffset,
-            right:  +DefaultCameraSettings.OrthographicFrustumPlaneOffset,
-            top:    +DefaultCameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
-            bottom: -DefaultCameraSettings.OrthographicFrustumPlaneOffset / viewAspect,
+            left:   -DefaultCameraSettings.orthographicFrustumPlaneOffset,
+            right:  +DefaultCameraSettings.orthographicFrustumPlaneOffset,
+            top:    +DefaultCameraSettings.orthographicFrustumPlaneOffset / viewAspect,
+            bottom: -DefaultCameraSettings.orthographicFrustumPlaneOffset / viewAspect,
         };
         return frustum;
     }

@@ -73,7 +73,7 @@ export class ModelView {
 
         // Camera Controls
         const cameraControlsOptions: ICameraControlsOptions = {
-            cameraHelper: SettingsManager.userSettings.DevelopmentUI ? true : false,
+            cameraHelper: SettingsManager.userSettings.developmentUI ? true : false,
         };
         this._cameraControls = new CameraControls(this._modelViewer, cameraControlsOptions);
 

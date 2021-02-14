@@ -43,9 +43,9 @@ DTO models are in an inheritance chain so they can share common functionality su
 
 |Graphics||DTO (HTTP)|
 |--|---|---|
-|Model||Dto.Model|
-|FileModel||Dto.FileModel|
-|GeneratedFileModel||Dto.GeneratedFileModel|
+|Model||DtoModel|
+|FileModel||DtoFileModel|
+|GeneratedFileModel||DtoGeneratedFileModel|
 
 **Graphics**
 ```javascript
@@ -64,14 +64,14 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||THREE|
 |---|---|---|---|---|---|---|
-|Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
-|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
-|Mesh|IGeneratedFileModel<br>GeneratedFileModel||Dto.Mesh|IGeneratedFileModel, IMesh<br>Dto.GeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Model||Dto.MeshTransform|IModel, IMeshTransform<br>Dto.Model|||
-|Model3d|IFileModel<br>FileModel||Dto.Model3d|IFileModel, IModel3d<br>Dto.FileModel||THREE.Mesh|
-|NormalMap|IGeneratedFileModel<br>GeneratedFileModel||Dto.NormalMap|IGeneratedFileModel, INormalMap<br>Dto.GeneratedFileModel||
-|Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
-|Settings|IModel<br>Model||Dto.Settings|IModel, IProject<br>Dto.Model||
+|Camera|IModel<br>Model||DtoCamera|IModel, ICamera<br>DtoModel||THREE.Camera|
+|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||DtoDepthBuffer|IGeneratedFileModel, IDepthBuffer<br>DtoGeneratedFileModel||
+|Mesh|IGeneratedFileModel<br>GeneratedFileModel||DtoMesh|IGeneratedFileModel, IMesh<br>DtoGeneratedFileModel||THREE.Mesh|
+|MeshTransform|IModel<br>Model||DtoMeshTransform|IModel, IMeshTransform<br>DtoModel|||
+|Model3d|IFileModel<br>FileModel||DtoModel3d|IFileModel, IModel3d<br>DtoFileModel||THREE.Mesh|
+|NormalMap|IGeneratedFileModel<br>GeneratedFileModel||DtoNormalMap|IGeneratedFileModel, INormalMap<br>DtoGeneratedFileModel||
+|Project|IModel<br>Model||DtoProject|IModel, IProject<br>DtoModel||
+|Settings|IModel<br>Model||DtoSettings|IModel, IProject<br>DtoModel||
 
 
 **Graphics**
@@ -137,7 +137,7 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 ```
 ### Concrete Classes
 ---
-|DTO (HTTP) |Implements|Notes||Domain Models (DB) |Inherits|
+|DTO (HTTP)<br>ModelRelief/Features|Implements|Notes||Domain Models (DB)<br>ModelRelief/Domain |Inherits|
 |---|---|---|---|---|---|
 |Dto.Camera|Dto.IModel|||Domain.Camera|DomainModel|
 |Dto.DepthBuffer|Dto.IGeneratedFileModel|||Domain.DepthBuffer|GeneratedFileDomainModel|

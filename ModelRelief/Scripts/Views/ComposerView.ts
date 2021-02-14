@@ -5,10 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
+import {DtoMesh} from "Scripts/Api/V1/Models/DtoMesh";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {TestModel} from "Scripts/ModelLoaders/TestModelLoader";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
@@ -21,7 +21,7 @@ import {ModelView} from "Scripts/Views/ModelView";
 import {NormalMapView} from "Scripts/Views/NormalMapView";
 
 // defined in Edit HTML page
-declare let composerMeshModel: Dto.Mesh;
+declare let composerMeshModel: DtoMesh;
 
 /**
  * @description Represents the UI view used to compose a relief.

@@ -38,7 +38,7 @@ export class MeshViewerControls {
         this._meshViewer = meshViewer;
 
         // UI Controls
-        if (SettingsManager.userSettings.MeshViewerExtendedControls)
+        if (SettingsManager.userSettings.meshViewerExtendedControls)
             this.initializeControls();
     }
 

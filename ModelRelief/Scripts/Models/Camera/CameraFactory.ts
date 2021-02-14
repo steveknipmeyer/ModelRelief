@@ -5,10 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {DtoCamera} from "Scripts/Api/V1/Models/DtoCamera";
 import {IThreeBaseCamera} from "Scripts/Graphics/IThreeBaseCamera";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {OrthographicCamera} from "Scripts/Models/Camera/OrthographicCamera";
@@ -38,7 +38,7 @@ export class CameraFactory {
      */
     public static async constructFromIdAsync(id: number): Promise<BaseCamera> {
 
-        const dtoCamera = await Dto.Camera.fromIdAsync(id);
+        const dtoCamera = await DtoCamera.fromIdAsync(id);
         const camera = await CameraFactory.constructFromDtoModelAsync(dtoCamera);
 
         return camera;
@@ -50,7 +50,7 @@ export class CameraFactory {
      * @param {number} id Camera Id.
      * @returns {Promise<BaseCamera>}
      */
-    public static async constructFromDtoModelAsync(dtoCamera: Dto.Camera): Promise<BaseCamera> {
+    public static async constructFromDtoModelAsync(dtoCamera: DtoCamera): Promise<BaseCamera> {
 
         const viewCamera = dtoCamera.getViewCamera();
         const cameraParameters = {id: dtoCamera.id, name: dtoCamera.name, description: dtoCamera.description};
@@ -94,7 +94,7 @@ export class CameraFactory {
 
         const sourceCamera: BaseCamera = CameraFactory.constructFromViewCamera({}, camera);
 
-        const newDtoCamera: Dto.Camera = sourceCamera.toDtoModel();
+        const newDtoCamera: DtoCamera = sourceCamera.toDtoModel();
         newDtoCamera.isPerspective = !newDtoCamera.isPerspective;
         const newCamera = newDtoCamera.getViewCamera();
 

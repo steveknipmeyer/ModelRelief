@@ -44,7 +44,7 @@ class CameraControlsSettings {
         this.near = baseCamera.near;
         this.far = baseCamera.far;
         this.isPerspective = camera instanceof THREE.PerspectiveCamera;
-        this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.FieldOfView;
+        this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : DefaultCameraSettings.fieldOfView;
         this.cameraHelper = false;
 
         this.standardView = StandardView.None;
@@ -225,7 +225,7 @@ export class CameraControls {
         this.initializeStandardView();
 
         // Extended Controls
-        if (SettingsManager.userSettings.ExtendedCameraControls) {
+        if (SettingsManager.userSettings.extendedCameraControls) {
 
             // Init dat.gui and controls for the UI
             const gui = new dat.GUI({

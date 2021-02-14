@@ -40,7 +40,7 @@ export class NormalMapViewerControls {
         this._normalMapViewer = normalMapViewer;
 
         // UI Controls
-        if (SettingsManager.userSettings.NormalMapViewVisible)
+        if (SettingsManager.userSettings.normalMapViewVisible)
             this.initializeControls();
     }
 

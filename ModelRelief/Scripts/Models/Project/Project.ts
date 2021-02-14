@@ -5,9 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {DtoProject} from "Scripts/Api/V1/Models/DtoProject";
 import {Model} from "Scripts/Models/Base/Model";
 
 /**
@@ -29,7 +28,7 @@ export class Project extends Model {
         if (!id)
             return undefined;
 
-        const project = new Dto.Project ({
+        const project = new DtoProject ({
             id,
         });
         const projectModel = await project.getAsync();
@@ -40,7 +39,7 @@ export class Project extends Model {
      * @description Constructs an instance from a DTO model.
      * @returns {Project}
      */
-    public static fromDtoModel(dtoProject: Dto.Project): Project {
+    public static fromDtoModel(dtoProject: DtoProject): Project {
 
         // constructor
         const project = new Project ({
@@ -76,11 +75,11 @@ export class Project extends Model {
 
     /**
      * @description Returns a DTO Project from the instance.
-     * @returns {Dto.Project}
+     * @returns {DtoProject}
      */
-    public toDtoModel(): Dto.Project {
+    public toDtoModel(): DtoProject {
 
-        const project = new Dto.Project({
+        const project = new DtoProject({
             id              : this.id,
             name            : this.name,
             description     : this.description,

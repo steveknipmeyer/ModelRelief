@@ -5,9 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
+
 import * as THREE from "three";
 
+import {DtoNormalMap} from "Scripts/Api/V1/Models/DtoNormalMap";
 import { ObjectNames } from "Scripts/Graphics/Graphics";
 import {IImageFactoryParameters, ImageFactory} from "Scripts/Graphics/ImageFactory";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -49,7 +50,7 @@ export class NormalMapFactory extends ImageFactory {
 
         const imageBuffer = this.createImageBuffer();
 
-        const dtoNormalMap = new Dto.NormalMap({
+        const dtoNormalMap = new DtoNormalMap({
 
             id          : 0,
             name        : "Unnamed",

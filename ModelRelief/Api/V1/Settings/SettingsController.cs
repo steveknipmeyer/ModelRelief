@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Settings
 {
     using System.Threading.Tasks;
+    using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ namespace ModelRelief.Api.V1.Settings
     public class SettingsController : RestController<Domain.Settings, Dto.Settings, Dto.Settings, Dto.Settings, Dto.PostFile>
     {
         public ISettingsManager SettingsManager { get; }
+        public IMapper Mapper { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
@@ -31,10 +33,12 @@ namespace ModelRelief.Api.V1.Settings
         /// <param name="dbContext">Database context.</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mediator">IMediator.</param>
+        /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">ISettingsManager</param>
-        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator, ISettingsManager settingsManager)
+        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator, IMapper mapper, ISettingsManager settingsManager)
             : base(dbContext, loggerFactory, mediator)
         {
+            Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             SettingsManager = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
         }
 
@@ -44,19 +48,10 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("camera")]
         [HttpGet]
-        public ContentResult Camera()
+        public IActionResult Camera()
         {
-            var settingsObject = this.SettingsManager.GetSettings("camera");
-            var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            });
-
-            return new ContentResult
-            {
-                ContentType = "application/json",
-                Content = serializedContent,
-            };
+            var settingsObject = this.SettingsManager.GetSettings("camera") as DefaultCameraSettingsJson;
+            return Ok(settingsObject);
         }
 
         /// <summary>
@@ -65,19 +60,13 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("user")]
         [HttpGet]
-        public ContentResult UserSettings()
+        [Produces("application/json")]
+        public IActionResult UserSettings()
         {
-            var settingsObject = this.SettingsManager.GetSettings("user");
-            var serializedContent = JsonConvert.SerializeObject(settingsObject, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            });
+            var settingsModel = this.SettingsManager.GetSettings("user") as Domain.Settings;
+            var settings = this.Mapper.Map<Dto.Settings>(settingsModel);
 
-            return new ContentResult
-            {
-                ContentType = "application/json",
-                Content = serializedContent,
-            };
+            return Ok(settings);
         }
     }
 }

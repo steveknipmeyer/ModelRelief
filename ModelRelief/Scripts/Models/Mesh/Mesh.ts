@@ -5,11 +5,9 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-import * as THREE from "three";
-
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {MeshFormat} from "Scripts/Api/V1/Interfaces/IMesh";
+import {DtoMesh} from "Scripts/Api/V1/Models/DtoMesh";
 import {GeneratedFileModel} from "Scripts/Models/Base/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -56,7 +54,7 @@ export class Mesh extends GeneratedFileModel {
         if (!id)
             return undefined;
 
-        const mesh = new Dto.Mesh ({
+        const mesh = new DtoMesh ({
             id,
         });
         const meshModel = await mesh.getAsync();
@@ -67,7 +65,7 @@ export class Mesh extends GeneratedFileModel {
      * @description Constructs an instance from a DTO model.
      * @returns {Mesh}
      */
-    public static async fromDtoModelAsync(dtoMesh: Dto.Mesh): Promise<Mesh> {
+    public static async fromDtoModelAsync(dtoMesh: DtoMesh): Promise<Mesh> {
 
         // constructor
         const mesh = new Mesh ({
@@ -121,11 +119,11 @@ export class Mesh extends GeneratedFileModel {
 
     /**
      * @description Returns a DTO Mesh from the instance.
-     * @returns {Dto.Mesh}
+     * @returns {DtoMesh}
      */
-    public toDtoModel(): Dto.Mesh {
+    public toDtoModel(): DtoMesh {
 
-        const mesh = new Dto.Mesh({
+        const mesh = new DtoMesh({
             id              : this.id,
             name            : this.name,
             description     : this.description,

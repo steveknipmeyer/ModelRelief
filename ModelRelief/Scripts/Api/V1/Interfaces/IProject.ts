@@ -12,6 +12,10 @@ export interface IProject extends IModel {
     id?: number;
     name?: string;
     description?: string;
+
+    // Navigation Properties
+    settingsId?: number;
+    settings?: IProject;
 }
 
 

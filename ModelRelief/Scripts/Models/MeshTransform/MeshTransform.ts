@@ -5,9 +5,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {DtoMeshTransform} from "Scripts/Api/V1/Models/DtoMeshTransform";
 import {Model} from "Scripts/Models/Base/Model";
 import {Project} from "Scripts/Models/Project/Project";
 
@@ -30,7 +29,7 @@ export class MeshTransform extends Model {
         if (!id)
             return undefined;
 
-        const meshTransform = new Dto.MeshTransform ({
+        const meshTransform = new DtoMeshTransform ({
             id,
         });
         const meshTransformModel = await meshTransform.getAsync();
@@ -41,7 +40,7 @@ export class MeshTransform extends Model {
      * @description Constructs an instance from a DTO model.
      * @returns {MeshTransform}
      */
-    public static async fromDtoModelAsync(dtoMeshTransform: Dto.MeshTransform): Promise<MeshTransform> {
+    public static async fromDtoModelAsync(dtoMeshTransform: DtoMeshTransform): Promise<MeshTransform> {
 
         // constructor
         const meshTransform = new MeshTransform ({
@@ -180,11 +179,11 @@ export class MeshTransform extends Model {
 
     /**
      * @description Returns a DTO MeshTransform from the instance.
-     * @returns {Dto.MeshTransform}
+     * @returns {DtoMeshTransform}
      */
-    public toDtoModel(): Dto.MeshTransform {
+    public toDtoModel(): DtoMeshTransform {
 
-        const meshTransform = new Dto.MeshTransform({
+        const meshTransform = new DtoMeshTransform({
             id              : this.id,
             name            : this.name,
             description     : this.description,

@@ -3,12 +3,7 @@
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
-#### General
-    Unpack DtoModels.ts.
-    Implement
-        Dto.Settings
-        (Graphics) Settings
-        
+#### General       
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         Add test cases to Postman.

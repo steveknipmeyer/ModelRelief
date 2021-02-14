@@ -5,21 +5,25 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+
 /**
  * @description Settings collection.
  * @interface ISettings
  */
-export interface ISettings {
+export interface ISettings extends IModel {
 
-    LoggingEnabled: boolean;
-    DevelopmentUI: boolean;
+    id?: number;
+    name?: string;
+    description?: string;
 
-    ModelViewerExtendedControls: boolean;
-    MeshViewerExtendedControls: boolean;
-    ExtendedCameraControls: boolean;
+    loggingEnabled?: boolean;
+    developmentUI?: boolean;
 
-    DepthBufferViewVisible: boolean;
-    NormalMapViewVisible: boolean;
+    modelViewerExtendedControls?: boolean;
+    meshViewerExtendedControls?: boolean;
+    extendedCameraControls?: boolean;
+
+    depthBufferViewVisible?: boolean;
+    normalMapViewVisible?: boolean;
 }
-
-

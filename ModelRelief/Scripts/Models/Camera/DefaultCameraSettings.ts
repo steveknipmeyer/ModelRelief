@@ -25,10 +25,10 @@ export interface IOrthographicFrustum {
  */
 export interface IDefaultCameraSettings {
 
-    NearClippingPlane: number;
-    FarClippingPlane: number;
-    FieldOfView: number;
-    OrthographicFrustrumPlaneOffset: number;
+    nearClippingPlane: number;
+    farClippingPlane: number;
+    fieldOfView: number;
+    orthographicFrustrumPlaneOffset: number;
 }
 
 /**
@@ -38,18 +38,18 @@ export interface IDefaultCameraSettings {
  */
 export class DefaultCameraSettings  {
     // N.B. These settings are held in a separate class (rather than OrthographicCamera, PerspectiveCamera) to avoid circular dependencies between BaseCamera and its derived classes.
-    public static NearClippingPlane: number;
+    public static nearClippingPlane: number;
     public static FarClippingPlane: number;
 
     // Perspective
-    public static FieldOfView: number;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
+    public static fieldOfView: number;       // 35mm vertical : https://www.nikonians.org/reviews/fov-tables
 
     // Orthographic
-    public static OrthographicFrustumPlaneOffset: number;
-    public static LeftPlane: number;
-    public static RightPlane: number;
-    public static TopPlane: number;
-    public static BottomPlane: number;
+    public static orthographicFrustumPlaneOffset: number;
+    public static leftPlane: number;
+    public static rightPlane: number;
+    public static topPlane: number;
+    public static bottomPlane: number;
 
     /**
      * @description Initialize the default settings from the common JSON file used to share settings between the front end (FE) and back end (BE).
@@ -63,17 +63,17 @@ export class DefaultCameraSettings  {
         const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 
         // Clipping Planes
-        DefaultCameraSettings.NearClippingPlane = defaultCameraSettings.NearClippingPlane;
-        DefaultCameraSettings.FarClippingPlane  = defaultCameraSettings.FarClippingPlane;
+        DefaultCameraSettings.nearClippingPlane = defaultCameraSettings.nearClippingPlane;
+        DefaultCameraSettings.FarClippingPlane  = defaultCameraSettings.farClippingPlane;
 
         // Perspective
-        DefaultCameraSettings.FieldOfView = defaultCameraSettings.FieldOfView;
+        DefaultCameraSettings.fieldOfView = defaultCameraSettings.fieldOfView;
 
         // Orthographic
-        DefaultCameraSettings.OrthographicFrustumPlaneOffset = defaultCameraSettings.OrthographicFrustrumPlaneOffset;
-        DefaultCameraSettings.LeftPlane    = -DefaultCameraSettings.OrthographicFrustumPlaneOffset;
-        DefaultCameraSettings.RightPlane   = +DefaultCameraSettings.OrthographicFrustumPlaneOffset;
-        DefaultCameraSettings.TopPlane     = +DefaultCameraSettings.OrthographicFrustumPlaneOffset;
-        DefaultCameraSettings.BottomPlane  = -DefaultCameraSettings.OrthographicFrustumPlaneOffset;
+        DefaultCameraSettings.orthographicFrustumPlaneOffset = defaultCameraSettings.orthographicFrustrumPlaneOffset;
+        DefaultCameraSettings.leftPlane    = -DefaultCameraSettings.orthographicFrustumPlaneOffset;
+        DefaultCameraSettings.rightPlane   = +DefaultCameraSettings.orthographicFrustumPlaneOffset;
+        DefaultCameraSettings.topPlane     = +DefaultCameraSettings.orthographicFrustumPlaneOffset;
+        DefaultCameraSettings.bottomPlane  = -DefaultCameraSettings.orthographicFrustumPlaneOffset;
     }
 }

@@ -5,9 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
-import * as THREE from "three";
-
+import {DtoCamera} from "Scripts/Api/V1/Models/DtoCamera";
+import {DtoDepthBuffer} from "Scripts/Api/V1/Models/DtoDepthBuffer";
+import {DtoMesh} from "Scripts/Api/V1/Models/DtoMesh";
+import {DtoMeshTransform} from "Scripts/Api/V1/Models/DtoMeshTransform";
+import {DtoNormalMap} from "Scripts/Api/V1/Models/DtoNormalMap";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -19,7 +21,7 @@ import {MeshTransform} from "Scripts/Models/MeshTransform/MeshTransform";
 import {Model3d} from "Scripts/Models/Model3d/Model3d";
 import {NormalMap} from "Scripts/Models/NormalMap/NormalMap";
 import {NormalMapFactory} from "Scripts/Models/NormalMap/NormalMapFactory";
-import {ElementAttributes, ElementIds} from "Scripts/System/Html";
+import {ElementIds} from "Scripts/System/Html";
 import {ILogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 import {DepthBufferViewer} from "Scripts/Viewers/DepthBufferViewer";
@@ -207,19 +209,19 @@ export class ComposerController {
     public async generateReliefAsync(): Promise<void> {
 
         // Camera
-        const cameraModel: Dto.Camera = await this.updateCameraAsync();
+        const cameraModel: DtoCamera = await this.updateCameraAsync();
 
         // DepthBufffer
-        const depthBufferModel: Dto.DepthBuffer = await this.updateDepthBufferAsync();
+        const depthBufferModel: DtoDepthBuffer = await this.updateDepthBufferAsync();
 
         // NormalMap
-        const normalMapModel: Dto.NormalMap = await this.updateNormalMapAsync();
+        const normalMapModel: DtoNormalMap = await this.updateNormalMapAsync();
 
         // MeshTransform
-        const meshTransformModel: Dto.MeshTransform = await this.updateMeshTransformAsync();
+        const meshTransformModel: DtoMeshTransform = await this.updateMeshTransformAsync();
 
         // Mesh
-        const meshModel: Dto.Mesh = await this.updateMeshAsync();
+        const meshModel: DtoMesh = await this.updateMeshAsync();
 
         // Mesh graphics
         const loader = new Loader();
@@ -233,9 +235,9 @@ export class ComposerController {
 
     /**
      * @description Updates the Camera.
-     * @returns {Promise<Dto.Camera>}
+     * @returns {Promise<DtoCamera>}
      */
-    public async updateCameraAsync(): Promise<Dto.Camera> {
+    public async updateCameraAsync(): Promise<DtoCamera> {
 
         // copy view camera so we can optimize clipping planes
         const modelViewCameraClone = this.modelViewer.camera.clone(true);
@@ -243,15 +245,15 @@ export class ComposerController {
         this.activeMeshReliefCamera.finalizeClippingPlanes(this.modelViewer.modelGroup);
 
         // update
-        const reliefCameraModel: Dto.Camera = await this.activeMeshReliefCamera.toDtoModel().putAsync();
+        const reliefCameraModel: DtoCamera = await this.activeMeshReliefCamera.toDtoModel().putAsync();
         return reliefCameraModel;
     }
 
     /**
      * @description Updates the DepthBuffer.
-     * @returns {Promise<Dto.DepthBuffer>}
+     * @returns {Promise<DtoDepthBuffer>}
      */
-    public async updateDepthBufferAsync(): Promise<Dto.DepthBuffer> {
+    public async updateDepthBufferAsync(): Promise<DtoDepthBuffer> {
 
         // generate new DepthBuffer from active Camera
         const canvasElement = this._composerView.depthBufferView.depthBufferViewer.canvas;
@@ -266,7 +268,7 @@ export class ComposerController {
         // The DepthBuffer is not synchronized because of changes to its dependent objects (e.g. Camera).
         // Do not allow the (currently unimplemented) FileGenerateRequest to be queued because POST will update the object.
         this.activeDepthBuffer.fileIsSynchronized = false;
-        let depthBufferModel: Dto.DepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
+        let depthBufferModel: DtoDepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
         this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
@@ -280,9 +282,9 @@ export class ComposerController {
 
     /**
      * @description Updates the NormalMap.
-     * @returns {Promise<Dto.NormalMap>}
+     * @returns {Promise<DtoNormalMap>}
      */
-    public async updateNormalMapAsync(): Promise<Dto.NormalMap> {
+    public async updateNormalMapAsync(): Promise<DtoNormalMap> {
 
         // generate new NormalMap from active Camera
         const canvasElement = this._composerView._normalMapView.normalMapViewer.canvas;
@@ -297,7 +299,7 @@ export class ComposerController {
         // The NormalMap is not synchronized because of changes to its dependent objects (e.g. Camera).
         // Do not allow the (currently unimplemented) FileGenerateRequest to be queued because POST will update the object.
         this.activeNormalMap.fileIsSynchronized = false;
-        let normalMapModel: Dto.NormalMap = await this.activeNormalMap.toDtoModel().putAsync();
+        let normalMapModel: DtoNormalMap = await this.activeNormalMap.toDtoModel().putAsync();
 
         // file
         this.activeNormalMap.rgbaArray = factoryNormalMap.rgbaArray;
@@ -311,9 +313,9 @@ export class ComposerController {
 
     /**
      * @description Updates the MeshTransform.
-     * @returns {Promise<Dto.MeshTransform>}
+     * @returns {Promise<DtoMeshTransform>}
      */
-    public async updateMeshTransformAsync(): Promise<Dto.MeshTransform> {
+    public async updateMeshTransformAsync(): Promise<DtoMeshTransform> {
 
         const updatedMeshTransform = await this.activeMeshTransform.toDtoModel().putAsync();
 
@@ -322,9 +324,9 @@ export class ComposerController {
 
     /**
      * @description Updates the Mesh.
-     * @returns {Promise<Dto.Mesh>}
+     * @returns {Promise<DtoMesh>}
      */
-    public async updateMeshAsync(): Promise<Dto.Mesh> {
+    public async updateMeshAsync(): Promise<DtoMesh> {
 
         // The Mesh is not synchronized because of changes to its dependent objects (Camera, DepthBuffer).
         // Force the Mesh to be re-generated now on the back end.
@@ -432,7 +434,7 @@ export class ComposerController {
         // WIP: Set far plane based on model extents to avoid clipping
         const boundingPlanes = this.activeMeshReliefCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
-        modelViewCamera.near = DefaultCameraSettings.NearClippingPlane;
+        modelViewCamera.near = DefaultCameraSettings.nearClippingPlane;
         modelViewCamera.far = DefaultCameraSettings.FarClippingPlane;
         modelViewCamera.updateProjectionMatrix();
 

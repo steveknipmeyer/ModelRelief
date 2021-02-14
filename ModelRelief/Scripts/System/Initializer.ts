@@ -8,6 +8,7 @@ import {WebGLDetector} from "Scripts/Graphics/WebGLDetector";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {ElementIds} from "Scripts/System/Html";
 import {SettingsManager} from "Scripts/System/SettingsManager";
+import {Services} from "Scripts/System/Services";
 
 /**
  * @description CameraSettings
@@ -15,7 +16,6 @@ import {SettingsManager} from "Scripts/System/SettingsManager";
  * @class CameraSettings
  */
 export class Initializer  {
-
 
     /**
      * @description Performs system initialization.
@@ -31,11 +31,15 @@ export class Initializer  {
             return false;
         }
 
-        // shared Camera settings with backend
+        // shared Camera settings
         await DefaultCameraSettings.initialize();
 
         // user settings
         await SettingsManager.initialize();
+
+        // logging
+        Services.consoleLogger.loggingEnabled = SettingsManager.userSettings.loggingEnabled;
+        Services.htmlLogger.loggingEnabled = SettingsManager.userSettings.loggingEnabled;
 
         return true;
     }

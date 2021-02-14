@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import {SettingsManager} from "Scripts/System/SettingsManager";
+// import {SettingsManager} from "Scripts/System/SettingsManager";
 
 /**
  * @description Diagnostic logging.
@@ -13,6 +13,9 @@ import {SettingsManager} from "Scripts/System/SettingsManager";
  * @interface Logger
  */
 export interface ILogger {
+
+    loggingEnabled: boolean;
+
     addErrorMessage(errorMessage: string);
     addWarningMessage(warningMessage: string);
     addInfoMessage(infoMessage: string);
@@ -40,7 +43,9 @@ enum MessageClass {
  */
 export class ConsoleLogger implements ILogger {
 
-    _defaultStyle: string = "";
+    private _defaultStyle: string = "";
+
+    public loggingEnabled: boolean;
 
     /**
      * @constructor
@@ -56,7 +61,7 @@ export class ConsoleLogger implements ILogger {
      * @param style Optional style.
      */
     public addMessageEntry(message: string, messageClass: MessageClass, style: string = this._defaultStyle): void {
-        if (!SettingsManager.userSettings.LoggingEnabled)
+        if (!this.loggingEnabled)
             return;
 
         const prefix = "MR: ";
@@ -144,6 +149,8 @@ export class ConsoleLogger implements ILogger {
  */
 export class HTMLLogger implements ILogger {
 
+    public loggingEnabled: boolean;
+
     public rootId: string;
     public rootElementTag: string;
     public rootElement: HTMLElement;
@@ -176,6 +183,8 @@ export class HTMLLogger implements ILogger {
      * @param messageClass CSS class to be added to message.
      */
     public addMessageElement(message: string, messageClass?: string): HTMLElement {
+        if (!this.loggingEnabled)
+            return;
 
         const messageElement = document.createElement(this.messageTag);
         messageElement.textContent = message;

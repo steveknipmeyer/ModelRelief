@@ -5,11 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {assert} from "chai";
 import {DepthBufferFormat} from "Scripts/Api/V1/Interfaces/IDepthBuffer";
+import {DtoDepthBuffer} from "Scripts/Api/V1/Models/DtoDepthBuffer";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
 import {DefaultCameraSettings} from "Scripts/Models/Camera/DefaultCameraSettings";
 import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
@@ -231,7 +231,7 @@ export class UnitTests {
             originalByteArray[iByte] = iByte;
         }
 
-        const depthBuffer = new Dto.DepthBuffer({
+        const depthBuffer = new DtoDepthBuffer({
             name : "DepthBuffer",
             description: "Unit Test",
             format: DepthBufferFormat.SDB,

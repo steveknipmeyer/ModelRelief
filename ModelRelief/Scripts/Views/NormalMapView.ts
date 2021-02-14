@@ -67,7 +67,7 @@ export class NormalMapView {
         // NormalMap Viewer
         this._normalMapViewer = new NormalMapViewer("NormalMapViewer", ElementIds.NormalMapCanvas, normalMap);
 
-        if (!SettingsManager.userSettings.NormalMapViewVisible) {
+        if (!SettingsManager.userSettings.normalMapViewVisible) {
             const normalMapViewerElement = document.getElementById(ElementIds.NormalMapCanvas);
             normalMapViewerElement.style.display = "none";
         }

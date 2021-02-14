@@ -5,12 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
-import {assert} from "chai";
 import {IGeneratedFileModel} from "Scripts/Api/V1/Interfaces/IGeneratedFileModel";
 import {NormalMapFormat} from "Scripts/Api/V1/Interfaces/INormalMap";
+import {DtoNormalMap} from "Scripts/Api/V1/Models/DtoNormalMap";
 import {GeneratedFileModel} from "Scripts/Models/Base/GeneratedFileModel";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
@@ -38,7 +37,7 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
         if (!id)
             return undefined;
 
-        const normalMap = new Dto.NormalMap ({
+        const normalMap = new DtoNormalMap ({
             id,
         });
         const normalMapModel = await normalMap.getAsync();
@@ -49,7 +48,7 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
      * @description Constructs an instance from a DTO model.
      * @returns {NormalMap}
      */
-    public static async fromDtoModelAsync(dtoNormalMap: Dto.NormalMap): Promise<NormalMap> {
+    public static async fromDtoModelAsync(dtoNormalMap: DtoNormalMap): Promise<NormalMap> {
 
         // constructor
         const normalMap = new NormalMap({
@@ -169,11 +168,11 @@ export class NormalMap extends GeneratedFileModel implements IImageModel {
 
     /**
      * @description Returns a DTO NormalMap from the instance.
-     * @returns {Dto.NormalMap}
+     * @returns {DtoNormalMap}
      */
-    public toDtoModel(): Dto.NormalMap {
+    public toDtoModel(): DtoNormalMap {
 
-        const model = new Dto.NormalMap({
+        const model = new DtoNormalMap({
             id              : this.id,
             name            : this.name,
             description     : this.description,
