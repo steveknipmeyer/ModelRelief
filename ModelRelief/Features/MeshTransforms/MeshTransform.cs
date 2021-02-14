@@ -66,13 +66,13 @@ namespace ModelRelief.Dto
 
         // Navigation Properties
         public int? ProjectId { get; set; }
-        public Dto.Project Project { get; set; }
+        public Project Project { get; set; }
     }
 
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class MeshTransformValidator : AbstractValidator<Dto.MeshTransform>
+    public class MeshTransformValidator : AbstractValidator<MeshTransform>
     {
         public MeshTransformValidator()
         {
@@ -119,7 +119,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public MeshTransformMappingProfile()
         {
-        CreateMap<Domain.MeshTransform, Dto.MeshTransform>().ReverseMap();
+        CreateMap<Domain.MeshTransform, MeshTransform>().ReverseMap();
         }
     }
 }

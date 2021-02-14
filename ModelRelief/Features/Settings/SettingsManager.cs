@@ -7,6 +7,7 @@
 namespace ModelRelief.Features.Settings
 {
     using System.IO;
+    using System.Linq;
     using System.Security.Claims;
     using Microsoft.AspNetCore.Hosting;
     using ModelRelief.Database;
@@ -41,6 +42,7 @@ namespace ModelRelief.Features.Settings
         {
             this.HostingEnvironment = hostingEnvironment;
             this.ConfigurationProvider = configurationProvider;
+            this.DbContext = dbContext;
 
             this.UserSettings = new Settings();
         }
@@ -49,17 +51,30 @@ namespace ModelRelief.Features.Settings
         /// Assign the user settings from the active user (if defined)
         /// </summary>
         /// <param name="user">Active user</param>
-        public void InitializeUserSettingsFromUser(ClaimsPrincipal user)
+        public Settings InitializeUserSettings(ClaimsPrincipal user)
         {
+            // defaults if no active user
+            if ((user == null) || !user.Identity.IsAuthenticated)
+                return this.UserSettings;
+
             var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
+            var userSettings = DbContext.Set<Settings>()
+                .Where(s => (s.UserId == applicationUser.Id)).First();
+
+            // use first settings belonging to user; otherwise default settings from system initialization remain active
+            if (userSettings != null)
+                this.UserSettings = userSettings;
+
+            return this.UserSettings;
         }
 
         /// <summary>
         /// Return the default settings object for the given settings type.
         /// </summary>
         /// <param name="settingsType">Settings type (e.g. camera)</param>
+        /// <param name="user">Active user</param>
         /// <returns>Settings object read from JSON.</returns>
-        public object GetSettings(string settingsType)
+        public object GetSettings(string settingsType, ClaimsPrincipal user = null)
         {
             switch (settingsType.ToLower())
             {
@@ -72,7 +87,7 @@ namespace ModelRelief.Features.Settings
                     return defaultCameraSettings;
 
                 case UserType:
-                    return this.UserSettings;
+                    return this.InitializeUserSettings(user);
 
                 default:
                     return null;

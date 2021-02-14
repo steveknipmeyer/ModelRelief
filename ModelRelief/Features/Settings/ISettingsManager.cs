@@ -14,7 +14,7 @@ namespace ModelRelief.Features.Settings
     public interface ISettingsManager
     {
         Settings UserSettings { get; set; }
-        void InitializeUserSettingsFromUser(ClaimsPrincipal user);
-        object GetSettings(string settingsType);
+        Settings InitializeUserSettings(ClaimsPrincipal user);
+        object GetSettings(string settingsType, ClaimsPrincipal user = null);
     }
 }

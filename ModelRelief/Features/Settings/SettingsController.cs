@@ -6,46 +6,68 @@
 
 namespace ModelRelief.Features.Settings
 {
-    using System.Net;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Database;
     using ModelRelief.Services;
+    using ModelRelief.Utility;
 
-    public class SettingsController : Controller
+    /// <summary>
+    /// Represents a controller to handle Settings Ux requests.
+    /// </summary>
+    [Authorize]
+    public class SettingsController : ViewController<Domain.Settings, Dto.Settings, Dto.Settings, Dto.Settings>
     {
-        public ILogger Logger { get; }
-        public IWebHostEnvironment HostingEnvironment { get; }
-        public Services.IConfigurationProvider ConfigurationProvider { get; }
-        public ISettingsManager SettingsManager { get; }
+        public IWebHostEnvironment HostingEnvironment { get; set; }
+        public Services.IConfigurationProvider ConfigurationProvider { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
         /// Constructor
         /// </summary>
+        /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
-        /// <param name="hostingEnvironment">IWebHostEnvironment</param>
-        /// <param name="configurationProvider">IConfigurationProvider</param>
-        /// <param name="settingsManager">ISettingsManager</param>
-        public SettingsController(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ISettingsManager settingsManager)
+        /// <param name="mapper">IMapper</param>
+        /// <param name="mediator">IMediator</param>
+        /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
+        /// <param name="configurationProvider">IConfigurationProvider.</param>
+        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+            : base(dbContext, loggerFactory, mapper, mediator)
         {
-            Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger<SettingsController>();
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
-            SettingsManager = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
         }
 
         /// <summary>
-        /// Action method for settings.
+        /// Action handler for an Edit request.
         /// </summary>
-        [Route("settings")]
-        [HttpGet]
-        public IActionResult Editor()
+        /// <param name="id">Id of model to edit.</param>
+        /// <param name="postRequest">Edited model to update.</param>
+        /// <returns>Edit page.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public override async Task<IActionResult> Edit(int id, Dto.Settings postRequest)
         {
+            await base.Edit(id, postRequest);
+            return this.Redirect("/");
+        }
+
+        /// <summary>
+        /// Setup View controls for select controls, etc.
+        /// </summary>
+        /// <param name="project">Project instance for View.</param>
+        protected async override Task InitializeViewControls(Dto.Settings project = null)
+        {
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
+            var userId = applicationUser?.Id ?? string.Empty;
+
             ViewBag.Environment = HostingEnvironment.EnvironmentName;
             ViewBag.ASPNETCORE_URLS = ConfigurationProvider.GetSetting(ConfigurationSettings.URLS);
-
-            return View();
         }
     }
 }

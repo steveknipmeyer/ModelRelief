@@ -1,0 +1,79 @@
+@model ModelRelief.Dto.Settings
+
+@{
+ViewData["Title"] = "Edit";
+}
+
+<div class="settingsEditorContainer container-fluid">
+
+    <div class="settingsTable">
+        <h2 class="mt-5 mb-4">Settings</h2>
+
+        <section class="mt-4">
+            <span class="settingsHeading">.NET Core</span>
+            <hr class="mt-0" />
+
+            <div class="row">
+                <div class="col-md-8">
+                    Environment = @ViewBag.Environment
+                </div>
+                <div class="col-md-8">
+                    ASPNETCORE_URLS = @ViewBag.ASPNETCORE_URLS
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit" asp-route-id="@Model.Id">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LoggingEnabled" class="control-label"></label>
+                    <input type="checkbox" asp-for="LoggingEnabled" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DevelopmentUI" class="control-label"></label>
+                    <input type="checkbox" asp-for="DevelopmentUI" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ModelViewerExtendedControls" class="control-label"></label>
+                    <input type="checkbox" asp-for="ModelViewerExtendedControls" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="MeshViewerExtendedControls" class="control-label"></label>
+                    <input type="checkbox" asp-for="MeshViewerExtendedControls" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExtendedCameraControls" class="control-label"></label>
+                    <input type="checkbox" asp-for="ExtendedCameraControls" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="DepthBufferViewVisible" class="control-label"></label>
+                    <input type="checkbox" asp-for="DepthBufferViewVisible" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="NormalMapViewVisible" class="control-label"></label>
+                    <input type="checkbox" asp-for="NormalMapViewVisible" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="actionButton btn button-rounded btn-sm" />
+                </div>
+            </form>
+        </div>
+    </div>
+

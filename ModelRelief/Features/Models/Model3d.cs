@@ -27,10 +27,10 @@ namespace ModelRelief.Dto
 
         // Navigation Properties
         public int? ProjectId { get; set; }
-        public Dto.Project Project { get; set; }
+        public Project Project { get; set; }
 
         public int? CameraId { get; set; }
-        public Dto.Camera Camera { get; set; }
+        public Camera Camera { get; set; }
 
         // not exposed in UX; API only
         public DateTime? FileTimeStamp { get; set; }
@@ -47,7 +47,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class Model3dValidator : AbstractValidator<Dto.Model3d>
+    public class Model3dValidator : AbstractValidator<Model3d>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Model3dValidator"/> class.
@@ -78,7 +78,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public Model3dMappingProfile()
         {
-            CreateMap<Domain.Model3d, Dto.Model3d>().ReverseMap();
+            CreateMap<Domain.Model3d, Model3d>().ReverseMap();
         }
     }
 }

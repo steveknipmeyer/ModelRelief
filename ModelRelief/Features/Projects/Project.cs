@@ -24,13 +24,13 @@ namespace ModelRelief.Dto
 
         // Navigation Properties
         public int? SettingsId { get; set; }
-        public Dto.Settings Settings { get; set; }
+        public Settings Settings { get; set; }
     }
 
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class ProjectValidator : AbstractValidator<Dto.Project>
+    public class ProjectValidator : AbstractValidator<Project>
     {
         public ProjectValidator()
         {
@@ -53,7 +53,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public ProjectMappingProfile()
         {
-        CreateMap<Domain.Project, Dto.Project>().ReverseMap();
+        CreateMap<Domain.Project, Project>().ReverseMap();
         }
     }
 }

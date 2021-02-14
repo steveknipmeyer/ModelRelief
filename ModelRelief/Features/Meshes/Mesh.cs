@@ -27,19 +27,19 @@ namespace ModelRelief.Dto
 
         // Navigation Properties
         public int? ProjectId { get; set; }
-        public Dto.Project Project { get; set; }
+        public Project Project { get; set; }
 
         public int? CameraId { get; set; }
-        public Dto.Camera Camera { get; set; }
+        public Camera Camera { get; set; }
 
         public int? DepthBufferId { get; set; }
-        public Dto.DepthBuffer DepthBuffer { get; set; }
+        public DepthBuffer DepthBuffer { get; set; }
 
         public int? NormalMapId { get; set; }
-        public Dto.NormalMap NormalMap { get; set; }
+        public NormalMap NormalMap { get; set; }
 
         public int? MeshTransformId { get; set; }
-        public Dto.MeshTransform MeshTransform { get; set; }
+        public MeshTransform MeshTransform { get; set; }
 
         // not exposed in UX; API only
         public DateTime? FileTimeStamp { get; set; }
@@ -57,7 +57,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class MeshValidator : AbstractValidator<Dto.Mesh>
+    public class MeshValidator : AbstractValidator<Mesh>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeshValidator"/> class.
@@ -88,7 +88,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public MeshMappingProfile()
         {
-            CreateMap<Domain.Mesh, Dto.Mesh>().ReverseMap();
+            CreateMap<Domain.Mesh, Mesh>().ReverseMap();
         }
     }
 }

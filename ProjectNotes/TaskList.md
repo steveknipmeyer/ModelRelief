@@ -4,6 +4,10 @@
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General       
+    How can the Id be determined in _Layout?
+    Style Settings page.
+    Redirect to referring page.
+        
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         Add test cases to Postman.

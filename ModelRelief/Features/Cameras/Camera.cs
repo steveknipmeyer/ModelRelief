@@ -76,7 +76,7 @@ namespace ModelRelief.Dto
 
         // Navigation Properties
         public int? ProjectId { get; set; }
-        public Dto.Project Project { get; set; }
+        public Project Project { get; set; }
 
         // Perspective
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
@@ -126,7 +126,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class CameraValidator : AbstractValidator<Dto.Camera>
+    public class CameraValidator : AbstractValidator<Camera>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CameraValidator"/> class.
@@ -196,7 +196,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public CameraMappingProfile()
         {
-            CreateMap<Domain.Camera, Dto.Camera>().ReverseMap();
+            CreateMap<Domain.Camera, Camera>().ReverseMap();
         }
     }
 }

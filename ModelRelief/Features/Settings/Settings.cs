@@ -18,7 +18,7 @@ namespace ModelRelief.Dto
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Setings Name")]
+        [Display(Name = "Settings Name")]
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -36,7 +36,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// FV validator to support Views and model-binding validation.
     /// </summary>
-    public class SettingsValidator : AbstractValidator<Dto.Settings>
+    public class SettingsValidator : AbstractValidator<Settings>
     {
         public SettingsValidator()
         {
@@ -59,7 +59,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public SettingsMappingProfile()
         {
-        CreateMap<Domain.Settings, Dto.Settings>().ReverseMap();
+        CreateMap<Domain.Settings, Settings>().ReverseMap();
         }
     }
 }

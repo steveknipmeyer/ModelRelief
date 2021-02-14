@@ -51,6 +51,7 @@ namespace ModelRelief.Database
         /// </summary>
         public void InitializeSharedSettings()
         {
+            // camera does not require DbContext
             var settingsManager = new SettingsManager(this.HostingEnvironment, this.ConfigurationProvider, null);
             var defaultCameraSettings = settingsManager.GetSettings(SettingsManager.CameraType) as DefaultCameraSettingsJson;
             DefaultCameraSettings.Initialize(defaultCameraSettings);

@@ -63,7 +63,7 @@ namespace ModelRelief.Api.V1.Settings
         [Produces("application/json")]
         public IActionResult UserSettings()
         {
-            var settingsModel = this.SettingsManager.GetSettings("user") as Domain.Settings;
+            var settingsModel = this.SettingsManager.GetSettings("user", User) as Domain.Settings;
             var settings = this.Mapper.Map<Dto.Settings>(settingsModel);
 
             return Ok(settings);
