@@ -4,7 +4,7 @@
 
 ### Front End (TypeScript)
 
-#### DTO Interfaces
+#### Interfaces
 
 The FE DTO interfaces are used to facilitate construction of DTO models from HTTP.
 
@@ -62,7 +62,7 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 
 #### Concrete Classes
 
-|Graphics |Implementation||DTO (HTTP) |Implementation||Notes|
+|Graphics |Implementation||DTO (HTTP) |Implementation||THREE|
 |---|---|---|---|---|---|---|
 |Camera|IModel<br>Model||Dto.Camera|IModel, ICamera<br>Dto.Model||THREE.Camera|
 |DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||Dto.DepthBuffer|IGeneratedFileModel, IDepthBuffer<br>Dto.GeneratedFileModel||
@@ -71,6 +71,7 @@ export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel
 |Model3d|IFileModel<br>FileModel||Dto.Model3d|IFileModel, IModel3d<br>Dto.FileModel||THREE.Mesh|
 |NormalMap|IGeneratedFileModel<br>GeneratedFileModel||Dto.NormalMap|IGeneratedFileModel, INormalMap<br>Dto.GeneratedFileModel||
 |Project|IModel<br>Model||Dto.Project|IModel, IProject<br>Dto.Model||
+|Settings|IModel<br>Model||Dto.Settings|IModel, IProject<br>Dto.Model||
 
 
 **Graphics**
@@ -914,13 +915,6 @@ https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
     
         Split Api and Ux into separate assemblies?
             Can the ServerFixture be in a separate assembly?
-    
-    Unit Tests
-        API Testing Mocks
-            How can RouteNames.ApiDocumentation be registered as a route?
-            Schema
-            Host
-            Port
     
     Investigate chai for FE JavaScript testing.
 

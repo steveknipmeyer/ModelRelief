@@ -5,8 +5,14 @@
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General
     Unpack DtoModels.ts.
-    routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
-
+    Implement
+        Dto.Settings
+        (Graphics) Settings
+        
+    Documentation
+        routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
+        Add test cases to Postman.
+        
     Settings
         Implement SettingsManager.InitializeUserSettingsFromUser
         Refactor Settings/Editor to use SettingsManager (not window.localstorage)

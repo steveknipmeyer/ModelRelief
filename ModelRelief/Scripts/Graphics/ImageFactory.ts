@@ -5,7 +5,6 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
-import * as Dto from "Scripts/Api/V1/Models/DtoModels";
 import * as THREE from "three";
 
 import {Graphics, ObjectNames} from "Scripts/Graphics/Graphics";
