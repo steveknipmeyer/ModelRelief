@@ -15,6 +15,7 @@ namespace ModelRelief.Features.Settings
     {
         Settings UserSettings { get; set; }
         Settings InitializeUserSettings(ClaimsPrincipal user);
+        int DefaultUserSettingsId(ClaimsPrincipal user);
         object GetSettings(string settingsType, ClaimsPrincipal user = null);
     }
 }

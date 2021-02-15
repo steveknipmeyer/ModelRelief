@@ -48,6 +48,19 @@ namespace ModelRelief.Features.Settings
         }
 
         /// <summary>
+        /// Find the Id of the default settings entity
+        /// </summary>
+        /// <param name="user">Active user</param>
+        public int DefaultUserSettingsId(ClaimsPrincipal user)
+        {
+            var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
+            var userSettings = DbContext.Set<Settings>()
+                .Where(s => (s.UserId == applicationUser.Id)).First();
+
+            return userSettings.Id;
+        }
+
+        /// <summary>
         /// Assign the user settings from the active user (if defined)
         /// </summary>
         /// <param name="user">Active user</param>
@@ -57,9 +70,9 @@ namespace ModelRelief.Features.Settings
             if ((user == null) || !user.Identity.IsAuthenticated)
                 return this.UserSettings;
 
-            var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
+            var defaultUserSettingsId = DefaultUserSettingsId(user);
             var userSettings = DbContext.Set<Settings>()
-                .Where(s => (s.UserId == applicationUser.Id)).First();
+                .Where(s => (s.Id == defaultUserSettingsId)) as Settings;
 
             // use first settings belonging to user; otherwise default settings from system initialization remain active
             if (userSettings != null)

@@ -61,7 +61,8 @@
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="1">Settings</a>
+                        var userSettingsId = settingsManager.DefaultUserSettingsId(User).ToString();
+                        <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettingsId">Settings</a>
                     @if (settingsManager.UserSettings.DevelopmentUI)
                     {
                         <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
