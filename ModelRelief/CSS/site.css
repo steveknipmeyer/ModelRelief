@@ -29,7 +29,7 @@ input, textarea {
     color: white;
 }
 
-input[type="checkbox"] {
+.form-group input[type="checkbox"] {
     height: 24px;
 }
 
