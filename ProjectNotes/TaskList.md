@@ -6,7 +6,6 @@
 #### General       
     How can the Id be determined in _Layout?
     Style Settings page.
-    Redirect to referring page.
         
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");

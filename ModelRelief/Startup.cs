@@ -110,6 +110,8 @@ namespace ModelRelief
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc().AddNewtonsoftJson();                                          // disable Core 3.1 System.Text.Json in middleware
             services.AddCustomMvc();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddModelReliefServices(Configuration);
             services.AddDatabaseServices(Env);
             services.AddAutoMapper(typeof(Startup));
@@ -188,6 +190,7 @@ namespace ModelRelief
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModelRelief API V1");
             });
 
+            app.UseSession();
             app.UseMvc(ConfigureRoutes);
         }
 

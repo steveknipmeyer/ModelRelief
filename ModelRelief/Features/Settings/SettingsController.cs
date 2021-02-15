@@ -11,6 +11,7 @@ namespace ModelRelief.Features.Settings
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
@@ -25,6 +26,9 @@ namespace ModelRelief.Features.Settings
     {
         public IWebHostEnvironment HostingEnvironment { get; set; }
         public Services.IConfigurationProvider ConfigurationProvider { get; set; }
+
+        // Session key
+        private const string SettingsEditReferringUrl = "SettingsEditReferringUrl";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsController"/> class.
@@ -44,6 +48,19 @@ namespace ModelRelief.Features.Settings
         }
 
         /// <summary>
+        /// Action handler for an Edit Get.
+        /// </summary>
+        /// <param name="id">Model Id to edit.</param>
+        /// <returns>Edit page.</returns>
+        [HttpGet]
+        public override async Task<IActionResult> Edit(int id)
+        {
+            HttpContext.Session.SetString(SettingsEditReferringUrl, this.Request.Headers["Referer"]);
+
+            return await base.Edit(id);
+        }
+
+        /// <summary>
         /// Action handler for an Edit request.
         /// </summary>
         /// <param name="id">Id of model to edit.</param>
@@ -54,7 +71,9 @@ namespace ModelRelief.Features.Settings
         public override async Task<IActionResult> Edit(int id, Dto.Settings postRequest)
         {
             await base.Edit(id, postRequest);
-            return this.Redirect("/");
+
+            var redirectUrl = HttpContext.Session.GetString(SettingsEditReferringUrl) ?? "/";
+            return this.Redirect(redirectUrl);
         }
 
         /// <summary>
