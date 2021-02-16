@@ -3,17 +3,13 @@
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
-#### General       
-    How can the Id be determined in _Layout?
+#### General             
+    Can Autofac be replaced with .NET Core DI?
+        https://github.com/jbogard/MediatR/wiki
         
     Documentation
-        routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
-        Add test cases to Postman.
+        routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
         
-    Settings
-        Implement SettingsManager.InitializeUserSettingsFromUser
-        Refactor Settings/Editor to use SettingsManager (not window.localstorage)
-
     Documentation
     Upload
 #### Models
@@ -26,12 +22,9 @@
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 
 #### UI
-    Add switch for Development controls. (Settings Gear?)
-
     Create a video or an animation?
     Workflow page
         Illustrate with images from Explorer!
-
 #### Solver
     Runtime error does not propagate back to UI.
         The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
@@ -44,7 +37,6 @@
 
     Silhouette
         Blend profile into mesh form.
-
 #### Build
     Review target=nginx handling in Builder.py.
         python Build/builder.py --target nginx --deploy True
