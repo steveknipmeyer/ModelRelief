@@ -35,5 +35,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Optionally provided by a query parameter.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetSingleRequest{TEntity, TGetModel}"/> class.
+        /// Constructor
+        /// </summary>
+        public GetSingleRequest()
+        {
+        }
     }
 }

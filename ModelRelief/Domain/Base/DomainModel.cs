@@ -6,12 +6,7 @@
 
 namespace ModelRelief.Domain
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
-    using System.IO;
-    using ModelRelief.Services;
-    using ModelRelief.Services.Relationships;
-    using ModelRelief.Utility;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -31,5 +26,13 @@ namespace ModelRelief.Domain
         // Navigation Properties
         [JsonIgnore]
         public string UserId { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainModel"/> class.
+        /// Constructor
+        /// </summary>
+        public DomainModel()
+        {
+        }
     }
 }

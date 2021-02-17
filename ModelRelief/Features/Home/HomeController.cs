@@ -10,25 +10,18 @@ namespace ModelRelief.Features.Home
     using Microsoft.Extensions.Options;
     using ModelRelief.Settings;
     using ModelRelief.Utility;
-    using ModelRelief.Workbench;
 
     public class HomeController : Controller
         {
-        private readonly IFunctionTwo<double> _function;
         private readonly ReCAPTCHASettings _reCAPTCHASettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
         /// </summary>
-        /// <param name="function">DI test object.</param>
         /// <param name="reCAPTCHASettings">reCAPTCHA settings from a configuration store (Azure key vault).</param>
-        public HomeController(IFunctionTwo<double> function, IOptions<ReCAPTCHASettings> reCAPTCHASettings)
+        public HomeController(IOptions<ReCAPTCHASettings> reCAPTCHASettings)
         {
             _reCAPTCHASettings = reCAPTCHASettings.Value as ReCAPTCHASettings;
-
-            // DI experimentation
-            this._function = function;
-            // Console.WriteLine(function.F2(1.0, 2.0));
         }
 
         /// <summary>

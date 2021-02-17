@@ -18,7 +18,6 @@ namespace ModelRelief.Services
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using ModelRelief.Database;
     using ModelRelief.Features.Email;
@@ -53,7 +52,8 @@ namespace ModelRelief.Services
         public static void AddAuth0Authentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Auth0 settings
-            var auth0 = services.BuildServiceProvider().GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
+            var auth0 = new Auth0Settings();
+            configuration.GetSection("Auth0").Bind(auth0);
 
             // Add authentication services
             services.AddAuthentication(options =>
@@ -136,15 +136,18 @@ namespace ModelRelief.Services
             services.AddMvc(options =>
             {
                 options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
+
                 // N.B. Order matters!
-                //                  options.Filters.Add(typeof(DbContextTransactionFilter));
+                // options.Filters.Add(typeof(DbContextTransactionFilter));
                 options.Filters.Add(typeof(GlobalExceptionFilter));
-                //                  options.Filters.Add(typeof(ValidatorActionFilter));
+                // options.Filters.Add(typeof(ValidatorActionFilter));
             })
                 .AddFeatureFolders()
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                // disable Core 3.1 System.Text.Json in middleware
+                .AddNewtonsoftJson();
         }
 
         /// <summary>
@@ -156,10 +159,10 @@ namespace ModelRelief.Services
         {
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddSingleton<IStorageManager, StorageManager>();
-            services.AddSingleton<IDependencyManager, DependencyManager>();
-            services.AddSingleton<IDispatcher, Dispatcher>();
-            services.AddSingleton<ISettingsManager, SettingsManager>();
 
+            services.AddTransient<IDependencyManager, DependencyManager>();
+            services.AddTransient<IDispatcher, Dispatcher>();
+            services.AddTransient<ISettingsManager, SettingsManager>();
             services.AddTransient<IEmailService, EmailService>();
         }
 
@@ -167,18 +170,17 @@ namespace ModelRelief.Services
         /// Extension method to add the database services.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
+        /// <param name="configuration">IConfiguration</param>
         /// <param name="env">IWebHostEnvironment</param>
-        public static void AddDatabaseServices(this IServiceCollection services, IWebHostEnvironment env)
+        public static void AddDatabaseServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
-            // build the intermediate service provider
-            var serviceProvider = services.BuildServiceProvider();
-            var configurationProvider = serviceProvider.GetService<Services.IConfigurationProvider>() as ModelRelief.Services.ConfigurationProvider;
+            var databaseProvider = Services.ConfigurationProvider.DatabaseFromSetting(configuration[ConfigurationSettings.MRDatabaseProvider]);
 
-            switch (configurationProvider.Database)
+            switch (databaseProvider)
             {
                 case RelationalDatabaseProvider.SQLite:
                 default:
-                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configurationProvider.Configuration.GetConnectionString(ConfigurationSettings.SQLite)));
+                    services.AddDbContext<ModelReliefDbContext>(options => options.UseSqlite(configuration.GetConnectionString(ConfigurationSettings.SQLite)));
                     break;
             }
         }

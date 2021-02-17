@@ -41,43 +41,42 @@ ViewData["Title"] = "Edit";
                         <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-
-                    <br><br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="LoggingEnabled" class="mr-2">Console Logging
-                    </label>
                     <br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="DevelopmentUI" class="mr-2">Extended Development UI
-                    </label>
-                    <br><br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="ModelViewerExtendedControls" class="mr-2">Model Viewer Extended Controls (e.g. Grid)
-                    </label>
+                    <div class="checkbox-inline">
+                        <label asp-for="LoggingEnabled"></label>
+                        <input type="checkbox" asp-for="LoggingEnabled" class="mr-2" />
+                    </div>
+                    <div class="checkbox-inline">
+                        <label asp-for="DevelopmentUI"></label>
+                        <input type="checkbox" asp-for="DevelopmentUI" class="mr-2" />
+                    </div>
                     <br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="MeshViewerExtendedControls" class="mr-2">Mesh Viewer Extended Controls
-                    </label>
+                    <div class="checkbox-inline">
+                        <label asp-for="ModelViewerExtendedControls"></label>
+                        <input type="checkbox" asp-for="ModelViewerExtendedControls" class="mr-2" />
+                    </div>
+                    <div class="checkbox-inline">
+                        <label asp-for="MeshViewerExtendedControls"></label>
+                        <input type="checkbox" asp-for="MeshViewerExtendedControls" class="mr-2" />
+                    </div>
+                    <div class="checkbox-inline">
+                        <label asp-for="ExtendedCameraControls"></label>
+                        <input type="checkbox" asp-for="ExtendedCameraControls" class="mr-2" />
+                    </div>
                     <br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="ExtendedCameraControls" class="mr-2">Extended Camera Controls (Clipping Planes, Camera Helper, etc.)
-                    </label>
-                    <br><br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="DepthBufferViewVisible" class="mr-2">Depth Buffer Visible
-                    </label>
+                    <div class="checkbox-inline">
+                        <label asp-for="DepthBufferViewVisible"></label>
+                        <input type="checkbox" asp-for="DepthBufferViewVisible" class="mr-2" />
+                    </div>
+                    <div class="checkbox-inline">
+                        <label asp-for="NormalMapViewVisible"></label>
+                        <input type="checkbox" asp-for="NormalMapViewVisible" class="mr-2" />
+                    </div>
                     <br>
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="NormalMapViewVisible" class="mr-2">Normal Map Visible
-                    </label>
-                    <br><br>
 
                     <div class="form-group">
                         <input type="submit" value="Save" class="actionButton btn button-rounded btn-sm" />
                     </div>
                 </form>
             </div>
-
-
-
     </div>

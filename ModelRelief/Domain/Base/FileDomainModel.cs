@@ -7,11 +7,9 @@
 namespace ModelRelief.Domain
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
     using System.IO;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
-    using ModelRelief.Utility;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -24,6 +22,10 @@ namespace ModelRelief.Domain
         [JsonIgnore]
         public string Path { get; set; }                        // associated file absolute path
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileDomainModel"/> class.
+        /// Constructor
+        /// </summary>
         public FileDomainModel()
         {
         }
@@ -33,7 +35,7 @@ namespace ModelRelief.Domain
         {
             get
             {
-                return ApplicationServices.StorageManager;
+                return ServicesRepository.StorageManager;
             }
         }
         /// <summary>

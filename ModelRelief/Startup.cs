@@ -35,8 +35,8 @@ namespace ModelRelief
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// Constructor
         /// </summary>
-        /// <param name="configuration">DI Configuration service</param>
-        /// <param name="env">DI IWebHostEnvironment</param>
+        /// <param name="configuration">IConfiguration [from DI]</param>
+        /// <param name="env">IWebHostEnvironment [from DI]</param>
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -44,17 +44,13 @@ namespace ModelRelief
         }
 
         /// <summary>
-        /// Registers types with Autofac to be used for DI.
+        /// Registers DI MediatR handlers.
         /// </summary>
         /// <param name="services">Existing service collection.</param>
-        /// <returns>IServiceProvider to provide DI support.</returns>
-        private IServiceProvider ConfigureAutofacServices(IServiceCollection services)
+        private IServiceProvider ConfigureDIRequestHandlers(IServiceCollection services)
         {
             var builder = new ContainerBuilder();
             builder.Populate(services);
-
-            // generics with <in> contravariant parameter
-            builder.RegisterSource(new ContravariantRegistrationSource());
 
             // module scanning: all types are registered for each interface supported
             builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
@@ -83,13 +79,12 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(DeleteRequest<>));
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
-            // MediatR : register delegates
-            builder.Register<ServiceFactory>(ctx =>
+            // register resolver
+            builder.Register<ServiceFactory>(context =>
             {
-                var c = ctx.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
+                var component = context.Resolve<IComponentContext>();
+                return theType => component.Resolve(theType);
             });
-
             var container = builder.Build();
             return container.Resolve<IServiceProvider>();
         }
@@ -108,12 +103,11 @@ namespace ModelRelief
             services.AddAuth0Authentication(Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddMvc().AddNewtonsoftJson();                                          // disable Core 3.1 System.Text.Json in middleware
             services.AddCustomMvc();
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddModelReliefServices(Configuration);
-            services.AddDatabaseServices(Env);
+            services.AddDatabaseServices(Configuration, Env);
             services.AddAutoMapper(typeof(Startup));
 
             // https://stackoverflow.com/questions/56234504/migrating-to-swashbuckle-aspnetcore-version-5
@@ -140,13 +134,7 @@ namespace ModelRelief
                 });
             });
 
-            var serviceProvider = ConfigureAutofacServices(services);
-            IMapper mapper = serviceProvider.GetRequiredService<IMapper>();
-            mapper.ConfigurationProvider.AssertConfigurationIsValid();
-
-            // service provider for contexts without DI
-            ApplicationServices.StorageManager = serviceProvider.GetRequiredService<IStorageManager>();
-
+            var serviceProvider = ConfigureDIRequestHandlers(services);
             return serviceProvider;
         }
 
@@ -155,8 +143,9 @@ namespace ModelRelief
         /// </summary>
         /// <param name="app">DI IApplicationBuilder</param>
         /// <param name="env">DI IWebHostEnvironment</param>
-        /// <param name="configurationProvider">Configuration provider.</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Services.IConfigurationProvider configurationProvider)
+        /// <param name="mapper">DI IMapper.</param>
+        /// <param name="storageManager">DI IStorageManager.</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper, IStorageManager storageManager)
         {
             if (env.IsDevelopment())
             {
@@ -192,6 +181,12 @@ namespace ModelRelief
 
             app.UseSession();
             app.UseMvc(ConfigureRoutes);
+
+            // validate AutoMapper configuration
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
+
+            // service provider for contexts without DI
+            ServicesRepository.StorageManager = storageManager;
         }
 
         /// <summary>

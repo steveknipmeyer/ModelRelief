@@ -7,6 +7,7 @@
 namespace ModelRelief.Test
 {
     using System;
+    using Microsoft.Extensions.DependencyInjection;
     using ModelRelief.Database;
     using Xunit;
 
@@ -25,13 +26,19 @@ namespace ModelRelief.Test
         public DatabaseCollectionFixture()
         {
             ServerFramework = new ServerFramework();
-            var serviceProvider = ServerFramework.Server.Host.Services;
 
-            var initializer = new Initializer(serviceProvider);
-            initializer.Initialize();
+            // create a scope to get scoped services (.e.g DbContext)
+            // https://stackoverflow.com/questions/59774559/how-do-i-get-a-instance-of-a-service-in-asp-net-core-3-1
+            using (var scope = ServerFramework.Server.Host.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
 
-            var dbInitializer = new DbInitializer(serviceProvider, exitAfterInitialization: false);
-            dbInitializer.SynchronizeTestDatabase(restore: true);
+                var initializer = new Initializer(serviceProvider);
+                initializer.Initialize();
+
+                var dbInitializer = new DbInitializer(serviceProvider, exitAfterInitialization: false);
+                dbInitializer.SynchronizeTestDatabase(restore: true);
+            }
         }
 
         /// <summary>

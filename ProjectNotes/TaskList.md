@@ -1,12 +1,17 @@
 ## Commit Notes
+
 #### Issues
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General             
-    Can Autofac be replaced with .NET Core DI?
-        https://github.com/jbogard/MediatR/wiki
-        
+    
+    Pull .NET Core source code.
+
+    Api
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModelRelief API V1");
+            api/v1/api.json
+
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
         

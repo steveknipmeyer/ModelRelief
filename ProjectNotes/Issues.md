@@ -106,3 +106,18 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
 #### Python
     Why does venv not add the Python 3.8 include files?
     Why does the 1st mayavi install fail with a vtk module error?
+#### Dependency Injection
+    Can Autofac be replaced with .NET Core DI?
+        https://github.com/jbogard/MediatR/wiki
+
+        Do services have to be cached?
+            // service provider for contexts without DI
+            ServicesRepository.StorageManager = storageManager;
+
+        .NET 5.0 Required for MediatR Constrained Open Generics
+            https://jimmybogard.com/constrained-open-generics-support-merged-in-net-core-di-container/
+
+        DI Setup Libraries
+            https://andrewlock.net/using-scrutor-to-automatically-register-your-services-with-the-asp-net-core-di-container/
+            https://www.thereformedprogrammer.net/asp-net-core-fast-and-automatic-dependency-injection-setup/
+        
