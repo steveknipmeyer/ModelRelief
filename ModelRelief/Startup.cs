@@ -171,12 +171,16 @@ namespace ModelRelief
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
             });
             app.UseAuthentication();
-            app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwagger(o =>
+               {
+                   o.RouteTemplate = "api/{documentName}/documentation/api.json";
+               });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModelRelief API V1");
+                c.RoutePrefix = "api/v1/documentation";
+                c.SwaggerEndpoint("/api/v1/documentation/api.json", "ModelRelief API V1");
             });
 
             app.UseSession();
