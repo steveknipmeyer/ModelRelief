@@ -549,7 +549,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     
     All validation providers can contribute rules to the validation.
         DataAnnotation Attribute
-        IValidatable
+        IValidatableObject
         FluentValidation
     
     ValidationActionFilter
@@ -563,7 +563,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
                                 Entity Exists   StorageFolder   File Exists     Formatting
         GetSingle               X                                               X
         GetList                                                                 X
-    
         Delete                  X
             DeleteStorage                       X               X
         Put                     X                                               X
