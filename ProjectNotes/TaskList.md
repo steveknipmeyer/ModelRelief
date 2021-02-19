@@ -1,14 +1,7 @@
 ## Commit Notes
-IWebHostBuilder -> IHostBuilder
-#### Issues
-    How does lucy.sfp get corrupted?
-        -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
-        -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### General             
-    MediatR IRequest registration failed only for concrete generics.
-    
-    Review all package versions.
-    Pull .NET Core source code.
+    SettingsManager.GetSettings
+        DefaultUserSettingsId succeeds but InitializeUserSettings fails.
 
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
@@ -40,6 +33,10 @@ IWebHostBuilder -> IHostBuilder
 
     Silhouette
         Blend profile into mesh form.
+#### Issues
+    How does lucy.sfp get corrupted?
+        -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
+        -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### Build
     Review target=nginx handling in Builder.py.
         python Build/builder.py --target nginx --deploy True

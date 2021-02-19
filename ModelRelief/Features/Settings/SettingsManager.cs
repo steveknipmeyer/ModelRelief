@@ -72,7 +72,7 @@ namespace ModelRelief.Features.Settings
 
             var defaultUserSettingsId = DefaultUserSettingsId(user);
             var userSettings = DbContext.Set<Settings>()
-                .Where(s => (s.Id == defaultUserSettingsId)) as Settings;
+                .Where(s => (s.Id == defaultUserSettingsId)).First<Settings>();
 
             // use first settings belonging to user; otherwise default settings from system initialization remain active
             if (userSettings != null)

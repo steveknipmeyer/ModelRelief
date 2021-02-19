@@ -33,7 +33,7 @@ namespace ModelRelief.Test
                 .ConfigureWebHost(webBuilder =>
                 {
                     webBuilder
-                        .UseTestServer()
+                        .UseTestServer();
                 })
                 .StartAsync();
 

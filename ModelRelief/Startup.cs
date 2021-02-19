@@ -42,30 +42,14 @@ namespace ModelRelief
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // Add any Autofac modules or registrations.
-            // This is called AFTER ConfigureServices so things you
-            // register here OVERRIDE things registered in ConfigureServices.
-            //
-            // You must have the call to `UseServiceProviderFactory(new AutofacServiceProviderFactory())`
-            // when building the host or this won't be called.
-
-            builder.RegisterGeneric(typeof(FileRequest<>));
             builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(GetSingleRequest<,>));
             builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(GetQueryRequest<,>));
             builder.RegisterGeneric(typeof(GetQueryRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(GetFileRequest<>));
             builder.RegisterGeneric(typeof(GetFileRequestHandler<>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PostRequest<,,>));
             builder.RegisterGeneric(typeof(PostRequestHandler<,,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PutRequest<,,>));
             builder.RegisterGeneric(typeof(PutRequestHandler<,,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PostFileRequest<,>));
             builder.RegisterGeneric(typeof(PostFileRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PatchRequest<,>));
             builder.RegisterGeneric(typeof(PatchRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(DeleteRequest<>));
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
             AutofacExperiments.Register(builder);

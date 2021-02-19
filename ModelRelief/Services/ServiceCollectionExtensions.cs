@@ -160,9 +160,11 @@ namespace ModelRelief.Services
             services.AddSingleton<Services.IConfigurationProvider, Services.ConfigurationProvider>();
             services.AddSingleton<IStorageManager, StorageManager>();
 
+            // match DbContext (Scoped) as SettingsManager holds a reference
+            services.AddScoped<ISettingsManager, SettingsManager>();
+
             services.AddTransient<IDependencyManager, DependencyManager>();
             services.AddTransient<IDispatcher, Dispatcher>();
-            services.AddTransient<ISettingsManager, SettingsManager>();
             services.AddTransient<IEmailService, EmailService>();
         }
 
