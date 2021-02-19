@@ -8,8 +8,6 @@ namespace ModelRelief
 {
     using System;
     using Autofac;
-    using Autofac.Extensions.DependencyInjection;
-    using Autofac.Features.Variance;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Builder;
@@ -42,24 +40,15 @@ namespace ModelRelief
             Configuration = configuration;
             Env = env;
         }
-
-        /// <summary>
-        /// Registers DI MediatR handlers.
-        /// </summary>
-        /// <param name="services">Existing service collection.</param>
-        private IServiceProvider ConfigureDIRequestHandlers(IServiceCollection services)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
+            // Add any Autofac modules or registrations.
+            // This is called AFTER ConfigureServices so things you
+            // register here OVERRIDE things registered in ConfigureServices.
+            //
+            // You must have the call to `UseServiceProviderFactory(new AutofacServiceProviderFactory())`
+            // when building the host or this won't be called.
 
-            // module scanning: all types are registered for each interface supported
-            builder.RegisterAssemblyTypes(typeof(IMediator).Assembly).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsImplementedInterfaces();
-
-            AutofacExperiments.Register(builder);
-
-            // generics
-            // WIP Why is AsImplementedInterfaces required for the Handlers?
             builder.RegisterGeneric(typeof(FileRequest<>));
             builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetSingleRequest<,>));
@@ -79,14 +68,35 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(DeleteRequest<>));
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
-            // register resolver
-            builder.Register<ServiceFactory>(context =>
+            AutofacExperiments.Register(builder);
+
+            // If you want to enable diagnostics, you can do that via a build
+            // callback. Diagnostics aren't free, so you shouldn't just do this
+            // by default. Note: since you're diagnosing the container you can't
+            // ALSO resolve the logger to which the diagnostics get written, so
+            // writing directly to the log destination is the way to go.
+            /*
+            var tracer = new DefaultDiagnosticTracer();
+            tracer.OperationCompleted += (sender, args) =>
             {
-                var component = context.Resolve<IComponentContext>();
-                return theType => component.Resolve(theType);
+                Console.WriteLine(args.TraceContent);
+            };
+
+            builder.RegisterBuildCallback(c =>
+            {
+                var container = c as IContainer;
+                container.SubscribeToDiagnostics(tracer);
             });
-            var container = builder.Build();
-            return container.Resolve<IServiceProvider>();
+            */
+        }
+
+        /// <summary>
+        /// Configures MediatR.
+        /// </summary>
+        /// <param name="services">Existing service collection.</param>
+        private void ConfigureMediatR(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(Startup));
         }
 
         /// <summary>
@@ -94,7 +104,7 @@ namespace ModelRelief
         /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         /// </summary>
         /// <param name="services">DI Service collection.</param>
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -134,8 +144,7 @@ namespace ModelRelief
                 });
             });
 
-            var serviceProvider = ConfigureDIRequestHandlers(services);
-            return serviceProvider;
+            ConfigureMediatR(services);
         }
 
         /// <summary>

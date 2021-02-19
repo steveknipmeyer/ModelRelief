@@ -45,7 +45,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         /// <param name="rootPrimaryKey">Prinary key of root.</param>
         private async Task<List<DomainModel>> FindDependentModels(Type rootType, int rootPrimaryKey)
         {
-            var accounts = this.ClassFixture.ServerFramework.Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+            var accounts = this.ClassFixture.ServerFramework.Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
             var developmentAccount = new ApplicationUser(accounts.Development.NameIdentifier, accounts.Development.Name);
 
             var rootModel = DbContext.Models

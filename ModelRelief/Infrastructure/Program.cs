@@ -8,14 +8,15 @@ namespace ModelRelief.Infrastructure
 {
     using System;
     using System.IO;
+    using Autofac.Extensions.DependencyInjection;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using ModelRelief.Database;
     using ModelRelief.Services;
     using Serilog;
-
     public class Program
     {
         private static bool ExitAfterInitialization { get; set; }
@@ -28,7 +29,7 @@ namespace ModelRelief.Infrastructure
         {
             ConfigureLogging();
 
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
             ProcessConfiguration(host);
 
@@ -44,7 +45,7 @@ namespace ModelRelief.Infrastructure
         /// Perform general initialization including seeding the database.
         /// </summary>
         /// <param name="host">Web host.</param>
-        private static void PerformInitialization(IWebHost host)
+        private static void PerformInitialization(IHost host)
         {
             var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
             using (var scope = services.CreateScope())
@@ -60,7 +61,7 @@ namespace ModelRelief.Infrastructure
         /// <summary>
         /// Process key configuration settings.
         /// </summary>
-        private static void ProcessConfiguration(IWebHost host)
+        private static void ProcessConfiguration(IHost host)
         {
             Services.IConfigurationProvider configurationProvider = host.Services.GetRequiredService<Services.IConfigurationProvider>();
             configurationProvider.LogConfigurationSettings();
@@ -89,13 +90,14 @@ namespace ModelRelief.Infrastructure
         /// Construct the web host.
         /// </summary>
         /// <param name="args">Arguments.</param>
-        /// <returns>IWebHost</returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        /// <returns>IHostBuilder</returns>
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
             try
             {
                 Log.Information("Starting web host");
-                var webHostBuilder = WebHost.CreateDefaultBuilder(args)
+                var hostBuilder = Host.CreateDefaultBuilder(args)
+                                     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                                      .ConfigureAppConfiguration((builderContext, config) =>
                                      {
                                         var env = builderContext.HostingEnvironment;
@@ -109,10 +111,13 @@ namespace ModelRelief.Infrastructure
                                              builtConfig["AzureKeyVault:ApplicationId"],
                                              builtConfig["AzureKeyVault:ModelReliefKVKey"]);
                                      })
-                                     .UseStartup<Startup>()
+                                    .ConfigureWebHostDefaults(webBuilder =>
+                                    {
+                                        webBuilder.UseStartup<Startup>();
+                                    })
                                     //  .UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
                                      .UseSerilog();
-                return webHostBuilder;
+                return hostBuilder;
             }
             catch (Exception ex)
             {

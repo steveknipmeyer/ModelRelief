@@ -12,11 +12,14 @@ namespace ModelRelief.Test
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore;
+    using Autofac.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using ModelRelief.Settings;
@@ -30,6 +33,7 @@ namespace ModelRelief.Test
     public class ServerFramework
     {
         public TestServer Server { get; set; }
+
         public HttpClient Client { get; set; }
 
         public Services.IConfigurationProvider ConfigurationProvider { get; set; }
@@ -39,28 +43,42 @@ namespace ModelRelief.Test
             var contentRootPath = Settings.GetContentRootPath();
             Directory.SetCurrentDirectory(contentRootPath);
 
-            Server = new TestServer(WebHost.CreateDefaultBuilder(null)
-                                            .UseEnvironment(Settings.Environment)
-                                            .UseContentRoot(contentRootPath)
-                                            .ConfigureAppConfiguration((builderContext, config) =>
-                                            {
-                                                var loggerFactory = new LoggerFactory();
-                                                var logger = loggerFactory.CreateLogger<Services.ConfigurationProvider>();
+            var host = Host.CreateDefaultBuilder()
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .UseEnvironment(Settings.Environment)
+                .UseContentRoot(contentRootPath)
+                .ConfigureAppConfiguration((builderContext, config) =>
+                {
+                    var loggerFactory = new LoggerFactory();
+                    var logger = loggerFactory.CreateLogger<Services.ConfigurationProvider>();
 
-                                                config.AddJsonFile("azurekeyvault.json", optional: false);
-                                                var builtConfig = config.Build();
+                    config.AddJsonFile("azurekeyvault.json", optional: false);
+                    var builtConfig = config.Build();
 
-                                                config.AddAzureKeyVault(
-                                                    $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
-                                                    builtConfig["AzureKeyVault:ApplicationId"],
-                                                    builtConfig["AzureKeyVault:ModelReliefKVKey"]);
+                    config.AddAzureKeyVault(
+                        $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
+                        builtConfig["AzureKeyVault:ApplicationId"],
+                        builtConfig["AzureKeyVault:ModelReliefKVKey"]);
 
-                                                var configurationProvider = Settings.ConfigurationProvider(config);
-                                                this.ConfigurationProvider = new Services.ConfigurationProvider(configurationProvider, logger);
-                                            })
-                                            .UseStartup<Startup>());
+                    var configurationProvider = Settings.ConfigurationProvider(config);
+                    this.ConfigurationProvider = new Services.ConfigurationProvider(configurationProvider, logger);
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    // N.B. <Must> precede UseTestServer or a Kestrel server is created
+                    webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureWebHost(webBuilder =>
+                {
+                    webBuilder.UseTestServer();
+                })
+                .Build();
 
+            host.StartAsync().Wait();
+
+            Server = host.GetTestServer();
             Client = Server.CreateClient();
+
             SetAuthorizationHeaderAsync().Wait();
         }
 
@@ -71,9 +89,8 @@ namespace ModelRelief.Test
         /// <returns>True</returns>
         private async Task<bool> SetAuthorizationHeaderAsync()
         {
-            var accounts = Server.Host.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
-            var auth0    = Server.Host.Services.GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
-
+            var accounts = Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+            var auth0 = Server.Services.GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
             var configuration = ConfigurationProvider.Configuration;
             var passwordGrantRequest = new
             {

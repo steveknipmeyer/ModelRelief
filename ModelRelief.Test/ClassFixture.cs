@@ -30,7 +30,7 @@ namespace ModelRelief.Test
             // The TestServer provides access to IServiceProvider through Server.Host so the ServerFramework is present in all tests.
             ServerFramework = collectionFixture.ServerFramework;
 
-            ServiceProvider = ServerFramework.Server.Host.Services;
+            ServiceProvider = ServerFramework.Server.Services;
         }
 
         /// <summary>
