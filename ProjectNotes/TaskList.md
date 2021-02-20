@@ -1,31 +1,6 @@
 ## Commit Notes
 #### General             
-    Endpoint Routing
-        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
-
-        RouteNames
-            routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
-            routeBuilder.MapRoute(name: RouteNames.DefaultApiV1, template: "api/v1/{controller}/{id?}");
-            routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
-
-        Views
-            about
-            special/{id}
-
-        Api
-            /api/v1/settings/camera
-            /api/v1/settings/user
-
-            /api/v1/depth-buffers
-            /api/v1/mesh-transforms
-            /api/v1/normal-maps
-
-        Documentation
-            api/v1/documentation/<model>/<error>",
-                "https://localhost:5001/api/v1/documentation/cameras/103",
-        Swagger
-            /api/v1/documentation
-            /api/v1/documentation/api.json
+    Review exception handling.
 
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"

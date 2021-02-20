@@ -8,7 +8,6 @@ namespace ModelRelief
 {
     using System;
     using Autofac;
-    using Autofac.Diagnostics;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Builder;
@@ -69,7 +68,6 @@ namespace ModelRelief
             services.AddConfigurationTypes(Configuration);
             services.AddAuth0Authentication(Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddCustomMvc();
             services.AddDistributedMemoryCache();
             services.AddSession();
@@ -148,25 +146,49 @@ namespace ModelRelief
             });
 
             app.UseSession();
-            app.UseMvc(ConfigureRoutes);
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                // View default
+                endpoints.MapControllerRoute(
+                    name: RouteNames.Default,
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // View compound names
+                endpoints.MapControllerRoute(
+                    name: RouteNames.DepthBuffers,
+                    pattern: "depth-buffers/{action=Index}/{id?}",
+                    defaults: new { controller = "DepthBuffers" });
+                endpoints.MapControllerRoute(
+                    name: RouteNames.NormalMaps,
+                    pattern: "normal-maps/{action=Index}/{id?}",
+                    defaults: new { controller = "NormalMaps" });
+                endpoints.MapControllerRoute(
+                    name: RouteNames.MeshTransforms,
+                    pattern: "mesh-transforms/{action=Index}/{id?}",
+                    defaults: new { controller = "MeshTransforms" });
+
+                // API
+                endpoints.MapControllerRoute(
+                    name: RouteNames.DefaultApiV1,
+                    pattern: "api/v1/{controller}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: RouteNames.ApiDocumentation,
+                    pattern: "api/v1/documentation/{controller}/{id?}");
+
+                // special
+                endpoints.MapControllerRoute(
+                      name: "special",
+                      pattern: "special/{id?}",
+                      defaults: new { controller = "Home" });
+            });
 
             // validate AutoMapper configuration
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             // service provider for contexts without DI
             ServicesRepository.StorageManager = storageManager;
-        }
-
-        /// <summary>
-        /// Configures the routes and their associated route templates.
-        /// </summary>
-        /// <param name="routeBuilder">IRouterBuilder.</param>
-        private void ConfigureRoutes(IRouteBuilder routeBuilder)
-        {
-            routeBuilder.MapRoute(name: RouteNames.Default, template: "{controller=Home}/{action=Index}/{id?}");
-
-            routeBuilder.MapRoute(name: RouteNames.DefaultApiV1, template: "api/v1/{controller}/{id?}");
-            routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}");
         }
     }
 }

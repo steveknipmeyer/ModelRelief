@@ -39,7 +39,6 @@ namespace ModelRelief.Features.Home
         /// <summary>
         /// Action method for settings.
         /// </summary>
-        [Route("about")]
         [HttpGet]
         public IActionResult About()
         {
@@ -68,7 +67,6 @@ namespace ModelRelief.Features.Home
         /// Action method for route testing.
         /// </summary>
         /// <param name="id">Placeholder.</param>
-        [Route("special/{id?}")]
         [HttpGet]
         public IActionResult Special(int id)
         {

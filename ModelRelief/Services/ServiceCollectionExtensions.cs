@@ -27,6 +27,7 @@ namespace ModelRelief.Services
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Settings;
+    using OdeToCode.AddFeatureFolders;
 
     public static class ServiceCollectionExtensions
     {
@@ -133,8 +134,12 @@ namespace ModelRelief.Services
         /// <param name="services">IServiceCollection</param>
         public static void AddCustomMvc(this IServiceCollection services)
         {
-            services.AddMvc(options =>
+            var featureFolderOptions = new FeatureFolderOptions();
+            services.AddControllersWithViews(options =>
                 {
+                    featureFolderOptions.FeatureFolderName = "Features";
+                    options.Conventions.Add(new FeatureControllerModelConvention(featureFolderOptions));
+
                     options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
 
                     // N.B. Order matters!
@@ -142,11 +147,19 @@ namespace ModelRelief.Services
                     options.Filters.Add(typeof(GlobalExceptionFilter));
                     // options.Filters.Add(typeof(ValidatorActionFilter));
                 })
-                .AddFeatureFolders()
+                .AddRazorOptions(o =>
+                {
+                    o.ViewLocationFormats.Clear();
+                    o.ViewLocationFormats.Add(featureFolderOptions.FeatureNamePlaceholder + "/{0}.cshtml");
+                    o.ViewLocationFormats.Add(featureFolderOptions.FeatureFolderName + "/Shared/{0}.cshtml");
+                    o.ViewLocationFormats.Add(featureFolderOptions.DefaultViewLocation);
+
+                    var expander = new FeatureViewLocationExpander(featureFolderOptions);
+                    o.ViewLocationExpanders.Add(expander);
+                })
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                // disable Core 3.1 System.Text.Json in middleware
+                // disable .NET Core System.Text.Json in middleware
                 .AddNewtonsoftJson();
         }
 

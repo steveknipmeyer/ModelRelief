@@ -62,7 +62,6 @@ namespace ModelRelief.Features.Workbench
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("[controller]/[action]")]
         public IActionResult ImageTest(ImageTestViewModel viewModel)
             {
             if (!ModelState.IsValid)
