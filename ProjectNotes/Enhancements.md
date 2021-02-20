@@ -6,11 +6,7 @@ Electron platform?
     How can Python binary extensions be resolved (e.g. sys, time)?
 
 #### .NET Core
-    
-    Routing
-        Change Ux routing for compound names (e.g. depthbuffer -> depth-buffers)
-        Use Endpoint routing?
-    
+   
     Complete implementation of DependencyManager.GetAllDependencyTypes.
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
