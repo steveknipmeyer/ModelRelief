@@ -1,8 +1,5 @@
 ## Commit Notes
 #### General             
-    SettingsManager.GetSettings
-        DefaultUserSettingsId succeeds but InitializeUserSettings fails.
-
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
         

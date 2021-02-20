@@ -8,6 +8,7 @@ namespace ModelRelief
 {
     using System;
     using Autofac;
+    using Autofac.Diagnostics;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Builder;
@@ -53,34 +54,6 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
 
             AutofacExperiments.Register(builder);
-
-            // If you want to enable diagnostics, you can do that via a build
-            // callback. Diagnostics aren't free, so you shouldn't just do this
-            // by default. Note: since you're diagnosing the container you can't
-            // ALSO resolve the logger to which the diagnostics get written, so
-            // writing directly to the log destination is the way to go.
-            /*
-            var tracer = new DefaultDiagnosticTracer();
-            tracer.OperationCompleted += (sender, args) =>
-            {
-                Console.WriteLine(args.TraceContent);
-            };
-
-            builder.RegisterBuildCallback(c =>
-            {
-                var container = c as IContainer;
-                container.SubscribeToDiagnostics(tracer);
-            });
-            */
-        }
-
-        /// <summary>
-        /// Configures MediatR.
-        /// </summary>
-        /// <param name="services">Existing service collection.</param>
-        private void ConfigureMediatR(IServiceCollection services)
-        {
-            services.AddMediatR(typeof(Startup));
         }
 
         /// <summary>
@@ -103,10 +76,9 @@ namespace ModelRelief
             services.AddModelReliefServices(Configuration);
             services.AddDatabaseServices(Configuration, Env);
             services.AddAutoMapper(typeof(Startup));
-
-            // https://stackoverflow.com/questions/56234504/migrating-to-swashbuckle-aspnetcore-version-5
             services.AddSwaggerGen(c =>
             {
+                // https://stackoverflow.com/questions/56234504/migrating-to-swashbuckle-aspnetcore-version-5
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "ModelRelief API",
@@ -127,8 +99,7 @@ namespace ModelRelief
                     Scheme = "bearer",                      // name of the HTTP Authorization scheme to be used in the Authorization header. In this case "bearer".
                 });
             });
-
-            ConfigureMediatR(services);
+            services.AddMediatR(typeof(Startup));
         }
 
         /// <summary>

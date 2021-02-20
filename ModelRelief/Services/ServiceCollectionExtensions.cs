@@ -134,14 +134,14 @@ namespace ModelRelief.Services
         public static void AddCustomMvc(this IServiceCollection services)
         {
             services.AddMvc(options =>
-            {
-                options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
+                {
+                    options.InputFormatters.Insert(0, new RawRequestBodyFormatter());
 
-                // N.B. Order matters!
-                // options.Filters.Add(typeof(DbContextTransactionFilter));
-                options.Filters.Add(typeof(GlobalExceptionFilter));
-                // options.Filters.Add(typeof(ValidatorActionFilter));
-            })
+                    // N.B. Order matters!
+                    // options.Filters.Add(typeof(DbContextTransactionFilter));
+                    options.Filters.Add(typeof(GlobalExceptionFilter));
+                    // options.Filters.Add(typeof(ValidatorActionFilter));
+                })
                 .AddFeatureFolders()
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })

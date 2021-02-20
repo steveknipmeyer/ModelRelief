@@ -97,26 +97,26 @@ namespace ModelRelief.Infrastructure
             {
                 Log.Information("Starting web host");
                 var hostBuilder = Host.CreateDefaultBuilder(args)
-                                     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                                     .ConfigureAppConfiguration((builderContext, config) =>
-                                     {
-                                        var env = builderContext.HostingEnvironment;
-                                        Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
+                    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                    .ConfigureAppConfiguration((builderContext, config) =>
+                    {
+                        var env = builderContext.HostingEnvironment;
+                        Log.Information($"Runtime environment (ASPNETCORE_ENVIRONMENT) = {env.EnvironmentName}");
 
-                                        config.AddJsonFile("azurekeyvault.json", optional: false);
-                                        var builtConfig = config.Build();
+                        config.AddJsonFile("azurekeyvault.json", optional: false);
+                        var builtConfig = config.Build();
 
-                                        config.AddAzureKeyVault(
-                                             $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
-                                             builtConfig["AzureKeyVault:ApplicationId"],
-                                             builtConfig["AzureKeyVault:ModelReliefKVKey"]);
-                                     })
-                                    .ConfigureWebHostDefaults(webBuilder =>
-                                    {
-                                        webBuilder.UseStartup<Startup>();
-                                    })
-                                    //  .UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
-                                     .UseSerilog();
+                        config.AddAzureKeyVault(
+                            $"https://{builtConfig["AzureKeyVault:Vault"]}.vault.azure.net/",
+                            builtConfig["AzureKeyVault:ApplicationId"],
+                            builtConfig["AzureKeyVault:ModelReliefKVKey"]);
+                    })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                    //  .UseUrls(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
+                    .UseSerilog();
                 return hostBuilder;
             }
             catch (Exception ex)
