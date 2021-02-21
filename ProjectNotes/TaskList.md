@@ -1,12 +1,33 @@
 ## Commit Notes
-#### General             
+#### General
+    Encapsulate SettingsType in the FE.
+
+    Can DI inject a Logger instance (suitably typed) instead of using ILoggerFactory to manufacture the instance?
+
     Review exception handling.
 
     Documentation
         routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
         
     Documentation
+
+    Projects
+        Place sample projects into a single project?
+        Test new user creation.
+            52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+        Use Index page as a template for the Project page.
+            Each user model is hosted in a tile.
+                How can a preview be generated?
     Upload
+
+    Auth0 Authorization
+        localhost introduces issues. Modify /etc/hosts as described below to suppress the "Access to Tenant" dialog box.
+            https://auth0.com/docs/authorization/user-consent-and-third-party-applications#skipping-consent-for-first-party-clients
+        Auth0 contains references to www. modelrelief.com.
+            http://www.modelrelief.com/images/ModelReliefBlue.png
+#### Integration Testing
+    Can dataabase rollbacks be used instead of SynchronizeTestDatabase?
+
 #### Models
     OBJ viewer has missing polygons.
         Plunderbuss
@@ -15,11 +36,6 @@
     Review all mesh generation settings for delivered models.
     Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
-
-#### UI
-    Create a video or an animation?
-    Workflow page
-        Illustrate with images from Explorer!
 #### Solver
     Runtime error does not propagate back to UI.
         The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
@@ -36,6 +52,10 @@
     How does lucy.sfp get corrupted?
         -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
         -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
+#### UI
+    Create a video or an animation?
+    Workflow page
+        Illustrate with images from Explorer!
 #### Build
     Review target=nginx handling in Builder.py.
         python Build/builder.py --target nginx --deploy True
@@ -53,7 +73,6 @@
         Mock azurekeysecrets.json.
             Move to a new settings file?
             How should the contact e-mail address be defined?
-
 ### Refactoring
     Review all casing of files and directories.
     Tools -> bin

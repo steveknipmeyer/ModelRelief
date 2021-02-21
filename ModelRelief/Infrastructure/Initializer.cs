@@ -9,13 +9,12 @@ namespace ModelRelief.Database
     using System;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using ModelRelief.Features.Settings;
 
     public class Initializer
     {
-        private IServiceProvider Services { get; set; }
-        private IWebHostEnvironment HostingEnvironment { get; set; }
-        private Services.IConfigurationProvider ConfigurationProvider { get; set; }
+        private ISettingsManager SettingsManager { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Initializer"/> class.
@@ -34,16 +33,10 @@ namespace ModelRelief.Database
         /// <param name="services">Service provider.</param>
         public Initializer(IServiceProvider services)
         {
-            Services = services;
             if (services == null)
                 throw new ArgumentNullException(nameof(IServiceScope));
-            HostingEnvironment = Services.GetRequiredService<IWebHostEnvironment>();
-            if (HostingEnvironment == null)
-                throw new ArgumentNullException(nameof(HostingEnvironment));
 
-            ConfigurationProvider = services.GetRequiredService<Services.IConfigurationProvider>();
-            if (ConfigurationProvider == null)
-                throw new ArgumentNullException(nameof(ConfigurationProvider));
+            SettingsManager = services.GetRequiredService<ISettingsManager>();
         }
 
         /// <summary>
@@ -52,8 +45,7 @@ namespace ModelRelief.Database
         public void InitializeSharedSettings()
         {
             // camera does not require DbContext
-            var settingsManager = new SettingsManager(this.HostingEnvironment, this.ConfigurationProvider, null);
-            var defaultCameraSettings = settingsManager.GetSettings(SettingsManager.CameraType) as DefaultCameraSettingsJson;
+            var defaultCameraSettings = SettingsManager.GetSettings(SettingsType.Camera) as DefaultCameraSettingsJson;
             DefaultCameraSettings.Initialize(defaultCameraSettings);
         }
 

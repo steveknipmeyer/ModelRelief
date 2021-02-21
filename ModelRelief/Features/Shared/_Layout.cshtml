@@ -1,7 +1,7 @@
 ﻿@using ModelRelief.Features.Settings
 
 @inject ISettingsManager settingsManager;
-@{ settingsManager.InitializeUserSettings(User); }
+@{ var userSettings = settingsManager.InitializeUserSettings(User); }
 
 <!DOCTYPE html>
 
@@ -61,9 +61,8 @@
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                        var userSettingsId = settingsManager.DefaultUserSettingsId(User).ToString();
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettingsId">Settings</a>
-                    @if (settingsManager.UserSettings.DevelopmentUI)
+                        <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
+                    @if (userSettings.DevelopmentUI)
                     {
                         <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
                         <a class="nav-item nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>

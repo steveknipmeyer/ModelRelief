@@ -26,7 +26,7 @@ export class SettingsManager  {
     public static async initialize(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettings}/user`;
+        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsUser}`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const settings = new DtoSettings(JSON.parse(result.contentString));
 

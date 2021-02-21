@@ -6,7 +6,7 @@
 namespace ModelRelief.Features.Settings
 {
     using System.Security.Claims;
-    using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     /// <summary>
     /// Interface for User settings.
@@ -15,7 +15,7 @@ namespace ModelRelief.Features.Settings
     {
         Settings UserSettings { get; set; }
         Settings InitializeUserSettings(ClaimsPrincipal user);
-        int DefaultUserSettingsId(ClaimsPrincipal user);
+
         object GetSettings(string settingsType, ClaimsPrincipal user = null);
     }
 }

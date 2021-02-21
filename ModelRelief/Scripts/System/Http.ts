@@ -43,6 +43,8 @@ export enum ServerEndPoints {
     ApiNormalMaps       = "api/v1/normal-maps",
     ApiProjects         = "api/v1/projects",
     ApiSettings         = "api/v1/settings",
+    ApiSettingsCamera   = "api/v1/settings/camera",
+    ApiSettingsUser     = "api/v1/settings/user",
 }
 
 /**

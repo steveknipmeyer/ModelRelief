@@ -50,7 +50,7 @@ namespace ModelRelief.Api.V1.Settings
         [HttpGet]
         public IActionResult Camera()
         {
-            var settingsObject = this.SettingsManager.GetSettings("camera") as DefaultCameraSettingsJson;
+            var settingsObject = this.SettingsManager.GetSettings(SettingsType.Camera) as DefaultCameraSettingsJson;
             return Ok(settingsObject);
         }
 
@@ -63,10 +63,8 @@ namespace ModelRelief.Api.V1.Settings
         [Produces("application/json")]
         public IActionResult UserSettings()
         {
-            var settingsModel = this.SettingsManager.GetSettings("user", User) as Domain.Settings;
-            var settings = this.Mapper.Map<Dto.Settings>(settingsModel);
-
-            return Ok(settings);
+            var settingsObject = this.SettingsManager.GetSettings(SettingsType.User, User) as Dto.Settings;
+            return Ok(settingsObject);
         }
     }
 }
