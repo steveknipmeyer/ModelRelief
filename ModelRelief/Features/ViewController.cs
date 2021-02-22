@@ -148,19 +148,26 @@ namespace ModelRelief.Features
         /// Action handler for an Edit Get.
         /// </summary>
         /// <param name="id">Model Id to edit.</param>
+        /// <param name="name">Model Name.</param>
         /// <returns>Edit page.</returns>
         [HttpGet]
-        public virtual async Task<IActionResult> Edit(int id)
+        public virtual async Task<IActionResult> Edit(int id, [FromQuery] string name)
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
                 Id = id,
+                Name = name,
             });
+
             if (model == null)
                 return NotFound();
 
             await InitializeViewControls((TGetModel)model);
+
+            // clear ModelState to prevent query parameters (e.g. partial Name) from binding
+            ModelState.Clear();
+
             return View(model);
         }
 

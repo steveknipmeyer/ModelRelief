@@ -51,13 +51,14 @@ namespace ModelRelief.Features.Settings
         /// Action handler for an Edit Get.
         /// </summary>
         /// <param name="id">Model Id to edit.</param>
+        /// <param name="name">Model Name.</param>
         /// <returns>Edit page.</returns>
         [HttpGet]
-        public override async Task<IActionResult> Edit(int id)
+        public override async Task<IActionResult> Edit(int id, [FromQuery] string name)
         {
             HttpContext.Session.SetString(SettingsEditReferringUrl, this.Request.Headers["Referer"]);
 
-            return await base.Edit(id);
+            return await base.Edit(id, string.Empty);
         }
 
         /// <summary>

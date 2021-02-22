@@ -1,5 +1,12 @@
 ## Commit Notes
 #### General
+    Why does Edit(query) populate the Edit page with the query expression?
+        ModelBinding?
+
+    Can ComposerController use ViewController as the base?
+        Should MeshController Edit replace ComposerController?
+        ViewController
+            public async Task<IActionResult> Edit(int id, [FromQuery] string name)
     
     Evaluate the need for ModifyDetailsViewModel.
 
@@ -10,9 +17,8 @@
             References to local variables (e.g. message.Name)
         AsEnumerable() queries
 
-    Review Razor iterations: @foreach
-
     Add constructors to all DTO classes.
+    Review Razor iterations: @foreach
 
     Evaluate all reference properties.
         How can reference properties be resolved in DTO models?
@@ -44,9 +50,6 @@
             MeshTransform -> Meshes
             Setttings -> Projects
 
-    Can ComposerController use ViewController as the base?
-        ViewController
-            public async Task<IActionResult> Edit(int id, [FromQuery] string name)
     
     Wrap the expansion of Dto.Entity to fully populated Dto.Entity.
     

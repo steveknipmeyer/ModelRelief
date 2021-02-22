@@ -51,10 +51,10 @@ namespace ModelRelief.Features.Composer
 
                 // query by Name
                 var model = DbContext.Meshes
-                                                .AsEnumerable()
-                                                .Where(m => (m.UserId == applicationUser.Id))
-                                                .Where(m => m.Name.StartsWith(name, true, CultureInfo.CurrentCulture))
-                                                .FirstOrDefault();
+                                .AsEnumerable()
+                                .Where(m => (m.UserId == applicationUser.Id))
+                                .Where(m => m.Name.StartsWith(name, true, CultureInfo.CurrentCulture))
+                                .FirstOrDefault();
                 id = model.Id;
             }
 
