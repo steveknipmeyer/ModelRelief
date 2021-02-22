@@ -41,6 +41,15 @@ namespace ModelRelief.Dto
         // not exposed in UX; API only
         public DateTime? FileTimeStamp { get; set; }
         public bool FileIsSynchronized { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DepthBuffer"/> class.
+        /// Constructor.
+        /// </summary>
+        public DepthBuffer()
+        {
+        }
+
     }
 
     /// <summary>
@@ -78,7 +87,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public DepthBufferMappingProfile()
         {
-        CreateMap<Domain.DepthBuffer, DepthBuffer>().ReverseMap();
+            CreateMap<Domain.DepthBuffer, DepthBuffer>().ReverseMap();
         }
     }
 }

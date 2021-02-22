@@ -31,6 +31,14 @@ namespace ModelRelief.Dto
 
         public bool DepthBufferViewVisible { get; set; }
         public bool NormalMapViewVisible { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Settings"/> class.
+        /// Constructor.
+        /// </summary>
+        public Settings()
+        {
+        }
     }
 
     /// <summary>
@@ -59,7 +67,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public SettingsMappingProfile()
         {
-        CreateMap<Domain.Settings, Settings>().ReverseMap();
+            CreateMap<Domain.Settings, Settings>().ReverseMap();
         }
     }
 }

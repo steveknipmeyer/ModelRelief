@@ -67,7 +67,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public ProjectMappingProfile()
         {
-        CreateMap<Domain.Project, Project>().ReverseMap();
+            CreateMap<Domain.Project, Project>().ReverseMap();
         }
     }
 }

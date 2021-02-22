@@ -67,6 +67,14 @@ namespace ModelRelief.Dto
         // Navigation Properties
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MeshTransform"/> class.
+        /// Constructor.
+        /// </summary>
+        public MeshTransform()
+        {
+        }
     }
 
     /// <summary>
@@ -119,7 +127,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public MeshTransformMappingProfile()
         {
-        CreateMap<Domain.MeshTransform, MeshTransform>().ReverseMap();
+            CreateMap<Domain.MeshTransform, MeshTransform>().ReverseMap();
         }
     }
 }

@@ -10,10 +10,7 @@
     Utility methods    
             Dto.Entity to fully populated Dto.Entity
 
-    DTO Classes
-        Add constructors.
-        Review Razor iterations: @foreach
-    
+    DTO Classes   
         Add reference properties to all DTO models.
         One to Many
             Camera
