@@ -862,6 +862,10 @@ https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
     Can authorization policies be used to provide access to sample models for all users?
         This would remove the need to seed the database with the test models <for each user>.
 
+    Consent Dialog 
+        localhost introduces issues. Modify /etc/hosts as described below to suppress the "Access to Tenant" dialog box.
+            https://auth0.com/docs/authorization/user-consent-and-third-party-applications#skipping-consent-for-first-party-clients
+
 #### HTTPSRedirection
     app.UseHttpsRedirection leads to Xunit test failure.
         Development hosting environment disables HttpsRedirection to support XUnit.

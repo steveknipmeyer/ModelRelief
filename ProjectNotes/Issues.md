@@ -107,6 +107,8 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
     Why does venv not add the Python 3.8 include files?
     Why does the 1st mayavi install fail with a vtk module error?
 #### Dependency Injection
+    Can DI inject a Logger instance (suitably typed) instead of using ILoggerFactory to manufacture the instance?
+
     Can Autofac be replaced with .NET Core DI?
         https://github.com/jbogard/MediatR/wiki
 
@@ -119,5 +121,10 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
 
         DI Setup Libraries
             https://andrewlock.net/using-scrutor-to-automatically-register-your-services-with-the-asp-net-core-di-container/
-            https://www.thereformedprogrammer.net/asp-net-core-fast-and-automatic-dependency-injection-setup/
-        
+            https://www.thereformedprogrammer.net/asp-net-core-fast-and-automatic-dependency-injection-setup/       
+#### Integration Testing
+    Can dataabase rollbacks be used instead of SynchronizeTestDatabase?
+#### Documentation
+     routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
+     Create the documentation content for the endpoints.
+        api/v1/documentation/{controller}/{error}

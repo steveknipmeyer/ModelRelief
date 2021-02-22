@@ -1,32 +1,77 @@
 ## Commit Notes
 #### General
-    Encapsulate SettingsType in the FE.
 
-    Can DI inject a Logger instance (suitably typed) instead of using ILoggerFactory to manufacture the instance?
+    Why does the Project.Models property lead to an exception in GetQueryRequestHandler.OnHandle?
+    
+    Why does the Project.Models property lead to exceptional memory use?
+    
+    Evaluate the need for ModifyDetailsViewModel.
 
-    Review exception handling.
+    Client Side Evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+        What aspect of the query requires client evaluation?
+            References to local variables (e.g. message.Name)
+        AsEnumerable() queries
 
-    Documentation
-        routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
-        
-    Documentation
+    Review Razor iterations: @foreach
 
+    Add constructors to all DTO classes.
+
+    Evaluate all reference properties.
+        How can reference properties be resolved in DTO models?
+        They are needed for Views.
+        One to Many
+            Camera
+            DepthBuffer
+            Mesh
+            MeshTransform
+            Model3d
+            NormalMap
+            Project
+            Settings
+
+            Project -> Cameras
+            Project -> DepthBuffers
+            Project -> Meshs
+            Project -> MeshTransforms
+            Project -> Model3ds
+            Project -> NormalMaps
+            Model3d -> DepthBuffers
+            Model3d -> NormalMaps
+            Camera -> DepthBuffers
+            Camera -> Meshes
+            Camera -> Model3ds
+            Camera -> NormalMaps
+            DepthBuffer -> Meshes
+            NormalMap -> Meshes
+            MeshTransform -> Meshes
+            Setttings -> Projects
+
+    Can ComposerController use ViewController as the base?
+        ViewController
+            public async Task<IActionResult> Edit(int id, [FromQuery] string name)
+    
+    Wrap the expansion of Dto.Entity to fully populated Dto.Entity.
+    
     Projects
-        Place sample projects into a single project?
-        Test new user creation.
-            52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+        Add a list of the models in the Projects Details page.
+            A
+
+        How should a new project be created?
+            Projects/Create is the basis.
+
+        What kind of UI control can be used to switch Projects?
+            A drop-down meny in the _Layout header?
+
         Use Index page as a template for the Project page.
             Each user model is hosted in a tile.
-                How can a preview be generated?
+                Add a new endpoint mesh/preview for a preview image of the mesh. 
+                Create using the Canvas image of the last generated Mesh.  
+
+        Place sample projects into a single project?
     Upload
 
-    Auth0 Authorization
-        localhost introduces issues. Modify /etc/hosts as described below to suppress the "Access to Tenant" dialog box.
-            https://auth0.com/docs/authorization/user-consent-and-third-party-applications#skipping-consent-for-first-party-clients
-        Auth0 contains references to www. modelrelief.com.
-            http://www.modelrelief.com/images/ModelReliefBlue.png
-#### Integration Testing
-    Can dataabase rollbacks be used instead of SynchronizeTestDatabase?
+    Test new user creation.
+        52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
 
 #### Models
     OBJ viewer has missing polygons.
@@ -73,6 +118,9 @@
         Mock azurekeysecrets.json.
             Move to a new settings file?
             How should the contact e-mail address be defined?
+    Auth0 contains references to www. modelrelief.com.
+        http://www.modelrelief.com/images/ModelReliefBlue.png
+
 ### Refactoring
     Review all casing of files and directories.
     Tools -> bin
@@ -111,11 +159,9 @@
         Vectrix
         3D Printing
         HackerNews
-
 ### SSL
     https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
     https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
 ### License
     Replace copyright headers with MIT license notice.
-

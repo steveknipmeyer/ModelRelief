@@ -77,7 +77,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             }
             // fully populate return model; ProjectTo requires IQueryable<TEntity>
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
-                                                .Where(m => (m.Id == targetModel.Id));
+                                                 .Where(m => (m.Id == targetModel.Id));
 
             // fully populate return model
             var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();

@@ -28,3 +28,43 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Format
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var projectModel in Model.Models)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => projectModel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => projectModel.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => projectModel.Format)
+            </td>
+            <td>
+                <a asp-controller="Models" asp-action="Edit" asp-route-id="@projectModel.Id">Edit</a> |
+                <a asp-controller="Models"  asp-action="Details" asp-route-id="@projectModel.Id">Details</a> |
+                <a asp-controller="Models" asp-action="Delete" asp-route-id="@projectModel.Id">Delete</a> |
+                <a asp-controller="Composer" asp-action="Edit" asp-route-id="@projectModel.Id">Composer</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

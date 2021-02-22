@@ -50,7 +50,7 @@ namespace ModelRelief.Features.Composer
                 var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
 
                 // query by Name
-                var model = DbContext.Set<Domain.Mesh>()
+                var model = DbContext.Meshes
                                                 .AsEnumerable()
                                                 .Where(m => (m.UserId == applicationUser.Id))
                                                 .Where(m => m.Name.StartsWith(name, true, CultureInfo.CurrentCulture))

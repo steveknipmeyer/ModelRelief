@@ -53,7 +53,7 @@ namespace ModelRelief.Features.Models
                 Id = id,
             });
 
-            var domainModel = await DbContext.Set<Domain.Model3d>().FindAsync(new object[] { id });
+            var domainModel = await DbContext.Models.FindAsync(new object[] { id });
             ViewData["ModelId"] = domainModel.Id;
             return View(model);
         }

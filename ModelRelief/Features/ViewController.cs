@@ -95,10 +95,12 @@ namespace ModelRelief.Features
                 User = User,
                 Id = id,
                 Name = name,
-            });
+            }) as TGetModel;
+
             if (model == null)
                 return NotFound();
 
+            model = await ModifyDetailsViewModel(model);
             return View(model);
         }
         #endregion
@@ -235,6 +237,16 @@ namespace ModelRelief.Features
         protected async virtual Task InitializeViewControls(TGetModel model = null)
         {
             await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Modify the View model before it is presented.
+        /// </summary>
+        /// <param name="model">Model instance for View.</param>
+        protected async virtual Task<TGetModel> ModifyDetailsViewModel(TGetModel model)
+        {
+            await Task.CompletedTask;
+            return model;
         }
     }
 }

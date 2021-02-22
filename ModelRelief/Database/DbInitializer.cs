@@ -264,7 +264,7 @@ namespace ModelRelief.Database
                 return;
 
             ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            IQueryable<Model3d> results = DbContext.Set<Model3d>()
+            IQueryable<Model3d> results = DbContext.Models
                                             .Where(m => (m.UserId == user.Id));
 
             // models exist; not brand new user
@@ -1135,14 +1135,14 @@ namespace ModelRelief.Database
             switch (typeof(TEntity).Name)
             {
                 case "Camera":
-                    modelList = (IQueryable<TEntity>)DbContext.Set<Camera>()
+                    modelList = (IQueryable<TEntity>)DbContext.Cameras
                                     .Where(c => c.UserId == user.Id)
                                     .Include(c => c.Project)
                                     .AsNoTracking();
                     break;
 
                 case "MeshTransform":
-                    modelList = (IQueryable<TEntity>)DbContext.Set<MeshTransform>()
+                    modelList = (IQueryable<TEntity>)DbContext.MeshTransforms
                                     .Where(m => m.UserId == user.Id)
                                     .Include(m => m.Project)
                                     .AsNoTracking();
@@ -1218,7 +1218,7 @@ namespace ModelRelief.Database
             // Test user provides the source of the data files.
             var developmentUser = GetDevelopmentUser();
 
-            var expandedMeshList = DbContext.Set<Mesh>()
+            var expandedMeshList = DbContext.Meshes
                                         .Where(m => (m.UserId == developmentUser.Id))
                                         .Include(m => m.DepthBuffer)
                                             .ThenInclude(d => d.Camera)

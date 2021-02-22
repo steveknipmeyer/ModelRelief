@@ -40,7 +40,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -54,18 +55,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Format)
             </td>
-            <th>
+            <td>
                 @Html.DisplayFor(modelItem => item.Camera.Name)
-            </th>
-            <th>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.DepthBuffer.Name)
-            </th>
-            <th>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.NormalMap.Name)
-            </th>
-            <th>
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.MeshTransform.Name)
-            </th>
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
@@ -73,6 +74,6 @@
                 <a asp-controller="Composer" asp-action="Edit" asp-route-id="@item.Id">Composer</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

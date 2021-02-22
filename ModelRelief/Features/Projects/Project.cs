@@ -6,9 +6,11 @@
 
 namespace ModelRelief.Dto
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Project.
@@ -25,6 +27,18 @@ namespace ModelRelief.Dto
         // Navigation Properties
         public int? SettingsId { get; set; }
         public Settings Settings { get; set; }
+
+        [JsonIgnore]
+        [IgnoreMap]
+        public IEnumerable<Model3d> Models { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Project"/> class.
+        /// Constructor.
+        /// </summary>
+        public Project()
+        {
+        }
     }
 
     /// <summary>

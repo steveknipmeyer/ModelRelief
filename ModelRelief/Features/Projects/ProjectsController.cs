@@ -6,10 +6,13 @@
 
 namespace ModelRelief.Features.Projects
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Utility;
@@ -42,5 +45,21 @@ namespace ModelRelief.Features.Projects
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
         }
+#if false
+        /// <summary>
+        /// Modify the View model before it is presented.
+        /// </summary>
+        /// <param name="project">Project instance for View.</param>
+        protected async override Task<Dto.Project> ModifyDetailsViewModel(Dto.Project project)
+        {
+            // List<Domain.Model3d> domainModels = await DbContext.Models
+            //                                             .Where(m => (m.ProjectId == project.Id)).ToListAsync<Domain.Model3d>();
+
+            IEnumerable<Dto.Model3d> models = Mapper.Map<List<Domain.Model3d>, IEnumerable<Dto.Model3d>>(domainModels);
+            project.Models = models;
+
+            return project;
+        }
+#endif
     }
 }

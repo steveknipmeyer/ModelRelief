@@ -69,7 +69,7 @@ namespace ModelRelief.Features.Settings
             try
             {
                 var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
-                var userSettings = DbContext.Set<Domain.Settings>()
+                var userSettings = DbContext.Settings
                     .Where(s => (s.UserId == applicationUser.Id)).First<Domain.Settings>();
 
                 // use first settings belonging to user; otherwise default settings from system initialization remain active

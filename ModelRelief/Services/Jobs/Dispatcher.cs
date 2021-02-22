@@ -145,7 +145,7 @@ namespace ModelRelief.Services.Jobs
             mesh.FileIsSynchronized = false;
             await DbContext.SaveChangesAsync();
 
-            var expandedMesh = await DbContext.Set<Mesh>()
+            var expandedMesh = await DbContext.Meshes
                                 .Where(m => (m.Id == mesh.Id) &&
                                             (m.UserId == mesh.UserId))
                                 .Include(m => m.DepthBuffer)
