@@ -6,11 +6,15 @@
 
 namespace ModelRelief.Features.Meshes
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Utility;
@@ -32,6 +36,23 @@ namespace ModelRelief.Features.Meshes
         public MeshesController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
             : base(dbContext, loggerFactory, mapper, mediator)
         {
+        }
+
+        /// <summary>
+        /// Action handler for a Compose request.
+        /// </summary>
+        /// <param name="id">Mesh Id.</param>
+        /// <param name="name">Mesh Name.</param>
+        /// <returns>Compose page.</returns>
+        public async Task<IActionResult> Compose(int id, [FromQuery] string name)
+        {
+            var result = await Edit(id, name);
+            if (result is NotFoundResult)
+                return result;
+
+            // return Compose View
+            var editView = result as ViewResult;
+            return View(editView.Model);
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ namespace ModelRelief.Features.Projects
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.EntityFrameworkCore;
@@ -45,21 +46,28 @@ namespace ModelRelief.Features.Projects
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
         }
-#if false
+
         /// <summary>
         /// Modify the View model before it is presented.
         /// </summary>
         /// <param name="project">Project instance for View.</param>
         protected async override Task<Dto.Project> ModifyDetailsViewModel(Dto.Project project)
         {
-            // List<Domain.Model3d> domainModels = await DbContext.Models
-            //                                             .Where(m => (m.ProjectId == project.Id)).ToListAsync<Domain.Model3d>();
+            // IQueryable<Domain.Project> domainProject = DbContext.Set<Domain.Project>()
+            //                                                 .Where(m => (m.Id == project.Id))
+            //                                                 .Include(m => m.Models);
 
-            IEnumerable<Dto.Model3d> models = Mapper.Map<List<Domain.Model3d>, IEnumerable<Dto.Model3d>>(domainModels);
+            // project = await domainProject.ProjectTo<Dto.Project>(Mapper.ConfigurationProvider).SingleAsync();
+            // project = Mapper.Map(domainProject, project);
+            // await Task.CompletedTask;
+
+            ICollection<Domain.Model3d> domainModels = await DbContext.Models
+                                                        .Where(m => (m.ProjectId == project.Id)).ToListAsync<Domain.Model3d>();
+
+            ICollection<Dto.Model3d> models = Mapper.Map<ICollection<Domain.Model3d>, ICollection<Dto.Model3d>>(domainModels);
             project.Models = models;
 
             return project;
         }
-#endif
     }
 }

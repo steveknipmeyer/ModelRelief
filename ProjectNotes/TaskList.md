@@ -1,28 +1,20 @@
 ## Commit Notes
-#### General
-    Why does Edit(query) populate the Edit page with the query expression?
-        ModelBinding?
 
-    Can ComposerController use ViewController as the base?
-        Should MeshController Edit replace ComposerController?
-        ViewController
-            public async Task<IActionResult> Edit(int id, [FromQuery] string name)
-    
+#### General   
+    Why does including collections lead to excessive memory use with AutoMapper?
+
     Evaluate the need for ModifyDetailsViewModel.
 
-    Evaluate use of Include in queries.
+    What is the role of TSingleGetModel?
 
-    Client Side Evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
-        What aspect of the query requires client evaluation?
-            References to local variables (e.g. message.Name)
-        AsEnumerable() queries
+    Utility methods    
+            Dto.Entity to fully populated Dto.Entity
 
-    Add constructors to all DTO classes.
-    Review Razor iterations: @foreach
-
-    Evaluate all reference properties.
-        How can reference properties be resolved in DTO models?
-        They are needed for Views.
+    DTO Classes
+        Add constructors.
+        Review Razor iterations: @foreach
+    
+        Add reference properties to all DTO models.
         One to Many
             Camera
             DepthBuffer
@@ -50,8 +42,6 @@
             MeshTransform -> Meshes
             Setttings -> Projects
 
-    
-    Wrap the expansion of Dto.Entity to fully populated Dto.Entity.
     
     Projects
         Add a list of the models in the Projects Details page.

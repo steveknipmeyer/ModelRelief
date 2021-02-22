@@ -62,12 +62,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
 
+            string matchPattern = string.IsNullOrEmpty(message.Name) ? "%" : $"{message.Name}%";
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
-                        .AsEnumerable()
-                        .Where(m => (m.UserId == user.Id))
-                        .Where(m => string.IsNullOrEmpty(message.Name) ? true : m.Name.StartsWith(message.Name, true, CultureInfo.CurrentCulture))
-                        // N.B. QueryProvider does not support Async
-                        .AsQueryable();
+                                            .Where(m => (m.UserId == user.Id))
+                                            .Where(m => EF.Functions.Like(m.Name, matchPattern));
 
             if (message.UsePaging)
             {

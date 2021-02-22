@@ -138,7 +138,7 @@ input[type=checkbox]:checked + label:before {
 }
 
 /* ----------------------
-    Composer
+    Compose
 ------------------------*/
 #depthBufferCanvas, #normalMapCanvas {
     width: 512px;
@@ -155,7 +155,7 @@ input[type=checkbox]:checked + label:before {
   color: cyan !important;
 }
 
-.composerStep {
+.composeStep {
     margin-top: 20px;
 }
 
