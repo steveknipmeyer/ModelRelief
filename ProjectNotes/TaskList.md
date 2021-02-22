@@ -1,11 +1,9 @@
 ## Commit Notes
 #### General
-
-    Why does the Project.Models property lead to an exception in GetQueryRequestHandler.OnHandle?
-    
-    Why does the Project.Models property lead to exceptional memory use?
     
     Evaluate the need for ModifyDetailsViewModel.
+
+    Evaluate use of Include in queries.
 
     Client Side Evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
         What aspect of the query requires client evaluation?

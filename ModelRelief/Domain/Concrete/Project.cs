@@ -11,7 +11,7 @@ namespace ModelRelief.Domain
         // Navigation Properties
         public int? SettingsId { get; set; }
         public Settings Settings { get; set; }
-        // public IEnumerable<Model3d> Models { get; set; }
+        public ICollection<Model3d> Models { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.

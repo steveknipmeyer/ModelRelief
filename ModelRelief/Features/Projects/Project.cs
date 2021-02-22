@@ -30,7 +30,7 @@ namespace ModelRelief.Dto
 
         [JsonIgnore]
         [IgnoreMap]
-        public IEnumerable<Model3d> Models { get; set; }
+        public ICollection<Model3d> Models { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
