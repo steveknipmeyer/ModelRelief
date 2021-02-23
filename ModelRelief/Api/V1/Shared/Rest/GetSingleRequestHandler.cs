@@ -28,7 +28,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public class GetSingleRequestHandler<TEntity, TGetModel>  : ValidatedHandler<GetSingleRequest<TEntity, TGetModel>, TGetModel>
         where TEntity   : DomainModel
-        where TGetModel : IModel
+        where TGetModel : IModel, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GetSingleRequestHandler{TEntity, TGetModel}"/> class.
@@ -75,13 +75,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
             {
                 targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
             }
-            // fully populate return model; ProjectTo requires IQueryable<TEntity>
+
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                                  .Where(m => (m.Id == targetModel.Id));
 
-            // fully populate return model
-            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
-
+            var projectedModel = Mapper.ProjectTo<TGetModel>(model).Single<TGetModel>();
             return projectedModel;
         }
     }

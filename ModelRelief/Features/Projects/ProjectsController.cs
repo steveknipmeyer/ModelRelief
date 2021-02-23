@@ -53,19 +53,12 @@ namespace ModelRelief.Features.Projects
         /// <param name="project">Project instance for View.</param>
         protected async override Task<Dto.Project> ModifyDetailsViewModel(Dto.Project project)
         {
-            // IQueryable<Domain.Project> domainProject = DbContext.Set<Domain.Project>()
-            //                                                 .Where(m => (m.Id == project.Id))
-            //                                                 .Include(m => m.Models);
+            var domainProject = DbContext.Set<Domain.Project>()
+                                            .Where(m => (m.Id == project.Id))
+                                            .Include(m => m.Models);
 
-            // project = await domainProject.ProjectTo<Dto.Project>(Mapper.ConfigurationProvider).SingleAsync();
-            // project = Mapper.Map(domainProject, project);
-            // await Task.CompletedTask;
-
-            ICollection<Domain.Model3d> domainModels = await DbContext.Models
-                                                        .Where(m => (m.ProjectId == project.Id)).ToListAsync<Domain.Model3d>();
-
-            ICollection<Dto.Model3d> models = Mapper.Map<ICollection<Domain.Model3d>, ICollection<Dto.Model3d>>(domainModels);
-            project.Models = models;
+            project = await Mapper.ProjectTo<Dto.Project>(domainProject).SingleAsync<Dto.Project>();
+            project.Models = Mapper.Map<ICollection<Dto.Model3d>>(domainProject.First().Models);
 
             return project;
         }

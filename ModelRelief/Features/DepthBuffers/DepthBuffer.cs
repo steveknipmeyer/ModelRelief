@@ -49,7 +49,6 @@ namespace ModelRelief.Dto
         public DepthBuffer()
         {
         }
-
     }
 
     /// <summary>
@@ -87,7 +86,7 @@ namespace ModelRelief.Dto
         /// </summary>
         public DepthBufferMappingProfile()
         {
-            CreateMap<Domain.DepthBuffer, DepthBuffer>().ReverseMap();
+        CreateMap<Domain.DepthBuffer, DepthBuffer>().ReverseMap();
         }
     }
 }

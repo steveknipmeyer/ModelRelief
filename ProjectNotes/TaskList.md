@@ -1,7 +1,10 @@
 ## Commit Notes
 
 #### General   
-    Why does including collections lead to excessive memory use with AutoMapper?
+    Replace ProjectTo with Mapper.ProjectTo.
+
+    Do API requests have a different form of authorization than Ux?
+        Postman Ux requests fail when API requests succeed.
 
     Evaluate the need for ModifyDetailsViewModel.
 
@@ -28,22 +31,25 @@
             Project -> MeshTransforms
             Project -> Model3ds
             Project -> NormalMaps
+
             Model3d -> DepthBuffers
             Model3d -> NormalMaps
+
             Camera -> DepthBuffers
             Camera -> Meshes
             Camera -> Model3ds
             Camera -> NormalMaps
+
             DepthBuffer -> Meshes
+
             NormalMap -> Meshes
+
             MeshTransform -> Meshes
+
             Setttings -> Projects
 
     
     Projects
-        Add a list of the models in the Projects Details page.
-            A
-
         How should a new project be created?
             Projects/Create is the basis.
 
