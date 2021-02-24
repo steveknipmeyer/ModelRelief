@@ -37,6 +37,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the relationship collections for the single model to be returned.
+        /// Optionally provided by a query parameter.
+        /// /projects/details/1/?relations=models,meshes
+        /// </summary>
+        public string Relations { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GetSingleRequest{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>

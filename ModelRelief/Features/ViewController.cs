@@ -86,15 +86,19 @@ namespace ModelRelief.Features
         /// Action handler for a Details page.
         /// </summary>
         /// <param name="id">Model Id.</param>
-        /// <param name="name">Model Name.</param>
+        /// <param name="name">(optional) Model Name.</param>
+        /// <param name="relations">(optional) Relationship collections.</param>
         /// <returns>Details page.</returns>
-        public virtual async Task<IActionResult> Details(int id, [FromQuery] string name)
+        public virtual async Task<IActionResult> Details(int id, [FromQuery] string name, [FromQuery] string relations)
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
                 Id = id,
+
+                // (optional) query parameters
                 Name = name,
+                Relations = relations,
             }) as TGetModel;
 
             if (model == null)
@@ -148,16 +152,20 @@ namespace ModelRelief.Features
         /// Action handler for an Edit Get.
         /// </summary>
         /// <param name="id">Model Id to edit.</param>
-        /// <param name="name">Model Name.</param>
+        /// <param name="name">(optional) Model Name.</param>
+        /// <param name="relations">(optional) Relationship collections.</param>
         /// <returns>Edit page.</returns>
         [HttpGet]
-        public virtual async Task<IActionResult> Edit(int id, [FromQuery] string name)
+        public virtual async Task<IActionResult> Edit(int id, [FromQuery] string name = "", [FromQuery] string relations = "")
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
                 Id = id,
+
+                // (optional) query parameters
                 Name = name,
+                Relations = relations,
             });
 
             if (model == null)

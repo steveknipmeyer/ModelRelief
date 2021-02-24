@@ -85,14 +85,20 @@ namespace ModelRelief.Api.V1.Shared
         /// Action method for GetSingleRequest.
         /// </summary>
         /// <param name="id">Model Id to fetch.</param>
+        /// <param name="name">(optional) Model Name.</param>
+        /// <param name="relations">(optional) Relationship collections.</param>
         /// <returns>TGetModel of target model.</returns>
         [HttpGet("{id:int}")]
-        public virtual async Task<IActionResult> GetSingle(int id)
+        public virtual async Task<IActionResult> GetSingle(int id, [FromQuery] string name, [FromQuery] string relations)
         {
             return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
                 User = User,
                 Id = id,
+
+                // (optional) query parameters
+                Name = name,
+                Relations = relations,
             });
         }
 

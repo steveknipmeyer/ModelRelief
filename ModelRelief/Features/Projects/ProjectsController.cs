@@ -57,7 +57,7 @@ namespace ModelRelief.Features.Projects
                                             .Where(m => (m.Id == project.Id))
                                             .Include(m => m.Models);
 
-            project = await Mapper.ProjectTo<Dto.Project>(domainProject).SingleAsync<Dto.Project>();
+            project = await domainProject.ProjectTo<Dto.Project>(Mapper.ConfigurationProvider).SingleAsync();
             project.Models = Mapper.Map<ICollection<Dto.Model3d>>(domainProject.First().Models);
 
             return project;

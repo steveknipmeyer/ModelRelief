@@ -79,7 +79,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                                  .Where(m => (m.Id == targetModel.Id));
 
-            var projectedModel = Mapper.ProjectTo<TGetModel>(model).Single<TGetModel>();
+            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
+
             return projectedModel;
         }
     }

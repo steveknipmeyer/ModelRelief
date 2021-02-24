@@ -41,24 +41,6 @@ namespace ModelRelief.Features.Models
         }
 
         /// <summary>
-        /// Action handler for a Viewer request.
-        /// </summary>
-        /// <param name="id">Model Id.</param>
-        /// <returns>Viewer page.</returns>
-        public async Task<IActionResult> Viewer(int id)
-        {
-            var model = await HandleRequestAsync(new GetSingleRequest<Domain.Model3d, Dto.Model3d>
-            {
-                User = User,
-                Id = id,
-            });
-
-            var domainModel = await DbContext.Models.FindAsync(new object[] { id });
-            ViewData["ModelId"] = domainModel.Id;
-            return View(model);
-        }
-
-        /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>

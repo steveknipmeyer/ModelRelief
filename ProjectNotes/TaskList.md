@@ -1,53 +1,28 @@
 ## Commit Notes
-
 #### General   
-    Replace ProjectTo with Mapper.ProjectTo.
+    Queries
+        Principle: All queries should be done in the API request handlers.
 
-    Do API requests have a different form of authorization than Ux?
-        Postman Ux requests fail when API requests succeed.
+        Add additional query methods to support returning DTO results as well as Domain.
+        FindModel<s>
+            Share a common method between GetSingleRequest and GetQueryRequest.
+            FindModelAsync reduces the query results with First or Single qualifications.
 
-    Evaluate the need for ModifyDetailsViewModel.
+        Support extended query parameters for relationship collections.
+            https://stackoverflow.com/questions/48047010/ef-core-2-0-include-nested-entities-with-dynamic-query
+            The query method constructs the query with a variable number of Includes.
+            projects/details/1/?relations=Models
+            projects/details/1/?relations=Models,Meshes
+            projects/details/1/?relations=All
 
-    What is the role of TSingleGetModel?
+        Domain -> Dto            
+            Through reflection, populate the collection properties.
 
-    Utility methods    
-            Dto.Entity to fully populated Dto.Entity
+        Replace ModifyDetailsViewModel.
+            projects/details/id/?relations=Models
 
-    DTO Classes   
-        Add reference properties to all DTO models.
-        One to Many
-            Camera
-            DepthBuffer
-            Mesh
-            MeshTransform
-            Model3d
-            NormalMap
-            Project
-            Settings
-
-            Project -> Cameras
-            Project -> DepthBuffers
-            Project -> Meshs
-            Project -> MeshTransforms
-            Project -> Model3ds
-            Project -> NormalMaps
-
-            Model3d -> DepthBuffers
-            Model3d -> NormalMaps
-
-            Camera -> DepthBuffers
-            Camera -> Meshes
-            Camera -> Model3ds
-            Camera -> NormalMaps
-
-            DepthBuffer -> Meshes
-
-            NormalMap -> Meshes
-
-            MeshTransform -> Meshes
-
-            Setttings -> Projects
-
+        GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
+        GetSingleRequest/Handler -> GetQueryRequest/Handler
     
     Projects
         How should a new project be created?
@@ -62,7 +37,17 @@
                 Create using the Canvas image of the last generated Mesh.  
 
         Place sample projects into a single project?
+
+
+    Do API requests have a different form of authorization than Ux?
+        Postman Ux requests fail when API requests succeed.
+
+    What is the role of TSingleGetModel?
+
     Upload
+
+    Add an alternative Details route.
+        {controller}/{id} = {controller}/Details/{id}
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
