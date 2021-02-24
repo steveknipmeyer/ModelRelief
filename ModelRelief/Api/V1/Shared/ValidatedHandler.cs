@@ -21,6 +21,7 @@ namespace ModelRelief.Api.V1.Shared
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Services.Relationships;
@@ -82,27 +83,14 @@ namespace ModelRelief.Api.V1.Shared
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="claimsPrincipal">Current HttpContext User.</param>
         /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            return await FindModelAsync<TEntity>(user, id, throwIfNotFound);
-        }
-
-        /// <summary>
-        /// Returns the domain model for a given Id.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="applicationUser">ApplicationUser.</param>
-        /// <param name="id">Target id to retrieve.</param>
-        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
-        /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(ApplicationUser applicationUser, int id, bool throwIfNotFound = true)
-            where TEntity : DomainModel
-        {
-            return await FindModelAsync<TEntity>(applicationUser.Id, id, throwIfNotFound);
+            return await FindModelAsync<TEntity>(user.Id, id, queryParameters, throwIfNotFound);
         }
 
         /// <summary>
@@ -111,20 +99,50 @@ namespace ModelRelief.Api.V1.Shared
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="userId">ApplicationUser Id.</param>
         /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, GetQueryParameters queryParameters, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
-            var domainModel = await DbContext.Set<TEntity>()
-                                .Where(m => (m.Id == id) &&
-                                            (m.UserId == userId))
-                                .SingleOrDefaultAsync();
+            var queryable = BuildQueryable<TEntity>(userId, id, queryParameters);
 
-            if (throwIfNotFound && (domainModel == null))
-                throw new EntityNotFoundException(typeof(TEntity), id);
-
+            TEntity domainModel = null;
+            try
+            {
+                domainModel = await queryable.SingleAsync();
+            }
+            catch (Exception)
+            {
+                if (throwIfNotFound)
+                    throw new EntityNotFoundException(typeof(TEntity), id);
+            }
             return domainModel;
+        }
+
+        /// <summary>
+        /// Returns the collection of domain models from a query.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="userId">ApplicationUser Id.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <returns>Collection of domain models.</returns>
+        public virtual IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int id, GetQueryParameters queryParameters)
+            where TEntity : DomainModel
+        {
+            IQueryable<TEntity> queryable = DbContext.Set<TEntity>()
+                                                     .Where(m => (m.UserId == userId));
+            // query by Id or Name?
+            if (id >= 0)
+            {
+                queryable = queryable.Where(m => (m.Id == id));
+            }
+            else if (!string.IsNullOrEmpty(queryParameters.Name))
+            {
+                queryable = queryable.Where(m => EF.Functions.Like(m.Name, $"{queryParameters.Name}%"));
+            }
+            return queryable;
         }
 
         /// <summary>
@@ -137,7 +155,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<bool> ModelExistsAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id)
             where TEntity : DomainModel
         {
-            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, throwIfNotFound: false);
+            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, new GetQueryParameters(), throwIfNotFound: false);
             return domainModel != null;
         }
 

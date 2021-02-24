@@ -59,26 +59,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for request</returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            TEntity targetModel;
-
-            // query by Name
-            if (message.Id == 0)
-            {
-                var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);
-                targetModel = DbContext.Set<TEntity>()
-                                                .Where(m => (m.UserId == applicationUser.Id))
-                                                .Where(m => EF.Functions.Like(m.Name, $"{message.QueryParameters.Name}%"))
-                                                .FirstOrDefault();
-            }
-            // query by Id
-            else
-            {
-                targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
-            }
+            TEntity targetModel = await FindModelAsync<TEntity>(message.User, message.Id, message.QueryParameters);
 
             IQueryable<TEntity> model = DbContext.Set<TEntity>()
                                                  .Where(m => (m.Id == targetModel.Id));
-
             var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
 
             return projectedModel;

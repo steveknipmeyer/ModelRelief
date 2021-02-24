@@ -1,13 +1,11 @@
 ## Commit Notes
-GetQueryParameters -> GetPagedQueryParameters
-#### General   
+BuildQueryable
+    Share a common method between GetSingleRequest and GetQueryRequest.
+    FindModelAsync reduces the query results with First or Single qualifications.
+#### General      
     Queries
         Principle: All queries should be done in the API request handlers.
-
         Add additional query methods to support returning DTO results as well as Domain.
-        FindModel<s>
-            Share a common method between GetSingleRequest and GetQueryRequest.
-            FindModelAsync reduces the query results with First or Single qualifications.
 
         Support extended query parameters for relationship collections.
             https://stackoverflow.com/questions/48047010/ef-core-2-0-include-nested-entities-with-dynamic-query

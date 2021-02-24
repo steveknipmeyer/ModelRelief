@@ -275,7 +275,7 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         [Fact]
         [Trait("Category", "Api Put")]
-        public async Task Put_InvalidReferencePropertyReturndBadRequest()
+        public async Task Put_InvalidReferencePropertyReturnsBadRequest()
         {
             // early exit if model has no reference properties properties
             if (TestModelFactory.ReferencePropertyNames.Count() <= 0)

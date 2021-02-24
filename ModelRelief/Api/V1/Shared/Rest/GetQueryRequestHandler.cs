@@ -61,19 +61,15 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<object> OnHandle(GetQueryRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
-
-            string matchPattern = string.IsNullOrEmpty(message.QueryParameters.Name) ? "%" : $"{message.QueryParameters.Name}%";
-            IQueryable<TEntity> results = DbContext.Set<TEntity>()
-                                            .Where(m => (m.UserId == user.Id))
-                                            .Where(m => EF.Functions.Like(m.Name, matchPattern));
+            IQueryable<TEntity> queryable = BuildQueryable<TEntity>(user.Id, -1, message.QueryParameters);
 
             if (message.UsePaging)
             {
-                var page = CreatePagedResultsAsync<TEntity, TGetModel>(results, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
+                var page = CreatePagedResultsAsync<TEntity, TGetModel>(queryable, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
                 return page;
             }
 
-            return results.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToArray();
+            return queryable.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToArray();
         }
 
         /// <summary>
