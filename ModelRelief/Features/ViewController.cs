@@ -59,11 +59,12 @@ namespace ModelRelief.Features
         /// Action handler for an Index page.
         /// Returns a collection of models.
         /// </summary>
-        /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>Index page.</returns>
-        public virtual async Task<IActionResult> Index([FromQuery] GetQueryParameters getRequest)
+        public virtual async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
         {
-            getRequest = getRequest ?? new GetQueryParameters();
+            pagedQueryParameters = pagedQueryParameters ?? new GetPagedQueryParameters();
             var results = await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
             {
                 User = User,
@@ -73,7 +74,7 @@ namespace ModelRelief.Features
                 UsePaging = false,
 
                 // (optional) query parameters
-                Name = getRequest.Name,
+                QueryParameters = queryParameters,
             });
 
             // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
@@ -86,10 +87,9 @@ namespace ModelRelief.Features
         /// Action handler for a Details page.
         /// </summary>
         /// <param name="id">Model Id.</param>
-        /// <param name="name">(optional) Model Name.</param>
-        /// <param name="relations">(optional) Relationship collections.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>Details page.</returns>
-        public virtual async Task<IActionResult> Details(int id, [FromQuery] string name, [FromQuery] string relations)
+        public virtual async Task<IActionResult> Details(int id, [FromQuery] GetQueryParameters queryParameters)
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
@@ -97,8 +97,7 @@ namespace ModelRelief.Features
                 Id = id,
 
                 // (optional) query parameters
-                Name = name,
-                Relations = relations,
+                QueryParameters = queryParameters,
             }) as TGetModel;
 
             if (model == null)
@@ -152,11 +151,10 @@ namespace ModelRelief.Features
         /// Action handler for an Edit Get.
         /// </summary>
         /// <param name="id">Model Id to edit.</param>
-        /// <param name="name">(optional) Model Name.</param>
-        /// <param name="relations">(optional) Relationship collections.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>Edit page.</returns>
         [HttpGet]
-        public virtual async Task<IActionResult> Edit(int id, [FromQuery] string name = "", [FromQuery] string relations = "")
+        public virtual async Task<IActionResult> Edit(int id, [FromQuery] GetQueryParameters queryParameters)
         {
             var model = await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
@@ -164,8 +162,7 @@ namespace ModelRelief.Features
                 Id = id,
 
                 // (optional) query parameters
-                Name = name,
-                Relations = relations,
+                QueryParameters = queryParameters,
             });
 
             if (model == null)

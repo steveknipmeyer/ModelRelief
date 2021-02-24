@@ -42,11 +42,11 @@ namespace ModelRelief.Features.Meshes
         /// Action handler for a Compose request.
         /// </summary>
         /// <param name="id">Mesh Id.</param>
-        /// <param name="name">Mesh Name.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>Compose page.</returns>
-        public async Task<IActionResult> Compose(int id, [FromQuery] string name)
+        public async Task<IActionResult> Compose(int id, [FromQuery] GetQueryParameters queryParameters)
         {
-            var result = await Edit(id, name);
+            var result = await Edit(id, queryParameters);
             if (result is NotFoundResult)
                 return result;
 

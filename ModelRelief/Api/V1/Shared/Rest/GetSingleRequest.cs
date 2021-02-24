@@ -31,17 +31,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the Name for the single model to be returned.
-        /// Optionally provided by a query parameter.
+        /// Gets or sets the query parameters.
         /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the relationship collections for the single model to be returned.
-        /// Optionally provided by a query parameter.
-        /// /projects/details/1/?relations=models,meshes
-        /// </summary>
-        public string Relations { get; set; }
+        public GetQueryParameters QueryParameters { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetSingleRequest{TEntity, TGetModel}"/> class.

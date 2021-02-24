@@ -62,7 +62,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
 
-            string matchPattern = string.IsNullOrEmpty(message.Name) ? "%" : $"{message.Name}%";
+            string matchPattern = string.IsNullOrEmpty(message.QueryParameters.Name) ? "%" : $"{message.QueryParameters.Name}%";
             IQueryable<TEntity> results = DbContext.Set<TEntity>()
                                             .Where(m => (m.UserId == user.Id))
                                             .Where(m => EF.Functions.Like(m.Name, matchPattern));

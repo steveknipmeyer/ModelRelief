@@ -57,12 +57,13 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Action method for GetQueryRequest.
         /// </summary>
-        /// <param name="getRequest">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>A collection of models in a PagedResult.</returns>
         [HttpGet("")]
-        public virtual async Task<IActionResult> GetQuery([FromQuery] GetQueryParameters getRequest)
+        public virtual async Task<IActionResult> GetQuery([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
         {
-            getRequest = getRequest ?? new GetQueryParameters();
+            pagedQueryParameters = pagedQueryParameters ?? new GetPagedQueryParameters();
             return await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
             {
                 User = User,
@@ -71,13 +72,13 @@ namespace ModelRelief.Api.V1.Shared
                 // results presentation
                 UsePaging = RestControllerOptions.UsePaging,
 
-                PageNumber          = getRequest.PageNumber,
-                NumberOfRecords     = getRequest.NumberOfRecords,
-                OrderBy             = getRequest.OrderBy,
-                Ascending           = getRequest.Ascending,
+                PageNumber          = pagedQueryParameters.PageNumber,
+                NumberOfRecords     = pagedQueryParameters.NumberOfRecords,
+                OrderBy             = pagedQueryParameters.OrderBy,
+                Ascending           = pagedQueryParameters.Ascending,
 
                 // (optional) query parameters
-                Name                = getRequest.Name,
+                QueryParameters     = queryParameters,
             });
         }
 
@@ -85,11 +86,10 @@ namespace ModelRelief.Api.V1.Shared
         /// Action method for GetSingleRequest.
         /// </summary>
         /// <param name="id">Model Id to fetch.</param>
-        /// <param name="name">(optional) Model Name.</param>
-        /// <param name="relations">(optional) Relationship collections.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>TGetModel of target model.</returns>
         [HttpGet("{id:int}")]
-        public virtual async Task<IActionResult> GetSingle(int id, [FromQuery] string name, [FromQuery] string relations)
+        public virtual async Task<IActionResult> GetSingle(int id, [FromQuery] GetQueryParameters queryParameters)
         {
             return await HandleRequestAsync(new GetSingleRequest<TEntity, TGetModel>
             {
@@ -97,8 +97,7 @@ namespace ModelRelief.Api.V1.Shared
                 Id = id,
 
                 // (optional) query parameters
-                Name = name,
-                Relations = relations,
+                QueryParameters = queryParameters,
             });
         }
 

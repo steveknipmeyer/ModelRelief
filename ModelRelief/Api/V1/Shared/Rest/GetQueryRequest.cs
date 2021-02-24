@@ -57,8 +57,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public bool UsePaging { get; set; }
 
         /// <summary>
-        /// Gets or sets a value for a Name query parameter.
+        /// Gets or sets the query parameters.
         /// </summary>
-        public string Name { get; set; }
+        public GetQueryParameters QueryParameters { get; set; }
     }
 }

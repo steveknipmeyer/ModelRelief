@@ -1,4 +1,5 @@
 ## Commit Notes
+GetQueryParameters -> GetPagedQueryParameters
 #### General   
     Queries
         Principle: All queries should be done in the API request handlers.

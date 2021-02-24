@@ -14,6 +14,7 @@ namespace ModelRelief.Features.Settings
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Services;
     using ModelRelief.Utility;
@@ -51,15 +52,14 @@ namespace ModelRelief.Features.Settings
         /// Action handler for an Edit Get.
         /// </summary>
         /// <param name="id">Model Id to edit.</param>
-        /// <param name="name">(optional) Model Name.</param>
-        /// <param name="relations">(optional) Relationship collections.</param>
+        /// <param name="queryParameters">Query parameters.</param>
         /// <returns>Edit page.</returns>
         [HttpGet]
-        public override async Task<IActionResult> Edit(int id, [FromQuery] string name = "", [FromQuery] string relations = "")
+        public override async Task<IActionResult> Edit(int id, [FromQuery] GetQueryParameters queryParameters)
         {
             HttpContext.Session.SetString(SettingsEditReferringUrl, this.Request.Headers["Referer"]);
 
-            return await base.Edit(id, name: name, relations: relations);
+            return await base.Edit(id, queryParameters);
         }
 
         /// <summary>
