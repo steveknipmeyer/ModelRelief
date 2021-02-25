@@ -46,21 +46,5 @@ namespace ModelRelief.Features.Projects
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
         }
-
-        /// <summary>
-        /// Modify the View model before it is presented.
-        /// </summary>
-        /// <param name="project">Project instance for View.</param>
-        protected async override Task<Dto.Project> ModifyDetailsViewModel(Dto.Project project)
-        {
-            var domainProject = DbContext.Set<Domain.Project>()
-                                            .Where(m => (m.Id == project.Id))
-                                            .Include(m => m.Models);
-
-            project = await domainProject.ProjectTo<Dto.Project>(Mapper.ConfigurationProvider).SingleAsync();
-            project.Models = Mapper.Map<ICollection<Dto.Model3d>>(domainProject.First().Models);
-
-            return project;
-        }
     }
 }

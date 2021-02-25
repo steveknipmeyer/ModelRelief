@@ -2,23 +2,9 @@
 Add support for Relations parameters.
 #### General      
     Queries
-        Extend query methods to return DTO models (via ProjectTo)
-
-        Principle: All queries should be done in the API request handlers.
-        Add additional query methods to support returning DTO results as well as Domain.
-
-        Support extended query parameters for relationship collections.
-            https://stackoverflow.com/questions/48047010/ef-core-2-0-include-nested-entities-with-dynamic-query
-            The query method constructs the query with a variable number of Includes.
-            projects/details/1/?relations=Models
-            projects/details/1/?relations=Models,Meshes
-            projects/details/1/?relations=All
-
         Domain -> Dto            
             Through reflection, populate the collection properties.
-
-        Replace ModifyDetailsViewModel.
-            projects/details/id/?relations=Models
+            If a collection is null, assign an empty collection (not null).
 
         GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
         GetSingleRequest/Handler -> GetQueryRequest/Handler

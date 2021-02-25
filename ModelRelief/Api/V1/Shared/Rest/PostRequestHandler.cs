@@ -74,11 +74,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
-            // fully populate return model; ProjectTo requires IQueryable<TEntity>
-            IQueryable<TEntity> model = DbContext.Set<TEntity>()
-                                            .Where(m => (m.Id == newModel.Id));
-            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
-
+            var projectedModel = await FindModelAsync<TEntity, TGetModel>(message.User, newModel.Id);
             return projectedModel;
         }
     }

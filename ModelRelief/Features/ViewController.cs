@@ -103,7 +103,6 @@ namespace ModelRelief.Features
             if (model == null)
                 return NotFound();
 
-            model = await ModifyDetailsViewModel(model);
             return View(model);
         }
         #endregion

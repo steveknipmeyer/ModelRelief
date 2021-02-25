@@ -46,7 +46,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var projectModel in Model.Models)
+        @{
+            var emptyList = new List<ModelRelief.Dto.Model3d>();
+        }
+        @foreach (var projectModel in Model.Models ?? emptyList)
         {
         <tr>
             <td>
