@@ -13,7 +13,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -59,12 +58,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for request</returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            TEntity targetModel = await FindModelAsync<TEntity>(message.User, message.Id, message.QueryParameters);
-
-            IQueryable<TEntity> model = DbContext.Set<TEntity>()
-                                                 .Where(m => (m.Id == targetModel.Id));
-            var projectedModel = model.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
-
+            var projectedModel = await FindModelAsync<TEntity, TGetModel>(message.User, message.Id, message.QueryParameters);
             return projectedModel;
         }
     }

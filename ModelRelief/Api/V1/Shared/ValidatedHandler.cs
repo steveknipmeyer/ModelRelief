@@ -14,6 +14,7 @@ namespace ModelRelief.Api.V1.Shared
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using FluentValidation.Results;
     using MediatR;
@@ -24,6 +25,7 @@ namespace ModelRelief.Api.V1.Shared
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
@@ -76,6 +78,33 @@ namespace ModelRelief.Api.V1.Shared
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
         }
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <typeparam name="TGetModel">DTO model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TGetModel> FindModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+            where TGetModel : IModel
+        {
+            TGetModel projectedModel = default(TGetModel);
+            try
+            {
+                IQueryable<TEntity> domainModel = await BuildQueryable<TEntity>(claimsPrincipal, id, queryParameters);
+                projectedModel = domainModel.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
+            }
+            catch (Exception)
+            {
+                if (throwIfNotFound)
+                    throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+            return projectedModel;
+        }
 
         /// <summary>
         /// Returns the domain model for a given Id.
@@ -121,26 +150,51 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Returns the collection of domain models from a query.
+        /// Returns an IQueryable for a query.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        public virtual async Task<IQueryable<TEntity>> BuildQueryable<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null)
+            where TEntity : DomainModel
+        {
+            var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
+            return BuildQueryable<TEntity>(user.Id, id, queryParameters);
+        }
+
+        /// <summary>
+        /// Returns an IQueryable for a query.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="userId">ApplicationUser Id.</param>
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="queryParameters">Query parameters.</param>
-        /// <returns>Collection of domain models.</returns>
-        public virtual IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int id, GetQueryParameters queryParameters)
+        public virtual IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int id, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel
         {
             IQueryable<TEntity> queryable = DbContext.Set<TEntity>()
                                                      .Where(m => (m.UserId == userId));
-            // query by Id or Name?
-            if (id >= 0)
-            {
-                queryable = queryable.Where(m => (m.Id == id));
-            }
-            else if (!string.IsNullOrEmpty(queryParameters.Name))
-            {
+
+            // query by Name?
+            if (!string.IsNullOrEmpty(queryParameters?.Name ?? string.Empty))
                 queryable = queryable.Where(m => EF.Functions.Like(m.Name, $"{queryParameters.Name}%"));
+            else if (id >= 0)
+                queryable = queryable.Where(m => (m.Id == id));
+
+            if (queryParameters == null)
+                return queryable;
+
+            if (string.IsNullOrEmpty(queryParameters.Relations))
+                return queryable;
+
+            Type entityType = typeof(TEntity);
+            string[] includes = queryParameters.Relations.Split(',');
+            foreach (string include in includes)
+            {
+                PropertyInfo propertyInfo = entityType.GetProperty(include, BindingFlags.Instance | BindingFlags.Public |  BindingFlags.IgnoreCase);
+                if (propertyInfo != null)
+                    queryable = queryable.Include(propertyInfo.Name);
             }
             return queryable;
         }

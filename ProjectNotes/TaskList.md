@@ -1,9 +1,9 @@
 ## Commit Notes
-BuildQueryable
-    Share a common method between GetSingleRequest and GetQueryRequest.
-    FindModelAsync reduces the query results with First or Single qualifications.
+Add support for Relations parameters.
 #### General      
     Queries
+        Extend query methods to return DTO models (via ProjectTo)
+
         Principle: All queries should be done in the API request handlers.
         Add additional query methods to support returning DTO results as well as Domain.
 
