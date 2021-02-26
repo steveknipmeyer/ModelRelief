@@ -6,7 +6,13 @@
 
 namespace ModelRelief.Test.Integration.Projects
 {
+    using System.Linq;
+    using System.Net;
+    using System.Threading.Tasks;
+    using FluentAssertions;
     using ModelRelief.Test.TestModels.Projects;
+    using Newtonsoft.Json;
+    using Xunit;
 
     /// <summary>
     /// Base integration Tests.
@@ -24,19 +30,40 @@ namespace ModelRelief.Test.Integration.Projects
         {
         }
 
-#region Get
-#endregion
+        #region Get
+        /// <summary>
+        /// Test that the "?relations=Models" parameter populates the Models collection.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api GetSingle")]
+        public async Task GetSingle_RelationsQueryParameterReturnsCollection()
+        {
+            // Arrange
+            var modelId = TestModelFactory.IdRange.Min();
 
-#region Post
-#endregion
+            // Act
+            var queryParameter = "?relations=Models";
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}{queryParameter}");
 
-#region Put
-#endregion
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-#region Patch
-#endregion
+            var project = JsonConvert.DeserializeObject<Dto.Project>(requestResponse.ContentString);
+            project.Models.Count().Should().NotBe(0);
+        }
 
-#region Delete
-#endregion
+        #endregion
+
+        #region Post
+        #endregion
+
+        #region Put
+        #endregion
+
+        #region Patch
+        #endregion
+
+        #region Delete
+        #endregion
     }
 }
