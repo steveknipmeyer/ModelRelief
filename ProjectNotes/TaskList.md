@@ -1,10 +1,13 @@
 ## Commit Notes
-Add support for Relations parameters.
+Add support for populating the query Relations.
+Expose Project.Models in API.
 #### General      
     Queries
         Domain -> Dto            
-            Through reflection, populate the collection properties.
+            Refactor ProjectSingle to handle single and collection return types.
             If a collection is null, assign an empty collection (not null).
+            Add unit tests for Relations query parameters.
+            Should GetQueryRequest contain GetQueryParameters?
 
         GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
         GetSingleRequest/Handler -> GetQueryRequest/Handler

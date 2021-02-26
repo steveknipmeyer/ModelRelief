@@ -28,7 +28,6 @@ namespace ModelRelief.Dto
         public int? SettingsId { get; set; }
         public Settings Settings { get; set; }
 
-        [JsonIgnore]
         [IgnoreMap]
         public ICollection<Model3d> Models { get; set; }
 

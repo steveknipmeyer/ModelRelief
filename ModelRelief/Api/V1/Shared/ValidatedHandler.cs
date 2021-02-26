@@ -78,6 +78,112 @@ namespace ModelRelief.Api.V1.Shared
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
         }
+
+        /// <summary>
+        /// Return the PropertyInfo for a (case-insensitive property name)
+        /// </summary>
+        /// <param name="propertyName">Case-insensitive property name</param>
+        /// <typeparam name="T">Class type</typeparam>
+        /// <returns>PropertyInfo</returns>
+        private PropertyInfo GetProperty<T>(string propertyName)
+            {
+            Type classType = typeof(T);
+            PropertyInfo propertyInfo = classType.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            return propertyInfo;
+            }
+
+        /// <summary>
+        /// Project a domain IQueryable to a TGetModel
+        /// </summary>
+        /// <param name="domainQueryable">Domain IQueryable</param>
+        /// <param name="queryParameters">Query parameters</param>
+        /// <typeparam name="TEntity">Domain type</typeparam>
+        /// <typeparam name="TGetModel">DTO type</typeparam>
+        /// <returns>Projected TGetModel</returns>
+        public TGetModel ProjectSingle<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
+            where TEntity : DomainModel
+            where TGetModel : IModel
+        {
+            TGetModel projectedModel = domainQueryable.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
+
+            if (queryParameters?.Relations == null)
+                return projectedModel;
+
+            try
+            {
+                string[] relations = queryParameters.Relations.Split(',');
+                foreach (string relation in relations)
+                {
+                    PropertyInfo domainProperty = GetProperty<TEntity>(relation);
+                    PropertyInfo mappedProperty = GetProperty<TGetModel>(relation);
+                    if ((domainProperty == null) || (mappedProperty == null))
+                        continue;
+
+                    var domainCollection = domainProperty.GetValue(domainQueryable.Single());
+                    if (domainCollection == null)
+                        continue;
+
+                    var domainPropertyType = domainProperty.PropertyType;
+                    var mappedPropertyType = mappedProperty.PropertyType;
+
+                    var mappedColleciton = Mapper.Map(domainCollection, domainPropertyType, mappedPropertyType);
+                    mappedProperty.SetValue(projectedModel, mappedColleciton);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Error mapping collection: Type = {typeof(TEntity).Name}, {ex.Message}");
+            }
+            return projectedModel;
+        }
+
+        /// <summary>
+        /// Project a domain IQueryable to a TGetModel
+        /// </summary>
+        /// <param name="domainQueryable">Domain IQueryable</param>
+        /// <param name="queryParameters">Query parameters</param>
+        /// <typeparam name="TEntity">Domain type</typeparam>
+        /// <typeparam name="TGetModel">DTO type</typeparam>
+        /// <returns>Projected TGetModel</returns>
+        public ICollection<TGetModel> ProjectAll<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
+            where TEntity : DomainModel
+            where TGetModel : IModel
+        {
+            ICollection<TGetModel> projectedModels = domainQueryable.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToList<TGetModel>();
+            if (queryParameters?.Relations == null)
+                return projectedModels;
+
+            foreach (var projectedModel in projectedModels)
+            {
+                try
+                {
+                    string[] relations = queryParameters.Relations.Split(',');
+                    foreach (string relation in relations)
+                    {
+                        PropertyInfo domainProperty = GetProperty<TEntity>(relation);
+                        PropertyInfo mappedProperty = GetProperty<TGetModel>(relation);
+                        if ((domainProperty == null) || (mappedProperty == null))
+                            continue;
+
+                        var domainCollection = domainProperty.GetValue(domainQueryable.Where(m => m.Id == projectedModel.Id).Single());
+                        if (domainCollection == null)
+                            continue;
+
+                        var domainPropertyType = domainProperty.PropertyType;
+                        var mappedPropertyType = mappedProperty.PropertyType;
+
+                        var mappedColleciton = Mapper.Map(domainCollection, domainPropertyType, mappedPropertyType);
+                        mappedProperty.SetValue(projectedModel, mappedColleciton);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"Error mapping collection: Type = {typeof(TEntity).Name}, {ex.Message}");
+                }
+            }
+            return projectedModels;
+        }
+
         /// <summary>
         /// Returns the domain model for a given Id.
         /// </summary>
@@ -95,8 +201,10 @@ namespace ModelRelief.Api.V1.Shared
             TGetModel projectedModel = default(TGetModel);
             try
             {
-                IQueryable<TEntity> domainModel = await BuildQueryable<TEntity>(claimsPrincipal, id, queryParameters);
-                projectedModel = domainModel.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
+                IQueryable<TEntity> domainQueryable = await BuildQueryable<TEntity>(claimsPrincipal, id, queryParameters);
+                projectedModel = ProjectSingle<TEntity, TGetModel>(domainQueryable, queryParameters);
+
+                var projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
             }
             catch (Exception)
             {
@@ -188,11 +296,10 @@ namespace ModelRelief.Api.V1.Shared
             if (string.IsNullOrEmpty(queryParameters.Relations))
                 return queryable;
 
-            Type entityType = typeof(TEntity);
-            string[] includes = queryParameters.Relations.Split(',');
-            foreach (string include in includes)
+            string[] relations = queryParameters.Relations.Split(',');
+            foreach (string relation in relations)
             {
-                PropertyInfo propertyInfo = entityType.GetProperty(include, BindingFlags.Instance | BindingFlags.Public |  BindingFlags.IgnoreCase);
+                PropertyInfo propertyInfo = GetProperty<TEntity>(relation);
                 if (propertyInfo != null)
                     queryable = queryable.Include(propertyInfo.Name);
             }
