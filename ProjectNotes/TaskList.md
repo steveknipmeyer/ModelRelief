@@ -1,12 +1,8 @@
 ## Commit Notes
+
 #### General      
     Queries
         Add remaining collection properties to DTO models.
-
-        If a collection is null, assign an empty collection (not null).
-        Relation Properties Testing
-            Add unit tests.
-            Add Postman tests.
 
         GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
         GetSingleRequest/Handler -> GetQueryRequest/Handler

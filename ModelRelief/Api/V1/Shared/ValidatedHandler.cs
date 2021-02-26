@@ -137,11 +137,15 @@ namespace ModelRelief.Api.V1.Shared
                             continue;
 
                         var domainCollection = domainProperty.GetValue(domainQueryable.Where(m => m.Id == projectedModel.Id).Single());
-                        if (domainCollection == null)
-                            continue;
-
                         var domainPropertyType = domainProperty.PropertyType;
                         var mappedPropertyType = mappedProperty.PropertyType;
+                        if (domainCollection == null)
+                        {
+                            // empty List<mappedPropertyType>
+                            var listType = typeof(List<>).MakeGenericType(mappedPropertyType);
+                            mappedProperty.SetValue(projectedModel, Activator.CreateInstance(listType));
+                            continue;
+                        }
 
                         var mappedColleciton = Mapper.Map(domainCollection, domainPropertyType, mappedPropertyType);
                         mappedProperty.SetValue(projectedModel, mappedColleciton);
