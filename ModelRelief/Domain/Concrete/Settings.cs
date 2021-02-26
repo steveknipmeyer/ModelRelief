@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using System.Collections.Generic;
     public class Settings : DomainModel
     {
         public bool LoggingEnabled { get; set; }
@@ -17,6 +18,9 @@ namespace ModelRelief.Domain
 
         public bool DepthBufferViewVisible { get; set; }
         public bool NormalMapViewVisible { get; set; }
+
+        // Navigation Propertiesa
+        public ICollection<Project> Projects { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.

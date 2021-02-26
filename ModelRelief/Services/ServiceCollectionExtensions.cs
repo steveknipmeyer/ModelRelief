@@ -27,6 +27,7 @@ namespace ModelRelief.Services
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Settings;
+    using Newtonsoft.Json;
     using OdeToCode.AddFeatureFolders;
 
     public static class ServiceCollectionExtensions
@@ -160,7 +161,10 @@ namespace ModelRelief.Services
                 // automatically register all validators within this assembly
                 .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
                 // disable .NET Core System.Text.Json in middleware
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
         }
 
         /// <summary>

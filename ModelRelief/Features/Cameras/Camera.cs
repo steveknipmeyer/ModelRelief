@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Dto
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -77,6 +78,15 @@ namespace ModelRelief.Dto
         // Navigation Properties
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
+
+        [IgnoreMap]
+        public ICollection<DepthBuffer> DepthBuffers { get; set; }
+        [IgnoreMap]
+        public ICollection<Mesh> Meshes { get; set; }
+        [IgnoreMap]
+        public ICollection<Model3d> Models { get; set; }
+        [IgnoreMap]
+        public ICollection<NormalMap> NormalMaps { get; set; }
 
         // Perspective
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]

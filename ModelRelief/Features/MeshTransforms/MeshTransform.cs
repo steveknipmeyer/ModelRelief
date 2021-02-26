@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Dto
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -67,6 +68,9 @@ namespace ModelRelief.Dto
         // Navigation Properties
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
+
+        [IgnoreMap]
+        public ICollection<Mesh> Meshes { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MeshTransform"/> class.

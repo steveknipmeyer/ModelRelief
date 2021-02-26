@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using System.Collections.Generic;
     using ModelRelief.Services.Relationships;
 
     public enum DepthBufferFormat
@@ -37,6 +38,7 @@ namespace ModelRelief.Domain
         [GeneratedFileProperty]
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
+        public ICollection<Mesh> Meshes { get; set; }
 
         public DepthBuffer()
         {

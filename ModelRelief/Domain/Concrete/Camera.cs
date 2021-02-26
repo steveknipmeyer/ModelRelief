@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using System.Collections.Generic;
     using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
 
@@ -81,6 +82,11 @@ namespace ModelRelief.Domain
         // Navigation Properties
         public int? ProjectId { get; set; }
         public Project Project { get; set; }
+
+        public ICollection<DepthBuffer> DepthBuffers { get; set; }
+        public ICollection<Mesh> Meshes { get; set; }
+        public ICollection<Model3d> Models { get; set; }
+        public ICollection<NormalMap> NormalMaps { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Camera"/> class.

@@ -130,30 +130,6 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
         api/v1/documentation/{controller}/{error}
 
 #### Database
-    Adding collection navigation properties to models leads to AutoMapper ProjectTo failing with extreme memory usage.
-    The properties must be marked [IgnoreMap] so ProjectTo ignores them.  A manual step is required (see ProjectController.ModifyDetailsViewModel.)
-        Dto.Project
-            [JsonIgnore]
-            [IgnoreMap]
-            public ICollection<Model3d> Models { get; set; }
-
-        Potential collection navigation properties:
-            Project -> Cameras
-            Project -> DepthBuffers
-            Project -> Meshs
-            Project -> MeshTransforms
-            Project -> Model3ds             (manually implemented now in ProjectsController)
-            Project -> NormalMaps
-            Model3d -> DepthBuffers
-            Model3d -> NormalMaps
-            Camera -> DepthBuffers
-            Camera -> Meshes
-            Camera -> Model3ds
-            Camera -> NormalMaps
-            DepthBuffer -> Meshes
-            NormalMap -> Meshes
-            MeshTransform -> Meshes
-            Setttings -> Projects
 
 
 

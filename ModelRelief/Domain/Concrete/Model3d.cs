@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using System.Collections.Generic;
     using ModelRelief.Services.Relationships;
 
     public enum Model3dFormat
@@ -26,6 +27,9 @@ namespace ModelRelief.Domain
 
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
+
+        public ICollection<DepthBuffer> DepthBuffers { get; set; }
+        public ICollection<NormalMap> NormalMaps { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Model3d"/> class.

@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Dto
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -31,6 +32,10 @@ namespace ModelRelief.Dto
 
         public bool DepthBufferViewVisible { get; set; }
         public bool NormalMapViewVisible { get; set; }
+
+        // Navigation Propertiesa
+        [IgnoreMap]
+        public ICollection<Project> Projects { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.

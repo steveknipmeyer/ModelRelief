@@ -29,7 +29,17 @@ namespace ModelRelief.Dto
         public Settings Settings { get; set; }
 
         [IgnoreMap]
+        public ICollection<Camera> Cameras { get; set; }
+        [IgnoreMap]
+        public ICollection<DepthBuffer> DepthBuffers { get; set; }
+        [IgnoreMap]
+        public ICollection<Mesh> Meshes { get; set; }
+        [IgnoreMap]
+        public ICollection<MeshTransform> MeshTransforms { get; set; }
+        [IgnoreMap]
         public ICollection<Model3d> Models { get; set; }
+        [IgnoreMap]
+        public ICollection<NormalMap> NormalMaps { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.

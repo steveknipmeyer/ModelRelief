@@ -192,14 +192,16 @@ namespace ModelRelief.Utility
                     {
                         Formatting = Formatting.Indented,
                         MaxDepth = 2,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                     };
 
                     //serialize object directly into file stream
                     serializer.Serialize(file, value);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"JSON serliazation error: {ex.Message}");
                 return false;
             }
 

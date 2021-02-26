@@ -7,6 +7,7 @@
 namespace ModelRelief.Dto
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
@@ -31,6 +32,11 @@ namespace ModelRelief.Dto
 
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
+
+        [IgnoreMap]
+        public ICollection<DepthBuffer> DepthBuffers { get; set; }
+        [IgnoreMap]
+        public ICollection<NormalMap> NormalMaps { get; set; }
 
         // not exposed in UX; API only
         public DateTime? FileTimeStamp { get; set; }
