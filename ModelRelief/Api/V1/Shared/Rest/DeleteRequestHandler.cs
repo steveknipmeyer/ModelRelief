@@ -107,7 +107,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>Null object</returns>
         public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
         {
-            var modelToRemove = await FindModelAsync<TEntity>(message.User, message.Id, new GetQueryParameters());
+            var modelToRemove = await FindModelAsync<TEntity>(message.User, message.Id);
 
             // remove model file if present
             DeleteModelStorage(modelToRemove);

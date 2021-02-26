@@ -80,7 +80,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Return the PropertyInfo for a (case-insensitive property name)
+        /// Return the PropertyInfo for a (case-insensitive) property name.
         /// </summary>
         /// <param name="propertyName">Case-insensitive property name</param>
         /// <typeparam name="T">Class type</typeparam>
@@ -93,59 +93,30 @@ namespace ModelRelief.Api.V1.Shared
             }
 
         /// <summary>
-        /// Project a domain IQueryable to a TGetModel
+        /// Project a domain IQueryable to a single TGetModel
         /// </summary>
         /// <param name="domainQueryable">Domain IQueryable</param>
         /// <param name="queryParameters">Query parameters</param>
         /// <typeparam name="TEntity">Domain type</typeparam>
         /// <typeparam name="TGetModel">DTO type</typeparam>
         /// <returns>Projected TGetModel</returns>
-        public TGetModel ProjectSingle<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
+        public virtual TGetModel ProjectSingle<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel
             where TGetModel : IModel
         {
-            TGetModel projectedModel = domainQueryable.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).Single();
-
-            if (queryParameters?.Relations == null)
-                return projectedModel;
-
-            try
-            {
-                string[] relations = queryParameters.Relations.Split(',');
-                foreach (string relation in relations)
-                {
-                    PropertyInfo domainProperty = GetProperty<TEntity>(relation);
-                    PropertyInfo mappedProperty = GetProperty<TGetModel>(relation);
-                    if ((domainProperty == null) || (mappedProperty == null))
-                        continue;
-
-                    var domainCollection = domainProperty.GetValue(domainQueryable.Single());
-                    if (domainCollection == null)
-                        continue;
-
-                    var domainPropertyType = domainProperty.PropertyType;
-                    var mappedPropertyType = mappedProperty.PropertyType;
-
-                    var mappedColleciton = Mapper.Map(domainCollection, domainPropertyType, mappedPropertyType);
-                    mappedProperty.SetValue(projectedModel, mappedColleciton);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Error mapping collection: Type = {typeof(TEntity).Name}, {ex.Message}");
-            }
-            return projectedModel;
+            ICollection<TGetModel> projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
+            return projectedModels.First<TGetModel>();
         }
 
         /// <summary>
-        /// Project a domain IQueryable to a TGetModel
+        /// Project a domain IQueryable to a collection of TGetModels
         /// </summary>
         /// <param name="domainQueryable">Domain IQueryable</param>
         /// <param name="queryParameters">Query parameters</param>
         /// <typeparam name="TEntity">Domain type</typeparam>
         /// <typeparam name="TGetModel">DTO type</typeparam>
-        /// <returns>Projected TGetModel</returns>
-        public ICollection<TGetModel> ProjectAll<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
+        /// <returns>Collection of projected TGetModels</returns>
+        public virtual ICollection<TGetModel> ProjectAll<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel
             where TGetModel : IModel
         {
@@ -182,79 +153,6 @@ namespace ModelRelief.Api.V1.Shared
                 }
             }
             return projectedModels;
-        }
-
-        /// <summary>
-        /// Returns the domain model for a given Id.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <typeparam name="TGetModel">DTO model.</typeparam>
-        /// <param name="claimsPrincipal">Current HttpContext User.</param>
-        /// <param name="id">Target id to retrieve.</param>
-        /// <param name="queryParameters">Query parameters.</param>
-        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
-        /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TGetModel> FindModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
-            where TEntity : DomainModel
-            where TGetModel : IModel
-        {
-            TGetModel projectedModel = default(TGetModel);
-            try
-            {
-                IQueryable<TEntity> domainQueryable = await BuildQueryable<TEntity>(claimsPrincipal, id, queryParameters);
-                projectedModel = ProjectSingle<TEntity, TGetModel>(domainQueryable, queryParameters);
-
-                var projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
-            }
-            catch (Exception)
-            {
-                if (throwIfNotFound)
-                    throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-            return projectedModel;
-        }
-
-        /// <summary>
-        /// Returns the domain model for a given Id.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="claimsPrincipal">Current HttpContext User.</param>
-        /// <param name="id">Target id to retrieve.</param>
-        /// <param name="queryParameters">Query parameters.</param>
-        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
-        /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters, bool throwIfNotFound = true)
-            where TEntity : DomainModel
-        {
-            var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            return await FindModelAsync<TEntity>(user.Id, id, queryParameters, throwIfNotFound);
-        }
-
-        /// <summary>
-        /// Returns the domain model for a given Id.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="userId">ApplicationUser Id.</param>
-        /// <param name="id">Target id to retrieve.</param>
-        /// <param name="queryParameters">Query parameters.</param>
-        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
-        /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, GetQueryParameters queryParameters, bool throwIfNotFound = true)
-            where TEntity : DomainModel
-        {
-            var queryable = BuildQueryable<TEntity>(userId, id, queryParameters);
-
-            TEntity domainModel = null;
-            try
-            {
-                domainModel = await queryable.SingleAsync();
-            }
-            catch (Exception)
-            {
-                if (throwIfNotFound)
-                    throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-            return domainModel;
         }
 
         /// <summary>
@@ -307,6 +205,105 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
+        /// Returns the collection of TGetModels for a given query.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <typeparam name="TGetModel">DTO model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Collection of TGetModels.</returns>
+        public virtual async Task<ICollection<TGetModel>> FindModelsAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+            where TGetModel : IModel
+        {
+            ICollection<TGetModel> projectedModels = null;
+            int allMNodelsId = -1;
+            try
+            {
+                IQueryable<TEntity> domainQueryable = await BuildQueryable<TEntity>(claimsPrincipal, allMNodelsId, queryParameters);
+                projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
+            }
+            catch (Exception)
+            {
+                if (throwIfNotFound)
+                    throw new EntityNotFoundException(typeof(TEntity), allMNodelsId);
+            }
+            return projectedModels;
+        }
+
+        /// <summary>
+        /// Returns the DTO model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <typeparam name="TGetModel">DTO model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>DTO model</returns>
+        public virtual async Task<TGetModel> FindModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+            where TGetModel : IModel
+        {
+            TGetModel projectedModel = default(TGetModel);
+            try
+            {
+                IQueryable<TEntity> domainQueryable = await BuildQueryable<TEntity>(claimsPrincipal, id, queryParameters);
+                projectedModel = ProjectSingle<TEntity, TGetModel>(domainQueryable, queryParameters);
+            }
+            catch (Exception)
+            {
+                if (throwIfNotFound)
+                    throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+            return projectedModel;
+        }
+
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="claimsPrincipal">Current HttpContext User.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+        {
+            var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
+            return await FindModelAsync<TEntity>(user.Id, id, queryParameters, throwIfNotFound);
+        }
+
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="userId">ApplicationUser Id.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+        {
+            var queryable = BuildQueryable<TEntity>(userId, id, queryParameters);
+
+            TEntity domainModel = null;
+            try
+            {
+                domainModel = await queryable.SingleAsync();
+            }
+            catch (Exception)
+            {
+                if (throwIfNotFound)
+                    throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+            return domainModel;
+        }
+
+        /// <summary>
         /// Returns true if the domain model exists for a given Id.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
@@ -316,7 +313,7 @@ namespace ModelRelief.Api.V1.Shared
         public virtual async Task<bool> ModelExistsAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id)
             where TEntity : DomainModel
         {
-            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, new GetQueryParameters(), throwIfNotFound: false);
+            var domainModel = await FindModelAsync<TEntity>(claimsPrincipal, id, throwIfNotFound: false);
             return domainModel != null;
         }
 

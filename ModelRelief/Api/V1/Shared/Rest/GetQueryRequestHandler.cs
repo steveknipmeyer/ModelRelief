@@ -65,43 +65,42 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             if (message.UsePaging)
             {
-                var page = CreatePagedResultsAsync<TEntity, TGetModel>(queryable, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending);
+                var page = CreatePagedResultsAsync(queryable, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending, message.QueryParameters);
                 return page;
             }
 
-            return queryable.ProjectTo<TGetModel>(Mapper.ConfigurationProvider).ToArray();
+            return ProjectAll<TEntity, TGetModel>(queryable, message.QueryParameters);
         }
 
         /// <summary>
         /// Creates a paged set of results.
         /// </summary>
-        /// <typeparam name="T">The type of the source IQueryable.</typeparam>
-        /// <typeparam name="TReturn">The type of the returned paged results.</typeparam>
         /// <param name="queryable">The source IQueryable.</param>
         /// <param name="urlHelperContainer">IUrlHelper to construct paging links (from active controller)</param>
         /// <param name="pageNumber">The page number you want to retrieve.</param>
         /// <param name="pageSize">The size of the page.</param>
         /// <param name="orderBy">The field or property to order by.</param>
         /// <param name="ascending">Indicates whether or not the order should be ascending (true) or descending (false.)</param>
+        /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>Returns a paged set of results.</returns>
-        protected PagedResults<TReturn> CreatePagedResultsAsync<T, TReturn>(
-            IQueryable<T> queryable,
+        protected PagedResults<TGetModel> CreatePagedResultsAsync(
+            IQueryable<TEntity> queryable,
             IUrlHelperContainer urlHelperContainer,
             int pageNumber,
             int pageSize,
             string orderBy,
-            bool ascending)
+            bool ascending,
+            GetQueryParameters queryParameters)
         {
             var skipAmount = pageSize * (pageNumber - 1);
 
-            var projection = queryable
+            queryable = queryable
                 .OrderByPropertyOrField(orderBy, ascending)
                 .Skip(skipAmount)
-                .Take(pageSize)
-                .ProjectTo<TReturn>(Mapper.ConfigurationProvider);
+                .Take(pageSize);
 
+            var projectiion = ProjectAll<TEntity, TGetModel>(queryable, queryParameters);
             var totalNumberOfRecords = queryable.Count();
-            var results = projection.ToList();
 
             var mod = totalNumberOfRecords % pageSize;
             var totalPageCount = (totalNumberOfRecords / pageSize) + (mod == 0 ? 0 : 1);
@@ -113,11 +112,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
                         RouteNames.DefaultApiV1,
                         new { pageNumber = pageNumber + 1, pageSize, orderBy, ascending });
 
-            return new PagedResults<TReturn>
+            return new PagedResults<TGetModel>
             {
-                Results = results,
+                Results = projectiion,
                 PageNumber = pageNumber,
-                PageSize = results.Count,
+                PageSize = projectiion.Count,
                 TotalNumberOfPages = totalPageCount,
                 TotalNumberOfRecords = totalNumberOfRecords,
                 NextPageUrl = nextPageUrl,
