@@ -1,16 +1,14 @@
 ## Commit Notes
 
 #### General      
+    Do API requests have a different form of authorization than Ux?
+        Postman Ux requests fail when API requests succeed.
+
+    What is the role of TSingleGetModel?
+
     Queries
-        Document ProjectAll.
-            Adding collection navigation properties to models leads to AutoMapper ProjectTo failing with extreme memory usage.
-            The properties must be marked [IgnoreMap] so ProjectTo ignores them.  A manual step is required (see ProjectController.ModifyDetailsViewModel.)
-            Dto.Project
-                [IgnoreMap]
-                public ICollection<Model3d> Models { get; set; }
-    
-        GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
-        GetSingleRequest/Handler -> GetQueryRequest/Handler
+       
+                                    GetSingleRequest/Handler
     
     Projects
         How should a new project be created?
@@ -25,12 +23,6 @@
                 Create using the Canvas image of the last generated Mesh.  
 
         Place sample projects into a single project?
-
-
-    Do API requests have a different form of authorization than Ux?
-        Postman Ux requests fail when API requests succeed.
-
-    What is the role of TSingleGetModel?
 
     Upload
 

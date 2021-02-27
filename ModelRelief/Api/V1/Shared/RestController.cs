@@ -55,16 +55,16 @@ namespace ModelRelief.Api.V1.Shared
 
         #region Get
         /// <summary>
-        /// Action method for GetQueryRequest.
+        /// Action method for GetMultipleRequest.
         /// </summary>
         /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
         /// <param name="queryParameters">Query parameters.</param>
         /// <returns>A collection of models in a PagedResult.</returns>
         [HttpGet("")]
-        public virtual async Task<IActionResult> GetQuery([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
+        public virtual async Task<IActionResult> GetMultiple([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
         {
             pagedQueryParameters = pagedQueryParameters ?? new GetPagedQueryParameters();
-            return await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
+            return await HandleRequestAsync(new GetMultipleRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer  = this,

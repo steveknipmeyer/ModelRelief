@@ -124,6 +124,11 @@ namespace ModelRelief.Api.V1.Shared
             if (queryParameters?.Relations == null)
                 return projectedModels;
 
+            // N.B. Collection navigation properties are explicitly populated below.
+            // Collection navigation properties in models leads to AutoMapper ProjectTo hanging with extreme memory usage.
+            // The properties must be marked [IgnoreMap] so ProjectTo skips them.
+            //     [IgnoreMap]
+            //     public ICollection<Model3d> Models { get; set; }
             foreach (var projectedModel in projectedModels)
             {
                 try

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetQueryRequestHandler.cs" company="ModelRelief">
+// <copyright file="GetMultipleRequestHandler.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -28,12 +28,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO model.</typeparam>
-    public class GetQueryRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetQueryRequest<TEntity, TGetModel>, object>
+    public class GetMultipleRequestHandler<TEntity, TGetModel> : ValidatedHandler<GetMultipleRequest<TEntity, TGetModel>, object>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetQueryRequestHandler{TEntity, TGetModel}"/> class.
+        /// Initializes a new instance of the <see cref="GetMultipleRequestHandler{TEntity, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -42,7 +42,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        public GetQueryRequestHandler(
+        public GetMultipleRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
@@ -58,7 +58,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="message">GetListRequest.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        public override async Task<object> OnHandle(GetQueryRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
             IQueryable<TEntity> queryable = BuildQueryable<TEntity>(user.Id, -1, message.QueryParameters);

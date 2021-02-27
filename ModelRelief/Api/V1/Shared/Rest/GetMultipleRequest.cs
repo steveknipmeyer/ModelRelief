@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetQueryRequest.cs" company="ModelRelief">
+// <copyright file="GetMultipleRequest.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -17,7 +17,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
     /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
-    public class GetQueryRequest<TEntity, TGetModel> : IRequest<object>
+    public class GetMultipleRequest<TEntity, TGetModel> : IRequest<object>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {

@@ -65,7 +65,7 @@ namespace ModelRelief.Features
         public virtual async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
         {
             pagedQueryParameters = pagedQueryParameters ?? new GetPagedQueryParameters();
-            var results = await HandleRequestAsync(new GetQueryRequest<TEntity, TGetModel>
+            var results = await HandleRequestAsync(new GetMultipleRequest<TEntity, TGetModel>
             {
                 User = User,
                 UrlHelperContainer = this,
