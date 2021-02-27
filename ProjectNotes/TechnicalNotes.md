@@ -1023,3 +1023,22 @@ public ContentResult Index()
     };
 }
 '''
+
+#### Relation
+        Potential collection navigation properties:
+            Project -> Cameras
+            Project -> DepthBuffers
+            Project -> Meshs
+            Project -> MeshTransforms
+            Project -> Model3ds
+            Project -> NormalMaps
+            Model3d -> DepthBuffers
+            Model3d -> NormalMaps
+            Camera -> DepthBuffers
+            Camera -> Meshes
+            Camera -> Model3ds
+            Camera -> NormalMaps
+            DepthBuffer -> Meshes
+            NormalMap -> Meshes
+            MeshTransform -> Meshes
+            Setttings -> Projects

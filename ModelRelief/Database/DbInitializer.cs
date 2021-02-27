@@ -1161,7 +1161,7 @@ namespace ModelRelief.Database
             }
 
             var jsonFile = GetEntityJSONFileName<TEntity>(folderType);
-            Files.SerializeJSON(modelList, jsonFile);
+            Files.SerializeJSON(modelList, jsonFile, Logger);
 
             Logger.LogInformation($"Writing JSON definitions for {user.Name} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
         }
@@ -1232,7 +1232,7 @@ namespace ModelRelief.Database
                 var modelName = Path.GetFileNameWithoutExtension(mesh.Name);
                 var destinationFile = Path.GetFullPath($"{destinationFolder}/{modelName}.json");
                 Logger.LogInformation($"Creating {destinationFile}");
-                Files.SerializeJSON(mesh, destinationFile);
+                Files.SerializeJSON(mesh, destinationFile, Logger);
             }
 
             return true;

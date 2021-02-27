@@ -94,7 +94,7 @@ namespace ModelRelief.Services.Jobs
             string workingStorageFolder = StorageManager.WorkingStorageFolder(model.UserId);
             string fileName = $"{workingStorageFolder}{model.GetType().Name}{model.Id.ToString()}.json";
 
-            Files.SerializeJSON(model, fileName);
+            Files.SerializeJSON(model, fileName, Logger);
 
             return fileName;
         }

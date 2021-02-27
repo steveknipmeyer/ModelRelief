@@ -11,7 +11,6 @@ namespace ModelRelief.Domain
         // Navigation Properties
         public int? SettingsId { get; set; }
         public Settings Settings { get; set; }
-
         public ICollection<Camera> Cameras { get; set; }
         public ICollection<DepthBuffer> DepthBuffers { get; set; }
         public ICollection<Mesh> Meshes { get; set; }

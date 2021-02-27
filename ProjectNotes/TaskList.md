@@ -1,13 +1,6 @@
 ## Commit Notes
 
 #### General      
-    Should Settings belong to a Project?
-        Or are Settings a cross-Project resource, shared my multiple Projects?
-    Why are the JSON collections null?
-
-    Improve the JSON serialization exception handling.
-        How can the Files class have access to a Logger?
-
     Queries
         Document ProjectAll.
             Adding collection navigation properties to models leads to AutoMapper ProjectTo failing with extreme memory usage.
@@ -15,24 +8,6 @@
             Dto.Project
                 [IgnoreMap]
                 public ICollection<Model3d> Models { get; set; }
-
-        Potential collection navigation properties:
-            Project -> Cameras
-            Project -> DepthBuffers
-            Project -> Meshs
-            Project -> MeshTransforms
-            Project -> Model3ds
-            Project -> NormalMaps
-            Model3d -> DepthBuffers
-            Model3d -> NormalMaps
-            Camera -> DepthBuffers
-            Camera -> Meshes
-            Camera -> Model3ds
-            Camera -> NormalMaps
-            DepthBuffer -> Meshes
-            NormalMap -> Meshes
-            MeshTransform -> Meshes
-            Setttings -> Projects
     
         GetQueryRequest/Handler  -> GetPagedQueryRequest/Handler
         GetSingleRequest/Handler -> GetQueryRequest/Handler

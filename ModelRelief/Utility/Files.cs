@@ -11,6 +11,7 @@ namespace ModelRelief.Utility
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
     public class Files
@@ -180,8 +181,9 @@ namespace ModelRelief.Utility
         /// </summary>
         /// <param name="value">Object to serialize</param>
         /// <param name="fileName">Output file.</param>
+        /// <param name="logger">ILogger.</param>
         /// <returns>True if successful</returns>
-        public static bool SerializeJSON(object value, string fileName)
+        public static bool SerializeJSON(object value, string fileName, ILogger logger)
         {
             Files.EnsureDirectoryExists(fileName);
             try
@@ -201,7 +203,7 @@ namespace ModelRelief.Utility
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"JSON serliazation error: {ex.Message}");
+                logger.LogError($"JSON serialization error: [{fileName}] {ex.Message}");
                 return false;
             }
 
