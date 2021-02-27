@@ -22,7 +22,6 @@ namespace ModelRelief.Features.Meshes
     /// <summary>
     /// Represents a controller to handle Mesh Ux requests.
     /// </summary>
-    [Authorize]
     public class MeshesController : ViewController<Domain.Mesh, Dto.Mesh, Dto.Mesh>
     {
         /// <summary>

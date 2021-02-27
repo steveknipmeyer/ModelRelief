@@ -18,7 +18,6 @@ namespace ModelRelief.Features.DepthBuffers
     /// <summary>
     /// Represents a controller to handle DepthBuffer Ux requests.
     /// </summary>
-    [Authorize]
     public class DepthBuffersController : ViewController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>

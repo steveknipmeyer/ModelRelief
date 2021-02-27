@@ -18,7 +18,6 @@ namespace ModelRelief.Features.MeshTransforms
     /// <summary>
     /// Represents a controller to handle MeshTransform Ux requests.
     /// </summary>
-    [Authorize]
     public class MeshTransformsController : ViewController<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform>
     {
         /// <summary>

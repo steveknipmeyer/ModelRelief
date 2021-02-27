@@ -10,12 +10,15 @@ namespace ModelRelief.Features
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;
-
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
     public abstract class UxController : Controller, IUrlHelperContainer
     {
         public ModelReliefDbContext         DbContext { get; }

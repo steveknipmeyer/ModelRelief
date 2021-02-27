@@ -155,6 +155,11 @@ namespace ModelRelief
                     name: RouteNames.Default,
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+                endpoints.MapControllerRoute(
+                    name: RouteNames.Details,
+                    pattern: "{controller}/{id}",
+                    defaults: new { controller = "{controller}", action = "Details" });
+
                 // View compound names
                 endpoints.MapControllerRoute(
                     name: RouteNames.DepthBuffers,

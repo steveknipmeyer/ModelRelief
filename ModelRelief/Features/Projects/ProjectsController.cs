@@ -21,7 +21,6 @@ namespace ModelRelief.Features.Projects
     /// <summary>
     /// Represents a controller to handle Project Ux requests.
     /// </summary>
-    [Authorize]
     public class ProjectsController : ViewController<Domain.Project, Dto.Project, Dto.Project>
     {
         /// <summary>

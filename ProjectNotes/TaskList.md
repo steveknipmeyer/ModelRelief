@@ -1,11 +1,7 @@
 ## Commit Notes
 
 #### General      
-    Do API requests have a different form of authorization than Ux?
-        Postman Ux requests fail when API requests succeed.
 
-    Add an alternative Details route.
-        {controller}/{id} = {controller}/Details/{id}
     
     Projects
         How should a new project be created?

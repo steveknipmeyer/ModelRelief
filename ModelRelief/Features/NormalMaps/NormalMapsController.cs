@@ -18,7 +18,6 @@ namespace ModelRelief.Features.NormalMaps
     /// <summary>
     /// Represents a controller to handle NormalMap Ux requests.
     /// </summary>
-    [Authorize]
     public class NormalMapsController : ViewController<Domain.NormalMap, Dto.NormalMap, Dto.NormalMap>
     {
         /// <summary>
