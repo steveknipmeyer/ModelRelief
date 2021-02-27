@@ -16,16 +16,15 @@ namespace ModelRelief.Features
     using ModelRelief.Domain;
     using ModelRelief.Dto;
 
-    public abstract class ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel> : UxController
+    public abstract class ViewController<TEntity, TGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
         where TGetModel       : class, IModel, new()            // class to allow default null parameter in InitializeViewControls
-        where TSingleGetModel : IModel
     {
         public ViewControllerOptions ViewControllerOptions { get; }
         public new ILogger Logger { get; }                // base class Logger category is UxController
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TSingleGetModel, TRequestModel}"/> class.
+        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -39,7 +38,7 @@ namespace ModelRelief.Features
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TSingleGetModel, TRequestModel}"/> class.
+        /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -51,7 +50,7 @@ namespace ModelRelief.Features
             : base(dbContext, loggerFactory, mapper, mediator)
         {
             ViewControllerOptions = viewControllerOptions;
-            Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TSingleGetModel, TRequestModel>).Name);
+            Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TRequestModel>).Name);
         }
 
         #region Get

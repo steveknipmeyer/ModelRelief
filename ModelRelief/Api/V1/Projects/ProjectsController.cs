@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Projects
     /// Represents a controller to handle Project API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class ProjectsController : RestController<Domain.Project, Dto.Project, Dto.Project, Dto.Project, Dto.PostFile>
+    public class ProjectsController : RestController<Domain.Project, Dto.Project, Dto.Project, Dto.PostFile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectsController"/> class.

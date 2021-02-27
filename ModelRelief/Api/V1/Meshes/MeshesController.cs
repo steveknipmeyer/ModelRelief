@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Meshes
     /// Represents a controller to handle Mesh API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.Mesh, Dto.PostFile>
+    public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.PostFile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeshesController"/> class.
@@ -41,9 +41,9 @@ namespace ModelRelief.Api.V1.Meshes
         {
             var errorResult = new ApiErrorResult
             (
-                this, 
-                HttpStatusCode.BadRequest, 
-                ApiErrorCode.FileCreation, 
+                this,
+                HttpStatusCode.BadRequest,
+                ApiErrorCode.FileCreation,
                 "Meshes cannot be created through POST.  Create a Mesh by synchronizing the object with its dependents."
             );
             return await Task.FromResult(errorResult.ObjectResult());

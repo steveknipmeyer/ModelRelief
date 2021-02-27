@@ -23,7 +23,7 @@ namespace ModelRelief.Features.Settings
     /// Represents a controller to handle Settings Ux requests.
     /// </summary>
     [Authorize]
-    public class SettingsController : ViewController<Domain.Settings, Dto.Settings, Dto.Settings, Dto.Settings>
+    public class SettingsController : ViewController<Domain.Settings, Dto.Settings, Dto.Settings>
     {
         public IWebHostEnvironment HostingEnvironment { get; set; }
         public Services.IConfigurationProvider ConfigurationProvider { get; set; }

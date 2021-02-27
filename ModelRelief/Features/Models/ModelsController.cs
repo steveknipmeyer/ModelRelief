@@ -21,7 +21,7 @@ namespace ModelRelief.Features.Models
     /// Represents a controller to handle Model Ux requests.
     /// </summary>
     [Authorize]
-    public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d>
+    public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d>
     {
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 

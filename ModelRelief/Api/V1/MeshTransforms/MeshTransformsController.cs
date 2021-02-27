@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.MeshTransforms
     /// Represents a controller to handle MeshTransform API requests.
     /// </summary>
     [Route("api/v1/mesh-transforms")]
-    public class MeshTransformsController : RestController<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform, Dto.MeshTransform, Dto.PostFile>
+    public class MeshTransformsController : RestController<Domain.MeshTransform, Dto.MeshTransform, Dto.MeshTransform, Dto.PostFile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeshTransformsController"/> class.

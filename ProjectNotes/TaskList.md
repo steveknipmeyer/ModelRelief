@@ -4,11 +4,8 @@
     Do API requests have a different form of authorization than Ux?
         Postman Ux requests fail when API requests succeed.
 
-    What is the role of TSingleGetModel?
-
-    Queries
-       
-                                    GetSingleRequest/Handler
+    Add an alternative Details route.
+        {controller}/{id} = {controller}/Details/{id}
     
     Projects
         How should a new project be created?
@@ -26,8 +23,6 @@
 
     Upload
 
-    Add an alternative Details route.
-        {controller}/{id} = {controller}/Details/{id}
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe

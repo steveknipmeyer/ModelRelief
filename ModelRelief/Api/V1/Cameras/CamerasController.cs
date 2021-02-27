@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Cameras
     /// Represents a controller to handle Camera API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class CamerasController : RestController<Domain.Camera, Dto.Camera, Dto.Camera, Dto.Camera, Dto.PostFile>
+    public class CamerasController : RestController<Domain.Camera, Dto.Camera, Dto.Camera, Dto.PostFile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CamerasController"/> class.

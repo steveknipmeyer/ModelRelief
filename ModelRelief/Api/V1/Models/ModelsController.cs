@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Models
     /// Represents a controller to handle Model3d API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class ModelsController : RestController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.Model3d, Dto.PostFile>
+    public class ModelsController : RestController<Domain.Model3d, Dto.Model3d, Dto.Model3d, Dto.PostFile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelsController"/> class.

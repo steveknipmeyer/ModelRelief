@@ -19,7 +19,7 @@ namespace ModelRelief.Features.Cameras
     /// Represents a controller to handle Camera Ux requests.
     /// </summary>
     [Authorize]
-    public class CamerasController : ViewController<Domain.Camera, Dto.Camera, Dto.Camera, Dto.Camera>
+    public class CamerasController : ViewController<Domain.Camera, Dto.Camera, Dto.Camera>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CamerasController"/> class.
