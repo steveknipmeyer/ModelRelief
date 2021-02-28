@@ -2,9 +2,8 @@
 
 #### General      
     Projects
-        What kind of UI control can be used to switch Projects?
-            A drop-down menu in the _Layout header?
-            https://jsfiddle.net/xnpf1rr9/
+        Style the Project dropdown.
+        Add links to the Project drop-down.
 
         How should a new project be created?
             Projects/Create is the basis.

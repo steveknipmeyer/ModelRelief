@@ -50,47 +50,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <img class="mt-0 mr-1" src="~/images/IconWhite.png" alt="ModelRelief Shell" height="24" width="24">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">modelRelief<span class="font-weight-lighter"><sup> preview</sup></span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav mr-auto">
-                <!-- <a class="nav-item nav-link mx-3" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a> -->
-
-                <div class="nav-item dropdown mr-3">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Microsoft</a>
-                        <a class="dropdown-item" href="#">JAVA</a>
-                        <a class="dropdown-item" href="#">Database</a>
-                    </div>
-                </div>
-
-                <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
-
-                    @if (userSettings.DevelopmentUI)
-                    {
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="depth-buffers" asp-action="Index">DepthBuffers</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="meshes" asp-action="Index">Meshes</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="mesh-transforms" asp-action="Index">MeshTransforms</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="normal-maps" asp-action="Index">NormalMaps</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
-                    }
-                }
-            </div>
-            <partial name="_LoginPartial" />
-        </div>
-    </nav>
     <partial name="_CookieConsentPartial" />
+    @await Component.InvokeAsync("NavBar")
 
     <div class="container-fluid">
         @RenderBody()
@@ -104,7 +65,6 @@
             © 2019 Copyright:
             <a class="font-weight-normal" href="http://modelrelief.com/"> ModelRelief.com</a>
         </div>
-
     </footer>
 
     <!--******************************************************************************************-->

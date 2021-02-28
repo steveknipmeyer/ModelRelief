@@ -18,10 +18,12 @@ namespace ModelRelief.Features.Shared.ViewComponents
             {
             _configurationProvider = configurationProvider;
             }
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
             {
-            var versionMessage = _configurationProvider.GetSetting("Version");
-            return View("Default", versionMessage);
+                await Task.CompletedTask;
+
+                var versionMessage = _configurationProvider.GetSetting("Version");
+                return View("Footer", versionMessage);
             }
         }
     }
