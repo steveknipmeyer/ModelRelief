@@ -29,14 +29,14 @@ namespace ModelRelief.Domain
         public Settings()
         {
         this.LoggingEnabled  = true;
-        this.DevelopmentUI = true;
+        this.DevelopmentUI = false;
 
         this.ModelViewerExtendedControls = true;
-        this.MeshViewerExtendedControls = true;
-        this.ExtendedCameraControls = true;
+        this.MeshViewerExtendedControls = false;
+        this.ExtendedCameraControls = false;
 
-        this.DepthBufferViewVisible = true;
-        this.NormalMapViewVisible = true;
+        this.DepthBufferViewVisible = false;
+        this.NormalMapViewVisible = false;
         }
     }
 }

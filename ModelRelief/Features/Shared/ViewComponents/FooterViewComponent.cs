@@ -18,20 +18,10 @@ namespace ModelRelief.Features.Shared.ViewComponents
             {
             _configurationProvider = configurationProvider;
             }
-
-#if true
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
             {
-            // This is the preferred form. It allows the use of await.
-            // The async modifier converts the return result to a Task.
-
-            // Server Side Async is not Client Side Async
-            // https://stackoverflow.com/questions/36024748/viewcomponents-in-asp-net-mvc-6-are-not-async
-            await Task.CompletedTask;
-
             var versionMessage = _configurationProvider.GetSetting("Version");
             return View("Default", versionMessage);
             }
-#endif
         }
     }

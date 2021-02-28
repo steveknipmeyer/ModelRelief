@@ -1,28 +1,28 @@
 ## Commit Notes
 
 #### General      
-
-    
     Projects
+        What kind of UI control can be used to switch Projects?
+            A drop-down menu in the _Layout header?
+            https://jsfiddle.net/xnpf1rr9/
+
         How should a new project be created?
             Projects/Create is the basis.
-
-        What kind of UI control can be used to switch Projects?
-            A drop-down meny in the _Layout header?
 
         Use Index page as a template for the Project page.
             Each user model is hosted in a tile.
                 Add a new endpoint mesh/preview for a preview image of the mesh. 
                 Create using the Canvas image of the last generated Mesh.  
 
+        Add support for creating mesh "thumbnails" from the mesh canvas.
+            mesh/{id}/thumbnail
+            
         Place sample projects into a single project?
 
     Upload
 
-
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
-
 #### Models
     OBJ viewer has missing polygons.
         Plunderbuss

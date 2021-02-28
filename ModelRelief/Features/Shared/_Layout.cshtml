@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
-    <environment names="Staging, Production, Test">
+    <environment names="Production, Staging, Test">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css" asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
 
         @*WIP : Add minification to generate site.min.css*@
@@ -57,15 +57,27 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+            <div class="navbar-nav mr-auto">
+                <!-- <a class="nav-item nav-link mx-3" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a> -->
+
+                <div class="nav-item dropdown mr-3">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Microsoft</a>
+                        <a class="dropdown-item" href="#">JAVA</a>
+                        <a class="dropdown-item" href="#">Database</a>
+                    </div>
+                </div>
+
                 <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
+
                     @if (userSettings.DevelopmentUI)
                     {
                         <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
                         <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
                         <a class="nav-item nav-link" asp-area="" asp-controller="depth-buffers" asp-action="Index">DepthBuffers</a>
                         <a class="nav-item nav-link" asp-area="" asp-controller="meshes" asp-action="Index">Meshes</a>
@@ -74,8 +86,6 @@
                         <a class="nav-item nav-link" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
                     }
                 }
-                <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
-
             </div>
             <partial name="_LoginPartial" />
         </div>
@@ -107,18 +117,17 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery" crossorigin="anonymous" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal" crossorigin="anonymous" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k">
-        </script>
+    <environment names="Production, Staging">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js" asp-fallback-src="~/lib/jquery/dist/jquery.min.js" asp-fallback-test="window.jQuery" crossorigin="anonymous" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"></script>
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal" crossorigin="anonymous" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"></script>
     </environment>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     @RenderSection("scripts", required: false)
-
 </body>
 
 </html>
