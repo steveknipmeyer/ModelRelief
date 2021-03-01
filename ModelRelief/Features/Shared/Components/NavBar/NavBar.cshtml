@@ -20,28 +20,25 @@
                     <div class="dropdown-menu">
                         @foreach (var project in Model)
                         {
-                        <a class="dropdown-item" href="#">@project</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="projects" asp-action="Details" asp-route-relations="models" asp-route-name="@project">@project</a>
                         }
                     </div>
                 </div>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
             }
             <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-            <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
+             <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
 
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && userSettings.DevelopmentUI)
             {
-                <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
-                @if (userSettings.DevelopmentUI)
-                {
-                    <!-- <a class="nav-item nav-link mx-3" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a> -->
-                    <a class="nav-item nav-link" asp-area="" asp-controller="meshes" asp-action="Index">Meshes</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="depth-buffers" asp-action="Index">DepthBuffers</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="mesh-transforms" asp-action="Index">MeshTransforms</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="normal-maps" asp-action="Index">NormalMaps</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
-                }
+                <!-- <a class="nav-item nav-link mx-3" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a> -->
+                <a class="nav-item nav-link" asp-area="" asp-controller="meshes" asp-action="Index">Meshes</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="depth-buffers" asp-action="Index">DepthBuffers</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="mesh-transforms" asp-action="Index">MeshTransforms</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="normal-maps" asp-action="Index">NormalMaps</a>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
             }
         </div>
         <partial name="_LoginPartial" />

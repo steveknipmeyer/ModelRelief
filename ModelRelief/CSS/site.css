@@ -91,6 +91,10 @@ sup {
     font-size: 14px;
 }
 
+.dropdown-item {
+    background-color: #1d272e;
+    color: white;
+}
 /* ----------------------
     Footer
 ------------------------*/

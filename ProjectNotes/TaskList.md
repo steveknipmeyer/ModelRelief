@@ -2,8 +2,6 @@
 
 #### General      
     Projects
-        Style the Project dropdown.
-        Add links to the Project drop-down.
 
         How should a new project be created?
             Projects/Create is the basis.
