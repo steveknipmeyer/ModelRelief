@@ -2,7 +2,6 @@
 
 #### General      
     Projects
-
         How should a new project be created?
             Projects/Create is the basis.
 
@@ -67,7 +66,7 @@
             How should the contact e-mail address be defined?
     Auth0 contains references to www. modelrelief.com.
         http://www.modelrelief.com/images/ModelReliefBlue.png
-
+    Disable execute permissions on the file upload location.
 ### Refactoring
     Review all casing of files and directories.
     Tools -> bin

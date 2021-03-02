@@ -1042,3 +1042,6 @@ public ContentResult Index()
             NormalMap -> Meshes
             MeshTransform -> Meshes
             Setttings -> Projects
+
+#### File Upload Security
+https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
