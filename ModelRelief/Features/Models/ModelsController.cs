@@ -9,12 +9,13 @@ namespace ModelRelief.Features.Models
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -40,6 +41,48 @@ namespace ModelRelief.Features.Models
         }
 
         /// <summary>
+        /// Action handler for Create Get.
+        /// </summary>
+        /// <returns>Create page.</returns>
+        [HttpGet]
+        public async override Task<ActionResult> Create()
+        {
+            var viewModel = new Dto.Model3dFormFile();
+            await InitializeViewControls(viewModel);
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// Action handler for a Create request.
+        /// </summary>
+        /// <param name="postRequest">Model to create.</param>
+        /// <returns>Create page.</returns>
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Dto.Model3dFormFile postRequest)
+        {
+            // WIP
+            // postRequest.Format = Model3dFormat.OBJ;
+
+            var newModel = await HandleRequestAsync(new PostRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+            {
+                User = User,
+                NewModel = postRequest,
+            });
+
+            // validation failed; return to View
+            if (newModel == null)
+            {
+                await InitializeViewControls(Mapper.Map<Dto.Model3dFormFile>(postRequest));
+                return View(postRequest);
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>
@@ -50,8 +93,8 @@ namespace ModelRelief.Features.Models
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", model?.ProjectId);
-            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", model?.CameraId);
+            ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Domain.Project>(DbContext, userId, "Select a project", model?.ProjectId);
+            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Domain.Camera>(DbContext, userId, "Select a camera", model?.CameraId);
         }
     }
 }

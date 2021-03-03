@@ -29,7 +29,7 @@ namespace ModelRelief.Domain
         public Settings()
         {
         this.LoggingEnabled  = true;
-        this.DevelopmentUI = false;
+        this.DevelopmentUI = true;
 
         this.ModelViewerExtendedControls = true;
         this.MeshViewerExtendedControls = false;

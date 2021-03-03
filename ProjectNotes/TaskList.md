@@ -1,6 +1,20 @@
 ## Commit Notes
 
-#### General      
+#### General     
+    Double Posts?
+
+    Add validation for the FormFile.
+    How can an OBJ file be validated?
+        The back end should assign the Format only after validation.
+        postRequest.Format = Model3dFormat.OBJ;
+
+    When is [FromBody] required in RestController?
+    Can TPostFile be deprecated?
+
+    Active Project
+        Controller InitializeViewControls does not filter based on Project. All resources are included.
+        Should Project be a Create property for resources? Or should the active Project always determine the Project.
+
     Projects
         How should a new project be created?
             Projects/Create is the basis.
