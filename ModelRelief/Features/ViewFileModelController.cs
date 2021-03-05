@@ -35,7 +35,60 @@ namespace ModelRelief.Features
             : base(dbContext, loggerFactory, mapper, mediator)
         {
         }
+
         #region Create
+        /// <summary>
+        /// Helper method for creating the FileModel model.
+        /// </summary>
+        /// <param name="postRequest">Model to create.</param>
+        /// <returns>TModel if successful</returns>
+        private async Task<TGetModel> CreateModel(TRequestModel postRequest)
+        {
+            TGetModel newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
+            {
+                User = User,
+                NewModel = postRequest,
+            }) as TGetModel;
+
+            if ((newModel == null) || (!ModelState.IsValid))
+                return null;
+
+            return newModel;
+        }
+
+        /// <summary>
+        /// Helper method for creating the FileModel file.
+        /// </summary>
+        /// <param name="postRequest">File to create.</param>
+        /// <param name="id">Id of model.</param>
+        /// <returns>TModel if successful</returns>
+        private async Task<TGetModel> CreateFile(TRequestModel postRequest, int id)
+        {
+            byte[] fileContent = null;
+            using (var memoryStream = new MemoryStream(2048))
+            {
+                await postRequest.FormFile.CopyToAsync(memoryStream);
+                fileContent = memoryStream.ToArray();
+            }
+            var postFile = new PostFile
+            {
+                Raw = fileContent,
+            };
+
+            ModelState.Clear();
+            TGetModel newModel = await HandleRequestAsync(new PostFileRequest<Domain.Model3d, Dto.Model3d>
+            {
+                User = User,
+                Id = id,
+                NewFile = postFile,
+            }) as TGetModel;
+
+            if ((newModel == null) || (!ModelState.IsValid))
+                return null;
+
+            return newModel;
+        }
+
         /// <summary>
         /// Action handler for a Create request.
         /// </summary>
@@ -46,44 +99,17 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public async override Task<IActionResult> Create(TRequestModel postRequest)
         {
-            // Model3d entity
-            TGetModel newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
-            {
-                User = User,
-                NewModel = postRequest,
-            }) as TGetModel;
-
-            // validation failed; return to View
-            if ((newModel == null) || (!ModelState.IsValid))
+            // model
+            TGetModel newModel = await CreateModel(postRequest);
+            if (newModel == null)
             {
                 await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
             }
 
-            // Model3d file
-            byte[] fileContent = null;
-            using (var memoryStream = new MemoryStream(2048))
-            {
-                await postRequest.FormFile.CopyToAsync(memoryStream);
-                fileContent = memoryStream.ToArray();
-            }
-
-            // construct from request body
-            var postFile = new PostFile
-            {
-                Raw = fileContent,
-            };
-
-            ModelState.Clear();
-            newModel = await HandleRequestAsync(new PostFileRequest<Domain.Model3d, Dto.Model3d>
-            {
-                User = User,
-                Id = newModel.Id,
-                NewFile = postFile,
-            }) as TGetModel;
-
-            // validation failed; return to View
-            if ((newModel == null) || (!ModelState.IsValid))
+            // file
+            newModel = await CreateFile(postRequest, newModel.Id);
+            if (newModel == null)
             {
                 await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);

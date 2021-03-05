@@ -1,7 +1,5 @@
 ## Commit Notes
 #### General     
-    Create a generic method for Post of model and file.
-
     Why is the FormFile binding lost?
         The focus has to leave the input fiels.
 
