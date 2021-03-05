@@ -1,4 +1,4 @@
-﻿@model ModelRelief.Dto.Model3dFormFile
+﻿@model ModelRelief.Dto.Model3d
 
 @{
     ViewData["Title"] = "Create";
@@ -27,7 +27,7 @@
             <br><br>
             <div class="form-group">
                 <label asp-for="FormFile"  class="control-label"></label>
-                <input asp-for="FormFile"  class="form-control" type="file" />
+                <input asp-for="FormFile"  class="form-control" data-val="true" data-val-required="Please select an OBJ file to upload." type="file" />
                 <span asp-validation-for="FormFile" class="text-danger"></span>
             </div>
 

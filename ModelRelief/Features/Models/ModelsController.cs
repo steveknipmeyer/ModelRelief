@@ -18,12 +18,13 @@ namespace ModelRelief.Features.Models
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
+    using ModelRelief.Features;
     using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Model Ux requests.
     /// </summary>
-    public class ModelsController : ViewController<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+    public class ModelsController : ViewFileModelController<Domain.Model3d, Dto.Model3d, Dto.Model3d>
     {
         public Services.IConfigurationProvider ConfigurationProvider { get; }
 
@@ -40,74 +41,6 @@ namespace ModelRelief.Features.Models
             : base(dbContext, loggerFactory, mapper, mediator)
         {
             ConfigurationProvider = configurationProvider;
-        }
-
-        /// <summary>
-        /// Action handler for Create Get.
-        /// </summary>
-        /// <returns>Create page.</returns>
-        [HttpGet]
-        public async override Task<ActionResult> Create()
-        {
-            var viewModel = new Dto.Model3dFormFile();
-            await InitializeViewControls(viewModel);
-            return View(viewModel);
-        }
-
-        /// <summary>
-        /// Action handler for a Create request.
-        /// </summary>
-        /// <param name="postRequest">Model to create.</param>
-        /// <returns>Create page.</returns>
-        [HttpPost]
-        [Consumes("multipart/form-data")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Dto.Model3dFormFile postRequest)
-        {
-            // Model3d entity
-            Dto.Model3d newModel = await HandleRequestAsync(new PostRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
-            {
-                User = User,
-                NewModel = postRequest,
-            }) as Dto.Model3d;
-
-            // validation failed; return to View
-            if ((newModel == null) || (!ModelState.IsValid))
-            {
-                await InitializeViewControls(Mapper.Map<Dto.Model3dFormFile>(postRequest));
-                return View(postRequest);
-            }
-
-            // Model3d file
-            byte[] fileContent = null;
-            using (var memoryStream = new MemoryStream(2048))
-            {
-                await postRequest.FormFile.CopyToAsync(memoryStream);
-                fileContent = memoryStream.ToArray();
-            }
-
-            // construct from request body
-            var postFile = new PostFile
-            {
-                Raw = fileContent,
-            };
-
-            ModelState.Clear();
-            newModel = await HandleRequestAsync(new PostFileRequest<Domain.Model3d, Dto.Model3d>
-            {
-                User = User,
-                Id = newModel.Id,
-                NewFile = postFile,
-            }) as Dto.Model3d;
-
-            // validation failed; return to View
-            if ((newModel == null) || (!ModelState.IsValid))
-            {
-                await InitializeViewControls(Mapper.Map<Dto.Model3dFormFile>(postRequest));
-                return View(postRequest);
-            }
-
-            return this.RedirectToAction(nameof(Index));
         }
 
         /// <summary>

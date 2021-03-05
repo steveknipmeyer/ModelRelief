@@ -11,7 +11,9 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
+    using Microsoft.AspNetCore.Http;
     using ModelRelief.Domain;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
@@ -25,6 +27,11 @@ namespace ModelRelief.Dto
         public string Description { get; set; }
 
         public Model3dFormat Format { get; set; }
+
+        [IgnoreMap]
+        [JsonIgnore]
+        [Display(Name = "OBJ File (Upload)")]
+        public IFormFile FormFile { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

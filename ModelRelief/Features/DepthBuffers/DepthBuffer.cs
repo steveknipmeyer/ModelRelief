@@ -11,7 +11,9 @@ namespace ModelRelief.Dto
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using FluentValidation;
+    using Microsoft.AspNetCore.Http;
     using ModelRelief.Domain;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a DepthBuffer.
@@ -28,6 +30,11 @@ namespace ModelRelief.Dto
         public double Width { get; set; }
         public double Height { get; set; }
         public DepthBufferFormat Format { get; set; }
+
+        [IgnoreMap]
+        [JsonIgnore]
+        [Display(Name = "File (Upload)")]
+        public IFormFile FormFile { get; set; }
 
         // Navigation Properties
         public int? ProjectId { get; set; }

@@ -1,29 +1,6 @@
 ## Commit Notes
-
 #### General     
-    Could Dto.FileModel include FormFile?
-        This would not make sense...only Model3ds will be uploaded.
-        DepthBuffer and NormalMap are GeneratedFileModel with a dependecy on Model3d.
-
-    What is the point of ViewUploadController if it will only be used by Model3d?
-
-    IUploadModel: IFileModel
-        IFormFile: FormFile
-
-    Model3dUpload : IUploadModel
-
-
-    ViewUploadController<TUploadModel> : ViewController
-        where TUploadModel : IUploadModel
-
-        Create a generic method for Post of model and file.
-        
-        Only Model3d inherits from ViewUploadController now.
-            Other models (e.g NormalMap, DepthBuffer) may in the future.
-    
-    Update documentation for new types.
-
-
+    Create a generic method for Post of model and file.
 
     Why is the FormFile binding lost?
         The focus has to leave the input fiels.
@@ -34,11 +11,6 @@
         How can an OBJ file be validated?
             The back end should assign the Format only after validation.
         Assign Format to model based on file content.
-
-    [ApiCcontroller]
-    ModelState
-        Does ValidationActionFilter.OnActionExecuting need to do more processing for ModelState?
-
 
 
     Active Project
@@ -51,18 +23,20 @@
 
         Use Index page as a template for the Project page.
             Each user model is hosted in a tile.
-                Add a new endpoint mesh/preview for a preview image of the mesh. 
-                Create using the Canvas image of the last generated Mesh.  
 
         Add support for creating mesh "thumbnails" from the mesh canvas.
             mesh/{id}/thumbnail
+            Add a new endpoint mesh/preview for a preview image of the mesh. 
+            Create using the Canvas image of the last generated Mesh.  
             
         Place sample projects into a single project?
 
-    Upload
-
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    [ApiCcontroller]
+    ModelState
+        Does ValidationActionFilter.OnActionExecuting need to do more processing for ModelState?
 
     GetFile: Is "application/json" required or could "application/octet-stream" be better?
             // WIP: When:
