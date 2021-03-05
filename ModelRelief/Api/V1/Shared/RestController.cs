@@ -18,15 +18,14 @@ namespace ModelRelief.Api.V1.Shared
     using ModelRelief.Dto;
     using ModelRelief.Utility;
 
-    public abstract class RestController<TEntity, TGetModel, TRequestModel, TPostFile> : ApiController<TEntity>
+    public abstract class RestController<TEntity, TGetModel, TRequestModel> : ApiController<TEntity>
         where TEntity         : DomainModel
         where TGetModel       : IModel
-        where TPostFile       : class, new()        // WIP Should TPostFile implement a particular interface?
     {
         public RestControllerOptions RestControllerOptions { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TRequestModel, TPostFile}"/> class.
+        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>
@@ -39,7 +38,7 @@ namespace ModelRelief.Api.V1.Shared
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TRequestModel, TPostFile}"/> class.
+        /// Initializes a new instance of the <see cref="RestController{TEntity, TGetModel, TRequestModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context.</param>

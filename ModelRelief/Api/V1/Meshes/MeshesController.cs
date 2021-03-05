@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.Meshes
     /// Represents a controller to handle Mesh API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh, Dto.PostFile>
+    public class MeshesController : RestController<Domain.Mesh, Dto.Mesh, Dto.Mesh>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeshesController"/> class.

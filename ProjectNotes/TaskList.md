@@ -1,4 +1,5 @@
 ## Commit Notes
+
 #### General     
     Could Dto.FileModel include FormFile?
         This would not make sense...only Model3ds will be uploaded.
@@ -11,8 +12,6 @@
 
     Model3dUpload : IUploadModel
 
-    TPostFile is not needed as a generic type parameter.
-        PostFile is instantiated when required.
 
     ViewUploadController<TUploadModel> : ViewController
         where TUploadModel : IUploadModel

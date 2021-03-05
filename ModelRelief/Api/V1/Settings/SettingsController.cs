@@ -21,7 +21,7 @@ namespace ModelRelief.Api.V1.Settings
     /// Represents a controller to handle Settings API requests.
     /// </summary>
     [Route("api/v1/[controller]")]
-    public class SettingsController : RestController<Domain.Settings, Dto.Settings, Dto.Settings, Dto.PostFile>
+    public class SettingsController : RestController<Domain.Settings, Dto.Settings, Dto.Settings>
     {
         public ISettingsManager SettingsManager { get; }
         public IMapper Mapper { get; }
