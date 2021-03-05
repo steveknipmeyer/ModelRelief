@@ -11,10 +11,11 @@ namespace ModelRelief.Dto
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// Represents a DataTransferObject (DTO) for a Model3d with an enclosed POST file.
+    /// Represents a DataTransferObject (DTO) for a Model3d with an enclosed file.
     /// </summary>
     public class Model3dFormFile : Model3d
     {
+        [Display(Name = "OBJ Model (Upload)")]
         public IFormFile FormFile { get; set; }
 
         /// <summary>
@@ -43,6 +44,9 @@ namespace ModelRelief.Dto
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.")
                 .MinimumLength(3).WithMessage("The Description must be three or more characters.");
+
+            RuleFor(m => m.FormFile)
+                .NotNull().WithMessage("Please select a model file to be uploaded.");
         }
     }
 }

@@ -1,19 +1,50 @@
 ## Commit Notes
-
 #### General     
-    Double Posts?
+    Could Dto.FileModel include FormFile?
+        This would not make sense...only Model3ds will be uploaded.
+        DepthBuffer and NormalMap are GeneratedFileModel with a dependecy on Model3d.
+
+    What is the point of ViewUploadController if it will only be used by Model3d?
+
+    IUploadModel: IFileModel
+        IFormFile: FormFile
+
+    Model3dUpload : IUploadModel
+
+    TPostFile is not needed as a generic type parameter.
+        PostFile is instantiated when required.
+
+    ViewUploadController<TUploadModel> : ViewController
+        where TUploadModel : IUploadModel
+
+        Create a generic method for Post of model and file.
+        
+        Only Model3d inherits from ViewUploadController now.
+            Other models (e.g NormalMap, DepthBuffer) may in the future.
+    
+    Update documentation for new types.
+
+
+
+    Why is the FormFile binding lost?
+        The focus has to leave the input fiels.
+
+    Style the Create page.
 
     Add validation for the FormFile.
-    How can an OBJ file be validated?
-        The back end should assign the Format only after validation.
-        postRequest.Format = Model3dFormat.OBJ;
+        How can an OBJ file be validated?
+            The back end should assign the Format only after validation.
+        Assign Format to model based on file content.
 
-    When is [FromBody] required in RestController?
-    Can TPostFile be deprecated?
+    [ApiCcontroller]
+    ModelState
+        Does ValidationActionFilter.OnActionExecuting need to do more processing for ModelState?
+
+
 
     Active Project
         Controller InitializeViewControls does not filter based on Project. All resources are included.
-        Should Project be a Create property for resources? Or should the active Project always determine the Project.
+        Should Project be a Create page property for resources? Or should the active Project always control all newly-created resources?
 
     Projects
         How should a new project be created?
@@ -33,6 +64,15 @@
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    GetFile: Is "application/json" required or could "application/octet-stream" be better?
+            // WIP: When:
+            //  1) The FileContentResult encoding is set to "application/octet-stream".
+            //  2) The RestController GetFile action method has [Produces("application/octet-stream")].
+            //  3) The client request header specifies "Accept : 'application/octet-stream'".
+            //  The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
+            //  Is a CustomFormatter required?
+            var response = new FileContentResult(contents, "application/octet-stream");
 #### Models
     OBJ viewer has missing polygons.
         Plunderbuss

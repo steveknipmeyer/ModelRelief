@@ -59,8 +59,12 @@ namespace ModelRelief.Features
                 var response = await Mediator.Send(request);
                 return response;
             }
-            catch (ApiValidationException)
+            catch (ApiValidationException ex)
             {
+                foreach (var validationError in ex.ValidationException.Errors)
+                {
+                    ModelState.AddModelError(validationError.PropertyName, validationError.ToString());
+                }
                 // action method returns View(model) when result is null
                 return null;
             }

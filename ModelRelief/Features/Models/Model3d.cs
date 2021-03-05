@@ -67,9 +67,6 @@ namespace ModelRelief.Dto
             RuleFor(m => m.Description)
                 .NotNull().WithMessage("The Description property is required.")
                 .MinimumLength(3).WithMessage("The Description must be three or more characters.");
-
-            RuleFor(m => m.Format)
-                .NotEmpty().WithMessage("The file format must be provided.");
         }
     }
 

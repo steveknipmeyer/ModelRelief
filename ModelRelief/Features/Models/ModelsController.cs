@@ -6,6 +6,8 @@
 
 namespace ModelRelief.Features.Models
 {
+    using System;
+    using System.IO;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
@@ -49,7 +51,6 @@ namespace ModelRelief.Features.Models
         {
             var viewModel = new Dto.Model3dFormFile();
             await InitializeViewControls(viewModel);
-
             return View(viewModel);
         }
 
@@ -63,17 +64,44 @@ namespace ModelRelief.Features.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Dto.Model3dFormFile postRequest)
         {
-            // WIP
-            // postRequest.Format = Model3dFormat.OBJ;
-
-            var newModel = await HandleRequestAsync(new PostRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+            // Model3d entity
+            Dto.Model3d newModel = await HandleRequestAsync(new PostRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
             {
                 User = User,
                 NewModel = postRequest,
-            });
+            }) as Dto.Model3d;
 
             // validation failed; return to View
-            if (newModel == null)
+            if ((newModel == null) || (!ModelState.IsValid))
+            {
+                await InitializeViewControls(Mapper.Map<Dto.Model3dFormFile>(postRequest));
+                return View(postRequest);
+            }
+
+            // Model3d file
+            byte[] fileContent = null;
+            using (var memoryStream = new MemoryStream(2048))
+            {
+                await postRequest.FormFile.CopyToAsync(memoryStream);
+                fileContent = memoryStream.ToArray();
+            }
+
+            // construct from request body
+            var postFile = new PostFile
+            {
+                Raw = fileContent,
+            };
+
+            ModelState.Clear();
+            newModel = await HandleRequestAsync(new PostFileRequest<Domain.Model3d, Dto.Model3d>
+            {
+                User = User,
+                Id = newModel.Id,
+                NewFile = postFile,
+            }) as Dto.Model3d;
+
+            // validation failed; return to View
+            if ((newModel == null) || (!ModelState.IsValid))
             {
                 await InitializeViewControls(Mapper.Map<Dto.Model3dFormFile>(postRequest));
                 return View(postRequest);
