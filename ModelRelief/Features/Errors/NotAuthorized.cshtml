@@ -3,9 +3,8 @@
     <title>ModelRelief NotAuthorized</title>
 </head>
 <body>
-    <h2>A status code of @ViewData["statusCode"] was received.</h2>
     <h3>The current user is invalid or not authenticated.</h3>
-    <h3>Path = @ViewData["originalPath"]</h3>
-    <h3>Query String = @ViewData["originalQueryString"]</h3>
+    <br>
+    <partial name="_ErrorPartial" />
 </body>
 </html>

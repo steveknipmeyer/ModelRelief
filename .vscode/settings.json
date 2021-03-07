@@ -42,18 +42,21 @@
     // ---------------------------------
     // Search
     // ---------------------------------
-        // The folders to exclude when doing a full text search in the workspace.
+        // The patterns to exclude when doing a full text search in the workspace.
         "search.exclude": {
             "**/*.d.ts": true,
             "**/*.js": true,
-            "**/*.obj": true,
+
+            "**/obj": true,
             "**/devenv": true,
             "**/node_modules": true,
-            "**/Publish/**/*": true,
-            "**/wwwroot/**/*": true,
-            "**/lib/**/*": true,
-            "**/Jupyter/**/*": false,
-            "**/MATLAB/**/*": false,
+            "**/Publish": true,
+            "**/wwwroot": true,
+            "**/lib": true,
+            "**/logs": true,
+
+            "**/Jupyter": false,
+            "**/MATLAB*": false,
         },
         "files.associations": {
             "*.cshtml": "html",

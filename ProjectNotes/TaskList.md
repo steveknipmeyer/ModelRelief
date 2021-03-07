@@ -1,19 +1,33 @@
 ## Commit Notes
 #### General     
-    Why is the FormFile binding lost?
-        The focus has to leave the input fiels.
+    Session
+        Wrap Http.Context
 
-    Style the Create page.
+    Active Project
+        Default property?
+        Controller InitializeViewControls does not filter based on Project. All resources are included.
+        Should Project be a Create page property for resources? Or should the active Project always control all newly-created resources?
+
+    Add support for creating supporting resources for a new model.
+        Mesh
+            MeshTransform            
+            DepthBuffer
+                Camera
+                Model
+                    Camera
+            Camera
+
+    Create View        
+        Why is the FormFile binding lost?
+            The focus has to leave the input field.
+
+        Style the Create page.
 
     Add validation for the FormFile.
+        /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
         How can an OBJ file be validated?
             The back end should assign the Format only after validation.
         Assign Format to model based on file content.
-
-
-    Active Project
-        Controller InitializeViewControls does not filter based on Project. All resources are included.
-        Should Project be a Create page property for resources? Or should the active Project always control all newly-created resources?
 
     Projects
         How should a new project be created?
