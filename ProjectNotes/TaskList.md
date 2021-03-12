@@ -1,7 +1,6 @@
 ## Commit Notes
 #### General     
     Project Control
-        Redirect to the new Project.
         Update the Session resource in the database.
         Control label
             Name of the active Project

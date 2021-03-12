@@ -22,19 +22,21 @@ export class Layout {
     }
 
     /**
-     * @description Initialize the Project Select control.
+     * @description Initialize the Project control.
      * @private
      * @param {string} elementId HTML element Id
      */
     private initializeProjectControl(elementId: string): void {
-
-        // const control = document.querySelector(`#${elementId} > div.dropdown-menu`) as HTMLDivElement;
-        const control = document.querySelector(`#${elementId}`) as HTMLDivElement;
-
-        control.addEventListener("click", (clickEvent: MouseEvent) => {
-            const target = clickEvent.target as HTMLAnchorElement;
-            console.log(target.innerText);
-        });
+        const projectItems = document.querySelectorAll(`#${elementId} > a.dropdown-item`);
+        for (let index = 0;  index < projectItems.length; index++) {
+            const projectItem = projectItems[index];
+            projectItem.addEventListener("click", (clickEvent: MouseEvent) => {
+                const target = clickEvent.target as HTMLElement;
+                const projectName = target.innerText;
+                const projectUrl = `/projects/details?name=${projectName}&relations=models`;
+                window.location.href = projectUrl;
+            });
+        }
     }
 
     /**
@@ -49,14 +51,6 @@ export class Layout {
      * @description Main
      */
     public main(): void {
-        const currentdate = new Date();
-        const datetime = "Last Sync: " + currentdate.getDate() + "/"
-            + (currentdate.getMonth() + 1) + "/"
-            + currentdate.getFullYear() + " @ "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
-            + currentdate.getSeconds();
-        console.log (datetime);
 
         this.initializeControls();
     }
