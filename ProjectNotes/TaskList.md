@@ -1,12 +1,14 @@
 ## Commit Notes
+Add Session resource for global cross-Project settings.
 #### General     
     Session
+        How will the Session resource be updated in the database?
+            Every change must be persisted.
         Wrap Http.Context
 
     Active Project
-        Default property?
         Controller InitializeViewControls does not filter based on Project. All resources are included.
-        Should Project be a Create page property for resources? Or should the active Project always control all newly-created resources?
+        The active Project should control all newly-created resources.
 
     Add support for creating supporting resources for a new model.
         Mesh

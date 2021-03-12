@@ -41,11 +41,12 @@ namespace ModelRelief.Database
         private string SqlitePath { get; set; }
 
         /// <summary>
-        /// Test Settings Names
+        /// Settings Names
         /// </summary>
         private class SettingsNames
         {
-            public static readonly string Default = "ModelRelief Settings";
+            public static readonly string Project = "Project Settings";
+            public static readonly string Session = "Session Settings";
         }
 
         /// <summary>
@@ -281,6 +282,7 @@ namespace ModelRelief.Database
         public void SeedDatabaseForUser(ApplicationUser user)
         {
             // database
+            AddSession(user);
             AddSettings(user);
             AddProjects(user);
             AddCameras(user);                   // JSON
@@ -361,14 +363,31 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Add test settings.
+        /// Add user (global) session.
+        /// </summary>
+        /// <param name="user">Owning user.</param>
+        private void AddSession(ApplicationUser user)
+        {
+            var session = new Session
+            {
+                Name = SettingsNames.Session, Description = "User interface and project settings", UserId = user.Id,
+            };
+
+            DbContext.Add(session);
+            DbContext.SaveChanges();
+
+            QualifyDescription<Session>(user);
+        }
+
+        /// <summary>
+        /// Add user (project) settings.
         /// </summary>
         /// <param name="user">Owning user.</param>
         private void AddSettings(ApplicationUser user)
         {
             var settings = new Settings[]
             {
-                new Settings { Name = SettingsNames.Default, Description = "User interface and project settings", UserId = user.Id },
+                new Settings { Name = SettingsNames.Project, Description = "User interface and project settings", UserId = user.Id },
             };
 
             foreach (var item in settings)
@@ -388,10 +407,10 @@ namespace ModelRelief.Database
         {
             var projects = new Project[]
             {
-                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
-                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
-                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
-                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", Settings = FindByName<Settings>(user, SettingsNames.Default), UserId = user.Id },
+                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
+                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
+                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
+                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
             };
 
             foreach (var project in projects)

@@ -48,6 +48,7 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("camera")]
         [HttpGet]
+        [Produces("application/json")]
         public IActionResult Camera()
         {
             var settingsObject = this.SettingsManager.GetSettings(SettingsType.Camera) as DefaultCameraSettingsJson;
@@ -65,6 +66,19 @@ namespace ModelRelief.Api.V1.Settings
         {
             var settingsObject = this.SettingsManager.GetSettings(SettingsType.User, User) as Dto.Settings;
             return Ok(settingsObject);
+        }
+
+        /// <summary>
+        /// Returns the JSON settings for the session.
+        /// </summary>
+        /// <returns>JSON settings.</returns>
+        [Route("session")]
+        [HttpGet]
+        [Produces("application/json")]
+        public IActionResult Session()
+        {
+            var sessionObject = this.SettingsManager.GetSettings(SettingsType.Session, User) as Dto.Session;
+            return Ok(sessionObject);
         }
     }
 }

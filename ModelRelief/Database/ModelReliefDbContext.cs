@@ -44,6 +44,8 @@ namespace ModelRelief.Database
 
         public DbSet<Settings> Settings
             { get; set; }
+        public DbSet<Session> Session
+        { get; set; }
 
         // https://stackoverflow.com/questions/34768976/specifying-on-delete-no-action-in-entity-framework-7
         protected override void OnModelCreating(ModelBuilder modelbuilder)

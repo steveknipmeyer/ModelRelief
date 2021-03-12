@@ -13,5 +13,7 @@ namespace ModelRelief.Features.Settings
     {
         public const string Camera = "camera";
         public const string User = "user";
+
+        public const string Session = "session";
     }
 }
