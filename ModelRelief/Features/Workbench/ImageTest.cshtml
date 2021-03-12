@@ -17,29 +17,13 @@
         </form>
     </div>
     @section scripts {
-        <!--******************************************************************************************-->
-        <!--                                    Libraries                                             -->
-        <!--******************************************************************************************-->
-        <script src="~/lib/requirejs/require.js"></script>
-
-        <!--******************************************************************************************-->
-        <!--                                    ModelRelief                                           -->
-        <!--******************************************************************************************-->
-        <script src="~/js/shaders.js"></script>
         <script>
-            requirejs.config({
-                baseUrl: '.',
-                paths: {
-                    'Workbench/ImageTest': '/js/modelrelief',
-
-                    chai: '/lib/chai/chai',
-                    three: '/lib/threejs/three',
-                    'dat-gui': '/lib/threejs/dat.gui.min',
+            window.onload = (function (existingOnLoad) {
+                return function () {
+                    existingOnLoad && existingOnLoad();
+                    requirejs(['Workbench/ImageTest']);
                 }
-            });
-            window.onload = function () {
-                requirejs(['Workbench/ImageTest']);
-            }
+            })(window.onload)
         </script>
     }
 </body>

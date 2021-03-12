@@ -6,6 +6,8 @@
 "use strict";
 
 export enum ElementIds {
+    // NavBar
+    ProjectDropDown     = "projectDropDown",
 
     // Composer
     Root                = "rootContainer",

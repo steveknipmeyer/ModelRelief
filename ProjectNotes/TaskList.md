@@ -1,9 +1,12 @@
 ## Commit Notes
-Add Session resource for global cross-Project settings.
 #### General     
-    Session
-        How will the Session resource be updated in the database?
-            Every change must be persisted.
+    Project Control
+        Redirect to the new Project.
+        Update the Session resource in the database.
+        Control label
+            Name of the active Project
+            Link to active Project Details page
+
         Wrap Http.Context
 
     Active Project

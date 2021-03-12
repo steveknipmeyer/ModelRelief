@@ -352,44 +352,20 @@
 </main>
 
 @section scripts {
-    <!--******************************************************************************************-->
-    <!--                                    Libraries                                             -->
-    <!--******************************************************************************************-->
-    <script src="~/lib/requirejs/require.js"></script>
-
-    <!--******************************************************************************************-->
-    <!--                                    ModelRelief                                           -->
-    <!--******************************************************************************************-->
-    <script type="text/javascript">
-        var composerMeshModel = JSON.parse(document.getElementById("dtoMesh").innerHTML);
-    </script>
     <environment names="Development, Test">
         <script src="~/js/shaders.js"></script>
-        <script>
-            let minifiedExtension = "";
-        </script>
     </environment>
     <environment names="Staging, Production">
         <script src="~/js/shaders.min.js"></script>
-        <script>
-            let minifiedExtension = ".min";
-        </script>
     </environment>
 
-    <script>
-        requirejs.config({
-            baseUrl: ".",
-            paths: {
-                "ModelRelief": `/js/modelrelief${minifiedExtension}`,
-                "three": `/lib/threejs/three${minifiedExtension}`,
-
-                "chai": "/lib/chai/chai",
-                "dat.gui": "/lib/threejs/dat.gui.min",
-            },
-        });
-        window.onload = () => {
-
-            requirejs(["ModelRelief"]);
-        };
+    <script type="text/javascript">
+        const composerMeshModel = JSON.parse(document.getElementById("dtoMesh").innerHTML);
+        window.onload = (function (existingOnLoad) {
+            return function () {
+                existingOnLoad && existingOnLoad();
+                requirejs(["ModelRelief"]);
+            }
+        })(window.onload)
     </script>
 }

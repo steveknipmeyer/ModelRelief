@@ -87,6 +87,44 @@
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal" crossorigin="anonymous" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"></script>
     </environment>
 
+    <!--******************************************************************************************-->
+    <!--                             ModelRelief Configuration                                    -->
+    <!--******************************************************************************************-->
+    <script src="~/lib/requirejs/require.js"></script>
+
+    <environment names="Development, Test">
+        <script>
+            let minifiedExtension = "";
+        </script>
+    </environment>
+    <environment names="Staging, Production">
+        <script>
+            let minifiedExtension = ".min";
+        </script>
+    </environment>
+        <script>
+            const modelRelief = `/js/modelrelief${minifiedExtension}`;
+            requirejs.config({
+                baseUrl: '.',
+                paths: {
+                    "ModelRelief": modelRelief,
+                    "Shared/Layout": modelRelief,
+
+                    'Workbench/CameraTest': modelRelief,
+                    'Workbench/ImageTest': modelRelief,
+
+                    chai: '/lib/chai/chai',
+                    three: '/lib/threejs/three',
+                    "dat.gui": '/lib/threejs/dat.gui.min',
+                }
+            });
+            window.onload = function () {
+                requirejs(['Shared/Layout']);
+            }
+        </script>
+
+        </script>
+
     @RenderSection("scripts", required: false)
 </body>
 

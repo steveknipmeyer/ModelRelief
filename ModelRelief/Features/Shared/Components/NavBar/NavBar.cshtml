@@ -15,12 +15,12 @@
         <div class="navbar-nav mr-auto">
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="nav-item dropdown mr-3">
+                <div id="projectDropDown" class="nav-item dropdown mr-3">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
                     <div class="dropdown-menu">
                         @foreach (var project in Model)
                         {
-                        <a class="dropdown-item" asp-area="" asp-controller="projects" asp-action="Details" asp-route-relations="models" asp-route-name="@project">@project</a>
+                        <a class="dropdown-item" >@project</a>
                         }
                     </div>
                 </div>
