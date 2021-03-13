@@ -33,13 +33,15 @@ namespace ModelRelief.Features.Shared.ViewComponents
         /// </summary>
         private async Task<List<string>> BuildProjectList()
         {
-            var user = await IdentityUtility.FindApplicationUserAsync(HttpContext.User);
+            var projectList = new List<string>();
+            if ((User == null) || !User.Identity.IsAuthenticated)
+                return projectList;
 
+            var user = await IdentityUtility.FindApplicationUserAsync(HttpContext.User);
             var projects = _dbContext.Set<Project>()
                 .Where(m => (m.UserId == user.Id))
                 .ToList();
 
-            var projectList = new List<string>();
             foreach (var project in projects)
             {
                 projectList.Add(project.Name);
