@@ -5,8 +5,10 @@
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
+import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";
 import {ElementIds} from "Scripts/System/Html";
-
+import {ISession} from "Scripts/Api/V1/Interfaces/ISession";
+import {DtoSession} from "Scripts/Api/V1/Models/DtoSession";
 /**
  * @description Layout
  * @export
@@ -14,11 +16,28 @@ import {ElementIds} from "Scripts/System/Html";
  */
 export class Layout {
 
+    public session: ISession;
+
     /**
      * Creates an instance of Layout.
      */
     constructor() {
         // NOP
+    }
+
+    /**
+     * @description Initialize the session settings.
+     * @static
+     * @returns {Promise<void>}
+     */
+    public async initializeSession(): Promise<void> {
+
+        // Populate the session settings from the JSON file.
+        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsSession}`;
+        const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
+        const session = new DtoSession(JSON.parse(result.contentString));
+
+        this.session = session;
     }
 
     /**
@@ -48,11 +67,22 @@ export class Layout {
     }
 
     /**
+     * @description Initialize the _Layout.
+     * @private
+     */
+    private async initializeaAsync(): Promise<void> {
+        await this.initializeSession();
+        this.initializeControls();
+    }
+
+    /**
      * @description Main
      */
     public main(): void {
 
-        this.initializeControls();
+        (async () => {
+            await this.initializeaAsync();
+        })();
     }
 }
 

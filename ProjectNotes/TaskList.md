@@ -2,6 +2,8 @@
 #### General     
     Project Control
         Update the Session resource in the database.
+                SettingsController should support settings/session POST.
+
         Control label
             Name of the active Project
             Link to active Project Details page

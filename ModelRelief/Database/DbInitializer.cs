@@ -370,7 +370,7 @@ namespace ModelRelief.Database
         {
             var session = new Session
             {
-                Name = SettingsNames.Session, Description = "User interface and project settings", UserId = user.Id,
+                Name = SettingsNames.Session, Description = "Cross-project session settings", UserId = user.Id,
             };
 
             DbContext.Add(session);

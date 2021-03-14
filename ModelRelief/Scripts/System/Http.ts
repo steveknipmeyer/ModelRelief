@@ -45,6 +45,7 @@ export enum ServerEndPoints {
     ApiSettings         = "api/v1/settings",
     ApiSettingsCamera   = "api/v1/settings/camera",
     ApiSettingsUser     = "api/v1/settings/user",
+    ApiSettingsSession  = "api/v1/settings/session",
 }
 
 /**

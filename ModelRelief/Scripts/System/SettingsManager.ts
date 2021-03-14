@@ -19,7 +19,6 @@ export class SettingsManager  {
 
     /**
      * @description Initialize the system settings variables.
-     * @private
      * @static
      * @returns {Promise<void>}
      */

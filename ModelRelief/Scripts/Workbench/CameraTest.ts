@@ -139,7 +139,6 @@ class CameraTest {
             // UI Controls
             this.initializeViewerControls();
         });
-        // Viewer
     }
 }
 
