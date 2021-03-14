@@ -12,7 +12,9 @@ namespace ModelRelief.Api.V1.Settings
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
+    using ModelRelief.Dto;
     using ModelRelief.Features.Settings;
 
     using Newtonsoft.Json;
@@ -79,6 +81,23 @@ namespace ModelRelief.Api.V1.Settings
         {
             var sessionObject = this.SettingsManager.GetSettings(SettingsType.Session, User) as Dto.Session;
             return Ok(sessionObject);
+        }
+
+        /// <summary>
+        /// Action method for Session Put Request. Updates ALL properties.
+        /// </summary>
+        /// <param name="sessionModel">Complete Session model.</param>
+        /// <returns>Updated Session model.</returns>
+        [Route("session")]
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Dto.Session sessionModel)
+        {
+            return await HandleRequestAsync(new PutRequest<Domain.Session, Dto.Session, Dto.Session>
+            {
+                User = User,
+                Id = sessionModel.Id,
+                UpdatedModel = sessionModel,
+            });
         }
     }
 }

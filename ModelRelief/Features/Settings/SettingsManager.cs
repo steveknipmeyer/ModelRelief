@@ -109,7 +109,7 @@ namespace ModelRelief.Features.Settings
                 if (this.UserSession.ProjectId != null)
                     userSettingsQueryable = userSettingsQueryable.Where(s => (s.Id == this.UserSession.ProjectId));
 
-                var userSettings = userSettingsQueryable.SingleOrDefault<Domain.Settings>();
+                var userSettings = userSettingsQueryable.SingleOrDefault<Domain.Settings>() ?? new Domain.Settings();
 
                 this.UserSettings = this.Mapper.Map<Dto.Settings>(userSettings);
 

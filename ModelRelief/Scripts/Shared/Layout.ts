@@ -16,7 +16,7 @@ import {DtoSession} from "Scripts/Api/V1/Models/DtoSession";
  */
 export class Layout {
 
-    public session: ISession;
+    public session: DtoSession;
 
     /**
      * Creates an instance of Layout.
@@ -26,26 +26,12 @@ export class Layout {
     }
 
     /**
-     * @description Initialize the session settings.
-     * @static
-     * @returns {Promise<void>}
-     */
-    public async initializeSession(): Promise<void> {
-
-        // Populate the session settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsSession}`;
-        const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
-        const session = new DtoSession(JSON.parse(result.contentString));
-
-        this.session = session;
-    }
-
-    /**
      * @description Initialize the Project control.
      * @private
      * @param {string} elementId HTML element Id
      */
     private initializeProjectControl(elementId: string): void {
+
         const projectItems = document.querySelectorAll(`#${elementId} > a.dropdown-item`);
         for (let index = 0;  index < projectItems.length; index++) {
             const projectItem = projectItems[index];
@@ -71,7 +57,8 @@ export class Layout {
      * @private
      */
     private async initializeaAsync(): Promise<void> {
-        await this.initializeSession();
+
+        this.session = await DtoSession.initialize();
         this.initializeControls();
     }
 

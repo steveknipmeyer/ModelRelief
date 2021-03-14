@@ -1,9 +1,8 @@
 ## Commit Notes
 #### General     
-    Project Control
-        Update the Session resource in the database.
-                SettingsController should support settings/session POST.
+    const updatedModel = JSON.stringify(this);
 
+    Project Control
         Control label
             Name of the active Project
             Link to active Project Details page
