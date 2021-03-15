@@ -74,7 +74,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
-            var projectedModel = await FindModelAsync<TEntity, TGetModel>(message.User, newModel.Id);
+            var projectedModel = await Query.FindModelAsync<TEntity, TGetModel>(message.User, newModel.Id);
             return projectedModel;
         }
     }

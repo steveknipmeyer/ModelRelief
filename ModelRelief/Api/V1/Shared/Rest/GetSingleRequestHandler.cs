@@ -58,7 +58,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for request</returns>
         public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var projectedModel = await FindModelAsync<TEntity, TGetModel>(message.User, message.Id, message.QueryParameters);
+            var projectedModel = await Query.FindModelAsync<TEntity, TGetModel>(message.User, message.Id, message.QueryParameters);
             return projectedModel;
         }
     }

@@ -63,7 +63,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for model0</returns>
         public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
         {
-            var targetModel = await FindModelAsync<TEntity>(message.User, message.Id);
+            var targetModel = await Query.FindModelAsync<TEntity>(message.User, message.Id);
 
             // update domain model
             targetModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
@@ -81,7 +81,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Update(targetModel);
             await DependencyManager.PersistChangesAsync(targetModel, cancellationToken);
 
-            var projectedModel = await FindModelAsync<TEntity, TGetModel>(message.User, message.Id);
+            var projectedModel = await Query.FindModelAsync<TEntity, TGetModel>(message.User, message.Id);
             return projectedModel;
         }
     }

@@ -61,7 +61,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
-            IQueryable<TEntity> queryable = BuildQueryable<TEntity>(user.Id, -1, message.QueryParameters);
+            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(user.Id, -1, message.QueryParameters);
 
             if (message.UsePaging)
             {
@@ -69,7 +69,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 return page;
             }
 
-            return ProjectAll<TEntity, TGetModel>(queryable, message.QueryParameters);
+            return Query.ProjectAll<TEntity, TGetModel>(queryable, message.QueryParameters);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 .Skip(skipAmount)
                 .Take(pageSize);
 
-            var projectiion = ProjectAll<TEntity, TGetModel>(queryable, queryParameters);
+            var projectiion = Query.ProjectAll<TEntity, TGetModel>(queryable, queryParameters);
             var totalNumberOfRecords = queryable.Count();
 
             var mod = totalNumberOfRecords % pageSize;
