@@ -13,10 +13,6 @@ import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
  */
 export interface ISettings extends IModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
-
     loggingEnabled?: boolean;
     developmentUI?: boolean;
 

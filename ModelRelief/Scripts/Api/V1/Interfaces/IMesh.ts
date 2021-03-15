@@ -33,10 +33,6 @@ export enum MeshFormat {
   */
 export interface IMesh extends IGeneratedFileModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
-
     format?: MeshFormat;
 
     // Navigation Properties

@@ -17,10 +17,6 @@ import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
  */
 export interface IMeshTransform extends IModel {
 
-  id?: number;
-  name?: string;
-  description?: string;
-
   width?: number;
   height?: number;
   depth?: number;

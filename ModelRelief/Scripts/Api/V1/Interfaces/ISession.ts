@@ -14,10 +14,6 @@ import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
  */
 export interface ISession extends IModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
-
     // Navigation Properties
     projectId?: number;
     project?: IProject;

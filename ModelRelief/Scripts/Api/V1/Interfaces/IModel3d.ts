@@ -27,10 +27,6 @@ export enum Model3dFormat {
   */
 export interface IModel3d extends IFileModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
-
     format?: Model3dFormat;
 
     // Navigation Properties

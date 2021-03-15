@@ -32,10 +32,6 @@ export enum DepthBufferFormat {
   */
 export interface IDepthBuffer extends IGeneratedFileModel {
 
-    id?: number;
-    name?: string;
-    description?: string;
-
     width?: number;
     height?: number;
     format?: DepthBufferFormat;
