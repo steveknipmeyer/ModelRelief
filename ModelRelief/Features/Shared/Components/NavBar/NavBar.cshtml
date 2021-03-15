@@ -1,5 +1,5 @@
-﻿@model List<string>
-@using ModelRelief.Features.Settings
+﻿@using ModelRelief.Features.Settings
+@model List<ModelRelief.Dto.Project>
 
 @inject ISettingsManager settingsManager;
 @{ var userSettings = settingsManager.InitializeUserSettings(User); }
@@ -16,11 +16,11 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <div class="nav-item dropdown mr-3">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
-                    <div id="projectDropDown" class="dropdown-menu">
+                    <a id="projectMenuLabel" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
+                    <div id="projectMenu" class="dropdown-menu">
                         @foreach (var project in Model)
                         {
-                        <a class="dropdown-item" href="#">@project</a>
+                        <a class="dropdown-item" data-projectid="@project.Id" href="#">@project.Name</a>
                         }
                     </div>
                 </div>

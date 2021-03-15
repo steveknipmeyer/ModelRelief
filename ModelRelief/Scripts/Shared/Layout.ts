@@ -28,18 +28,36 @@ export class Layout {
     /**
      * @description Initialize the Project control.
      * @private
-     * @param {string} elementId HTML element Id
+     * @param {string} menuLabelId HTML element Id
+     * @param {string} menuId HTML element Id
      */
-    private initializeProjectControl(elementId: string): void {
+    private initializeProjectControl(menuLabelId: string, menuId: string): void {
 
-        const projectItems = document.querySelectorAll(`#${elementId} > a.dropdown-item`);
-        for (let index = 0;  index < projectItems.length; index++) {
-            const projectItem = projectItems[index];
-            projectItem.addEventListener("click", (clickEvent: MouseEvent) => {
+        const projectMenuLabel:HTMLElement = document.querySelector(`#${menuLabelId}`);
+        const projectMenuItems:NodeListOf<HTMLElement> = document.querySelectorAll(`#${menuId} > a.dropdown-item`);
+        for (let index = 0;  index < projectMenuItems.length; index++) {
+
+            const projectMenuItem = projectMenuItems[index];
+            const projectId = parseInt(projectMenuItem.dataset.projectid);
+            // update menu label if active Project
+            if (projectId == this.session.projectId) {
+                projectMenuLabel.innerText = projectMenuItem.innerText;
+            }
+
+            // click handler
+            projectMenuItem.addEventListener("click", (clickEvent: MouseEvent) => {
+
                 const target = clickEvent.target as HTMLElement;
                 const projectName = target.innerText;
-                const projectUrl = `/projects/details?name=${projectName}&relations=models`;
-                window.location.href = projectUrl;
+                const id = parseInt(target.dataset.projectid);
+
+                this.session.projectId = id;
+                this.session.update().then(() => {
+                    projectMenuLabel.innerText = projectName;
+
+                    const projectUrl = `/projects/details?name=${projectName}&relations=models`;
+                    window.location.href = projectUrl;
+                });
             });
         }
     }
@@ -49,7 +67,7 @@ export class Layout {
      * @private
      */
     private initializeControls(): void {
-        this.initializeProjectControl(ElementIds.ProjectDropDown);
+        this.initializeProjectControl(ElementIds.ProjectMenuLabel, ElementIds.ProjectMenu);
     }
 
     /**

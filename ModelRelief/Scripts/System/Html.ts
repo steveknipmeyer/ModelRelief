@@ -7,7 +7,8 @@
 
 export enum ElementIds {
     // NavBar
-    ProjectDropDown     = "projectDropDown",
+    ProjectMenuLabel    = "projectMenuLabel",
+    ProjectMenu         = "projectMenu",
 
     // Composer
     Root                = "rootContainer",

@@ -1,52 +1,61 @@
 ## Commit Notes
+
 #### General     
     const updatedModel = JSON.stringify(this);
-
-    Project Control
-        Control label
-            Name of the active Project
-            Link to active Project Details page
-
-        Wrap Http.Context
-
-    Active Project
-        Controller InitializeViewControls does not filter based on Project. All resources are included.
-        The active Project should control all newly-created resources.
-
-    Add support for creating supporting resources for a new model.
-        Mesh
-            MeshTransform            
-            DepthBuffer
-                Camera
-                Model
-                    Camera
-            Camera
-
-    Create View        
-        Why is the FormFile binding lost?
-            The focus has to leave the input field.
-
-        Style the Create page.
-
-    Add validation for the FormFile.
-        /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
-        How can an OBJ file be validated?
-            The back end should assign the Format only after validation.
-        Assign Format to model based on file content.
+    Session    
+        Wrap Http.Context?
+    Settings fails with Id = 0.
+        Each each Project correctly initialzied with a Settings resource?
 
     Projects
-        How should a new project be created?
-            Projects/Create is the basis.
 
-        Use Index page as a template for the Project page.
-            Each user model is hosted in a tile.
+        Examples Project
+            Populate Examples with existing resources.
+            Initialize Session.ProjectId to Examples.
+            Refactor the Index View to Examples?
+            Workflow for new user selection of Example model...
+                Should the Login complete action redirect to Examples/Details?
 
-        Add support for creating mesh "thumbnails" from the mesh canvas.
-            mesh/{id}/thumbnail
-            Add a new endpoint mesh/preview for a preview image of the mesh. 
-            Create using the Canvas image of the last generated Mesh.  
-            
-        Place sample projects into a single project?
+        Active Project
+            Create Views
+                Remove Project control.
+                Controller InitializeViewControls should filter based on active Project. 
+                    The active Project should control all newly-created resources.
+
+        Create Project
+            How should a new project be created?
+                Projects/Create is the basis.
+
+        Project Details
+            Use Index page as a template for the Project page.
+                Each user model is hosted in a tile.
+
+            Add support for creating mesh "thumbnails" from the mesh canvas.
+                mesh/{id}/thumbnail
+                Add a new endpoint mesh/preview for a preview image of the mesh. 
+                Create using the Canvas image of the last generated Mesh.  
+
+        New Model
+            Add support for creating supporting resources for a new model.
+                Mesh
+                    MeshTransform            
+                    DepthBuffer
+                        Camera
+                        Model
+                            Camera
+                    Camera
+
+            Create View        
+                Why is the FormFile binding lost?
+                    The focus has to leave the input field.
+
+                Style the Create page.
+
+            Add validation for the FormFile.
+                /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
+                How can an OBJ file be validated?
+                    The back end should assign the Format only after validation.
+                Assign Format to model based on file content.
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe

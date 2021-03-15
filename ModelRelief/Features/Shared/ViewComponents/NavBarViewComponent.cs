@@ -9,42 +9,45 @@ namespace ModelRelief.Features.Shared.ViewComponents
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
     using ModelRelief.Utility;
 
     public class NavBarViewComponent : ViewComponent
         {
         private ModelReliefDbContext _dbContext { get; set; }
+        private IMapper _mapper { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavBarViewComponent"/> class.
         /// Constructor.
         /// </summary>
         /// <param name="dbContext">Database context.</param>
-        public NavBarViewComponent(ModelReliefDbContext dbContext)
+        /// <param name="mapper">IMapper</param>
+        public NavBarViewComponent(ModelReliefDbContext dbContext, IMapper mapper)
             {
             _dbContext = dbContext;
+            _mapper = mapper;
             }
 
         /// <summary>
         /// Builds a list of Projects belonging to the active user.
         /// </summary>
-        private async Task<List<string>> BuildProjectList()
+        private async Task<List<Dto.Project>> BuildProjectList()
         {
-            var projectList = new List<string>();
+            var projectList = new List<Dto.Project>();
             if ((User == null) || !User.Identity.IsAuthenticated)
                 return projectList;
 
             var user = await IdentityUtility.FindApplicationUserAsync(HttpContext.User);
-            var projects = _dbContext.Set<Project>()
+            var projects = _dbContext.Set<Domain.Project>()
                 .Where(m => (m.UserId == user.Id))
                 .ToList();
 
             foreach (var project in projects)
             {
-                projectList.Add(project.Name);
+                projectList.Add(_mapper.Map<Dto.Project>(project));
             }
             return projectList;
         }
