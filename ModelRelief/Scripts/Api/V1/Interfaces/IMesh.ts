@@ -17,7 +17,7 @@ import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
   *  @enum {number}
   */
 export enum MeshFormat {
-    None,           // unknown
+    None,       // unknown
     SDB,        // single precision depth buffer
     DDB,        // double precision depth buffer
     SFP,        // single precision float (model units)

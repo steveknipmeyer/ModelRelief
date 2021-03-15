@@ -1,13 +1,20 @@
 ## Commit Notes
 
 #### General     
+    Refactor ValidatedHandler to hold a Utility.Query class.
+        Refactor queries (e.g. .Where) to use the new helper.
+        
+    Add a Project Navigation property to Session.
+    InitializeUserSettings
+        Use Session.Project to filter the active Settings.
+
     const updatedModel = JSON.stringify(this);
     Session    
         Wrap Http.Context?
-    Settings fails with Id = 0.
-        Each each Project correctly initialzied with a Settings resource?
 
     Projects
+        Project Control
+            Should the Menu label link to the active project?
 
         Examples Project
             Populate Examples with existing resources.

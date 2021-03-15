@@ -8,8 +8,9 @@ namespace ModelRelief.Domain
 {
     public class Session : DomainModel
     {
-        // active project
+        // Navigation Properties
         public int? ProjectId { get; set; }
+        public Project Project { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Session"/> class.

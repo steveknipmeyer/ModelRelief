@@ -35,6 +35,7 @@ export interface ICamera extends IModel {
     id?: number;
     name?: string;
     description?: string;
+
     isPerspective?: boolean;
 
     near?: number;

@@ -93,6 +93,8 @@ namespace ModelRelief.Features.Settings
         public Dto.Settings InitializeUserSettings(ClaimsPrincipal user)
         {
             InitializeUserSession(user);
+            if (this.UserSession.ProjectId == null)
+                return this.UserSettings;
 
             // N.B. This method is called by _Layout to condition the UI menus.
             // As it is called outside the normal HTTP pipeline, the GlobalExceptionFilter cannot be used.

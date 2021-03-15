@@ -8,6 +8,7 @@
 import {DtoModel} from "Scripts/Api/V1/Base/DtoModel";
 import {ISession} from "Scripts/Api/V1/Interfaces/ISession";
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";
 
 /**
@@ -18,23 +19,28 @@ export class DtoSession extends DtoModel<DtoSession> implements ISession {
 
     public static endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsSession}`;
 
+    // Navigation Properties
     public projectId: number;
+    public project: IProject;
 
     /**
      * Creates an instance of Session.
-     * @param {DtoSession} parameters
+     * @param {ISession} parameters
      */
     constructor(parameters: ISession = {}) {
 
         super(parameters);
 
-
         const {
+            // Navigation Properties
             projectId,
+            project,
 
         } = parameters;
 
+        // Navigation Properties
         this.projectId = projectId;
+        this.project = project;
     }
 
     /**

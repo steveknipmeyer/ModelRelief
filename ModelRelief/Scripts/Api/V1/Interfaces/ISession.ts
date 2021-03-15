@@ -6,6 +6,7 @@
 "use strict";
 
 import {IModel} from "Scripts/Api/V1/Interfaces/IModel";
+import {IProject} from "Scripts/Api/V1/Interfaces/IProject";
 
 /**
  * @description Session settings.
@@ -17,6 +18,7 @@ export interface ISession extends IModel {
     name?: string;
     description?: string;
 
-    // active project
+    // Navigation Properties
     projectId?: number;
+    project?: IProject;
 }
