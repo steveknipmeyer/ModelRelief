@@ -141,7 +141,7 @@ namespace ModelRelief.Utility
         /// <param name="claimsPrincipal">Current HttpContext User.</param>
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="queryParameters">Query parameters.</param>
-        public virtual async Task<IQueryable<TEntity>> BuildQueryable<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null)
+        public virtual async Task<IQueryable<TEntity>> BuildQueryable<TEntity>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel
         {
             var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
@@ -155,7 +155,7 @@ namespace ModelRelief.Utility
         /// <param name="userId">ApplicationUser Id.</param>
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="queryParameters">Query parameters.</param>
-        public virtual IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int id, GetQueryParameters queryParameters = null)
+        public virtual IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int? id, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel
         {
             IQueryable<TEntity> queryable = DbContext.Set<TEntity>()
@@ -221,7 +221,7 @@ namespace ModelRelief.Utility
         /// <param name="queryParameters">Query parameters.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>DTO model</returns>
-        public virtual async Task<TGetModel> FindModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+        public virtual async Task<TGetModel> FindModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
             where TEntity : DomainModel
             where TGetModel : IModel
         {
@@ -248,7 +248,7 @@ namespace ModelRelief.Utility
         /// <param name="queryParameters">Query parameters.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
@@ -264,7 +264,7 @@ namespace ModelRelief.Utility
         /// <param name="queryParameters">Query parameters.</param>
         /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
         /// <returns>Domain model if exists, null otherwise.</returns>
-        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+        public virtual async Task<TEntity> FindModelAsync<TEntity>(string userId, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
             where TEntity : DomainModel
         {
             var queryable = BuildQueryable<TEntity>(userId, id, queryParameters);

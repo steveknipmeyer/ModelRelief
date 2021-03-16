@@ -107,9 +107,7 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                var settingsId = this.UserSession.Project.SettingsId ?? 0;
-                var queryParameters = new GetQueryParameters() { Relations = "Projects" };
-                this.UserSettings = await this.Query.FindModelAsync<Domain.Settings, Dto.Settings>(user, settingsId, queryParameters);
+                this.UserSettings = await this.Query.FindModelAsync<Domain.Settings, Dto.Settings>(user, this.UserSession.Project.SettingsId);
 
                 return this.UserSettings;
             }

@@ -1,20 +1,14 @@
 ## Commit Notes
+
 #### General     
-    InitializeUserSettings
-        Use Session.Project to query the active Settings.
-        Allow nullable id in Query.
-        Invalid Session Project leads to Edit/0 exception in Settings View.
-        
     Projects
         Project Control
             Should the Menu label link to the active project?
+                This requires using the dropdown arrow to activate the menu.
 
         Examples Project
             Populate Examples with existing resources.
             Initialize Session.ProjectId to Examples.
-            Refactor the Index View to Examples?
-            Workflow for new user selection of Example model...
-                Should the Login complete action redirect to Examples/Details?
 
         Active Project
             Create Views
