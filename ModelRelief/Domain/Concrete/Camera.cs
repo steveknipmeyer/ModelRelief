@@ -23,7 +23,7 @@ namespace ModelRelief.Domain
     }
 
     [DependentFiles(typeof(DepthBuffer), typeof(NormalMap))]
-    public class Camera : DomainModel
+    public class Camera : DomainModel, IProjectModel
     {
         [DependentFileProperty]
         public bool IsPerspective { get; set; }

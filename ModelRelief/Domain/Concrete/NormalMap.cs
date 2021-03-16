@@ -24,7 +24,7 @@ namespace ModelRelief.Domain
         Tangent,
     }
     [DependentFiles(typeof(Mesh))]
-    public class NormalMap  : GeneratedFileDomainModel
+    public class NormalMap  : GeneratedFileDomainModel, IProjectModel
     {
         public double Width { get; set; }
         public double Height { get; set; }

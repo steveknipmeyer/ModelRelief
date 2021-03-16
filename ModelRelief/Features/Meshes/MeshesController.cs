@@ -60,17 +60,16 @@ namespace ModelRelief.Features.Meshes
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="mesh">Mesh instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Mesh mesh = null)
+        protected override async Task InitializeViewControlsAsync(Dto.Mesh mesh = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
+            await InitializeSessionAsync();
 
             ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
 
-            ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", mesh?.CameraId);
-            ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, userId, "Select a depth buffer", mesh?.DepthBufferId);
-            ViewBag.NormalMapId      = ViewHelpers.PopulateModelDropDownList<NormalMap>(DbContext, userId, "Select a normal map", mesh?.NormalMapId);
-            ViewBag.MeshTransformId = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext, userId, "Select a mesh transform", mesh?.CameraId);
+            ViewBag.CameraId         = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", mesh?.CameraId);
+            ViewBag.DepthBufferId    = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a depth buffer", mesh?.DepthBufferId);
+            ViewBag.NormalMapId      = ViewHelpers.PopulateModelDropDownList<NormalMap>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a normal map", mesh?.NormalMapId);
+            ViewBag.MeshTransformId  = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a mesh transform", mesh?.CameraId);
         }
     }
 }

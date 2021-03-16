@@ -83,10 +83,9 @@ namespace ModelRelief.Features.Settings
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="project">Project instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Settings project = null)
+        protected override async Task InitializeViewControlsAsync(Dto.Settings project = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
+            await InitializeSessionAsync();
 
             ViewBag.Environment = HostingEnvironment.EnvironmentName;
             ViewBag.ASPNETCORE_URLS = ConfigurationProvider.GetSetting(ConfigurationSettings.URLS);

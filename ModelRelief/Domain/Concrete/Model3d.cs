@@ -17,7 +17,7 @@ namespace ModelRelief.Domain
     }
 
     [DependentFiles(typeof(DepthBuffer))]
-    public class Model3d : FileDomainModel
+    public class Model3d : FileDomainModel, IProjectModel
     {
         public Model3dFormat Format { get; set; }
 

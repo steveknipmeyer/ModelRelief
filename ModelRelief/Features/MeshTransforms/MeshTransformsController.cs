@@ -34,15 +34,5 @@ namespace ModelRelief.Features.MeshTransforms
             : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
         }
-
-        /// <summary>
-        /// Setup View controls for select controls, etc.
-        /// </summary>
-        /// <param name="meshTransform">MeshTransform instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.MeshTransform meshTransform = null)
-        {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
-        }
     }
 }

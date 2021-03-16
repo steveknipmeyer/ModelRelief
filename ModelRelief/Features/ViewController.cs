@@ -16,14 +16,16 @@ namespace ModelRelief.Features
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Features.Settings;
+    using ModelRelief.Utility;
 
     public abstract class ViewController<TEntity, TGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
         where TGetModel       : class, IModel, new()            // class to allow default null parameter in InitializeViewControls
     {
-        public ViewControllerOptions ViewControllerOptions { get; }
-        public new ILogger Logger { get; }                // base class Logger category is UxController
-        public ISettingsManager SettingsManager { get; set; }
+        protected ViewControllerOptions ViewControllerOptions { get; }
+        protected new ILogger Logger { get; }                     // base class Logger category is UxController
+        protected ISettingsManager SettingsManager { get; set; }
+        protected string UserId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TRequestModel}"/> class.
@@ -117,9 +119,9 @@ namespace ModelRelief.Features
         /// </summary>
         /// <returns>Create page.</returns>
         [HttpGet]
-        public async virtual Task<ActionResult> Create()
+        public virtual async Task<ActionResult> Create()
         {
-            await InitializeViewControls();
+            await InitializeViewControlsAsync();
             return View(new TGetModel());
         }
 
@@ -141,7 +143,7 @@ namespace ModelRelief.Features
             // validation failed; return to View
             if (newModel == null)
                 {
-                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
+                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
                 }
 
@@ -171,7 +173,7 @@ namespace ModelRelief.Features
             if (model == null)
                 return NotFound();
 
-            await InitializeViewControls((TGetModel)model);
+            await InitializeViewControlsAsync((TGetModel)model);
 
             // clear ModelState to prevent query parameters (e.g. partial Name) from binding
             ModelState.Clear();
@@ -199,7 +201,7 @@ namespace ModelRelief.Features
             // validation failed; return to View
             if (model == null)
                 {
-                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
+                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
                 }
 
@@ -246,10 +248,21 @@ namespace ModelRelief.Features
         #endregion
 
         /// <summary>
+        /// Initialize the user session settings.
+        /// </summary>
+        protected async Task InitializeSessionAsync()
+        {
+            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
+            UserId = applicationUser?.Id ?? string.Empty;
+
+            await SettingsManager.InitializeUserSessionAsync(User);
+        }
+
+        /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>
-        protected async virtual Task InitializeViewControls(TGetModel model = null)
+        protected async virtual Task InitializeViewControlsAsync(TGetModel model = null)
         {
             await Task.CompletedTask;
         }

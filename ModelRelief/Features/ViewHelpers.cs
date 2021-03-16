@@ -51,10 +51,11 @@ namespace ModelRelief.Features
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userId">Owning User Id; permit only authorized models.</param>
+        /// <param name="projectId">Owning Project Id; permit only authorized models.</param>
         /// <param name="prompt">Control selection prompt</param>
         /// <param name="selectedRow">(Optional) Primary key of selected row</param>
-        public static List<SelectListItem> PopulateModelDropDownList<TEntity>(ModelReliefDbContext dbContext, string userId, string prompt, int? selectedRow = 0)
-            where TEntity : DomainModel
+        public static List<SelectListItem> PopulateModelDropDownList<TEntity>(ModelReliefDbContext dbContext, string userId, int? projectId, string prompt, int? selectedRow = 0)
+            where TEntity : DomainModel, IProjectModel
         {
             var modelSelectList = new List<SelectListItem>
             {
@@ -66,7 +67,8 @@ namespace ModelRelief.Features
             };
 
             var models = dbContext.Set<TEntity>()
-                .Where(m => (m.UserId == userId));
+                .Where(m => (m.UserId == userId))
+                .Where(m => (m.ProjectId == projectId));
 
             foreach (TEntity model in models)
             {

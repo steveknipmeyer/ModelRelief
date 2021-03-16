@@ -1,4 +1,5 @@
 ## Commit Notes
+
 #### General     
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....
@@ -11,12 +12,7 @@
                 ProjectId
                     Assign to active project if null.
 
-            Add a 'activeProjectOnly' parameter to ViewController.InitializeViewControls.
-                PopulateModelDropDownList
-
-        Project Control
-            Should the Menu label link to the active project?
-                This requires using the dropdown arrow to activate the menu.
+        Filter Index pages by active Project?
 
         Projects
             DbInitializer: FindByName must filter by project.
@@ -24,6 +20,10 @@
                 {
                 }
             Verify projects are coherent. All resources are held by a project.            
+
+        Project Control
+            Should the Menu label link to the active project?
+                This requires using the dropdown arrow to activate the menu.
 
         Create Project
             How should a new project be created?

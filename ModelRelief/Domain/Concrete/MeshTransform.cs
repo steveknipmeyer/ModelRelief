@@ -9,7 +9,7 @@ namespace ModelRelief.Domain
     using System.Collections.Generic;
     using ModelRelief.Services.Relationships;
     [DependentFiles(typeof(Mesh))]
-    public class MeshTransform : DomainModel
+    public class MeshTransform : DomainModel, IProjectModel
     {
         [DependentFileProperty]
         public double Width { get; set; }

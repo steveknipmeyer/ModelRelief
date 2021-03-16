@@ -105,7 +105,7 @@ namespace ModelRelief.Features
             TGetModel newModel = await CreateModel(postRequest);
             if (newModel == null)
             {
-                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
+                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
             }
 
@@ -113,7 +113,7 @@ namespace ModelRelief.Features
             newModel = await CreateFile(postRequest, newModel.Id);
             if (newModel == null)
             {
-                await InitializeViewControls(Mapper.Map<TGetModel>(postRequest));
+                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
                 return View(postRequest);
             }
 

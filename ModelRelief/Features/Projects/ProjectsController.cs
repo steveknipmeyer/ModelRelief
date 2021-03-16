@@ -37,15 +37,5 @@ namespace ModelRelief.Features.Projects
             : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
         }
-
-        /// <summary>
-        /// Setup View controls for select controls, etc.
-        /// </summary>
-        /// <param name="project">Project instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Project project = null)
-        {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
-        }
     }
 }

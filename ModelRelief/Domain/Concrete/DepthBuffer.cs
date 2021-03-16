@@ -19,7 +19,7 @@ namespace ModelRelief.Domain
     }
 
     [DependentFiles(typeof(Mesh))]
-    public class DepthBuffer  : GeneratedFileDomainModel
+    public class DepthBuffer  : GeneratedFileDomainModel, IProjectModel
     {
         public double Width { get; set; }
         public double Height { get; set; }

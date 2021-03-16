@@ -39,15 +39,14 @@ namespace ModelRelief.Features.DepthBuffers
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="depthBuffer">DepthBuffer instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.DepthBuffer depthBuffer = null)
+        protected override async Task InitializeViewControlsAsync(Dto.DepthBuffer depthBuffer = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
+            await InitializeSessionAsync();
 
             ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");
 
-            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", depthBuffer?.Model3dId);
-            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", depthBuffer?.CameraId);
+            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", depthBuffer?.Model3dId);
+            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", depthBuffer?.CameraId);
         }
     }
 }

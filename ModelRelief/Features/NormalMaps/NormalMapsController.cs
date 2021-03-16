@@ -39,16 +39,15 @@ namespace ModelRelief.Features.NormalMaps
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="normalMap">NormalMap instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.NormalMap normalMap = null)
+        protected override async Task InitializeViewControlsAsync(Dto.NormalMap normalMap = null)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
+            await InitializeSessionAsync();
 
             ViewBag.NormalMapFormats  = ViewHelpers.PopulateEnumDropDownList<NormalMapFormat>("Select normal map format");
             ViewBag.NormalMapSpaces  = ViewHelpers.PopulateEnumDropDownList<NormalMapSpace>("Select normal map space");
 
-            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, userId, "Select a model", normalMap?.Model3dId);
-            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", normalMap?.CameraId);
+            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", normalMap?.Model3dId);
+            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", normalMap?.CameraId);
         }
     }
 }

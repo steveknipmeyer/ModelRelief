@@ -49,14 +49,13 @@ namespace ModelRelief.Features.Models
         /// Setup View controls for select controls, etc.
         /// </summary>
         /// <param name="model">Model instance for View.</param>
-        protected async override Task InitializeViewControls(Dto.Model3d model)
+        protected override async Task InitializeViewControlsAsync(Dto.Model3d model)
         {
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            var userId = applicationUser?.Id ?? string.Empty;
+            await InitializeSessionAsync();
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Domain.Camera>(DbContext, userId, "Select a camera", model?.CameraId);
+            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Domain.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
         }
     }
 }
