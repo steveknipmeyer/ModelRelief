@@ -1,6 +1,9 @@
 ## Commit Notes
 
 #### General     
+    testrunner does not initialize the database.
+    Add templates (without a ProjectId) to seed new Prpjects/Models
+
     Projects
         Project Control
             Should the Menu label link to the active project?

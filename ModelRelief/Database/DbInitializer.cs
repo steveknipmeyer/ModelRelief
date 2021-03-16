@@ -43,7 +43,7 @@ namespace ModelRelief.Database
         /// <summary>
         /// Settings Names
         /// </summary>
-        private class SettingsNames
+        public class SettingsNames
         {
             public static readonly string Project = "Project Settings";
             public static readonly string Session = "Session Settings";
@@ -52,12 +52,13 @@ namespace ModelRelief.Database
         /// <summary>
         /// Test Project Names
         /// </summary>
-        private class ProjectNames
+        public class ProjectNames
         {
+            public static readonly string Examples = "Examples";
             public static readonly string Architecture = "Architecture";
             public static readonly string Jewelry = "Jewelry";
-            public static readonly string ModelRelief = "ModelRelief";
             public static readonly string Stanford = "Stanford";
+            public static readonly string ModelRelief = "ModelRelief";
         }
 
         /// <summary>
@@ -282,7 +283,6 @@ namespace ModelRelief.Database
         public void SeedDatabaseForUser(ApplicationUser user)
         {
             // database
-            AddSession(user);
             AddSettings(user);
             AddProjects(user);
             AddCameras(user);                   // JSON
@@ -292,6 +292,8 @@ namespace ModelRelief.Database
             AddDepthBuffers(user);
             AddNormalMaps(user);
             AddMeshes(user);
+
+            AddSession(user);
 
             // user store
             SeedUserStore(user);
@@ -371,6 +373,7 @@ namespace ModelRelief.Database
             var session = new Session
             {
                 Name = SettingsNames.Session, Description = "Cross-project session settings", UserId = user.Id,
+                Project = FindByName<Project>(user, ProjectNames.Examples),
             };
 
             DbContext.Add(session);
@@ -407,6 +410,7 @@ namespace ModelRelief.Database
         {
             var projects = new Project[]
             {
+                new Project { Name = ProjectNames.Examples, Description = "Example models", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
                 new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
                 new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
                 new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
@@ -478,17 +482,17 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "dragon.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "horse.obj", Description = "Prancing horse", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "house.obj", Description = "San Francisco house", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -498,12 +502,12 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
                     Name = "plunderbusspete.obj", Description = "Plunder Buss Pete pirate", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {
@@ -513,7 +517,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "scallop.obj", Description = "Scallop shell", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
                 },
                 new Model3d
                 {

@@ -6,7 +6,13 @@
 
 namespace ModelRelief.Test.Integration.Settings
 {
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using ModelRelief.Database;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Test.TestModels.Settings;
+    using Newtonsoft.Json;
+    using Xunit;
 
     /// <summary>
     /// Base integration Tests.
@@ -24,19 +30,78 @@ namespace ModelRelief.Test.Integration.Settings
         {
         }
 
-#region Get
-#endregion
+        #region Get
+        /// <summary>
+        /// Test that the default camera settings resource can be retrieved.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api GetSingle")]
+        public virtual async Task DefaultCameraSettingsExist()
+        {
+            // Arrange
 
-#region Post
-#endregion
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/camera");
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-#region Put
-#endregion
+            var defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettingsJson>(requestResponse.ContentString);
 
-#region Patch
-#endregion
+            // Assert
+            Assert.True(defaultCameraSettings.NearClippingPlane > 0.0);
+            Assert.True(defaultCameraSettings.FarClippingPlane > 0.0);
+            Assert.True(defaultCameraSettings.FieldOfView > 0.0);
+        }
 
-#region Delete
-#endregion
+        /// <summary>
+        /// Test that the active user settings resource can be retrieved.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api GetSingle")]
+        public virtual async Task ActiveProjectUserSettingsExist()
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/user");
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var userSettings = JsonConvert.DeserializeObject<Dto.Settings>(requestResponse.ContentString);
+
+            // Assert
+            userSettings.Name.Should().Be(DbInitializer.SettingsNames.Project);
+        }
+
+        /// <summary>
+        /// Test that the session settings resource can be retrieved.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api GetSingle")]
+        public virtual async Task SessionSettingsExist()
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/session");
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var sessionSettings = JsonConvert.DeserializeObject<Dto.Session>(requestResponse.ContentString);
+
+            // Assert
+            sessionSettings.Name.Should().Be(DbInitializer.SettingsNames.Session);
+            sessionSettings.Project.Name.Should().Be(DbInitializer.ProjectNames.Examples);
+        }
+        #endregion
+
+        #region Post
+        #endregion
+
+        #region Put
+        #endregion
+
+        #region Patch
+        #endregion
+
+        #region Delete
+        #endregion
     }
 }

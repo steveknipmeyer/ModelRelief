@@ -76,7 +76,7 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                var queryParameters = new GetQueryParameters() { Name = "Session" };
+                var queryParameters = new GetQueryParameters() { Name = DbInitializer.SettingsNames.Session };
                 this.UserSession = await Query.FindModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
 
                 return this.UserSession;
