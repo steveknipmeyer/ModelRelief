@@ -16,6 +16,7 @@ namespace ModelRelief.Features
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
+    using ModelRelief.Features.Settings;
 
     public abstract class ViewFileModelController<TEntity, TGetModel, TRequestModel> : ViewController<TEntity, TGetModel, TRequestModel>
         where TEntity         : DomainModel
@@ -29,10 +30,11 @@ namespace ModelRelief.Features
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewFileModelController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, mediator)
+        protected ViewFileModelController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
         }
 

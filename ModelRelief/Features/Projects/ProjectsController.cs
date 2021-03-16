@@ -16,6 +16,7 @@ namespace ModelRelief.Features.Projects
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -30,9 +31,10 @@ namespace ModelRelief.Features.Projects
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        public ProjectsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, mediator)
+        public ProjectsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
         }
 

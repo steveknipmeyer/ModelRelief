@@ -15,6 +15,7 @@ namespace ModelRelief.Features
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
+    using ModelRelief.Features.Settings;
 
     public abstract class ViewController<TEntity, TGetModel, TRequestModel> : UxController
         where TEntity         : DomainModel
@@ -22,6 +23,7 @@ namespace ModelRelief.Features
     {
         public ViewControllerOptions ViewControllerOptions { get; }
         public new ILogger Logger { get; }                // base class Logger category is UxController
+        public ISettingsManager SettingsManager { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewController{TEntity, TGetModel, TRequestModel}"/> class.
@@ -30,10 +32,11 @@ namespace ModelRelief.Features
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : this(dbContext, loggerFactory, mapper, mediator, new ViewControllerOptions { UsePaging = true })
+        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
+            : this(dbContext, loggerFactory, mapper, settingsManager, mediator, new ViewControllerOptions { UsePaging = true })
         {
         }
 
@@ -44,13 +47,15 @@ namespace ModelRelief.Features
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
-        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, ViewControllerOptions viewControllerOptions)
+        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, ViewControllerOptions viewControllerOptions)
             : base(dbContext, loggerFactory, mapper, mediator)
         {
             ViewControllerOptions = viewControllerOptions;
             Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TRequestModel>).Name);
+            SettingsManager       = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
         }
 
         #region Get

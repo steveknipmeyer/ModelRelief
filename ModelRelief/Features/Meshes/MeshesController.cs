@@ -17,6 +17,7 @@ namespace ModelRelief.Features.Meshes
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -31,9 +32,10 @@ namespace ModelRelief.Features.Meshes
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        public MeshesController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, mediator)
+        public MeshesController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
         }
 

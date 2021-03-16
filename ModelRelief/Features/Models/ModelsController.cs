@@ -19,6 +19,7 @@ namespace ModelRelief.Features.Models
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Features;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Utility;
 
     /// <summary>
@@ -35,10 +36,11 @@ namespace ModelRelief.Features.Models
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="configurationProvider">Configuration provider.</param>
-        public ModelsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, Services.IConfigurationProvider configurationProvider)
-            : base(dbContext, loggerFactory, mapper, mediator)
+        public ModelsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, Services.IConfigurationProvider configurationProvider)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
             ConfigurationProvider = configurationProvider;
         }

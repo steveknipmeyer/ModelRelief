@@ -16,6 +16,7 @@ namespace ModelRelief.Features.Settings
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Utility;
 
@@ -37,11 +38,12 @@ namespace ModelRelief.Features.Settings
         /// <param name="dbContext">Database context</param>
         /// <param name="loggerFactory">ILoggerFactor.</param>
         /// <param name="mapper">IMapper</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, IMediator mediator, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
-            : base(dbContext, loggerFactory, mapper, mediator)
+        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
