@@ -10,9 +10,11 @@ namespace ModelRelief.Features.Settings
     using System.IO;
     using System.Linq;
     using System.Security.Claims;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
@@ -31,6 +33,8 @@ namespace ModelRelief.Features.Settings
         private IMapper Mapper { get; set; }
         private ILogger Logger { get; set; }
         private  ModelReliefDbContext DbContext { get; set; }
+
+        private Query Query { get; set; }
 
         public Dto.Settings UserSettings { get; set; }
         public Dto.Session UserSession { get; set; }
@@ -52,6 +56,8 @@ namespace ModelRelief.Features.Settings
             this.Logger = loggerFactory.CreateLogger<SettingsManager>();
             this.DbContext = dbContext;
 
+            this.Query = new Query(DbContext, loggerFactory, Mapper);
+
             this.UserSession = new Dto.Session();
             this.UserSettings = new Dto.Settings();
         }
@@ -60,7 +66,7 @@ namespace ModelRelief.Features.Settings
         /// Get the user sessions for the active user.
         /// </summary>
         /// <param name="user">Active user</param>
-        public Dto.Session InitializeUserSession(ClaimsPrincipal user)
+        public async Task<Dto.Session> InitializeUserSessionAsync(ClaimsPrincipal user)
         {
             // N.B. This method is called by _Layout to condition the UI menus.
             // As it is called outside the normal HTTP pipeline, the GlobalExceptionFilter cannot be used.
@@ -70,12 +76,8 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
-                var userSession = DbContext.Session
-                    .Where(s => (s.UserId == applicationUser.Id))
-                    .SingleOrDefault<Domain.Session>();
-
-                this.UserSession = this.Mapper.Map<Dto.Session>(userSession);
+                var queryParameters = new GetQueryParameters() { Name = "Session" };
+                this.UserSession = await Query.FindModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
 
                 return this.UserSession;
             }
@@ -90,10 +92,11 @@ namespace ModelRelief.Features.Settings
         /// Assign the user settings from the active user (if defined)
         /// </summary>
         /// <param name="user">Active user</param>
-        public Dto.Settings InitializeUserSettings(ClaimsPrincipal user)
+        public async Task<Dto.Settings> InitializeUserSettingsAsync(ClaimsPrincipal user)
         {
-            InitializeUserSession(user);
-            if (this.UserSession.ProjectId == null)
+            await InitializeUserSessionAsync(user);
+            if ((this.UserSession.ProjectId == null) ||
+               (this.UserSession.Project.Settings == null))
                 return this.UserSettings;
 
             // N.B. This method is called by _Layout to condition the UI menus.
@@ -104,16 +107,9 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                var applicationUser = IdentityUtility.FindApplicationUserAsync(user).GetAwaiter().GetResult();
-                var userSettingsQueryable = DbContext.Settings
-                    .Where(s => (s.UserId == applicationUser.Id));
-
-                if (this.UserSession.ProjectId != null)
-                    userSettingsQueryable = userSettingsQueryable.Where(s => (s.Id == this.UserSession.ProjectId));
-
-                var userSettings = userSettingsQueryable.SingleOrDefault<Domain.Settings>() ?? new Domain.Settings();
-
-                this.UserSettings = this.Mapper.Map<Dto.Settings>(userSettings);
+                var settingsId = this.UserSession.Project.SettingsId ?? 0;
+                var queryParameters = new GetQueryParameters() { Relations = "Projects" };
+                this.UserSettings = await this.Query.FindModelAsync<Domain.Settings, Dto.Settings>(user, settingsId, queryParameters);
 
                 return this.UserSettings;
             }
@@ -130,7 +126,7 @@ namespace ModelRelief.Features.Settings
         /// <param name="settingsType">Settings type (e.g. camera)</param>
         /// <param name="user">Active user</param>
         /// <returns>Settings object read from JSON.</returns>
-        public object GetSettings(string settingsType, ClaimsPrincipal user = null)
+        public async Task<object> GetSettingsAsync(string settingsType, ClaimsPrincipal user = null)
         {
             switch (settingsType.ToLower())
             {
@@ -143,10 +139,10 @@ namespace ModelRelief.Features.Settings
                     return defaultCameraSettings;
 
                 case SettingsType.User:
-                    return InitializeUserSettings(user);
+                    return await InitializeUserSettingsAsync(user);
 
                 case SettingsType.Session:
-                    return InitializeUserSession(user);
+                    return await InitializeUserSessionAsync(user);
 
                 default:
                     return null;

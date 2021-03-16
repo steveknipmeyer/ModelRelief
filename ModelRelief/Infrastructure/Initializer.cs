@@ -7,6 +7,7 @@
 namespace ModelRelief.Database
 {
     using System;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -42,10 +43,10 @@ namespace ModelRelief.Database
         /// <summary>
         /// Initialization of backend (BE) shared settings that are defined through JSON.
         /// </summary>
-        public void InitializeSharedSettings()
+        public async Task InitializeSharedSettingsAsync()
         {
             // camera does not require DbContext
-            var defaultCameraSettings = SettingsManager.GetSettings(SettingsType.Camera) as DefaultCameraSettingsJson;
+            var defaultCameraSettings = await SettingsManager.GetSettingsAsync(SettingsType.Camera) as DefaultCameraSettingsJson;
             DefaultCameraSettings.Initialize(defaultCameraSettings);
         }
 
@@ -54,7 +55,7 @@ namespace ModelRelief.Database
         /// </summary>
         public void Initialize()
         {
-            InitializeSharedSettings();
+            InitializeSharedSettingsAsync().Wait();
         }
     }
 }

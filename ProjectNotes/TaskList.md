@@ -2,7 +2,9 @@
 #### General     
     InitializeUserSettings
         Use Session.Project to query the active Settings.
-
+        Allow nullable id in Query.
+        Invalid Session Project leads to Edit/0 exception in Settings View.
+        
     Projects
         Project Control
             Should the Menu label link to the active project?

@@ -6,6 +6,7 @@
 namespace ModelRelief.Features.Settings
 {
     using System.Security.Claims;
+    using System.Threading.Tasks;
     using ModelRelief.Dto;
 
     /// <summary>
@@ -15,9 +16,8 @@ namespace ModelRelief.Features.Settings
     {
         Settings UserSettings { get; set; }
         Session UserSession { get; set; }
-        Settings InitializeUserSettings(ClaimsPrincipal user);
-        Session InitializeUserSession(ClaimsPrincipal user);
-
-        object GetSettings(string settingsType, ClaimsPrincipal user = null);
+        Task<Settings> InitializeUserSettingsAsync(ClaimsPrincipal user);
+        Task<Session> InitializeUserSessionAsync(ClaimsPrincipal user);
+        Task<object> GetSettingsAsync(string settingsType, ClaimsPrincipal user = null);
     }
 }

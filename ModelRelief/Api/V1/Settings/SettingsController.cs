@@ -51,9 +51,9 @@ namespace ModelRelief.Api.V1.Settings
         [Route("camera")]
         [HttpGet]
         [Produces("application/json")]
-        public IActionResult Camera()
+        public async Task<IActionResult> Camera()
         {
-            var settingsObject = this.SettingsManager.GetSettings(SettingsType.Camera) as DefaultCameraSettingsJson;
+            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Camera) as DefaultCameraSettingsJson;
             return Ok(settingsObject);
         }
 
@@ -64,9 +64,9 @@ namespace ModelRelief.Api.V1.Settings
         [Route("user")]
         [HttpGet]
         [Produces("application/json")]
-        public IActionResult UserSettings()
+        public async Task<IActionResult> UserSettings()
         {
-            var settingsObject = this.SettingsManager.GetSettings(SettingsType.User, User) as Dto.Settings;
+            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.User, User) as Dto.Settings;
             return Ok(settingsObject);
         }
 
@@ -77,9 +77,9 @@ namespace ModelRelief.Api.V1.Settings
         [Route("session")]
         [HttpGet]
         [Produces("application/json")]
-        public IActionResult Session()
+        public async Task<IActionResult> Session()
         {
-            var sessionObject = this.SettingsManager.GetSettings(SettingsType.Session, User) as Dto.Session;
+            var sessionObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Session, User) as Dto.Session;
             return Ok(sessionObject);
         }
 

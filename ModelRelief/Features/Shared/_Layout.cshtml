@@ -1,7 +1,7 @@
 ﻿@using ModelRelief.Features.Settings
 
 @inject ISettingsManager settingsManager;
-@{ var userSettings = settingsManager.InitializeUserSettings(User); }
+@{ var userSettings = await settingsManager.InitializeUserSettingsAsync(User); }
 
 <!DOCTYPE html>
 

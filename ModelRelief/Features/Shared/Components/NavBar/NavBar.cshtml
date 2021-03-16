@@ -2,7 +2,7 @@
 @model List<ModelRelief.Dto.Project>
 
 @inject ISettingsManager settingsManager;
-@{ var userSettings = settingsManager.InitializeUserSettings(User); }
+@{ var userSettings = await settingsManager.InitializeUserSettingsAsync(User); }
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <img class="mt-0 mr-1" src="~/images/IconWhite.png" alt="ModelRelief Shell" height="24" width="24">
