@@ -43,7 +43,6 @@ namespace ModelRelief.Features.Cameras
             var userId = applicationUser?.Id ?? string.Empty;
 
             ViewBag.StandardViews   = ViewHelpers.PopulateEnumDropDownList<StandardView>("Select a standard camera view");
-            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", camera?.ProjectId);
         }
     }
 }

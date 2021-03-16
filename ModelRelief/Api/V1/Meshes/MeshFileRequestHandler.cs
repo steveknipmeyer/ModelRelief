@@ -15,6 +15,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
@@ -36,6 +37,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
         /// <param name="dispatcher">Dispatcher for long-runnning processes.</param>
@@ -46,10 +48,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
+            ISettingsManager settingsManager,
             IEnumerable<IValidator<FileRequest<Domain.Mesh>>> validators,
             IStorageManager storageManager,
             IDispatcher dispatcher)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, validators, storageManager)
         {
             Dispatcher = dispatcher;
         }

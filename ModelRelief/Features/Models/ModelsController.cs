@@ -54,7 +54,6 @@ namespace ModelRelief.Features.Models
 
             ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.ProjectId    = ViewHelpers.PopulateModelDropDownList<Domain.Project>(DbContext, userId, "Select a project", model?.ProjectId);
             ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Domain.Camera>(DbContext, userId, "Select a camera", model?.CameraId);
         }
     }

@@ -65,7 +65,6 @@ namespace ModelRelief.Features.Meshes
 
             ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
 
-            ViewBag.ProjectId       = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", mesh?.ProjectId);
             ViewBag.CameraId        = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, userId, "Select a camera", mesh?.CameraId);
             ViewBag.DepthBufferId   = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, userId, "Select a depth buffer", mesh?.DepthBufferId);
             ViewBag.NormalMapId      = ViewHelpers.PopulateModelDropDownList<NormalMap>(DbContext, userId, "Select a normal map", mesh?.NormalMapId);

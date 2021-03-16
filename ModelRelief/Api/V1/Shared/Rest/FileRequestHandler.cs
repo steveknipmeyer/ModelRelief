@@ -17,6 +17,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
 
@@ -39,6 +40,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
         public FileRequestHandler(
@@ -48,9 +50,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
+            ISettingsManager settingsManager,
             IEnumerable<IValidator<FileRequest<TEntity>>> validators,
             IStorageManager storageManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, validators)
         {
             StorageManager = storageManager;
         }

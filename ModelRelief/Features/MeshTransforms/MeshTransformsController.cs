@@ -41,8 +41,6 @@ namespace ModelRelief.Features.MeshTransforms
         {
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             var userId = applicationUser?.Id ?? string.Empty;
-
-            ViewBag.ProjectId = ViewHelpers.PopulateModelDropDownList<Project>(DbContext, userId, "Select a project", meshTransform?.ProjectId);
         }
     }
 }

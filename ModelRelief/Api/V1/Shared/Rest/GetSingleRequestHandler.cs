@@ -17,6 +17,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
@@ -39,14 +40,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="settingsManager">Settings manager.</param>
         public GetSingleRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
-            IDependencyManager dependencyManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+            IDependencyManager dependencyManager,
+            ISettingsManager settingsManager)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, null)
         {
         }
 

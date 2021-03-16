@@ -1,23 +1,29 @@
 ## Commit Notes
-
 #### General     
-    testrunner does not initialize the database.
+    Why is it (intermittently) necessary to run ModelRelief before testrunner?
+        testrunner does initiialize the database....
+
     Add templates (without a ProjectId) to seed new Prpjects/Models
 
     Projects
+        Active Project
+            ValidatedHandler.ValidateReferences               
+                ProjectId
+                    Assign to active project if null.
+
+            Add a 'activeProjectOnly' parameter to ViewController.InitializeViewControls.
+                PopulateModelDropDownList
+
         Project Control
             Should the Menu label link to the active project?
                 This requires using the dropdown arrow to activate the menu.
 
-        Examples Project
-            Populate Examples with existing resources.
-            Initialize Session.ProjectId to Examples.
-
-        Active Project
-            Create Views
-                Remove Project control.
-                Controller InitializeViewControls should filter based on active Project. 
-                    The active Project should control all newly-created resources.
+        Projects
+            DbInitializer: FindByName must filter by project.
+                foreach (var project in Projects)
+                {
+                }
+            Verify projects are coherent. All resources are held by a project.            
 
         Create Project
             How should a new project be created?

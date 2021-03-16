@@ -18,6 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
 
@@ -42,6 +43,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="validators">All validators matching IValidator for the given request.</param>
         public PutRequestHandler(
             ModelReliefDbContext dbContext,
@@ -50,8 +52,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager,
+            ISettingsManager settingsManager,
             IEnumerable<IValidator<PutRequest<TEntity, TRequestModel, TGetModel>>> validators)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, validators)
         {
         }
 
