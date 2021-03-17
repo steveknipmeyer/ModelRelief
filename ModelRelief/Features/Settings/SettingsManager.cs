@@ -77,7 +77,7 @@ namespace ModelRelief.Features.Settings
             try
             {
                 var queryParameters = new GetQueryParameters() { Name = DbInitializer.SettingsNames.Session };
-                this.UserSession = await Query.FindModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
+                this.UserSession = await Query.FindDtoModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
 
                 return this.UserSession;
             }
@@ -107,7 +107,7 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                this.UserSettings = await this.Query.FindModelAsync<Domain.Settings, Dto.Settings>(user, this.UserSession.Project.SettingsId);
+                this.UserSettings = await this.Query.FindDtoModelAsync<Domain.Settings, Dto.Settings>(user, this.UserSession.Project.SettingsId);
 
                 return this.UserSettings;
             }

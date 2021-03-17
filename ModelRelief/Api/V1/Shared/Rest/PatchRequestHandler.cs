@@ -67,7 +67,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel</returns>
         public async Task<TGetModel> BuildUpdatedTGetModel(PatchRequest<TEntity, TGetModel> message)
         {
-            var domainModel = await Query.FindModelAsync<TEntity>(message.User, message.Id);
+            var domainModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
 
             var updatedDomainModel = BuildUpdatedDomainModel(message, domainModel);
             message.UpdatedModel = Mapper.Map<TEntity, TGetModel>(updatedDomainModel);
@@ -93,9 +93,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 PropertyInfo property = null;
                 try
                 {
+                    // invalid property: exception
                     property = properties.Single(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                    if (property == null)
-                        continue;
                 }
                 catch (Exception)
                 {
@@ -145,7 +144,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             // find target model
-            var targetModel = await Query.FindModelAsync<TEntity>(message.User, message.Id);
+            var targetModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
 
             // update from request
             var updatedModel = BuildUpdatedDomainModel(message, targetModel);
@@ -155,7 +154,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
-            var projectedModel = await Query.FindModelAsync<TEntity, TGetModel>(message.User, message.Id);
+            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(message.User, message.Id);
             return projectedModel;
         }
     }

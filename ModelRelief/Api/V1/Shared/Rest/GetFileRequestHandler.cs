@@ -61,7 +61,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var domainModel = await Query.FindModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var domainModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
 
             var fileName = fileDomainModel.FileName;

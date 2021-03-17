@@ -1,8 +1,19 @@
 ## Commit Notes
-
 #### General     
+    ErrorCodes vs Exceptions
+        Dispatcher
+            ExceptionSolver
+
+    First, Single, Default
+        ProjectSingle
+            return projectedModels.First<TGetModel>();
+            
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....
+        Restore logic?
+
+    Is the test for stderr output valid?
+        Can the return status be tested?
 
     Add templates (without a ProjectId) to seed new Prpjects/Models
 

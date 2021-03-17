@@ -48,10 +48,6 @@ namespace ModelRelief.Test.Unit.DependencyManager
             var accounts = this.ClassFixture.ServerFramework.Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
             var developmentAccount = new ApplicationUser(accounts.Development.NameIdentifier, accounts.Development.Name);
 
-            var rootModel = DbContext.Models
-                            .Where(m => (m.Id == rootPrimaryKey))
-                            .SingleOrDefault();
-
             var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
             var dependentModels = await Manager.FindDependentModels(developmentAccount.Id, rootType, rootPrimaryKey, dependentTypes);
 

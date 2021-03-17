@@ -19,7 +19,7 @@ namespace ModelRelief.Domain
         STL,            // Stereolithography
     }
 
-    public class Mesh : GeneratedFileDomainModel
+    public class Mesh : GeneratedFileDomainModel, IProjectModel
     {
         public MeshFormat Format { get; set; }
 

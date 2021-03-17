@@ -193,7 +193,6 @@ namespace ModelRelief.Test.TestModels
             // Required properties are missing.
             //  Name
             //  Description
-            //  Format
             var invalidModel = new TGetModel()
             {
             };

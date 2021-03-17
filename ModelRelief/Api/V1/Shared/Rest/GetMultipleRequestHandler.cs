@@ -64,7 +64,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
             var user = await IdentityUtility.FindApplicationUserAsync(message.User);
-            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(user.Id, -1, message.QueryParameters);
+            int? multipleModels = null;
+            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(user.Id, multipleModels, message.QueryParameters);
 
             if (message.UsePaging)
             {

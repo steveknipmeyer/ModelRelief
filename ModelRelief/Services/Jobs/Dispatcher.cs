@@ -146,11 +146,16 @@ namespace ModelRelief.Services.Jobs
             await DbContext.SaveChangesAsync();
 
             var expandedMesh = await DbContext.Meshes
-                                .Where(m => (m.Id == mesh.Id) &&
-                                            (m.UserId == mesh.UserId))
+                                .Where(m => ((m.UserId == mesh.UserId) &&
+                                             (m.Id == mesh.Id)))
                                 .Include(m => m.DepthBuffer)
                                     .ThenInclude(d => d.Camera)
                                 .SingleOrDefaultAsync();
+            if (expandedMesh == null)
+            {
+                Logger.LogError($"GenerateMesh cannot query Mesh: Id = {mesh.Id}");
+                return false;
+            }
 
             string jsonFile = SerializeModelToWorkingStorage(expandedMesh);
             string jsonFileArgument = $"-s \"{jsonFile}\"";
@@ -162,7 +167,10 @@ namespace ModelRelief.Services.Jobs
             string arguments = $"{jsonFileArgument} {workingFolderArgument}";
             int solverExitCode = RunPythonTask(solverPath, arguments);
             if (solverExitCode != 0)
+            {
+                Logger.LogError($"Solver returned error code {solverExitCode}");
                 return false;
+            }
 
             // The job is complete and the mesh file has been generated.
             var generatedFile = Path.Combine($"{workingFolder}{mesh.Name}");
