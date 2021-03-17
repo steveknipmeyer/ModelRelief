@@ -985,10 +985,13 @@ namespace ModelRelief.Database
                 var model = DbContext.Set<TEntity>()
                     .Where(m => m.Name.StartsWith(dirInfo.Name))
                     .Where(m => (m.UserId == user.Id))
-                    .FirstOrDefault();
+                    .SingleOrDefault();
 
                 if (model == null)
+                {
                     Debug.Assert(false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
+                    continue;
+                }
 
                 // create target folder
                 var targetDirectory = Directory.CreateDirectory(Path.Combine(destinationFolderPath, model.Id.ToString())).FullName;
@@ -1054,7 +1057,7 @@ namespace ModelRelief.Database
             where TEntity : DomainModel
         {
             var resource = DbContext.Set<TEntity>()
-                .Where(r => ((r.Name == name) && (r.UserId == user.Id))).First();
+                .Where(r => ((r.Name == name) && (r.UserId == user.Id))).SingleOrDefault();
 
             if (resource == null)
                 Debug.Assert(false, $"DbInitializer: {typeof(TEntity).Name} = '{name}' not found)");

@@ -480,7 +480,7 @@ namespace ModelRelief.Test.Integration
             // https://stackoverflow.com/questions/6044482/setting-anonymous-type-property-name
             var validPatchModel = new Dictionary<string, int?>
             {
-                { TestModelFactory.ReferencePropertyNames.FirstOrDefault(), TestModelFactory.ValidReferenceProperty },
+                { TestModelFactory.ReferencePropertyNames.First(), TestModelFactory.ValidReferenceProperty },
             };
 
             // Act

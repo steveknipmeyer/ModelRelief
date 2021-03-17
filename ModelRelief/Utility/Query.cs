@@ -75,7 +75,7 @@ namespace ModelRelief.Utility
             where TGetModel : IModel
         {
             ICollection<TGetModel> projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
-            return projectedModels.First<TGetModel>();
+            return projectedModels.Single<TGetModel>();
         }
 
         /// <summary>

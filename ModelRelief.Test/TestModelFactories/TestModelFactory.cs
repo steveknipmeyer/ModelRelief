@@ -126,7 +126,7 @@ namespace ModelRelief.Test.TestModels
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
-            var model = pagedResults.Results.First();
+            var model = pagedResults.Results.Single();
             return model;
         }
 
@@ -140,7 +140,7 @@ namespace ModelRelief.Test.TestModels
             Type type = model.GetType();
             PropertyInfo[] properties = type.GetProperties();
 
-            var referenceProperty  = type.GetProperty(ReferencePropertyNames.FirstOrDefault());
+            var referenceProperty  = type.GetProperty(ReferencePropertyNames.First());
             return referenceProperty;
         }
 

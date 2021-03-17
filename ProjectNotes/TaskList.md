@@ -3,10 +3,6 @@
     ErrorCodes vs Exceptions
         Dispatcher
             ExceptionSolver
-
-    First, Single, Default
-        ProjectSingle
-            return projectedModels.First<TGetModel>();
             
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....
