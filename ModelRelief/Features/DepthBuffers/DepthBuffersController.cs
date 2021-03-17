@@ -43,10 +43,10 @@ namespace ModelRelief.Features.DepthBuffers
         {
             await InitializeSessionAsync();
 
-            ViewBag.DepthBufferFormats  = ViewHelpers.PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");
+            ViewBag.DepthBufferFormats  = PopulateEnumDropDownList<DepthBufferFormat>("Select depth buffer format");
 
-            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", depthBuffer?.Model3dId);
-            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", depthBuffer?.CameraId);
+            ViewBag.Model3dId = await PopulateModelDropDownList<Dto.Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", depthBuffer?.Model3dId);
+            ViewBag.CameraId  = await PopulateModelDropDownList<Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", depthBuffer?.CameraId);
         }
     }
 }

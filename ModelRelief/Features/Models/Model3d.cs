@@ -18,7 +18,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Model3d.
     /// </summary>
-    public class Model3d : IFileModel
+    public class Model3d : IFileModel, IProjectModel
     {
         public int Id { get; set; }
 

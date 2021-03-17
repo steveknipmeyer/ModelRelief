@@ -53,9 +53,9 @@ namespace ModelRelief.Features.Models
         {
             await InitializeSessionAsync();
 
-            ViewBag.ModelFormat  = ViewHelpers.PopulateEnumDropDownList<Model3dFormat>("Select model format");
+            ViewBag.ModelFormat  = PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.CameraId     = ViewHelpers.PopulateModelDropDownList<Domain.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
+            ViewBag.CameraId     = await PopulateModelDropDownList<Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
         }
     }
 }

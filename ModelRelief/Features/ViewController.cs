@@ -6,10 +6,14 @@
 
 namespace ModelRelief.Features
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
@@ -25,6 +29,7 @@ namespace ModelRelief.Features
         protected ViewControllerOptions ViewControllerOptions { get; }
         protected new ILogger Logger { get; }                     // base class Logger category is UxController
         protected ISettingsManager SettingsManager { get; set; }
+        public Query Query { get; set; }
         protected string UserId { get; set; }
 
         /// <summary>
@@ -58,6 +63,8 @@ namespace ModelRelief.Features
             ViewControllerOptions = viewControllerOptions;
             Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TRequestModel>).Name);
             SettingsManager       = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
+
+            Query = new Query(DbContext, loggerFactory, Mapper);
         }
 
         #region Get
@@ -275,6 +282,81 @@ namespace ModelRelief.Features
         {
             await Task.CompletedTask;
             return model;
+        }
+
+        /// <summary>
+        /// Create a SelectList from an enum.
+        /// Note: None is skipped.
+        /// </summary>
+        /// <typeparam name="TEnum">The enum type of the list.</typeparam>
+        /// <param name="prompt">Control selection prompt</param>
+        protected List<SelectListItem> PopulateEnumDropDownList<TEnum>(string prompt)
+            where TEnum : struct, IComparable, IFormattable, IConvertible
+        {
+            var enumSelectList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = prompt,
+                    Value = string.Empty,
+                },
+            };
+            foreach (TEnum enumValue in Enum.GetValues(typeof(TEnum)))
+            {
+                string enumText = Enum.GetName(typeof(TEnum), enumValue);
+                if (!string.Equals(enumText, "None", StringComparison.CurrentCultureIgnoreCase))
+                    enumSelectList.Add(new SelectListItem { Text = Enum.GetName(typeof(TEnum), enumValue), Value = enumValue.ToString() });
+            }
+            return enumSelectList;
+        }
+
+        /// <summary>
+        /// Creates a SelectListModel from the Name properties in a database table.
+        /// </summary>
+        /// <typeparam name="TViewModel">TGetModel implementing IProject.</typeparam>
+        /// <param name="dbContext">Database context.</param>
+        /// <param name="userId">Owning User Id; permit only authorized models.</param>
+        /// <param name="projectId">Owning Project Id; permit only authorized models.</param>
+        /// <param name="prompt">Control selection prompt</param>
+        /// <param name="selectedRow">(Optional) Primary key of selected row</param>
+        protected async Task<List<SelectListItem>> PopulateModelDropDownList<TViewModel>(ModelReliefDbContext dbContext, string userId, int? projectId, string prompt, int? selectedRow = 0)
+            where TViewModel : IModel, Dto.IProjectModel
+        {
+            var modelSelectList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = prompt,
+                    Value = string.Empty,
+                },
+            };
+            var models = await Query.FindDtoModelsAsync<TEntity, TViewModel>(User);
+            var filteredModels = models.Where(m => m.ProjectId == SettingsManager.UserSession.ProjectId);
+
+            foreach (TViewModel model in filteredModels)
+            {
+                string modelText = model.Name;
+                bool selectedState = model.Id == (selectedRow ?? 0);
+                modelSelectList.Add(new SelectListItem { Text = modelText, Value = model.Id.ToString(), Selected = selectedState });
+            }
+            return modelSelectList;
+        }
+
+        /// <summary>
+        /// Filters a View model collection by the active Project.
+        /// </summary>
+        /// <param name="viewResult">ViewResult (unfiltered)</param>
+        /// <typeparam name="TViewModel">View model type (implements IProjectModel)</typeparam>
+        /// <returns>View containing only models belonging to active Project</returns>
+        protected async Task<ViewResult> FilterViewByActiveProject<TViewModel>(ViewResult viewResult)
+            where TViewModel : Dto.IProjectModel
+        {
+            var models = viewResult.Model as IEnumerable<TViewModel>;
+
+            await SettingsManager.InitializeUserSessionAsync(User);
+            var filteredModels = models.Where(m => m.ProjectId == SettingsManager.UserSession.ProjectId);
+
+            return View(filteredModels);
         }
     }
 }

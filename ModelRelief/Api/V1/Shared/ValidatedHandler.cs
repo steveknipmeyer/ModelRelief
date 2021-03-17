@@ -42,7 +42,6 @@ namespace ModelRelief.Api.V1.Shared
         public IDependencyManager               DependencyManager { get; }
         public ISettingsManager                 SettingsManager { get; set; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
-
         public Query Query { get; set; }
 
         /// <summary>

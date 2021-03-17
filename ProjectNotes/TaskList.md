@@ -1,17 +1,15 @@
 ## Commit Notes
 #### General     
-    ErrorCodes vs Exceptions
-        Dispatcher
-            ExceptionSolver
-            
+    Should Query implement IQuery for DI best practices?
+    Document IProjectModel
+    Simplify Dto.IProjectModel.
+
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....
         Restore logic?
 
-    Is the test for stderr output valid?
-        Can the return status be tested?
-
-    Add templates (without a ProjectId) to seed new Prpjects/Models
+    Add templates (without a ProjectId) to seed new Pr0jects/Models
+        Default constructor initialization should serve as templates.
 
     Projects
         Active Project
@@ -20,6 +18,10 @@
                     Assign to active project if null.
 
         Filter Index pages by active Project?
+            if (typeof(TEntity).GetInterfaces().Contains(typeof(IProjectModel)))
+            {
+                queryable = queryable.Where(m => (m.ProjectId == id));
+            }
 
         Projects
             DbInitializer: FindByName must filter by project.

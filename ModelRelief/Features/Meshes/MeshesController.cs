@@ -6,7 +6,9 @@
 
 namespace ModelRelief.Features.Meshes
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
@@ -64,12 +66,27 @@ namespace ModelRelief.Features.Meshes
         {
             await InitializeSessionAsync();
 
-            ViewBag.MeshFormat      = ViewHelpers.PopulateEnumDropDownList<MeshFormat>("Select mesh format");
+            ViewBag.MeshFormat       = PopulateEnumDropDownList<MeshFormat>("Select mesh format");
 
-            ViewBag.CameraId         = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", mesh?.CameraId);
-            ViewBag.DepthBufferId    = ViewHelpers.PopulateModelDropDownList<DepthBuffer>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a depth buffer", mesh?.DepthBufferId);
-            ViewBag.NormalMapId      = ViewHelpers.PopulateModelDropDownList<NormalMap>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a normal map", mesh?.NormalMapId);
-            ViewBag.MeshTransformId  = ViewHelpers.PopulateModelDropDownList<MeshTransform>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a mesh transform", mesh?.CameraId);
+            ViewBag.CameraId         = await PopulateModelDropDownList<Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", mesh?.CameraId);
+            ViewBag.DepthBufferId    = await PopulateModelDropDownList<Dto.DepthBuffer>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a depth buffer", mesh?.DepthBufferId);
+            ViewBag.NormalMapId      = await PopulateModelDropDownList<Dto.NormalMap>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a normal map", mesh?.NormalMapId);
+            ViewBag.MeshTransformId  = await PopulateModelDropDownList<Dto.MeshTransform>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a mesh transform", mesh?.CameraId);
         }
+
+        #region Get
+        /// <summary>
+        /// Action handler for an Index page.
+        /// Returns a collection of models.
+        /// </summary>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <returns>Index page.</returns>
+        public override async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
+        {
+            ViewResult view = await base.Index(pagedQueryParameters, queryParameters) as ViewResult;
+            return await FilterViewByActiveProject<Dto.Mesh>(view);
+        }
+        #endregion
     }
 }

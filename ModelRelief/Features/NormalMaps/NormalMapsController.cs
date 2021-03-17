@@ -43,11 +43,11 @@ namespace ModelRelief.Features.NormalMaps
         {
             await InitializeSessionAsync();
 
-            ViewBag.NormalMapFormats  = ViewHelpers.PopulateEnumDropDownList<NormalMapFormat>("Select normal map format");
-            ViewBag.NormalMapSpaces  = ViewHelpers.PopulateEnumDropDownList<NormalMapSpace>("Select normal map space");
+            ViewBag.NormalMapFormats  = PopulateEnumDropDownList<NormalMapFormat>("Select normal map format");
+            ViewBag.NormalMapSpaces  = PopulateEnumDropDownList<NormalMapSpace>("Select normal map space");
 
-            ViewBag.Model3dId = ViewHelpers.PopulateModelDropDownList<Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", normalMap?.Model3dId);
-            ViewBag.CameraId  = ViewHelpers.PopulateModelDropDownList<Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", normalMap?.CameraId);
+            ViewBag.Model3dId = await PopulateModelDropDownList<Dto.Model3d>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a model", normalMap?.Model3dId);
+            ViewBag.CameraId  = await PopulateModelDropDownList<Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", normalMap?.CameraId);
         }
     }
 }

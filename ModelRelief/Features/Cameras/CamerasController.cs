@@ -42,7 +42,7 @@ namespace ModelRelief.Features.Cameras
         protected async override Task InitializeViewControlsAsync(Dto.Camera camera = null)
         {
             await InitializeSessionAsync();
-            ViewBag.StandardViews = ViewHelpers.PopulateEnumDropDownList<StandardView>("Select a standard camera view");
+            ViewBag.StandardViews = PopulateEnumDropDownList<StandardView>("Select a standard camera view");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a NormalMap.
     /// </summary>
-    public class NormalMap : IGeneratedFileModel
+    public class NormalMap : IGeneratedFileModel, IProjectModel
     {
         public int Id { get; set; }
 

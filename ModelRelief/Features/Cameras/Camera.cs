@@ -15,7 +15,7 @@ namespace ModelRelief.Dto
     /// <summary>
     /// Represents a DataTransferObject (DTO) for a Camera.
     /// </summary>
-    public class Camera : IModel
+    public class Camera : IModel, IProjectModel
     {
         public int Id { get; set; }
 
