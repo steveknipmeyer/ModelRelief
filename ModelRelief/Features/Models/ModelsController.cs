@@ -6,21 +6,16 @@
 
 namespace ModelRelief.Features.Models
 {
-    using System;
-    using System.IO;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
-    using ModelRelief.Dto;
     using ModelRelief.Features;
     using ModelRelief.Features.Settings;
-    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Model Ux requests.
@@ -45,6 +40,21 @@ namespace ModelRelief.Features.Models
             ConfigurationProvider = configurationProvider;
         }
 
+        #region Get
+        /// <summary>
+        /// Action handler for an Index page.
+        /// Returns a (filtered) collection of models.
+        /// </summary>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <returns>Index page.</returns>
+        public override async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
+        {
+            ViewResult view = await base.Index(pagedQueryParameters, queryParameters) as ViewResult;
+            return await FilterViewByActiveProject<Dto.Model3d>(view);
+        }
+        #endregion
+
         /// <summary>
         /// Setup View controls for select controls, etc.
         /// </summary>
@@ -55,7 +65,7 @@ namespace ModelRelief.Features.Models
 
             ViewBag.ModelFormat  = PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.CameraId     = await PopulateModelDropDownList<Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
+            ViewBag.CameraId     = await PopulateModelDropDownList<Camera, Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
         }
     }
 }

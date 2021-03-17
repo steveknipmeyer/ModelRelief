@@ -313,13 +313,15 @@ namespace ModelRelief.Features
         /// <summary>
         /// Creates a SelectListModel from the Name properties in a database table.
         /// </summary>
+        /// <typeparam name="TDomainModel">DomainModel.</typeparam>
         /// <typeparam name="TViewModel">TGetModel implementing IProject.</typeparam>
         /// <param name="dbContext">Database context.</param>
         /// <param name="userId">Owning User Id; permit only authorized models.</param>
         /// <param name="projectId">Owning Project Id; permit only authorized models.</param>
         /// <param name="prompt">Control selection prompt</param>
         /// <param name="selectedRow">(Optional) Primary key of selected row</param>
-        protected async Task<List<SelectListItem>> PopulateModelDropDownList<TViewModel>(ModelReliefDbContext dbContext, string userId, int? projectId, string prompt, int? selectedRow = 0)
+        protected async Task<List<SelectListItem>> PopulateModelDropDownList<TDomainModel, TViewModel>(ModelReliefDbContext dbContext, string userId, int? projectId, string prompt, int? selectedRow = 0)
+            where TDomainModel : DomainModel
             where TViewModel : IModel, Dto.IProjectModel
         {
             var modelSelectList = new List<SelectListItem>
@@ -330,7 +332,7 @@ namespace ModelRelief.Features
                     Value = string.Empty,
                 },
             };
-            var models = await Query.FindDtoModelsAsync<TEntity, TViewModel>(User);
+            var models = await Query.FindDtoModelsAsync<TDomainModel, TViewModel>(User);
             var filteredModels = models.Where(m => m.ProjectId == SettingsManager.UserSession.ProjectId);
 
             foreach (TViewModel model in filteredModels)

@@ -9,12 +9,12 @@ namespace ModelRelief.Features.Cameras
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
-    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Camera Ux requests.
@@ -44,5 +44,20 @@ namespace ModelRelief.Features.Cameras
             await InitializeSessionAsync();
             ViewBag.StandardViews = PopulateEnumDropDownList<StandardView>("Select a standard camera view");
         }
+
+        #region Get
+        /// <summary>
+        /// Action handler for an Index page.
+        /// Returns a (filtered) collection of models.
+        /// </summary>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <returns>Index page.</returns>
+        public override async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
+        {
+            ViewResult view = await base.Index(pagedQueryParameters, queryParameters) as ViewResult;
+            return await FilterViewByActiveProject<Dto.Camera>(view);
+        }
+        #endregion
     }
 }

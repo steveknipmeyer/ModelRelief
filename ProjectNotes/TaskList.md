@@ -1,8 +1,10 @@
 ## Commit Notes
+
 #### General     
     Should Query implement IQuery for DI best practices?
-    Document IProjectModel
-    Simplify Dto.IProjectModel.
+    IProjectModel
+        Simplify Dto.IProjectModel
+        Remove Domain.IProjectModel?
 
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....
@@ -16,12 +18,6 @@
             ValidatedHandler.ValidateReferences               
                 ProjectId
                     Assign to active project if null.
-
-        Filter Index pages by active Project?
-            if (typeof(TEntity).GetInterfaces().Contains(typeof(IProjectModel)))
-            {
-                queryable = queryable.Where(m => (m.ProjectId == id));
-            }
 
         Projects
             DbInitializer: FindByName must filter by project.

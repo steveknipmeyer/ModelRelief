@@ -8,6 +8,7 @@ namespace ModelRelief.Utility
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Security.Claims;
@@ -203,8 +204,9 @@ namespace ModelRelief.Utility
                 IQueryable<TEntity> domainQueryable = await BuildQueryable<TEntity>(claimsPrincipal, multipleModels, queryParameters);
                 projectedModels = ProjectAll<TEntity, TGetModel>(domainQueryable, queryParameters);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogError($"Error querying for DTO models of {typeof(TEntity)}: {ex.Message}");
                 if (throwIfNotFound)
                     throw new EntityNotFoundException(typeof(TEntity), multipleModels);
             }
