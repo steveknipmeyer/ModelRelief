@@ -52,7 +52,9 @@ export class Layout {
                 const id = parseInt(target.dataset.projectid);
 
                 this.session.projectId = id;
+                this.session.project = null;
                 this.session.update().then(() => {
+
                     projectMenuLabel.innerText = projectName;
 
                     const projectUrl = `/projects/details?name=${projectName}&relations=models`;

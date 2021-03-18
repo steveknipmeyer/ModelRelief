@@ -1,21 +1,27 @@
 ## Commit Notes
 
 #### General     
-    Should Query implement IQuery for DI best practices?
+    Reference properties override the foreign key if different.
+        True only for PUT or all HTTP?
+
+    Remove IProjectModel Index methods.
+    
     IProjectModel
-        Simplify Dto.IProjectModel
+        Dto.IProjectModel -> IProjectModel?
         Remove Domain.IProjectModel?
+        Document in TechnicalNotes
 
-    Why is it (intermittently) necessary to run ModelRelief before testrunner?
-        testrunner does initiialize the database....
-        Restore logic?
-
-    Add templates (without a ProjectId) to seed new Pr0jects/Models
-        Default constructor initialization should serve as templates.
+    DI
+        Construct instances at top-level from other DI parameters (such as how Query is handled)?
+            ValidatedHandler
+            ViewController
+                IDependencyManager dependencyManager
+                ISettingsManager settingsManager
 
     Projects
         Active Project
-            ValidatedHandler.ValidateReferences               
+            ValidatedHandler.ValidateReferences     
+                Verify that reference properties belong to the active Project.          
                 ProjectId
                     Assign to active project if null.
 
@@ -23,6 +29,7 @@
             DbInitializer: FindByName must filter by project.
                 foreach (var project in Projects)
                 {
+                    BuildProject
                 }
             Verify projects are coherent. All resources are held by a project.            
 
@@ -45,6 +52,7 @@
 
         New Model
             Add support for creating supporting resources for a new model.
+            Default constructor initialization should serve as templates.
                 Mesh
                     MeshTransform            
                     DepthBuffer
@@ -67,6 +75,10 @@
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    Why is it (intermittently) necessary to run ModelRelief before testrunner?
+        testrunner does initiialize the database....
+        Restore logic?
 
     Investigate Chrome page warnings.
         Compose has multiple progressBar ids.

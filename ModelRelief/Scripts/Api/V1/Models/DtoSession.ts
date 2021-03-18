@@ -54,14 +54,21 @@ export class DtoSession extends DtoModel<DtoSession> implements ISession {
 
     /**
      * @description Update the Session in the database.
-     * @return {*}  {Promise<DtoSession>}
+     * @return {*}  {Promise<bool>}
      */
-    public async update(): Promise<DtoSession> {
+    public async update(): Promise<boolean> {
 
-        const updatedModel = JSON.stringify(this);
-        const result = await this.submitRequestAsync(DtoSession.endPoint, MethodType.Put, ContentType.Json, updatedModel);
+        const updatedModelJSON = JSON.stringify(this);
+        const result = await this.submitRequestAsync(DtoSession.endPoint, MethodType.Put, ContentType.Json, updatedModelJSON);
+        const updatedModel = result.model as DtoSession;
 
-        return this.factory(result.model) as DtoSession;
+        if (!result.response.ok)
+            return false;
+
+        // update references
+        this.project = updatedModel.project;
+
+        return true;
     }
 
     /**

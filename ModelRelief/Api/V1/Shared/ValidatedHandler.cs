@@ -128,6 +128,11 @@ namespace ModelRelief.Api.V1.Shared
                         // ModelExistsAsync requires the primary key to be an integer.
                         continue;
 
+                    // case nameof(Project):
+                    //     if (((propertyValue as int?) ?? 0) == 0)
+                    //         property.SetValue(model, SettingsManager.UserSession.ProjectId);
+                    //     continue;
+
                     default:
                         break;
                 }
