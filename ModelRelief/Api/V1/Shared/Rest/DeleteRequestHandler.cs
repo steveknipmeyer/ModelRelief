@@ -39,7 +39,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="storageManager">Services for file system storage.</param>
         public DeleteRequestHandler(
             ModelReliefDbContext dbContext,
@@ -48,9 +47,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
-            ISettingsManager settingsManager,
             IStorageManager storageManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, null)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
             StorageManager = storageManager;
         }

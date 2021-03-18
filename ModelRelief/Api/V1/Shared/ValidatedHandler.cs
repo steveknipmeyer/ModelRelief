@@ -54,7 +54,6 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        /// <param name="settingsManager">Settings manager.</param>
         /// <param name="validators">List of validators</param>
         public ValidatedHandler(
             ModelReliefDbContext dbContext,
@@ -63,7 +62,6 @@ namespace ModelRelief.Api.V1.Shared
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
-            ISettingsManager settingsManager,
             IEnumerable<IValidator<TRequest>> validators)
         {
             DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
@@ -72,7 +70,6 @@ namespace ModelRelief.Api.V1.Shared
             HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
             DependencyManager =     dependencyManager ?? throw new System.ArgumentNullException(nameof(dependencyManager));
-            SettingsManager =       settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
 
             // WIP Why are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.
@@ -80,6 +77,7 @@ namespace ModelRelief.Api.V1.Shared
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
 
+            SettingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider, Mapper, loggerFactory, DbContext);
             Query = new Query(DbContext, loggerFactory, Mapper);
         }
 

@@ -5,16 +5,7 @@
         True only for PUT or all HTTP?
    
     IProjectModel
-        Dto.IProjectModel -> IProjectModel?
-        Remove Domain.IProjectModel?
         Document in TechnicalNotes
-
-    DI
-        Construct instances at top-level from other DI parameters (such as how Query is handled)?
-            ValidatedHandler
-            ViewController
-                IDependencyManager dependencyManager
-                ISettingsManager settingsManager
 
     Projects
         Active Project

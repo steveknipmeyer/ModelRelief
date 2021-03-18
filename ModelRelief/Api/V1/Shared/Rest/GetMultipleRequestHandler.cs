@@ -43,16 +43,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
-        /// <param name="settingsManager">Settings manager.</param>
         public GetMultipleRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
-            IDependencyManager dependencyManager,
-            ISettingsManager settingsManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, settingsManager, null)
+            IDependencyManager dependencyManager)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
         {
         }
 
