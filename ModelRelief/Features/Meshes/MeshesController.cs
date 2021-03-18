@@ -52,19 +52,6 @@ namespace ModelRelief.Features.Meshes
             var editView = result as ViewResult;
             return View(editView.Model);
         }
-
-        /// <summary>
-        /// Action handler for an Index page.
-        /// Returns a (filtered) collection of models.
-        /// </summary>
-        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
-        /// <param name="queryParameters">Query parameters.</param>
-        /// <returns>Index page.</returns>
-        public override async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
-        {
-            ViewResult view = await base.Index(pagedQueryParameters, queryParameters) as ViewResult;
-            return await FilterViewByActiveProject<Dto.Mesh>(view);
-        }
         #endregion
 
         /// <summary>

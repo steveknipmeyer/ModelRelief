@@ -93,11 +93,10 @@ namespace ModelRelief.Features
             // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
             var modelCollection = (results is PagedResults<TGetModel>) ? ((PagedResults<TGetModel>)results).Results : results;
 
-#if false
             var projectModelCollection = modelCollection as IEnumerable<Dto.IProjectModel>;
             if (projectModelCollection != null)
-                modelCollection = FilterModelCollectionByActiveProject(projectModelCollection) as IEnumerable<TGetModel>;
-#endif
+                modelCollection = await FilterModelCollectionByActiveProject(modelCollection as IEnumerable<TGetModel>);
+
             return View(modelCollection);
         }
 
@@ -349,31 +348,14 @@ namespace ModelRelief.Features
             return modelSelectList;
         }
 
-        /// <summary>
-        /// Filters a View model collection by the active Project.
-        /// </summary>
-        /// <param name="viewResult">ViewResult (unfiltered)</param>
-        /// <typeparam name="TViewModel">View model type (implements IProjectModel)</typeparam>
-        /// <returns>View containing only models belonging to active Project</returns>
-        protected async Task<ViewResult> FilterViewByActiveProject<TViewModel>(ViewResult viewResult)
-            where TViewModel : Dto.IProjectModel
-        {
-            var models = viewResult.Model as IEnumerable<TViewModel>;
-
-            await SettingsManager.InitializeUserSessionAsync(User);
-            var filteredModels = models.Where(m => m.ProjectId == SettingsManager.UserSession.ProjectId);
-
-            return View(filteredModels);
-        }
-
-        /// <summary>
+         /// <summary>
         /// Filters a model collection by the active Project.
         /// </summary>
         /// <param name="models">Model collection (unfiltered)</param>
-        protected async Task<IEnumerable<Dto.IProjectModel>> FilterModelCollectionByActiveProject(IEnumerable<Dto.IProjectModel> models)
+        protected async Task<IEnumerable<TGetModel>> FilterModelCollectionByActiveProject(IEnumerable<TGetModel> models)
         {
             await SettingsManager.InitializeUserSessionAsync(User);
-            var activeProjectModels = models.Where(m => m.ProjectId == SettingsManager.UserSession.ProjectId);
+            var activeProjectModels = models.Where(m => (m as Dto.IProjectModel).ProjectId == SettingsManager.UserSession.ProjectId);
 
             return activeProjectModels;
         }
