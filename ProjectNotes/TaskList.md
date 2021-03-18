@@ -3,9 +3,7 @@
 #### General     
     Reference properties override the foreign key if different.
         True only for PUT or all HTTP?
-
-    Remove IProjectModel Index methods.
-    
+   
     IProjectModel
         Dto.IProjectModel -> IProjectModel?
         Remove Domain.IProjectModel?

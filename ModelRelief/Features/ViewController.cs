@@ -93,9 +93,7 @@ namespace ModelRelief.Features
             // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
             var modelCollection = (results is PagedResults<TGetModel>) ? ((PagedResults<TGetModel>)results).Results : results;
 
-            var projectModelCollection = modelCollection as IEnumerable<Dto.IProjectModel>;
-            if (projectModelCollection != null)
-                modelCollection = await FilterModelCollectionByActiveProject(modelCollection as IEnumerable<TGetModel>);
+            modelCollection = await FilterModelCollectionByActiveProject(modelCollection as IEnumerable<TGetModel>);
 
             return View(modelCollection);
         }
@@ -355,7 +353,8 @@ namespace ModelRelief.Features
         protected async Task<IEnumerable<TGetModel>> FilterModelCollectionByActiveProject(IEnumerable<TGetModel> models)
         {
             await SettingsManager.InitializeUserSessionAsync(User);
-            var activeProjectModels = models.Where(m => (m as Dto.IProjectModel).ProjectId == SettingsManager.UserSession.ProjectId);
+            var activeProjectModels = models.Where(m => (
+                (m as Dto.IProjectModel) == null ? true : (m as Dto.IProjectModel).ProjectId == SettingsManager.UserSession.ProjectId));
 
             return activeProjectModels;
         }
