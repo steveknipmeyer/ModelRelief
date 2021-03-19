@@ -2,7 +2,7 @@
 
 <div style="font-size:9pt">
 
-### Front End (TypeScript)
+## Front End (TypeScript)
 
 #### Interfaces
 
@@ -14,6 +14,8 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 |||IFileModel||
 |||IGeneratedFileModel||
 |||||
+|||IImageModel||
+|||||
 |||ICamera||
 |||IDepthBuffer||
 |||IMesh||
@@ -21,6 +23,7 @@ The FE DTO interfaces are used to facilitate construction of DTO models from HTT
 |||IModel3d||
 |||INormalMap||
 |||IProject||
+|||ISession||
 |||ISettings||
 
 ```javascript
@@ -35,6 +38,7 @@ export interface IMeshTransform extends IModel
 export interface IModel3d extends IFileModel
 export interface INormalMap extends IGeneratedFileModel
 export interface IProject extends IModel
+export interface ISession extends IModel
 export interface ISettings extends IModel
 ```
 
@@ -55,44 +59,46 @@ export class GeneratedFileModel extends FileModel implements IGeneratedFileModel
 ```
 **DTO**
 ```javascript
-export class Model<T extends IModel> implements IModel
-export class FileModel<T extends IFileModel> extends Model<T> implements IFileModel
-export class GeneratedFileModel<T extends IGeneratedFileModel> extends FileModel<T> implements IGeneratedFileModel
+export class DtoModel<T extends IModel> implements IModel
+export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements IFileModel 
+export class DtoGeneratedFileModel<T extends IGeneratedFileModel> extends DtoFileModel<T> implements IGeneratedFileModel 
 ```
 
 #### Concrete Classes
 
 |Graphics |Implementation||DTO (HTTP) |Implementation||THREE|
 |---|---|---|---|---|---|---|
-|Camera|IModel<br>Model||DtoCamera|IModel, ICamera<br>DtoModel||THREE.Camera|
-|DepthBuffer|IGeneratedFileModel<br>GeneratedFileModel||DtoDepthBuffer|IGeneratedFileModel, IDepthBuffer<br>DtoGeneratedFileModel||
-|Mesh|IGeneratedFileModel<br>GeneratedFileModel||DtoMesh|IGeneratedFileModel, IMesh<br>DtoGeneratedFileModel||THREE.Mesh|
-|MeshTransform|IModel<br>Model||DtoMeshTransform|IModel, IMeshTransform<br>DtoModel|||
-|Model3d|IFileModel<br>FileModel||DtoModel3d|IFileModel, IModel3d<br>DtoFileModel||THREE.Mesh|
-|NormalMap|IGeneratedFileModel<br>GeneratedFileModel||DtoNormalMap|IGeneratedFileModel, INormalMap<br>DtoGeneratedFileModel||
-|Project|IModel<br>Model||DtoProject|IModel, IProject<br>DtoModel||
-|Settings|IModel<br>Model||DtoSettings|IModel, IProject<br>DtoModel||
-
+|Camera|Model||DtoCamera|DtoModel<br>ICamera||THREE.Camera|
+|DepthBuffer|GeneratedFileModel||DtoDepthBuffer|DtoGeneratedFileModel<br>IDepthBuffer, IImageModel||
+|Mesh|GeneratedFileModel||DtoMesh|DtoGeneratedFileModel<br>IMesh||THREE.Mesh|
+|MeshTransform|Model||DtoMeshTransform|DtoModel<br>IMeshTransform|||
+|Model3d|FileModel||DtoModel3d|DtoFileModel<br>IModel3d||THREE.Mesh|
+|NormalMap|GeneratedFileModel||DtoNormalMap|DtoGeneratedFileModel<br>INormalMap, IImageModel||
+|Project|Model||DtoProject|DtoModel<br>IProject||
+||||DtoSession|DtoModel<br>ISession||
+||||DtoSettings|DtoModel<br>ISession||
 
 **Graphics**
 ```javascript
-export class Camera extends Model
-export class DepthBuffer extends GeneratedFileModel
+export class BaseCamera extends Model
+export class DepthBuffer extends GeneratedFileModel implements IImageModel
 export class Mesh extends GeneratedFileModel
 export class MeshTransform extends Model
 export class Model3d extends FileModel
-export class NormalMap extends GeneratedFileModel
+export class NormalMap extends GeneratedFileModel implements IImageModel
 export class Project extends Model
 ```
 **DTO**
 ```javascript
-export class Camera extends Model<Camera> implements ICamera
-export class DepthBuffer extends GeneratedFileModel<DepthBuffer> implements IDepthBuffer
-export class Mesh extends GeneratedFileModel<Mesh> implements IMesh
-export class MeshTransform extends Model<MeshTransform> implements IMeshTransform
-export class Model3d extends FileModel<Model3d> implements IModel3d
-export class NormalMap extends GeneratedFileModel<NormalMap> implements INormalMap
-export class Project extends Model<Project> implements IProject
+export class DtoCamera extends DtoModel<DtoCamera> implements ICamera
+export class DtoDepthBuffer extends DtoGeneratedFileModel<DtoDepthBuffer> implements IDepthBuffer
+export class DtoMesh extends DtoGeneratedFileModel<DtoMesh> implements IMesh
+export class DtoMeshTransform extends DtoModel<DtoMeshTransform> implements IMeshTransform
+export class DtoModel3d extends DtoFileModel<DtoModel3d> implements IModel3d
+export class DtoNormalMap extends DtoGeneratedFileModel<DtoNormalMap> implements INormalMap
+export class DtoProject extends DtoModel<DtoProject> implements IProject
+export class DtoSession extends DtoModel<DtoSession> implements ISession
+export class DtoSettings extends DtoModel<DtoSettings> implements ISettings
 ```
 
 ___
@@ -105,6 +111,8 @@ ___
 |Dto.IModel|||
 |Dto.IFileModel|
 |Dto.IGeneratedFileModel|
+||
+|Dto.IProjectModel||Domain.IProjectModel
 
 **DTO**  
 ModelRelief/Features/Dto
@@ -137,39 +145,44 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 ```
 ### Concrete Classes
 ---
-|DTO (HTTP)<br>ModelRelief/Features|Implements|Notes||Domain Models (DB)<br>ModelRelief/Domain |Inherits|
+|DTO (HTTP)<br>ModelRelief/Features|Implements|Notes||Domain Models (DB)<br>ModelRelief/Domain |Implements|
 |---|---|---|---|---|---|
-|Dto.Camera|Dto.IModel|||Domain.Camera|DomainModel|
-|Dto.DepthBuffer|Dto.IGeneratedFileModel|||Domain.DepthBuffer|GeneratedFileDomainModel|
-|Dto.Mesh|Dto.IGeneratedFileModel|||Domain.Mesh|GeneratedFileDomainModel|
-|Dto.MeshTransform|Dto.IModel|||Domain.MeshTransform|DomainModel|
-|Dto.Model3d|Dto.IFileModel|||Domain.Model3d|FileDomainModel|
-|Dto.NormalMap|Dto.IGeneratedFileModel|||Domain.NormalMap|GeneratedFileDomainModel|
+|Dto.Camera|Dto.IModel<br>Dto.IProjectModel|||Domain.Camera|DomainModel<br>Domain.IProjectModel|
+|Dto.DepthBuffer|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.DepthBuffer|GeneratedFileDomainModel<br>Domain.IProjectModel|
+|Dto.Mesh|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.Mesh|GeneratedFileDomainModel<br>Domain.IProjectModel|
+|Dto.MeshTransform|Dto.IModel<br>Dto.IProjectModel|||Domain.MeshTransform|DomainModel<br>Domain.IProjectModel|
+|Dto.Model3d|Dto.IFileModel<br>Dto.IProjectModel|||Domain.Model3d|FileDomainModel<br>Domain.IProjectModel|
+|Dto.NormalMap|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.NormalMap|GeneratedFileDomainModel<br>Domain.IProjectModel|
 |Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
+|Dto.Session|Dto.IModel|||Domain.Session|DomainModel|
 |Dto.Settings|Dto.IModel|||Domain.Settings|DomainModel|
 |||||
 
 **DTO**  
 ModelRelief/Features
 ```csharp
-public class Camera : IModel
-public class DepthBuffer : IGeneratedFileModel
-public class Mesh : IGeneratedFileModel
-public class MeshTransform : IModel
-public class Model3d : IFileModel
-public class NormalMap : IGeneratedFileModel
+public class Camera : IModel, IProjectModel
+public class DepthBuffer : IGeneratedFileModel, IProjectModel
+public class Mesh : IGeneratedFileModel, IProjectModel
+public class MeshTransform : IModel, IProjectModel
+public class Model3d : IFileModel, IProjectModel
+public class NormalMap : IGeneratedFileModel, IProjectModel
 public class Project : IModel
+public class Session : IModel
+public class Settings : IModel
 ```
 **Domain**  
  ModelRelief/Domain/Concrete
 ```csharp
-public class Camera : DomainModel
-public class DepthBuffer  : GeneratedFileDomainModel
-public class Mesh : GeneratedFileDomainModel
-public class MeshTransform : DomainModel
-public class Model3d : FileDomainModel
-public class NormalMap  : GeneratedFileDomainModel
+public class Camera : DomainModel, IProjectModel
+public class DepthBuffer  : GeneratedFileDomainModel, IProjectModel
+public class Mesh : GeneratedFileDomainModel, IProjectModel
+public class MeshTransform : DomainModel, IProjectModel
+public class Model3d : FileDomainModel, IProjectModel
+public class NormalMap  : GeneratedFileDomainModel, IProjectModel
 public class Project : DomainModel
+public class Session : DomainModel
+public class Settings : DomainModel
 ```
 ___
 </div>

@@ -34,7 +34,8 @@
             Use Index page as a template for the Project page.
                 Each user model is hosted in a tile.
 
-            Add support for creating mesh "thumbnails" from the mesh canvas.
+            Add support for creating mesh "thumbnails" from the
+             mesh canvas.
                 mesh/{id}/thumbnail
                 Add a new endpoint mesh/preview for a preview image of the mesh. 
                 Create using the Canvas image of the last generated Mesh.  
