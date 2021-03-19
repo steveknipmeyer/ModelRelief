@@ -2,10 +2,7 @@
 
 #### General     
     Reference properties override the foreign key if different.
-        True only for PUT or all HTTP?
-   
-    IProjectModel
-        Document in TechnicalNotes
+        True only for PUT or all HTTP? 
 
     Projects
         Active Project

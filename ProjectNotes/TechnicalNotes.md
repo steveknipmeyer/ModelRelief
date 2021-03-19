@@ -69,14 +69,16 @@ export class DtoGeneratedFileModel<T extends IGeneratedFileModel> extends DtoFil
 |Graphics |Implementation||DTO (HTTP) |Implementation||THREE|
 |---|---|---|---|---|---|---|
 |Camera|Model||DtoCamera|DtoModel<br>ICamera||THREE.Camera|
-|DepthBuffer|GeneratedFileModel||DtoDepthBuffer|DtoGeneratedFileModel<br>IDepthBuffer, IImageModel||
-|Mesh|GeneratedFileModel||DtoMesh|DtoGeneratedFileModel<br>IMesh||THREE.Mesh|
 |MeshTransform|Model||DtoMeshTransform|DtoModel<br>IMeshTransform|||
-|Model3d|FileModel||DtoModel3d|DtoFileModel<br>IModel3d||THREE.Mesh|
-|NormalMap|GeneratedFileModel||DtoNormalMap|DtoGeneratedFileModel<br>INormalMap, IImageModel||
 |Project|Model||DtoProject|DtoModel<br>IProject||
 ||||DtoSession|DtoModel<br>ISession||
 ||||DtoSettings|DtoModel<br>ISession||
+|||||||
+|Model3d|FileModel||DtoModel3d|DtoFileModel<br>IModel3d||THREE.Mesh|
+|||||||
+|DepthBuffer|GeneratedFileModel||DtoDepthBuffer|DtoGeneratedFileModel<br>IDepthBuffer, IImageModel||
+|Mesh|GeneratedFileModel||DtoMesh|DtoGeneratedFileModel<br>IMesh||THREE.Mesh|
+|NormalMap|GeneratedFileModel||DtoNormalMap|DtoGeneratedFileModel<br>INormalMap, IImageModel||
 
 **Graphics**
 ```javascript
@@ -148,15 +150,16 @@ public abstract class GeneratedFileDomainModel : FileDomainModel
 |DTO (HTTP)<br>ModelRelief/Features|Implements|Notes||Domain Models (DB)<br>ModelRelief/Domain |Implements|
 |---|---|---|---|---|---|
 |Dto.Camera|Dto.IModel<br>Dto.IProjectModel|||Domain.Camera|DomainModel<br>Domain.IProjectModel|
-|Dto.DepthBuffer|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.DepthBuffer|GeneratedFileDomainModel<br>Domain.IProjectModel|
-|Dto.Mesh|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.Mesh|GeneratedFileDomainModel<br>Domain.IProjectModel|
 |Dto.MeshTransform|Dto.IModel<br>Dto.IProjectModel|||Domain.MeshTransform|DomainModel<br>Domain.IProjectModel|
-|Dto.Model3d|Dto.IFileModel<br>Dto.IProjectModel|||Domain.Model3d|FileDomainModel<br>Domain.IProjectModel|
-|Dto.NormalMap|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.NormalMap|GeneratedFileDomainModel<br>Domain.IProjectModel|
 |Dto.Project|Dto.IModel|||Domain.Project|DomainModel|
 |Dto.Session|Dto.IModel|||Domain.Session|DomainModel|
 |Dto.Settings|Dto.IModel|||Domain.Settings|DomainModel|
 |||||
+|Dto.Model3d|Dto.IFileModel<br>Dto.IProjectModel|||Domain.Model3d|FileDomainModel<br>Domain.IProjectModel|
+|||||
+|Dto.DepthBuffer|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.DepthBuffer|GeneratedFileDomainModel<br>Domain.IProjectModel|
+|Dto.Mesh|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.Mesh|GeneratedFileDomainModel<br>Domain.IProjectModel|
+|Dto.NormalMap|Dto.IGeneratedFileModel<br>Dto.IProjectModel|||Domain.NormalMap|GeneratedFileDomainModel<br>Domain.IProjectModel|
 
 **DTO**  
 ModelRelief/Features
