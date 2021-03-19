@@ -20,6 +20,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
@@ -43,6 +44,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
         public ISettingsManager                 SettingsManager { get; set; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
         public Query Query { get; set; }
+        public ModelReferenceValidator ReferenceValidator { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatedHandler{TRequest, TResponse}"/> class.
@@ -79,6 +81,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
 
             SettingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider, Mapper, loggerFactory, DbContext);
             Query = new Query(DbContext, loggerFactory, Mapper);
+            ReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
         }
 
         /// <summary>

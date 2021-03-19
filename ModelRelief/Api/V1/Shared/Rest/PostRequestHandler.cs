@@ -64,7 +64,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var newModel = Mapper.Map<TEntity>(message.NewModel);
 
              // validate all references are owned
-            await ValidateReferences<TEntity>(newModel, message.User);
+            await ReferenceValidator.Validate<TEntity>(newModel, message.User);
 
             // set ownership
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);

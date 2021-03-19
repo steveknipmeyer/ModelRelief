@@ -1,6 +1,8 @@
 ## Commit Notes
 
 #### General     
+    Preserve Project during Edit.
+    
     Reference properties override the foreign key if different.
         True only for PUT or all HTTP? 
 

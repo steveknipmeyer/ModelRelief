@@ -206,7 +206,7 @@ namespace ModelRelief.Api.V1.Shared.Errors
         public static ApiErrorCode MapRequestToApiErrorCode(HttpRequest httpRequest, Type apiRequestType)
         {
             // 1st generic type is the domain model
-            Type domainModelType = apiRequestType.GenericTypeArguments?.First();
+            Type domainModelType = apiRequestType.GenericTypeArguments?.FirstOrDefault();
             if (domainModelType == null)
                 return ApiErrorCode.Default;
 
