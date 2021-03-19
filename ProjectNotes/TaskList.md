@@ -1,17 +1,12 @@
 ## Commit Notes
 
 #### General     
-    Preserve Project during Edit.
-    
     Reference properties override the foreign key if different.
         True only for PUT or all HTTP? 
 
     Projects
-        Active Project
-            ValidatedHandler.ValidateReferences     
-                Verify that reference properties belong to the active Project.          
-                ProjectId
-                    Assign to active project if null.
+        ModelReferenceValidator
+            Verify that reference properties belong to the active Project.          
 
         Projects
             DbInitializer: FindByName must filter by project.

@@ -8,6 +8,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Security.Claims;
@@ -75,10 +76,11 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Model to validate.</param>
-        /// <param name="claimsPrincipal">Active user for this request.</param>
-        public async Task Validate<TEntity>(TEntity model, ClaimsPrincipal claimsPrincipal)
+        /// <param name="user">Active user for this request.</param>
+        public async Task Validate<TEntity>(TEntity model, ClaimsPrincipal user)
             where TEntity : DomainModel
         {
+            await SettingsManager.InitializeUserSessionAsync(user);
             var validationFailures = new List<ValidationFailure>();
 
             Type type = model.GetType();
@@ -90,41 +92,42 @@ namespace ModelRelief.Api.V1.Shared.Validation
                     continue;
 
                 var propertyName = property.Name;
-                var propertyValue = property.GetValue(model, null);
+                var propertyValue = property.GetValue(model);
 
-                if (propertyName == "Id")
-                    continue;
-                if (propertyValue == null)
-                    continue;
-
-                // foreign key?
-                if (!propertyName.EndsWith("Id"))
-                    continue;
-
-                // find actual reference property
-                var referencePropertyName = propertyName.Substring(0, propertyName.LastIndexOf("Id"));
-                var referenceType = type.GetProperty(referencePropertyName)?.PropertyType;
-
-                if (referenceType == null)
-                    continue;
-
-                // Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue, null);
-                switch (referenceType.Name)
+                switch (propertyName)
                 {
-                    case nameof(ApplicationUser):
-                        // ModelExistsAsync requires the primary key to be an integer.
+                    // skip primary key
+                    case "Id":
                         continue;
 
-                    // case nameof(Project):
-                    //     if (((propertyValue as int?) ?? 0) == 0)
-                    //         property.SetValue(model, SettingsManager.UserSession.ProjectId);
-                    //     continue;
+                    case "ProjectId":
+                        if (((propertyValue as int?) ?? 0) == 0)
+                            property.SetValue(model, SettingsManager.UserSession.ProjectId);
+                        break;
 
                     default:
                         break;
                 }
 
-                await ValidateReference(claimsPrincipal, validationFailures, propertyName, propertyValue, referenceType);
+                // skip properties that are not foreign keys
+                if (!propertyName.EndsWith("Id"))
+                    continue;
+
+                // skip null foreign keys
+                if (propertyValue == null)
+                    continue;
+
+                // find actual reference property
+                var referencePropertyName = propertyName.Substring(0, propertyName.LastIndexOf("Id"));
+                var referenceType = type.GetProperty(referencePropertyName)?.PropertyType;
+                if (referenceType == null)
+                {
+                    // e.g. UserId
+                    continue;
+                }
+
+                // Console.WriteLine("Verifying reference property: " + propertyName + ", Value: " + propertyValue);
+                await ValidateReference(user, validationFailures, propertyName, propertyValue, referenceType);
             }
 
             if (validationFailures.Count() > 0)
