@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Api.V1.Shared
+namespace ModelRelief.Api.V1.Shared.Validation
 {
     using System.Threading;
     using System.Threading.Tasks;

@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Api.V1.Shared.Rest
+namespace ModelRelief.Api.V1.Shared.Errors
 {
     using System;
     using System.Collections.Generic;

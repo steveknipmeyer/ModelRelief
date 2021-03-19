@@ -6,8 +6,8 @@
 
 namespace ModelRelief.Api.V1.Settings
 {
-    using ModelRelief.Api.V1.Shared;
     using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Dto;
 

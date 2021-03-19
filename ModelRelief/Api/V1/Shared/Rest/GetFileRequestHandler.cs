@@ -14,9 +14,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
-    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
 
     /// <summary>

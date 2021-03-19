@@ -15,7 +15,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Domain;
-    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;

@@ -14,10 +14,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
-    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;

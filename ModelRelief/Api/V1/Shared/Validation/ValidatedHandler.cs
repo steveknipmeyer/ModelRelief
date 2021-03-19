@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ModelRelief.Api.V1.Shared
+namespace ModelRelief.Api.V1.Shared.Validation
 {
     using System;
     using System.Collections.Generic;
@@ -135,12 +135,7 @@ namespace ModelRelief.Api.V1.Shared
                         break;
                 }
 
-                // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
-                // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
-                var method = typeof(Query).GetMethod(nameof(Query.ModelExistsAsync)).MakeGenericMethod(referenceType);
-                var modelExists = await (Task<bool>)method.Invoke(Query, new object[] { claimsPrincipal, (int)propertyValue });
-                if (!modelExists)
-                    validationFailures.Add(new ValidationFailure(propertyName, $"Property '{propertyName}' references an entity that does not exist."));
+                await ValidateReference(claimsPrincipal, validationFailures, propertyName, propertyValue, referenceType);
             }
 
             if (validationFailures.Count() > 0)
@@ -148,6 +143,16 @@ namespace ModelRelief.Api.V1.Shared
                 // package TRequest type with FV ValidationException
                 throw new ApiValidationException(typeof(TRequest), validationFailures);
             }
+        }
+
+        private async Task ValidateReference(ClaimsPrincipal claimsPrincipal, List<ValidationFailure> validationFailures, string propertyName, object propertyValue, Type referenceType)
+        {
+            // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
+            // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
+            var method = typeof(Query).GetMethod(nameof(Query.ModelExistsAsync)).MakeGenericMethod(referenceType);
+            var modelExists = await (Task<bool>)method.Invoke(Query, new object[] { claimsPrincipal, (int)propertyValue });
+            if (!modelExists)
+                validationFailures.Add(new ValidationFailure(propertyName, $"Property '{propertyName}' references an entity that does not exist."));
         }
 
         /// <summary>

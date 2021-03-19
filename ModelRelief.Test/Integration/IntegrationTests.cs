@@ -11,7 +11,7 @@ namespace ModelRelief.Test.Integration
     using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
-    using ModelRelief.Api.V1.Shared.Rest;
+    using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Test.TestModels;
