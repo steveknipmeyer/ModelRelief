@@ -34,7 +34,7 @@ class TestRunner:
         self.logger = Logger()
         self.environment:Environment = Environment()
 
-    def initialize_database(self, database: str):
+    def initialize_database(self, database: str)-> bool:
         """
         Initialize the database.
 
@@ -44,10 +44,10 @@ class TestRunner:
             The database provider (SQLite | TBD)
         """
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
-
-        subprocess.call (["dotnet", "run", "--no-launch-profile", "-p", "ModelRelief", "--MRExitAfterInitialization=True", "--MRUpdateSeedData=False", "--MRInitializeDatabase=True", "--MRSeedDatabase=True" "--MRDatabaseProvider={}".format(database)])
-
+        status = subprocess.call (["dotnet", "run", "--no-launch-profile", "-p", "ModelRelief", "--MRExitAfterInitialization=True", "--MRUpdateSeedData=False", "--MRInitializeDatabase=True", "--MRSeedDatabase=True" "--MRDatabaseProvider={}".format(database)])
         self.logger.logInformation("End initialize database for {}".format(database), Colors.BrightYellow)
+
+        return status == 0
 
     def create_baseline(self, database: str):
         """
@@ -96,6 +96,7 @@ class TestRunner:
             2) Create clean unit test database.
             3) Execute unit tests.
         """
+        os.system('clear')
         self.logger.logInformation("\nTestRunner start", Colors.BrightCyan)
 
         # save environment
@@ -106,7 +107,8 @@ class TestRunner:
         for database in databases:
 
             # initialize database and user store
-            self.initialize_database(database)
+            if not self.initialize_database(database):
+                return
 
             # unit tests
             self.execute_database_tests(database)

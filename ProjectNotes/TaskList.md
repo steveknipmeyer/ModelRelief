@@ -1,8 +1,13 @@
 ## Commit Notes
 
 #### General     
+    Mesh Edit has null Camera because it has a non-Project Camera that has been excluded by the View control filter.
+    
     Reference properties override the foreign key if different.
         True only for PUT or all HTTP? 
+
+    Optimize SettingsManager.Initialize[UserSession|Settings]Async
+        Every property validation causes a database read.
 
     Projects
         ModelReferenceValidator
