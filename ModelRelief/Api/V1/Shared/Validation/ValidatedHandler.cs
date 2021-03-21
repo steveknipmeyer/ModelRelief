@@ -20,7 +20,6 @@ namespace ModelRelief.Api.V1.Shared.Validation
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
-    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;

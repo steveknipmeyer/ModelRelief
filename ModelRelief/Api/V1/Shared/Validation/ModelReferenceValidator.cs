@@ -119,11 +119,12 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// </summary>
         /// <param name="user">User</param>
         /// <param name="model">Model to validate.</param>
+        /// <param name="properties">Model properties</param>
         /// <param name="modelProjectId">Model project</param>
         /// <param name="foreignKeyPropertyName">(Foreign key) reference property name </param>
         /// <param name="foreignKey">Foreign key</param>
         /// <param name="validationFailures">Collection of active validation errors.</param>
-        private async Task ValidateReference<TEntity>(ClaimsPrincipal user, TEntity model, int? modelProjectId, string foreignKeyPropertyName, int? foreignKey, List<ValidationFailure> validationFailures)
+        private async Task ValidateReference<TEntity>(ClaimsPrincipal user, TEntity model, PropertyInfo[] properties, int? modelProjectId, string foreignKeyPropertyName, int? foreignKey, List<ValidationFailure> validationFailures)
             where TEntity : DomainModel
         {
             // if ((foreignKey ?? 0) == 0)
@@ -155,6 +156,22 @@ namespace ModelRelief.Api.V1.Shared.Validation
                                                     .ToDictionary(p => p.Name, p => p.GetValue(referenceModel));
 
             // verify reference model belongs to same project as parent model
+            if (modelProjectId == null)
+                return;
+
+            if (!referenceModelProperties.ContainsKey("ProjectId"))
+                return;
+
+            var projectId = referenceModelProperties["ProjectId"] as int?;
+            if (projectId == null)
+                return;
+
+            if (modelProjectId != projectId)
+            {
+                var message = $"{referenceModel} ProjectId {projectId} belongs to a different project than its parent model {modelProjectId}.";
+                Console.WriteLine(message);
+                // validationFailures.Add(new ValidationFailure("ProjectId", message));
+            }
         }
 
         /// <summary>
@@ -184,7 +201,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
                 if (foreignKey == null)
                     continue;
 
-                await ValidateReference<TEntity>(user, model, modelProjectId, foreignKeyPropertyName, foreignKey, validationFailures);
+                await ValidateReference<TEntity>(user, model, properties, modelProjectId, foreignKeyPropertyName, foreignKey, validationFailures);
             }
 
             if (validationFailures.Count() > 0)

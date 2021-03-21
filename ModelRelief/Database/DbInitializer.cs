@@ -14,11 +14,13 @@ namespace ModelRelief.Database
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Settings;
@@ -32,10 +34,11 @@ namespace ModelRelief.Database
         private IWebHostEnvironment HostingEnvironment { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider { get; set; }
         private ModelReliefDbContext DbContext { get; set; }
-        private ILogger<DbInitializer> Logger { get; set; }
+        private ILogger Logger { get; set; }
         private IStorageManager StorageManager { get; set; }
+        private ModelReferenceValidator ModelReferenceValidator { get; set; }
         private AccountsSettings Accounts { get; set; }
-
+        private IMapper Mapper { get; set; }
         private string StoreUsersPath { get; set; }
         private string SqlitePath { get; set; }
 
@@ -95,15 +98,26 @@ namespace ModelRelief.Database
             if (DbContext == null)
                 throw new ArgumentNullException(nameof(DbContext));
 
-            Logger = services.GetRequiredService<ILogger<DbInitializer>>();
-            if (Logger == null)
-                throw new ArgumentNullException(nameof(Logger));
+            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+            Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(DbInitializer).Name);
+
+            Mapper = services.GetRequiredService<IMapper>();
+            if (Mapper == null)
+                throw new ArgumentNullException(nameof(Mapper));
 
             StorageManager = services.GetRequiredService<IStorageManager>();
             if (StorageManager == null)
                 throw new ArgumentNullException(nameof(StorageManager));
 
             Accounts = services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+            if (Accounts == null)
+                throw new ArgumentNullException(nameof(Accounts));
+
+            Mapper = services.GetRequiredService<IMapper>();
+            if (Mapper == null)
+                throw new ArgumentNullException(nameof(Mapper));
+
+            ModelReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
 
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
@@ -111,21 +125,6 @@ namespace ModelRelief.Database
             SqlitePath = Path.GetFullPath($"{StorageManager.GetAbsolutePath(ConfigurationProvider.GetSetting(Paths.StoreDatabase))}{ConfigurationSettings.SQLite}");
 
             ExitAfterInitialization = exitAfterInitialization;
-        }
-
-        /// <summary>
-        /// Ensure the database server is initialized and available.
-        /// During (Docker) startup the front-end may attemp to access the database before the service is running.!--
-        /// </summary>
-        private bool EnsureServerInitialized()
-        {
-            switch (ConfigurationProvider.Database)
-            {
-                default:
-                case RelationalDatabaseProvider.SQLite:
-                    Directory.CreateDirectory(SqlitePath);
-                    return true;
-            }
         }
 
         /// <summary>
@@ -153,28 +152,6 @@ namespace ModelRelief.Database
                     SeedDatabaseForTestUsersAsync().Wait();
                 }
             }
-        }
-
-        /// <summary>
-        /// Populate the database schema.
-        /// </summary>
-        public async Task InitializeDatabaseAsync()
-        {
-            Logger.LogInformation($"Preparing to initialize database.");
-            try
-            {
-                await DbContext.Database.EnsureDeletedAsync();
-
-                // SQLite Error 1: 'table "AspNetRoles" already exists'.
-                // https://github.com/aspnet/EntityFrameworkCore/issues/4649
-                await DbContext.Database.EnsureCreatedAsync();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
-                return;
-            }
-            Logger.LogInformation("Database initialized.");
         }
 
         /// <summary>
@@ -234,6 +211,63 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Seeds the database with test data for a new user.
+        /// </summary>
+        /// <param name="claimsPrincipal">Newly-logged in user.</param>
+        public async Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
+                return;
+
+            ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
+            IQueryable<Model3d> results = DbContext.Models
+                                            .Where(m => (m.UserId == user.Id));
+
+            // models exist; not brand new user
+            if (results.Any())
+                return;
+
+            SeedDatabaseForUser(user);
+        }
+
+        /// <summary>
+        /// Ensure the database server is initialized and available.
+        /// During (Docker) startup the front-end may attemp to access the database before the service is running.!--
+        /// </summary>
+        private bool EnsureServerInitialized()
+        {
+            switch (ConfigurationProvider.Database)
+            {
+                default:
+                case RelationalDatabaseProvider.SQLite:
+                    Directory.CreateDirectory(SqlitePath);
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// Populate the database schema.
+        /// </summary>
+        private async Task InitializeDatabaseAsync()
+        {
+            Logger.LogInformation($"Preparing to initialize database.");
+            try
+            {
+                await DbContext.Database.EnsureDeletedAsync();
+
+                // SQLite Error 1: 'table "AspNetRoles" already exists'.
+                // https://github.com/aspnet/EntityFrameworkCore/issues/4649
+                await DbContext.Database.EnsureCreatedAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
+                return;
+            }
+            Logger.LogInformation("Database initialized.");
+        }
+
+        /// <summary>
         /// Seeds the database with test data.
         /// </summary>
         private async Task SeedDatabaseForTestUsersAsync()
@@ -256,30 +290,10 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
-        /// Seeds the database with test data for a new user.
-        /// </summary>
-        /// <param name="claimsPrincipal">Newly-logged in user.</param>
-        public async Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal)
-        {
-            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
-                return;
-
-            ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            IQueryable<Model3d> results = DbContext.Models
-                                            .Where(m => (m.UserId == user.Id));
-
-            // models exist; not brand new user
-            if (results.Any())
-                return;
-
-            SeedDatabaseForUser(user);
-        }
-
-        /// <summary>
         /// Populate the database and user store with examples.
         /// </summary>
         /// <param name="user">Owning user.</param>
-        public void SeedDatabaseForUser(ApplicationUser user)
+        private void SeedDatabaseForUser(ApplicationUser user)
         {
             // database
             AddSettings(user);
@@ -1288,6 +1302,16 @@ namespace ModelRelief.Database
 
             return true;
         }
+        #endregion
+
+        /// <summary>
+        ///  Validate the database entities.
+        /// </summary>
+        /// <returns>true if all entities are valid</returns>
+        private async Task<bool> Validate()
+        {
+            await Task.CompletedTask;
+            return true;
+        }
     }
-    #endregion
 }
