@@ -17,6 +17,7 @@ namespace ModelRelief.Domain
         public ApplicationUser()
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationUser"/> class.
         /// </summary>

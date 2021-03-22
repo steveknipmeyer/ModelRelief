@@ -123,20 +123,20 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <param name="modelProjectId">Model project</param>
         /// <param name="foreignKeyPropertyName">(Foreign key) reference property name </param>
         /// <param name="foreignKey">Foreign key</param>
-        /// <param name="validationFailures">Collection of active validation errors.</param>
-        private async Task ValidateReference<TEntity>(ClaimsPrincipal user, TEntity model, PropertyInfo[] properties, int? modelProjectId, string foreignKeyPropertyName, int? foreignKey, List<ValidationFailure> validationFailures)
+        private async Task<List<ValidationFailure>> ValidateReferenceAsync<TEntity>(ClaimsPrincipal user, TEntity model, PropertyInfo[] properties, int? modelProjectId, string foreignKeyPropertyName, int? foreignKey)
             where TEntity : DomainModel
         {
             // if ((foreignKey ?? 0) == 0)
             //     Console.WriteLine($"{typeof(TEntity).Name} {model.Name} foreign key: [{foreignKeyPropertyName}, {foreignKey}]");
 
+            var propertyValidationFailures = new List<ValidationFailure>();
             var type = typeof(TEntity);
 
             // find actual reference property (e.g. MeshId -> Mesh)
             var referencePropertyName = foreignKeyPropertyName.Substring(0, foreignKeyPropertyName.LastIndexOf("Id"));
             var referenceType = type.GetProperty(referencePropertyName)?.PropertyType;
             if (referenceType == null)
-                return;
+                return propertyValidationFailures;
 
             // https://stackoverflow.com/questions/4101784/calling-a-generic-method-with-a-dynamic-type
             // https://stackoverflow.com/questions/16153047/net-invoke-async-method-and-await
@@ -146,32 +146,31 @@ namespace ModelRelief.Api.V1.Shared.Validation
             dynamic referenceModel = Convert.ChangeType(task.Result, referenceType);
             if (referenceModel == null)
             {
-                validationFailures.Add(new ValidationFailure(foreignKeyPropertyName, $"Property '{foreignKeyPropertyName}' references an entity that does not exist."));
-                return;
+                propertyValidationFailures.Add(new ValidationFailure(foreignKeyPropertyName, $"Property '{foreignKeyPropertyName}' references an entity that does not exist."));
+                return propertyValidationFailures;
             }
-
             Dictionary<string, object> referenceModelProperties = ((object)referenceModel)
                                                     .GetType()
                                                     .GetProperties()
-                                                    .ToDictionary(p => p.Name, p => p.GetValue(referenceModel));
+                                                    .ToDictionary(p => p.Name, p => p.CanWrite ? p.GetValue(referenceModel) : string.Empty);
 
             // verify reference model belongs to same project as parent model
             if (modelProjectId == null)
-                return;
+                return propertyValidationFailures;
 
             if (!referenceModelProperties.ContainsKey("ProjectId"))
-                return;
+                return propertyValidationFailures;
 
             var projectId = referenceModelProperties["ProjectId"] as int?;
             if (projectId == null)
-                return;
+                return propertyValidationFailures;
 
             if (modelProjectId != projectId)
             {
                 var message = $"{referenceModel} ProjectId {projectId} belongs to a different project than its parent model {modelProjectId}.";
-                Console.WriteLine(message);
-                // validationFailures.Add(new ValidationFailure("ProjectId", message));
+                propertyValidationFailures.Add(new ValidationFailure("ProjectId", message));
             }
+            return propertyValidationFailures;
         }
 
         /// <summary>
@@ -180,11 +179,13 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Model to validate.</param>
         /// <param name="user">Active user for this request.</param>
-        public async Task Validate<TEntity>(TEntity model, ClaimsPrincipal user)
+        /// <param name="throwIfError">Throw exception instead of returning the collection of validation errors.</param>
+        public async Task<List<ValidationFailure>> ValidateAsync<TEntity>(TEntity model, ClaimsPrincipal user, bool throwIfError = true)
             where TEntity : DomainModel
         {
             await SettingsManager.InitializeUserSessionAsync(user);
-            var validationFailures = new List<ValidationFailure>();
+            var modelValidationFailures = new List<ValidationFailure>();
+            var propertyValidationFailures = new List<ValidationFailure>();
 
             Type type = typeof(TEntity);
             PropertyInfo[] properties = type.GetProperties();
@@ -201,14 +202,16 @@ namespace ModelRelief.Api.V1.Shared.Validation
                 if (foreignKey == null)
                     continue;
 
-                await ValidateReference<TEntity>(user, model, properties, modelProjectId, foreignKeyPropertyName, foreignKey, validationFailures);
+                propertyValidationFailures = await ValidateReferenceAsync<TEntity>(user, model, properties, modelProjectId, foreignKeyPropertyName, foreignKey);
+                modelValidationFailures.AddRange(propertyValidationFailures);
             }
 
-            if (validationFailures.Count() > 0)
+            if (throwIfError && (modelValidationFailures.Count() > 0))
             {
                 // package TRequest type with FV ValidationException
-                throw new ApiValidationException(typeof(ModelReferenceValidator), validationFailures);
+                throw new ApiValidationException(typeof(ModelReferenceValidator), modelValidationFailures);
             }
+            return modelValidationFailures;
         }
     }
 }

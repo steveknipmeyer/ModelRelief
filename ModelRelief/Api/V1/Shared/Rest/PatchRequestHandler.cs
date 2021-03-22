@@ -147,7 +147,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var updatedModel = BuildUpdatedDomainModel(message, targetModel);
 
             // validate all references are owned
-            await ReferenceValidator.Validate<TEntity>(updatedModel, message.User);
+            await ReferenceValidator.ValidateAsync<TEntity>(updatedModel, message.User);
 
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 

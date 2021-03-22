@@ -1,26 +1,13 @@
 ## Commit Notes
 
 #### General       
-    Should ModelValidator be a generic class (rather than use generic methods?)
-        ModelValidator<IDomainModel>()
-        
-        https://stackoverflow.com/questions/12708090/is-generics-runtime-or-compile-time-polymorphism
-
-    
-    Mesh Edit has null Camera because it has a non-Project Camera that has been excluded by the View control filter.
-    
-    Reference properties override the foreign key if different.
-        True only for PUT or all HTTP? 
-
+    DbInitializer: FindByName must filter by project.
+       
     Optimize SettingsManager.Initialize[UserSession|Settings]Async
         Every property validation causes a database read.
 
     Projects
-        ModelReferenceValidator
-            Verify that reference properties belong to the active Project.          
-
         Projects
-            DbInitializer: FindByName must filter by project.
                 foreach (var project in Projects)
                 {
                     BuildProject
@@ -70,6 +57,9 @@
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    Reference properties override the foreign key if different.
+        True only for PUT or all HTTP? 
 
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....

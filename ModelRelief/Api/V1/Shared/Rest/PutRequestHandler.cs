@@ -71,7 +71,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             targetModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
 
             // validate all references are owned
-            await ReferenceValidator.Validate<TEntity>(targetModel, message.User);
+            await ReferenceValidator.ValidateAsync<TEntity>(targetModel, message.User);
 
             // ensure Id is set; PutModel may not have included the Id but it is always present in the PutRequest.
             targetModel.Id = message.Id;

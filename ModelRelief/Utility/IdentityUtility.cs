@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Utility
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;
@@ -49,6 +50,22 @@ namespace ModelRelief.Utility
             await Task.CompletedTask;
 
             return applicationUser;
+        }
+
+        /// <summary>
+        ///  Synthesize a ClaimsPrincipal from an ApplicationUser
+        /// </summary>
+        /// <param name="user">Application user</param>
+        /// <returns>true if all entities are valid</returns>
+        public static ClaimsPrincipal ConstructClaimsPrincipal(ApplicationUser user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.NameIdentifier),
+                new Claim(ClaimTypes.Name, user.Name),
+            };
+            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Basic"));
+            return claimsPrincipal;
         }
     }
 }

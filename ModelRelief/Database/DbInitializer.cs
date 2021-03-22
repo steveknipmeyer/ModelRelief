@@ -15,6 +15,7 @@ namespace ModelRelief.Database
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FluentValidation.Results;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -231,6 +232,58 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        ///  Validate the database entities.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="user">Application user</param>
+        /// <returns>true if all entities are valid</returns>
+        public async Task<List<ValidationFailure>> ValidateEntityAsync<TEntity>(ApplicationUser user)
+        where TEntity : DomainModel
+        {
+            var claimsPrincipal = IdentityUtility.ConstructClaimsPrincipal(user);
+            var validationFailures = new List<ValidationFailure>();
+            var modelValidationFailures = new List<ValidationFailure>();
+
+            IQueryable<TEntity> models = DbContext.Set<TEntity>()
+                                                  .Where(m => (m.UserId == user.Id));
+            await models.ForEachAsync(async (model) =>
+            {
+                modelValidationFailures = await ModelReferenceValidator.ValidateAsync<TEntity>(model, claimsPrincipal, throwIfError: false);
+                validationFailures.AddRange(modelValidationFailures);
+            });
+
+            validationFailures.ForEach((failure) =>
+            {
+                Logger.LogError(failure.ErrorMessage);
+            });
+
+            return validationFailures;
+        }
+
+        /// <summary>
+        /// Validate the database entities.
+        /// </summary>
+        /// <param name="user">Application user</param>
+        /// <returns>true if all entities are valid</returns>
+        public bool ValidateAll(ApplicationUser user)
+        {
+            var validationFailures = new List<ValidationFailure>();
+            var entityValidationFailures = new List<ValidationFailure>();
+
+            var entityTypes = DbContext.GetAllEntityTypes();
+            entityTypes.ForEach(async (entityType) =>
+            {
+                var validateEntityMethod = typeof(DbInitializer).GetMethod(nameof(ValidateEntityAsync)).MakeGenericMethod(entityType);
+                dynamic task = validateEntityMethod.Invoke(this, new object[] { user });
+                await task;
+                entityValidationFailures = task.Result;
+                validationFailures.AddRange(entityValidationFailures);
+            });
+
+            return validationFailures.Count == 0;
+        }
+
+        /// <summary>
         /// Ensure the database server is initialized and available.
         /// During (Docker) startup the front-end may attemp to access the database before the service is running.!--
         /// </summary>
@@ -283,8 +336,9 @@ namespace ModelRelief.Database
             {
                 ApplicationUser user = ConstructUserFromAccount(account);
                 SeedDatabaseForUser(user);
-            }
 
+                ValidateAll(user);
+            }
             CreateTestDatabase();
             await Task.CompletedTask;
         }
@@ -475,7 +529,7 @@ namespace ModelRelief.Database
                 new Model3d
                 {
                     Name = "armadillo.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Isometric Camera"),
+                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Lucy"),
                 },
                 new Model3d
                 {
@@ -1303,15 +1357,5 @@ namespace ModelRelief.Database
             return true;
         }
         #endregion
-
-        /// <summary>
-        ///  Validate the database entities.
-        /// </summary>
-        /// <returns>true if all entities are valid</returns>
-        private async Task<bool> Validate()
-        {
-            await Task.CompletedTask;
-            return true;
-        }
     }
 }
