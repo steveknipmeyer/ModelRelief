@@ -3,46 +3,32 @@
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-
 namespace ModelRelief.Features.Settings
 {
     /// <summary>
-    /// Shared camera settings.
+    /// Default settings.
     /// These settings are shared between the backend and frontend through JSON.
     /// </summary>
     public static class DefaultSettings
     {
-        public static double NearClippingPlane { get; set; }
-        public static double FarClippingPlane { get; set; }
+        /// <summary>
+        /// Initializes static members of the <see cref="DefaultSettings"/>  class.
+        /// Constructor
+        /// </summary>
+        static DefaultSettings()
+        {
+            Camera = new DefaultCameraSettings();
+        }
 
-        // Perspective
-        public static double FieldOfView { get; set; }
-
-        // Orthographic
-        public static double OrthographicFrustrumPlaneOffset { get; set; }
-        public static double LeftPlane { get; set; }
-        public static double RightPlane { get; set; }
-        public static double TopPlane { get; set; }
-        public static double BottomPlane { get; set; }
+        public static DefaultCameraSettings Camera { get; set; }
 
         /// <summary>
-        /// Assign the shared settings from JSON definitions.
+        /// Initialize the settings from the JSON definitions.
         /// </summary>
-        /// <param name="settings">Camera settings read from JSON.</param>
-        public static void Initialize(DefaultSettingsJson settings)
+        /// <param name="settingsJson">Raw JSON settings</param>
+        public static void Initialize(dynamic settingsJson)
         {
-            NearClippingPlane               = settings.NearClippingPlane;
-            FarClippingPlane                = settings.FarClippingPlane;
-
-            // Perspective
-            FieldOfView                     = settings.FieldOfView;
-
-            // Orthographic
-            OrthographicFrustrumPlaneOffset = settings.OrthographicFrustrumPlaneOffset;
-            LeftPlane   = -OrthographicFrustrumPlaneOffset;
-            RightPlane  = +OrthographicFrustrumPlaneOffset;
-            TopPlane    = +OrthographicFrustrumPlaneOffset;
-            BottomPlane = -OrthographicFrustrumPlaneOffset;
+            Camera.Initialize(settingsJson);
         }
     }
 }

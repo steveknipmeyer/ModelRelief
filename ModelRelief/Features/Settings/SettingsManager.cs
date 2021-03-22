@@ -23,8 +23,7 @@ namespace ModelRelief.Features.Settings
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Shared settings manager.
-    /// Provides initialization of settings shared between the front end (FE) and backend (BE) through JSON.
+    /// Settings manager.
     /// </summary>
     public class SettingsManager : ISettingsManager
     {
@@ -133,7 +132,7 @@ namespace ModelRelief.Features.Settings
                     var settingsFile = $"{this.HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
                     settingsFile = Path.GetFullPath(settingsFile);
 
-                    var defaultSettings = JsonConvert.DeserializeObject<DefaultSettingsJson>(System.IO.File.ReadAllText(settingsFile));
+                    dynamic defaultSettings = JsonConvert.DeserializeObject(System.IO.File.ReadAllText(settingsFile));
                     return defaultSettings;
 
                 case SettingsType.User:

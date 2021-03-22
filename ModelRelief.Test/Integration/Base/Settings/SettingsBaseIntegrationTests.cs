@@ -44,12 +44,12 @@ namespace ModelRelief.Test.Integration.Settings
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/default");
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var defaultSettings = JsonConvert.DeserializeObject<DefaultSettingsJson>(requestResponse.ContentString);
+            dynamic defaultSettings = JsonConvert.DeserializeObject(requestResponse.ContentString);
 
             // Assert
-            Assert.True(defaultSettings.NearClippingPlane > 0.0);
-            Assert.True(defaultSettings.FarClippingPlane > 0.0);
-            Assert.True(defaultSettings.FieldOfView > 0.0);
+            Assert.True(defaultSettings.Camera.NearClippingPlane > 0.0);
+            Assert.True(defaultSettings.Camera.FarClippingPlane > 0.0);
+            Assert.True(defaultSettings.Camera.FieldOfView > 0.0);
         }
 
         /// <summary>

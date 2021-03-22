@@ -43,10 +43,9 @@ namespace ModelRelief.Database
         /// <summary>
         /// Initialization of backend (BE) shared settings that are defined through JSON.
         /// </summary>
-        public async Task InitializeSharedSettingsAsync()
+        public async Task InitializeDefaultSettingsAsync()
         {
-            // camera does not require DbContext
-            var defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default) as DefaultSettingsJson;
+            dynamic defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default);
             DefaultSettings.Initialize(defaultSettings);
         }
 
@@ -55,7 +54,7 @@ namespace ModelRelief.Database
         /// </summary>
         public void Initialize()
         {
-            InitializeSharedSettingsAsync().Wait();
+            InitializeDefaultSettingsAsync().Wait();
         }
     }
 }

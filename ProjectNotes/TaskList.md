@@ -1,12 +1,9 @@
 ## Commit Notes
-
+DefaultSettings are read as a dynamic object.
 #### General       
-    Expand CamersSettings.json -> DefaultSettings.json
-        DefaultSettings.json provides defaults for Settings.
 
-    settings/camera -> settings/default
-    DefaultCameraSettings -> DefaultSettings.Camera
-
+    DefaultSettings.json should provides the defaults for Settings.
+    
 
     DbInitializer: FindByName must filter by project.
        

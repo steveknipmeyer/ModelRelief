@@ -53,7 +53,7 @@ namespace ModelRelief.Api.V1.Settings
         [Produces("application/json")]
         public async Task<IActionResult> Default()
         {
-            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Default) as DefaultSettingsJson;
+            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Default);
             return Ok(settingsObject);
         }
 

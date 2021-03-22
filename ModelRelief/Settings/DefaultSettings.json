@@ -1,6 +1,9 @@
 {
-    "NearClippingPlane": 0.1,
-    "FarClippingPlane": 10000.0,
-    "FieldOfView": 37.0,
-    "OrthographicFrustrumPlaneOffset": 100
+    "Camera":
+    {
+        "NearClippingPlane": 0.1,
+        "FarClippingPlane": 10000.0,
+        "FieldOfView": 37.0,
+        "OrthographicFrustrumPlaneOffset": 100
+    }
 }
