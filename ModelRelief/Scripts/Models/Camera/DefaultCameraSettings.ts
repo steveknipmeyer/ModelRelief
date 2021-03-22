@@ -18,7 +18,6 @@ export interface IOrthographicFrustum {
     bottom: number;
 }
 
-
 /**
  * @description JSON default camera settings.
  * @interface IDefaultCameraSettings
@@ -58,7 +57,7 @@ export class DefaultCameraSettings  {
     public static async initialize(): Promise<void> {
 
         // Populate the shared settings from the JSON file.
-        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsCamera}`;
+        const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsDefault}`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const defaultCameraSettings: IDefaultCameraSettings = JSON.parse(result.contentString) as unknown as IDefaultCameraSettings;
 

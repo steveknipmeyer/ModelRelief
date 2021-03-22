@@ -128,13 +128,13 @@ namespace ModelRelief.Features.Settings
         {
             switch (settingsType.ToLower())
             {
-                case SettingsType.Camera:
+                case SettingsType.Default:
                     var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
                     var settingsFile = $"{this.HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
                     settingsFile = Path.GetFullPath(settingsFile);
 
-                    var defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettingsJson>(System.IO.File.ReadAllText(settingsFile));
-                    return defaultCameraSettings;
+                    var defaultSettings = JsonConvert.DeserializeObject<DefaultSettingsJson>(System.IO.File.ReadAllText(settingsFile));
+                    return defaultSettings;
 
                 case SettingsType.User:
                     return await InitializeUserSettingsAsync(user);

@@ -25,6 +25,7 @@ namespace ModelRelief.Domain
     [DependentFiles(typeof(DepthBuffer), typeof(NormalMap))]
     public class Camera : DomainModel, IProjectModel
     {
+        // Properties
         [DependentFileProperty]
         public bool IsPerspective { get; set; }
 
@@ -96,6 +97,10 @@ namespace ModelRelief.Domain
         {
             IsPerspective = true;
 
+            // Clipping Planes
+            Near = DefaultSettings.NearClippingPlane;
+            Far = DefaultSettings.FarClippingPlane;
+
             ScaleX = 1.0;
             ScaleY = 1.0;
             ScaleZ = 1.0;
@@ -105,14 +110,14 @@ namespace ModelRelief.Domain
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = DefaultCameraSettings.FieldOfView;
+            FieldOfView = DefaultSettings.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = DefaultCameraSettings.LeftPlane;
-            Right   = DefaultCameraSettings.RightPlane;
-            Top     = DefaultCameraSettings.TopPlane;
-            Bottom  = DefaultCameraSettings.BottomPlane;
+            Left    = DefaultSettings.LeftPlane;
+            Right   = DefaultSettings.RightPlane;
+            Top     = DefaultSettings.TopPlane;
+            Bottom  = DefaultSettings.BottomPlane;
         }
     }
 }

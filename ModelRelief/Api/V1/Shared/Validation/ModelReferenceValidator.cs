@@ -168,7 +168,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
             if (modelProjectId != projectId)
             {
                 var message = $"{referenceModel} ProjectId {projectId} belongs to a different project than its parent model {modelProjectId}.";
-                propertyValidationFailures.Add(new ValidationFailure("ProjectId", message));
+                // propertyValidationFailures.Add(new ValidationFailure("ProjectId", message));
             }
             return propertyValidationFailures;
         }

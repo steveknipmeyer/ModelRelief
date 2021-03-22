@@ -11,7 +11,7 @@ namespace ModelRelief.Features.Settings
     /// </summary>
     public class SettingsType
     {
-        public const string Camera = "camera";
+        public const string Default = "default";
         public const string User = "user";
 
         public const string Session = "session";

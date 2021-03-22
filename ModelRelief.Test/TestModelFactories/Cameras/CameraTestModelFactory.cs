@@ -47,10 +47,10 @@ namespace ModelRelief.Test.TestModels.Cameras
             var validModel = base.ConstructValidModel() as Dto.Camera;
             validModel.Name = "TestCamera";
 
-            validModel.FieldOfView = DefaultCameraSettings.FieldOfView;
+            validModel.FieldOfView = DefaultSettings.FieldOfView;
             validModel.AspectRatio = 1.0;
-            validModel.Near = DefaultCameraSettings.NearClippingPlane;
-            validModel.Far =  DefaultCameraSettings.FarClippingPlane;
+            validModel.Near = DefaultSettings.NearClippingPlane;
+            validModel.Far =  DefaultSettings.FarClippingPlane;
 
             validModel.PositionX = 0.0;
             validModel.PositionY = 0.0;

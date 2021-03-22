@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="DefaultCameraSettings.cs" company="ModelRelief">
+// <copyright file="DefaultSettings.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,7 +10,7 @@ namespace ModelRelief.Features.Settings
     /// Shared camera settings.
     /// These settings are shared between the backend and frontend through JSON.
     /// </summary>
-    public static class DefaultCameraSettings
+    public static class DefaultSettings
     {
         public static double NearClippingPlane { get; set; }
         public static double FarClippingPlane { get; set; }
@@ -29,7 +29,7 @@ namespace ModelRelief.Features.Settings
         /// Assign the shared settings from JSON definitions.
         /// </summary>
         /// <param name="settings">Camera settings read from JSON.</param>
-        public static void Initialize(DefaultCameraSettingsJson settings)
+        public static void Initialize(DefaultSettingsJson settings)
         {
             NearClippingPlane               = settings.NearClippingPlane;
             FarClippingPlane                = settings.FarClippingPlane;

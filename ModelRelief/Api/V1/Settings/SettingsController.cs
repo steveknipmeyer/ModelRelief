@@ -45,15 +45,15 @@ namespace ModelRelief.Api.V1.Settings
         }
 
         /// <summary>
-        /// Returns the JSON settings for the default camera.
+        /// Returns the default JSON settings.
         /// </summary>
         /// <returns>JSON settings.</returns>
-        [Route("camera")]
+        [Route("default")]
         [HttpGet]
         [Produces("application/json")]
-        public async Task<IActionResult> Camera()
+        public async Task<IActionResult> Default()
         {
-            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Camera) as DefaultCameraSettingsJson;
+            var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Default) as DefaultSettingsJson;
             return Ok(settingsObject);
         }
 

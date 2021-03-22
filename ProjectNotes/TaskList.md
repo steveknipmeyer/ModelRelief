@@ -1,18 +1,45 @@
 ## Commit Notes
 
 #### General       
+    Expand CamersSettings.json -> DefaultSettings.json
+        DefaultSettings.json provides defaults for Settings.
+
+    settings/camera -> settings/default
+    DefaultCameraSettings -> DefaultSettings.Camera
+
+
     DbInitializer: FindByName must filter by project.
        
     Optimize SettingsManager.Initialize[UserSession|Settings]Async
         Every property validation causes a database read.
 
     Projects
+
+        Default Constructors
+            Camera
+            DepthBuffer
+            Mesh
+            MeshTransform
+            Model3d
+            NormalMap
+            Project
+            Settings
+            Session
+
         Projects
-                foreach (var project in Projects)
-                {
-                    BuildProject
-                }
-            Verify projects are coherent. All resources are held by a project.            
+            New Model
+                Add support for creating supporting resources for a new model.               
+            projects.ForEach
+            {
+                Mesh
+                    MeshTransform            
+                    DepthBuffer
+                        Camera
+                        Model
+                            Camera
+                    Camera
+            }
+
 
         Project Control
             Should the Menu label link to the active project?
@@ -32,16 +59,6 @@
                 Add a new endpoint mesh/preview for a preview image of the mesh. 
                 Create using the Canvas image of the last generated Mesh.  
 
-        New Model
-            Add support for creating supporting resources for a new model.
-            Default constructor initialization should serve as templates.
-                Mesh
-                    MeshTransform            
-                    DepthBuffer
-                        Camera
-                        Model
-                            Camera
-                    Camera
 
             Create View        
                 Why is the FormFile binding lost?

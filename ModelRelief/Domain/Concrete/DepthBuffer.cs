@@ -17,10 +17,13 @@ namespace ModelRelief.Domain
         PNG,        // PNG format
         JPG,        // JPG format
     }
-
     [DependentFiles(typeof(Mesh))]
     public class DepthBuffer  : GeneratedFileDomainModel, IProjectModel
     {
+        // defaults
+        public const double DefaultSize = 512.0;
+
+        // Properties
         public double Width { get; set; }
         public double Height { get; set; }
         public DepthBufferFormat Format { get; set; }
@@ -42,6 +45,10 @@ namespace ModelRelief.Domain
 
         public DepthBuffer()
         {
+            Width  = DefaultSize;
+            Height = DefaultSize;
+
+            Format = DepthBufferFormat.SDB;
         }
     }
 }

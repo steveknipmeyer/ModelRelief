@@ -46,8 +46,8 @@ namespace ModelRelief.Database
         public async Task InitializeSharedSettingsAsync()
         {
             // camera does not require DbContext
-            var defaultCameraSettings = await SettingsManager.GetSettingsAsync(SettingsType.Camera) as DefaultCameraSettingsJson;
-            DefaultCameraSettings.Initialize(defaultCameraSettings);
+            var defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default) as DefaultSettingsJson;
+            DefaultSettings.Initialize(defaultSettings);
         }
 
         /// <summary>

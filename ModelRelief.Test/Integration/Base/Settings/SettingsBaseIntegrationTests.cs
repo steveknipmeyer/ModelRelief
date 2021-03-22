@@ -32,24 +32,24 @@ namespace ModelRelief.Test.Integration.Settings
 
         #region Get
         /// <summary>
-        /// Test that the default camera settings resource can be retrieved.
+        /// Test that the default settings resource can be retrieved.
         /// </summary>
         [Fact]
         [Trait("Category", "Api GetSingle")]
-        public virtual async Task DefaultCameraSettingsExist()
+        public virtual async Task DefaultSettingsExist()
         {
             // Arrange
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/camera");
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/default");
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
-            var defaultCameraSettings = JsonConvert.DeserializeObject<DefaultCameraSettingsJson>(requestResponse.ContentString);
+            var defaultSettings = JsonConvert.DeserializeObject<DefaultSettingsJson>(requestResponse.ContentString);
 
             // Assert
-            Assert.True(defaultCameraSettings.NearClippingPlane > 0.0);
-            Assert.True(defaultCameraSettings.FarClippingPlane > 0.0);
-            Assert.True(defaultCameraSettings.FieldOfView > 0.0);
+            Assert.True(defaultSettings.NearClippingPlane > 0.0);
+            Assert.True(defaultSettings.FarClippingPlane > 0.0);
+            Assert.True(defaultSettings.FieldOfView > 0.0);
         }
 
         /// <summary>
