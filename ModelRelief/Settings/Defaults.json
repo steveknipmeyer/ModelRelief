@@ -7,6 +7,10 @@
         "OrthographicFrustrumPlaneOffset": 100
     },
 
+    "DepthBuffer": {
+        "Format": 1
+    },
+
     "Mesh":
     {
         "Format": 1
@@ -42,6 +46,14 @@
 
     "Model3d": {
         "Format": 1
+    },
+
+    "NormalMap": {
+        "Format": 1
+    },
+
+    "Resolution": {
+        "Image": 512
     },
 
     "Settings":

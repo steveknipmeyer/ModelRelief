@@ -1,11 +1,7 @@
-## Commit Notes
-DefaultSettings are read as a dynamic object.
+#### Commit
 #### General       
-    Should Defaults be in the Domain (not Features.Settings) namespace?
+    ComposerController should initialize relief dimensions based on DepthBuffer.
     CSS static properties (e.g. image sizes) must be moved to code.
-
-    DefaultSettings.json should provides the defaults for Settings.
-    
 
     DbInitializer: FindByName must filter by project.
        
@@ -13,22 +9,7 @@ DefaultSettings are read as a dynamic object.
         Every property validation causes a database read.
 
     Projects
-
-        Default Constructors
-            Camera
-            Mesh
-            MeshTransform
-            Model3d
-            Settings
-            Session
-            Project
-
-            DepthBuffer
-            NormalMap
-
         Projects
-            New Model
-                Add support for creating supporting resources for a new model.               
             projects.ForEach
             {
                 Mesh
@@ -39,6 +20,8 @@ DefaultSettings are read as a dynamic object.
                             Camera
                     Camera
             }
+            New Model
+                Add support for creating supporting resources for a new model.               
 
         Project Control
             Should the Menu label link to the active project?

@@ -77,15 +77,12 @@ class ControlSettings {
  */
 export class ComposerController {
 
-    // Static
-    public static DefaultReliefDimensions = 512;                    // relief dimensions
-
     // Public
-    public _composerView: ComposerView;                             // application view
-    public _composerViewSettings: ComposerViewSettings;             // UI settings
+    public _composerView: ComposerView;                                     // application view
+    public _composerViewSettings: ComposerViewSettings;                     // UI settings
 
-    public _reliefWidthPixels: number;                              // relief width
-    public _reliefHeightPixels: number;                             // relief height
+    public _reliefWidthPixels: number;                                      // relief width
+    public _reliefHeightPixels: number;                                     // relief height
 
     // Protected
     protected _logger: ILogger;
@@ -345,7 +342,7 @@ export class ComposerController {
         this._logger = Services.defaultLogger;
 
         // overall dimensions
-        this._reliefWidthPixels = ComposerController.DefaultReliefDimensions;
+        this._reliefWidthPixels = Defaults.resolution.image;
         this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
 
         // ModelViewer camera = DepthBuffer camera (used to generate active mesh)

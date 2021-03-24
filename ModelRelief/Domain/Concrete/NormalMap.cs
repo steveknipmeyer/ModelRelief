@@ -48,6 +48,10 @@ namespace ModelRelief.Domain
 
         public NormalMap()
         {
+            Width = Defaults.Resolution.Image;
+            Height = Defaults.Resolution.Image;
+
+            Format = NormalMapFormat.NMAP;
         }
     }
 }

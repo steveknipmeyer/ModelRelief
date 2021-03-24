@@ -7,6 +7,7 @@
 namespace ModelRelief.Test.TestModels.NormalMaps
 {
     using System.Collections.Generic;
+    using ModelRelief.Domain;
     using ModelRelief.Dto;
 
     /// <summary>
@@ -48,8 +49,8 @@ namespace ModelRelief.Test.TestModels.NormalMaps
             var normalMap = base.ConstructValidModel() as Dto.NormalMap;
 
             normalMap.Name = "testnormalmap.sdb";
-            normalMap.Width  = 512;
-            normalMap.Height = 512;
+            normalMap.Width  = Defaults.Resolution.Image;
+            normalMap.Height = Defaults.Resolution.Image;
             normalMap.Format = Domain.NormalMapFormat.NMAP;
 
             return normalMap;

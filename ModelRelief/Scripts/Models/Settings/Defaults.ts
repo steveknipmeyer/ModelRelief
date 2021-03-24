@@ -7,6 +7,7 @@
 
 import {ContentType, HttpLibrary, MethodType, ServerEndPoints } from "Scripts/System/Http";
 import {DefaultCameraSettings} from "Scripts/Models/Settings/DefaultCameraSettings";
+import {DefaultResolutionSettings} from "Scripts/Models/Settings/DefaultResolutionSettings";
 
 /**
  * @description DefaultSettings
@@ -16,6 +17,7 @@ import {DefaultCameraSettings} from "Scripts/Models/Settings/DefaultCameraSettin
 export class Defaults  {
 
     public static camera: DefaultCameraSettings;
+    public static resolution: DefaultResolutionSettings;
 
     /**
      * @description Initialize the default settings from the common JSON file used to share settings between the front end (FE) and back end (BE).
@@ -30,5 +32,8 @@ export class Defaults  {
 
         Defaults.camera = new DefaultCameraSettings();
         Defaults.camera.initialize(defaultSettings);
+
+        Defaults.resolution = new DefaultResolutionSettings();
+        Defaults.resolution.initialize(defaultSettings);
     }
 }
