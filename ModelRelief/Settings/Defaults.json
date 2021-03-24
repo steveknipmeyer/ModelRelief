@@ -7,6 +7,11 @@
         "OrthographicFrustrumPlaneOffset": 100
     },
 
+    "Mesh":
+    {
+        "Format": 1
+    },
+
     "Settings":
     {
         "LoggingEnabled": true,

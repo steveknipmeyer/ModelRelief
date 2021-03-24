@@ -1,6 +1,8 @@
 ## Commit Notes
 DefaultSettings are read as a dynamic object.
 #### General       
+    Should Defaults be in the Domain (not Features.Settings) namespace?
+    CSS static properties (e.g. image sizes) must be moved to code.
 
     DefaultSettings.json should provides the defaults for Settings.
     
@@ -16,13 +18,13 @@ DefaultSettings are read as a dynamic object.
             Camera
             Settings
             Session
+            Project
 
             DepthBuffer
             Mesh
             MeshTransform
             Model3d
             NormalMap
-            Project
 
         Projects
             New Model
@@ -37,7 +39,6 @@ DefaultSettings are read as a dynamic object.
                             Camera
                     Camera
             }
-
 
         Project Control
             Should the Menu label link to the active project?

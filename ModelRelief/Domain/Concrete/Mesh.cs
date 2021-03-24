@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
 
     public enum MeshFormat
@@ -41,9 +42,9 @@ namespace ModelRelief.Domain
         [GeneratedFileProperty]
         public int? MeshTransformId { get; set; }
         public MeshTransform MeshTransform { get; set; }
-
         public Mesh()
         {
+            Format = Defaults.Mesh.Format;
         }
     }
 }

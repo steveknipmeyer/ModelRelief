@@ -11,8 +11,11 @@ namespace ModelRelief.Features.Settings
     /// </summary>
     public static class Defaults
     {
+        public const string SettingsFile = "Defaults.json";
+
         public static DefaultCameraSettings Camera { get; set; }
         public static DefaultSettings ProjectSettings { get; set; }
+        public static DefaultMeshSettings Mesh { get; set; }
 
         /// <summary>
         /// Initializes static members of the <see cref="Defaults"/>  class.
@@ -21,6 +24,7 @@ namespace ModelRelief.Features.Settings
         static Defaults()
         {
             Camera = new DefaultCameraSettings();
+            Mesh = new DefaultMeshSettings();
             ProjectSettings = new DefaultSettings();
         }
 
@@ -31,6 +35,7 @@ namespace ModelRelief.Features.Settings
         public static void Initialize(dynamic settingsJson)
         {
             Camera.Initialize(settingsJson);
+            Mesh.Initialize(settingsJson);
             ProjectSettings.Initialize(settingsJson);
         }
     }

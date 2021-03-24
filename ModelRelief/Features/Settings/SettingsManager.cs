@@ -128,7 +128,7 @@ namespace ModelRelief.Features.Settings
             switch (settingsType.ToLower())
             {
                 case SettingsType.Default:
-                    var rootSettingsFile = $"{Strings.Captitalize(settingsType)}Settings.json";
+                    var rootSettingsFile = Defaults.SettingsFile;
                     var settingsFile = $"{this.HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
                     settingsFile = Path.GetFullPath(settingsFile);
 
