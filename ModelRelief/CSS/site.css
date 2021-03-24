@@ -145,8 +145,6 @@ input[type=checkbox]:checked + label:before {
     Compose
 ------------------------*/
 #depthBufferCanvas, #normalMapCanvas {
-    width: 512px;
-    height: 512px;
     background-color: #000000;
 }
 

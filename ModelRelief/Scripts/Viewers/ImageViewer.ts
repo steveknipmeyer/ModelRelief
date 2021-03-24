@@ -35,8 +35,11 @@ export class ImageViewer  {
     constructor(name: string, canvasId: string, image: IImageModel) {
 
         this.name = name;
-        this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
         this.imageModel = image;
+
+        this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
+        this.canvas.width = this.imageModel.width;
+        this.canvas.height = this.imageModel.height;
 
         this._logger = Services.defaultLogger;
 

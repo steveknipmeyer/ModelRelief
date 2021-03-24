@@ -1,7 +1,6 @@
 #### Commit
 #### General          
-    CSS static properties (e.g. image sizes) must be moved to code.
-    
+   
     DbInitializer: FindByName must filter by project.
        
     Projects
@@ -49,6 +48,8 @@
                 How can an OBJ file be validated?
                     The back end should assign the Format only after validation.
                 Assign Format to model based on file content.
+
+    Verify Resolutin.Image setting.
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
