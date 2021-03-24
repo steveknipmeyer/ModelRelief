@@ -7,7 +7,7 @@
 namespace ModelRelief.Domain
 {
     using System.Collections.Generic;
-    using ModelRelief.Features.Settings;
+    using ModelRelief.Domain.Defaults;
     using ModelRelief.Services.Relationships;
 
     public enum StandardView
@@ -98,8 +98,8 @@ namespace ModelRelief.Domain
             IsPerspective = true;
 
             // Clipping Planes
-            Near = Defaults.Camera.NearClippingPlane;
-            Far = Defaults.Camera.FarClippingPlane;
+            Near = Default.Camera.NearClippingPlane;
+            Far = Default.Camera.FarClippingPlane;
 
             ScaleX = 1.0;
             ScaleY = 1.0;
@@ -110,14 +110,14 @@ namespace ModelRelief.Domain
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = Defaults.Camera.FieldOfView;
+            FieldOfView = Default.Camera.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = Defaults.Camera.LeftPlane;
-            Right   = Defaults.Camera.RightPlane;
-            Top     = Defaults.Camera.TopPlane;
-            Bottom  = Defaults.Camera.BottomPlane;
+            Left    = Default.Camera.LeftPlane;
+            Right   = Default.Camera.RightPlane;
+            Top     = Default.Camera.TopPlane;
+            Bottom  = Default.Camera.BottomPlane;
         }
     }
 }

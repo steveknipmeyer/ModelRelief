@@ -3,7 +3,7 @@
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-namespace ModelRelief.Features.Settings
+namespace ModelRelief.Domain.Defaults
 {
     /// <summary>
     /// Default camera settings.

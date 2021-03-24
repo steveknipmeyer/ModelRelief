@@ -8,9 +8,8 @@ namespace ModelRelief.Database
 {
     using System;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
+    using ModelRelief.Domain.Defaults;
     using ModelRelief.Features.Settings;
 
     public class Initializer
@@ -46,7 +45,7 @@ namespace ModelRelief.Database
         public async Task InitializeDefaultSettingsAsync()
         {
             dynamic defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default);
-            Defaults.Initialize(defaultSettings);
+            Default.Initialize(defaultSettings);
         }
 
         /// <summary>
