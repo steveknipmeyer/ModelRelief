@@ -12,6 +12,10 @@
         "Format": 1
     },
 
+    "Model3d": {
+        "Format": 1
+    },
+
     "Settings":
     {
         "LoggingEnabled": true,

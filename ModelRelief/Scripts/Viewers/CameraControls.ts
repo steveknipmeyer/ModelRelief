@@ -13,7 +13,7 @@ import { IThreeBaseCamera } from "Scripts/Graphics/IThreeBaseCamera";
 import { BaseCamera } from "Scripts/Models/Camera/BaseCamera";
 import { CameraFactory } from "Scripts/Models/Camera/CameraFactory";
 import { CameraHelper } from "Scripts/Models/Camera/CameraHelper";
-import {Default} from "Scripts/Models/Settings/Default";
+import {Defaults} from "Scripts/Models/Settings/Defaults";
 import { EventType, IMREvent } from "Scripts/System/EventManager";
 import { ElementAttributes, ElementClasses, ElementIds } from "Scripts/System/Html";
 import {SettingsManager} from "Scripts/System/SettingsManager";
@@ -44,7 +44,7 @@ class CameraControlsSettings {
         this.near = baseCamera.near;
         this.far = baseCamera.far;
         this.isPerspective = camera instanceof THREE.PerspectiveCamera;
-        this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : Default.camera.fieldOfView;
+        this.fieldOfView = this.isPerspective ? (camera as THREE.PerspectiveCamera).fov : Defaults.camera.fieldOfView;
         this.cameraHelper = false;
 
         this.standardView = StandardView.None;
@@ -251,7 +251,7 @@ export class CameraControls {
             if (showClippingControls) {
                 // Near Clipping Plane
                 minimum = 0.1;
-                maximum = Default.camera.farClippingPlane;
+                maximum = Defaults.camera.farClippingPlane;
                 stepSize = 0.1;
                 this._controlNearClippingPlane = cameraOptions.add(this.settings, "near").name("Near Clipping Plane").min(minimum).max(maximum).step(stepSize);
                 this._controlNearClippingPlane.onChange((value) => {
@@ -262,7 +262,7 @@ export class CameraControls {
 
                 // Far Clipping Plane
                 minimum = 1;
-                maximum = Default.camera.farClippingPlane;
+                maximum = Defaults.camera.farClippingPlane;
                 stepSize = 0.1;
                 this._controlFarClippingPlane = cameraOptions.add(this.settings, "far").name("Far Clipping Plane").min(minimum).max(maximum).step(stepSize);
                 this._controlFarClippingPlane.onChange((value) => {

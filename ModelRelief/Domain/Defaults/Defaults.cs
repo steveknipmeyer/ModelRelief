@@ -1,30 +1,32 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Default.cs" company="ModelRelief">
+// <copyright file="Defaults.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-namespace ModelRelief.Domain.Defaults
+namespace ModelRelief.Domain
 {
     /// <summary>
     /// Default settings.
     /// These settings are shared between the backend and frontend through JSON.
     /// </summary>
-    public static class Default
+    public static class Defaults
     {
         public const string SettingsFile = "Defaults.json";
 
         public static DefaultCameraSettings Camera { get; set; }
         public static DefaultSettings ProjectSettings { get; set; }
         public static DefaultMeshSettings Mesh { get; set; }
+        public static DefaultModel3dSettings Model3d { get; set; }
 
         /// <summary>
-        /// Initializes static members of the <see cref="Default"/>  class.
+        /// Initializes static members of the <see cref="Defaults"/>  class.
         /// Constructor
         /// </summary>
-        static Default()
+        static Defaults()
         {
             Camera = new DefaultCameraSettings();
             Mesh = new DefaultMeshSettings();
+            Model3d = new DefaultModel3dSettings();
             ProjectSettings = new DefaultSettings();
         }
 
@@ -36,6 +38,7 @@ namespace ModelRelief.Domain.Defaults
         {
             Camera.Initialize(settingsJson);
             Mesh.Initialize(settingsJson);
+            Model3d.Initialize(settingsJson);
             ProjectSettings.Initialize(settingsJson);
         }
     }

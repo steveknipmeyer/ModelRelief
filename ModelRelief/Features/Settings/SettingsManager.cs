@@ -15,7 +15,7 @@ namespace ModelRelief.Features.Settings
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
-    using ModelRelief.Domain.Defaults;
+    using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Utility;
     using Newtonsoft.Json;
@@ -126,7 +126,7 @@ namespace ModelRelief.Features.Settings
             switch (settingsType.ToLower())
             {
                 case SettingsType.Default:
-                    var rootSettingsFile = Default.SettingsFile;
+                    var rootSettingsFile = Defaults.SettingsFile;
                     var settingsFile = $"{this.HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.Settings)}/{rootSettingsFile}";
                     settingsFile = Path.GetFullPath(settingsFile);
 

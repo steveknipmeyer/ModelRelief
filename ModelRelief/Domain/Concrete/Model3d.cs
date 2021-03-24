@@ -37,6 +37,7 @@ namespace ModelRelief.Domain
         /// </summary>
         public Model3d()
         {
+            Format = Defaults.Model3d.Format;
         }
     }
 }

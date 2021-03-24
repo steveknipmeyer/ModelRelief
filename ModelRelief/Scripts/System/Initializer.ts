@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 import {WebGLDetector} from "Scripts/Graphics/WebGLDetector";
-import {Default} from "Scripts/Models/Settings/Default";
+import {Defaults} from "Scripts/Models/Settings/Defaults";
 
 import {ElementIds} from "Scripts/System/Html";
 import {SettingsManager} from "Scripts/System/SettingsManager";
@@ -33,7 +33,7 @@ export class Initializer  {
         }
 
         // shared Camera settings
-        await Default.initialize();
+        await Defaults.initialize();
 
         // user settings
         await SettingsManager.initialize();

@@ -7,7 +7,6 @@
 namespace ModelRelief.Domain
 {
     using System.Collections.Generic;
-    using ModelRelief.Domain.Defaults;
 
     public class Settings : DomainModel
     {
@@ -30,15 +29,15 @@ namespace ModelRelief.Domain
         /// </summary>
         public Settings()
         {
-        this.LoggingEnabled  = Default.ProjectSettings.LoggingEnabled;
-        this.DevelopmentUI = Default.ProjectSettings.DevelopmentUI;
+        this.LoggingEnabled  = Defaults.ProjectSettings.LoggingEnabled;
+        this.DevelopmentUI = Defaults.ProjectSettings.DevelopmentUI;
 
-        this.ModelViewerExtendedControls = Default.ProjectSettings.ModelViewerExtendedControls;
-        this.MeshViewerExtendedControls = Default.ProjectSettings.MeshViewerExtendedControls;
-        this.ExtendedCameraControls = Default.ProjectSettings.ExtendedCameraControls;
+        this.ModelViewerExtendedControls = Defaults.ProjectSettings.ModelViewerExtendedControls;
+        this.MeshViewerExtendedControls = Defaults.ProjectSettings.MeshViewerExtendedControls;
+        this.ExtendedCameraControls = Defaults.ProjectSettings.ExtendedCameraControls;
 
-        this.DepthBufferViewVisible = Default.ProjectSettings.DepthBufferViewVisible;
-        this.NormalMapViewVisible = Default.ProjectSettings.NormalMapViewVisible;
+        this.DepthBufferViewVisible = Defaults.ProjectSettings.DepthBufferViewVisible;
+        this.NormalMapViewVisible = Defaults.ProjectSettings.NormalMapViewVisible;
         }
     }
 }

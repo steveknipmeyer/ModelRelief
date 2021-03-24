@@ -16,14 +16,14 @@ DefaultSettings are read as a dynamic object.
 
         Default Constructors
             Camera
+            Mesh
+            Model3d
             Settings
             Session
             Project
 
             DepthBuffer
-            Mesh
             MeshTransform
-            Model3d
             NormalMap
 
         Projects
