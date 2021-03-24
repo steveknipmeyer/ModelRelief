@@ -342,7 +342,7 @@ export class ComposerController {
         this._logger = Services.defaultLogger;
 
         // overall dimensions
-        this._reliefWidthPixels = Defaults.resolution.image;
+        this._reliefWidthPixels = this._composerView.meshView.meshViewer.mesh.width;
         this._reliefHeightPixels = this._reliefWidthPixels / this.modelViewer.aspectRatio;
 
         // ModelViewer camera = DepthBuffer camera (used to generate active mesh)

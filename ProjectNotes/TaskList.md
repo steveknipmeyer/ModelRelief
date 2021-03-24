@@ -1,13 +1,9 @@
 #### Commit
-#### General       
-    ComposerController should initialize relief dimensions based on DepthBuffer.
+#### General          
     CSS static properties (e.g. image sizes) must be moved to code.
-
+    
     DbInitializer: FindByName must filter by project.
        
-    Optimize SettingsManager.Initialize[UserSession|Settings]Async
-        Every property validation causes a database read.
-
     Projects
         Projects
             projects.ForEach
@@ -56,6 +52,9 @@
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    Optimize SettingsManager.Initialize[UserSession|Settings]Async
+        Every property validation causes a database read.
 
     Reference properties override the foreign key if different.
         True only for PUT or all HTTP? 
