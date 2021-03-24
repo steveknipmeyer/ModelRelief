@@ -5,5 +5,18 @@
         "FarClippingPlane": 10000.0,
         "FieldOfView": 37.0,
         "OrthographicFrustrumPlaneOffset": 100
+    },
+
+    "Settings":
+    {
+        "LoggingEnabled": true,
+        "DevelopmentUI": true,
+
+        "ModelViewerExtendedControls": true,
+        "MeshViewerExtendedControls": false,
+        "ExtendedCameraControls": false,
+
+        "DepthBufferViewVisible": false,
+        "NormalMapViewVisible": false
     }
 }

@@ -122,14 +122,14 @@ namespace ModelRelief.Dto
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = DefaultSettings.Camera.FieldOfView;
+            FieldOfView = Defaults.Camera.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = DefaultSettings.Camera.LeftPlane;
-            Right   = DefaultSettings.Camera.RightPlane;
-            Top     = DefaultSettings.Camera.TopPlane;
-            Bottom  = DefaultSettings.Camera.BottomPlane;
+            Left    = Defaults.Camera.LeftPlane;
+            Right   = Defaults.Camera.RightPlane;
+            Top     = Defaults.Camera.TopPlane;
+            Bottom  = Defaults.Camera.BottomPlane;
         }
     }
 

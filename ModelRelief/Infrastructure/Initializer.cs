@@ -46,7 +46,7 @@ namespace ModelRelief.Database
         public async Task InitializeDefaultSettingsAsync()
         {
             dynamic defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default);
-            DefaultSettings.Initialize(defaultSettings);
+            Defaults.Initialize(defaultSettings);
         }
 
         /// <summary>

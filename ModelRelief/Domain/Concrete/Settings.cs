@@ -7,6 +7,8 @@
 namespace ModelRelief.Domain
 {
     using System.Collections.Generic;
+    using ModelRelief.Features.Settings;
+
     public class Settings : DomainModel
     {
         public bool LoggingEnabled { get; set; }
@@ -28,15 +30,15 @@ namespace ModelRelief.Domain
         /// </summary>
         public Settings()
         {
-        this.LoggingEnabled  = true;
-        this.DevelopmentUI = true;
+        this.LoggingEnabled  = Defaults.ProjectSettings.LoggingEnabled;
+        this.DevelopmentUI = Defaults.ProjectSettings.DevelopmentUI;
 
-        this.ModelViewerExtendedControls = true;
-        this.MeshViewerExtendedControls = false;
-        this.ExtendedCameraControls = false;
+        this.ModelViewerExtendedControls = Defaults.ProjectSettings.ModelViewerExtendedControls;
+        this.MeshViewerExtendedControls = Defaults.ProjectSettings.MeshViewerExtendedControls;
+        this.ExtendedCameraControls = Defaults.ProjectSettings.ExtendedCameraControls;
 
-        this.DepthBufferViewVisible = false;
-        this.NormalMapViewVisible = false;
+        this.DepthBufferViewVisible = Defaults.ProjectSettings.DepthBufferViewVisible;
+        this.NormalMapViewVisible = Defaults.ProjectSettings.NormalMapViewVisible;
         }
     }
 }

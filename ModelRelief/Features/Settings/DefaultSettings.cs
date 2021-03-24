@@ -6,29 +6,36 @@
 namespace ModelRelief.Features.Settings
 {
     /// <summary>
-    /// Default settings.
+    /// Default camera settings.
     /// These settings are shared between the backend and frontend through JSON.
     /// </summary>
-    public static class DefaultSettings
+    public class DefaultSettings
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="DefaultSettings"/>  class.
-        /// Constructor
-        /// </summary>
-        static DefaultSettings()
-        {
-            Camera = new DefaultCameraSettings();
-        }
+        public bool LoggingEnabled { get; set; }
+        public bool DevelopmentUI { get; set; }
 
-        public static DefaultCameraSettings Camera { get; set; }
+        public bool ModelViewerExtendedControls { get; set; }
+        public bool MeshViewerExtendedControls { get; set; }
+        public bool ExtendedCameraControls { get; set; }
+
+        public bool DepthBufferViewVisible { get; set; }
+        public bool NormalMapViewVisible { get; set; }
 
         /// <summary>
-        /// Initialize the settings from the JSON definitions.
+        /// Initialize the settings from JSON definitions.
         /// </summary>
         /// <param name="settingsJson">Raw JSON settings</param>
-        public static void Initialize(dynamic settingsJson)
+        public void Initialize(dynamic settingsJson)
         {
-            Camera.Initialize(settingsJson);
+            LoggingEnabled = settingsJson.Settings.LoggingEnabled;
+            DevelopmentUI = settingsJson.Settings.DevelopmentUI;
+
+            ModelViewerExtendedControls = settingsJson.Settings.ModelViewerExtendedControls;
+            MeshViewerExtendedControls = settingsJson.Settings.MeshViewerExtendedControls;
+            ExtendedCameraControls = settingsJson.Settings.ExtendedCameraControls;
+
+            DepthBufferViewVisible = settingsJson.Settings.DepthBufferViewVisible;
+            NormalMapViewVisible = settingsJson.Settings.NormalMapViewVisible;
         }
     }
 }

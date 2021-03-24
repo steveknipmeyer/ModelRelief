@@ -98,8 +98,8 @@ namespace ModelRelief.Domain
             IsPerspective = true;
 
             // Clipping Planes
-            Near = DefaultSettings.Camera.NearClippingPlane;
-            Far = DefaultSettings.Camera.FarClippingPlane;
+            Near = Defaults.Camera.NearClippingPlane;
+            Far = Defaults.Camera.FarClippingPlane;
 
             ScaleX = 1.0;
             ScaleY = 1.0;
@@ -110,14 +110,14 @@ namespace ModelRelief.Domain
             UpZ = 0.0;
 
             // Perspective
-            FieldOfView = DefaultSettings.Camera.FieldOfView;
+            FieldOfView = Defaults.Camera.FieldOfView;
             AspectRatio = 1.0;
 
             // Orthographic
-            Left    = DefaultSettings.Camera.LeftPlane;
-            Right   = DefaultSettings.Camera.RightPlane;
-            Top     = DefaultSettings.Camera.TopPlane;
-            Bottom  = DefaultSettings.Camera.BottomPlane;
+            Left    = Defaults.Camera.LeftPlane;
+            Right   = Defaults.Camera.RightPlane;
+            Top     = Defaults.Camera.TopPlane;
+            Bottom  = Defaults.Camera.BottomPlane;
         }
     }
 }
