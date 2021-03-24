@@ -42,7 +42,6 @@ namespace ModelRelief.Domain
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
         public ICollection<Mesh> Meshes { get; set; }
-
         public DepthBuffer()
         {
             Width  = DefaultSize;

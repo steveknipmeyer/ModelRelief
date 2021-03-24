@@ -13,7 +13,7 @@ import {DefaultCameraSettings} from "Scripts/Models/Settings/DefaultCameraSettin
  * @export
  * @class DefaultSettings
  */
-export class DefaultSettings  {
+export class Defaults  {
 
     public static camera: DefaultCameraSettings;
 
@@ -28,7 +28,7 @@ export class DefaultSettings  {
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
         const defaultSettings = JSON.parse(result.contentString);
 
-        DefaultSettings.camera = new DefaultCameraSettings();
-        DefaultSettings.camera.initialize(defaultSettings);
+        Defaults.camera = new DefaultCameraSettings();
+        Defaults.camera.initialize(defaultSettings);
     }
 }

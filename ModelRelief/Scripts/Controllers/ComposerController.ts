@@ -13,7 +13,7 @@ import {DtoNormalMap} from "Scripts/Api/V1/Models/DtoNormalMap";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
-import {DefaultSettings} from "Scripts/Models/Settings/DefaultSettings";
+import {Defaults} from "Scripts/Models/Settings/Defaults";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
 import {Mesh} from "Scripts/Models/Mesh/Mesh";
@@ -434,8 +434,8 @@ export class ComposerController {
         // WIP: Set far plane based on model extents to avoid clipping
         const boundingPlanes = this.activeMeshReliefCamera.getBoundingClippingPlanes(this.modelViewer.modelGroup);
 
-        modelViewCamera.near = DefaultSettings.camera.nearClippingPlane;
-        modelViewCamera.far = DefaultSettings.camera.farClippingPlane;
+        modelViewCamera.near = Defaults.camera.nearClippingPlane;
+        modelViewCamera.far = Defaults.camera.farClippingPlane;
         modelViewCamera.updateProjectionMatrix();
 
         this.modelViewer.camera = modelViewCamera;
