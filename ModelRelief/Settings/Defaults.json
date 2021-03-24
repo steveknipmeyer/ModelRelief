@@ -12,6 +12,34 @@
         "Format": 1
     },
 
+    "MeshTransform":
+    {
+        "Width": "100.0",
+        "Height": "100.0",
+        "Depth": "1.0",
+
+        "GradientThresholdEnabled": "true",
+        "GradientThreshold": "5.0",
+
+        "AttenuationEnabled": "true",
+        "AttenuationFactor": "10.0",
+        "AttenuationDecay" : "0.6",
+
+        "UnsharpMaskingEnabled" : "true",
+        "UnsharpGaussianLow" : "4.0",
+        "UnsharpGaussianHigh" : "1.0",
+        "UnsharpHighFrequencyScale" : "3.0",
+
+        "PlanarBackground" : "true",
+        "TranslateMeshZPositive" : "true",
+
+        "SilhouetteEnabled" : "true",
+        "SilhouetteEdgeWidth" : "4",
+        "SilhouetteSigma" : "5.0",
+
+        "ReliefScale" : "0.03"
+    },
+
     "Model3d": {
         "Format": 1
     },

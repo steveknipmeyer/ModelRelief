@@ -5,8 +5,6 @@
 // -----------------------------------------------------------------------
 namespace ModelRelief.Domain
 {
-    using ModelRelief.Domain;
-
     /// <summary>
     /// Default mesh settings.
     /// These settings are shared between the backend and frontend through JSON.

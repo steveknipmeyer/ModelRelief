@@ -97,6 +97,30 @@ namespace ModelRelief.Domain
         /// </summary>
         public MeshTransform()
         {
+            Width = Defaults.MeshTransform.Width;
+            Height = Defaults.MeshTransform.Height;
+            Depth = Defaults.MeshTransform.Depth;
+
+            GradientThresholdEnabled = Defaults.MeshTransform.GradientThresholdEnabled;
+            GradientThreshold = Defaults.MeshTransform.GradientThreshold;
+
+            AttenuationEnabled = Defaults.MeshTransform.AttenuationEnabled;
+            AttenuationFactor = Defaults.MeshTransform.AttenuationFactor;
+            AttenuationDecay = Defaults.MeshTransform.AttenuationDecay;
+
+            UnsharpMaskingEnabled = Defaults.MeshTransform.UnsharpMaskingEnabled;
+            UnsharpGaussianLow = Defaults.MeshTransform.UnsharpGaussianLow;
+            UnsharpGaussianHigh = Defaults.MeshTransform.UnsharpGaussianHigh;
+            UnsharpHighFrequencyScale = Defaults.MeshTransform.UnsharpHighFrequencyScale;
+
+            PlanarBackground = Defaults.MeshTransform.PlanarBackground;
+            TranslateMeshZPositive = Defaults.MeshTransform.TranslateMeshZPositive;
+
+            SilhouetteEnabled = Defaults.MeshTransform.SilhouetteEnabled;
+            SilhouetteEdgeWidth = Defaults.MeshTransform.SilhouetteEdgeWidth;
+            SilhouetteSigma = Defaults.MeshTransform.SilhouetteSigma;
+
+            ReliefScale = Defaults.MeshTransform.ReliefScale;
         }
     }
 }

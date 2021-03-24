@@ -16,6 +16,7 @@ namespace ModelRelief.Domain
         public static DefaultCameraSettings Camera { get; set; }
         public static DefaultSettings ProjectSettings { get; set; }
         public static DefaultMeshSettings Mesh { get; set; }
+        public static DefaultMeshTransformSettings MeshTransform { get; set; }
         public static DefaultModel3dSettings Model3d { get; set; }
 
         /// <summary>
@@ -26,6 +27,7 @@ namespace ModelRelief.Domain
         {
             Camera = new DefaultCameraSettings();
             Mesh = new DefaultMeshSettings();
+            MeshTransform = new DefaultMeshTransformSettings();
             Model3d = new DefaultModel3dSettings();
             ProjectSettings = new DefaultSettings();
         }
@@ -38,6 +40,7 @@ namespace ModelRelief.Domain
         {
             Camera.Initialize(settingsJson);
             Mesh.Initialize(settingsJson);
+            MeshTransform.Initialize(settingsJson);
             Model3d.Initialize(settingsJson);
             ProjectSettings.Initialize(settingsJson);
         }
