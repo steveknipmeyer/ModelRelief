@@ -37,7 +37,7 @@ namespace ModelRelief.Test
                 initializer.Initialize();
 
                 var dbInitializer = new DbInitializer(serviceProvider, exitAfterInitialization: false);
-                dbInitializer.SynchronizeTestDatabase(restore: true);
+                dbInitializer.DbFactory.SynchronizeTestDatabase(restore: true);
             }
         }
 

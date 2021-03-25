@@ -1,22 +1,23 @@
 #### Commit
 #### General          
-   
-    DbInitializer: FindByName must filter by project.
-       
+
     Projects
         Projects
             projects.ForEach
             {
-                Mesh
-                    MeshTransform            
-                    DepthBuffer
-                        Camera
-                        Model
+                New Model
+                    Add support for creating supporting resources for a new model.               
+
+                    Mesh
+                        MeshTransform            
+                        DepthBuffer
                             Camera
-                    Camera
+                            Model
+                                Camera
+                        Camera
+                DbInitializer: FindByName must filter by project.
             }
-            New Model
-                Add support for creating supporting resources for a new model.               
+
 
         Project Control
             Should the Menu label link to the active project?
@@ -30,12 +31,10 @@
             Use Index page as a template for the Project page.
                 Each user model is hosted in a tile.
 
-            Add support for creating mesh "thumbnails" from the
-             mesh canvas.
-                mesh/{id}/thumbnail
+            Add support for creating mesh "thumbnails" from the mesh canvas.
                 Add a new endpoint mesh/preview for a preview image of the mesh. 
+                    mesh/{id}/thumbnail
                 Create using the Canvas image of the last generated Mesh.  
-
 
             Create View        
                 Why is the FormFile binding lost?

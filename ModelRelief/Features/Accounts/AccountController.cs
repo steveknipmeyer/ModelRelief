@@ -45,7 +45,7 @@ namespace ModelRelief.Features.Accounts
         public async Task<RedirectResult> LoginComplete()
         {
             var dbInitializer = new DbInitializer(_services, exitAfterInitialization: false);
-            await dbInitializer.SeedDatabaseForNewUserAsync(this.User);
+            await dbInitializer.DbFactory.SeedDatabaseForNewUserAsync(this.User);
 
             return Redirect("/");
         }

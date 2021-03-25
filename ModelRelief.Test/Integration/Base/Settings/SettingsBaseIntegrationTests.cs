@@ -68,7 +68,7 @@ namespace ModelRelief.Test.Integration.Settings
             var userSettings = JsonConvert.DeserializeObject<Dto.Settings>(requestResponse.ContentString);
 
             // Assert
-            userSettings.Name.Should().Be(DbInitializer.SettingsNames.Project);
+            userSettings.Name.Should().Be(DbFactory.SettingsNames.Project);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace ModelRelief.Test.Integration.Settings
             var sessionSettings = JsonConvert.DeserializeObject<Dto.Session>(requestResponse.ContentString);
 
             // Assert
-            sessionSettings.Name.Should().Be(DbInitializer.SettingsNames.Session);
-            sessionSettings.Project.Name.Should().Be(DbInitializer.ProjectNames.Examples);
+            sessionSettings.Name.Should().Be(DbFactory.SettingsNames.Session);
+            sessionSettings.Project.Name.Should().Be(DbFactory.ProjectNames.Examples);
         }
         #endregion
 
