@@ -257,7 +257,7 @@ namespace ModelRelief.Database
             var rootSourceFolderPath = Path.GetFullPath($"{StoreUsersPath}{developmentUser.Id}/{ConfigurationProvider.GetSetting(folderType)}");
 
             // Destination: ModelRelief/Test/Data/Users/depthbuffers
-            var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
             var rootDestinationFolderPath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
 
             var modelList = DbContext.Set<TEntity>()

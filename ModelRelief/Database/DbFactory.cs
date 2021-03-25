@@ -246,7 +246,7 @@ namespace ModelRelief.Database
         /// <param name="folderType">Folder type.</param>
         public string GetEntityJSONFileName<TEntity>(string folderType)
         {
-            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
             var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
 
             var modelType = typeof(TEntity).Name;
@@ -988,7 +988,7 @@ namespace ModelRelief.Database
         private void CopySeedDataFilesToStore<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
-            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUsers)}/{ConfigurationProvider.GetSetting(folderType)}";
+            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
             var sourceFolderPath = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
             var destinationFolderPath = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";

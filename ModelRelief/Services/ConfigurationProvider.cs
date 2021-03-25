@@ -147,8 +147,8 @@ namespace ModelRelief.Services
     public class Paths
     {
         public const string Settings      = "Paths:Settings";
-        public const string TestDataUsers = "Paths:TestDataUsers";
-        public const string TestDataFiles = "Paths:TestDataFiles";
+        public const string TestDataUser = "Paths:TestDataUser";
+        public const string TestDataIntegration = "Paths:TestDataIntegration";
         public const string StoreDatabase = "Paths:StoreDatabase";
         public const string StoreUsers    = "Paths:StoreUsers";
         public const string Working       = "Paths:Working";

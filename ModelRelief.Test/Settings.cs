@@ -20,7 +20,7 @@ namespace ModelRelief.Test
         public const string Host   = "localhost";
 
         public const string ContentRootFolder = "ModelRelief";
-        public const string TestFilesFolder   = "Test/Data/Files";
+        public const string TestFilesFolder   = "Test/Data/Integration";
 
         /// <summary>
         /// Returns the root of the content folder. wwwroot is below this folder.
