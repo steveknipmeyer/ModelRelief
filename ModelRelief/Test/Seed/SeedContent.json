@@ -1,0 +1,17 @@
+{
+    "Projects":
+        [
+            {
+                "Name": "Stanford",
+                "Description": "Stanford model repository",
+                "Models":
+                [
+                    {
+                        "Name": "Lucy",
+                        "Description": "Stanford model repository",
+                        "File": "lucy.obj"
+                    },
+                ]
+            }
+        ]
+}

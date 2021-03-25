@@ -21,6 +21,7 @@ namespace ModelRelief.Database
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using ModelRelief.Api.V1.Shared.Validation;
+    using ModelRelief.Database.Seed;
     using ModelRelief.Domain;
     using ModelRelief.Services;
     using ModelRelief.Settings;
@@ -153,6 +154,12 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task SeedDatabaseForTestUsersAsync()
         {
+            var rootContentFile = SeedContent.ContentFile;
+            var contentFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.TestSeed)}/{rootContentFile}";
+            contentFile = Path.GetFullPath(contentFile);
+
+            var seedContent = JsonConvert.DeserializeObject<SeedContent>(System.IO.File.ReadAllText(contentFile));
+
             var userAccounts = new List<Account>
             {
                 Accounts.Development,
