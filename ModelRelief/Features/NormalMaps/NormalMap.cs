@@ -27,8 +27,8 @@ namespace ModelRelief.Dto
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public NormalMapFormat Format { get; set; }
         public NormalMapSpace Space { get; set; }
 
@@ -75,10 +75,10 @@ namespace ModelRelief.Dto
                 .NotNull().WithMessage("The Description property is required.");
 
             RuleFor(m => m.Width)
-                .GreaterThan(0.0).WithMessage("The Width property must be greater than zero.");
+                .GreaterThan(0).WithMessage("The Width property must be greater than zero.");
 
             RuleFor(m => m.Height)
-                .GreaterThan(0.0).WithMessage("The Height property must be greater than zero.");
+                .GreaterThan(0).WithMessage("The Height property must be greater than zero.");
 
             RuleFor(m => m.Format)
                 .NotEmpty().WithMessage("The file format must be provided.");

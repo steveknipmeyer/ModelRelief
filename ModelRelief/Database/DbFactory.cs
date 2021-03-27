@@ -295,7 +295,7 @@ namespace ModelRelief.Database
         /// <returns>true if all entities are valid</returns>
         public bool ValidateAll(ApplicationUser user)
         {
-            Console.WriteLine($"{Environment.NewLine}{user.Name}");
+            Logger.LogInformation($"{Environment.NewLine}Validation: {user.Name}");
             var validationFailures = new List<ValidationFailure>();
             var entityValidationFailures = new List<ValidationFailure>();
 
@@ -615,6 +615,9 @@ namespace ModelRelief.Database
             DbContext.SaveChanges();
             SetFileProperties<DepthBuffer>(depthBuffer);
 
+            var path = $"{HostingEnvironment.ContentRootPath}/{depthBuffer.Path}{depthBuffer.Name}";
+            Utility.Files.WriteRawFileFromByteArray(path, depthBuffer.CreateDefaultContent(depthBuffer.Width, depthBuffer.Height)).Wait();
+
             return depthBuffer;
         }
 
@@ -642,6 +645,9 @@ namespace ModelRelief.Database
             DbContext.Add(normalMap);
             DbContext.SaveChanges();
             SetFileProperties<NormalMap>(normalMap);
+
+            var path = $"{HostingEnvironment.ContentRootPath}/{normalMap.Path}{normalMap.Name}";
+            Utility.Files.WriteRawFileFromByteArray(path, normalMap.CreateDefaultContent(normalMap.Width, normalMap.Height)).Wait();
 
             return normalMap;
         }
@@ -673,6 +679,9 @@ namespace ModelRelief.Database
             DbContext.Add(mesh);
             DbContext.SaveChanges();
             SetFileProperties<Mesh>(mesh);
+
+            var path = $"{HostingEnvironment.ContentRootPath}/{mesh.Path}{mesh.Name}";
+            Utility.Files.WriteRawFileFromByteArray(path, mesh.CreateDefaultContent(Defaults.Resolution.Image, Defaults.Resolution.Image)).Wait();
 
             return mesh;
         }

@@ -6,7 +6,9 @@
 
 namespace ModelRelief.Domain
 {
+    using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using ModelRelief.Services.Relationships;
 
     public enum DepthBufferFormat
@@ -21,8 +23,8 @@ namespace ModelRelief.Domain
     public class DepthBuffer  : GeneratedFileDomainModel, IProjectModel
     {
         // Properties
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public DepthBufferFormat Format { get; set; }
 
         // Navigation Properties
@@ -39,6 +41,11 @@ namespace ModelRelief.Domain
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
         public ICollection<Mesh> Meshes { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DepthBuffer"/> class.
+        /// Constructor
+        /// </summary>
         public DepthBuffer()
         {
             Name = "Default DepthBuffer";
@@ -47,6 +54,24 @@ namespace ModelRelief.Domain
             Height = Defaults.Resolution.Image;
 
             Format = DepthBufferFormat.SDB;
+        }
+
+        /// <summary>
+        /// Creates the default element of a DepthBuffer.
+        /// </summary>
+        /// <returns>Byte array of default DepthBuffer element.</returns>
+        public override byte[] CreateDefaultElement()
+        {
+            switch (Format)
+            {
+                case DepthBufferFormat.SDB:
+                    float defaultElement = 0.0f;
+                    return BitConverter.GetBytes(defaultElement);
+
+                default:
+                    var message = $"DepthBuffer format {Format} not implemented";
+                    throw new NotImplementedException(message);
+            }
         }
     }
 }

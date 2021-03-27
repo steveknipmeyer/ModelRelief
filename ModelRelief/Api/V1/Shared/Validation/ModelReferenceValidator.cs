@@ -155,20 +155,20 @@ namespace ModelRelief.Api.V1.Shared.Validation
                                                     .ToDictionary(p => p.Name, p => p.CanWrite ? p.GetValue(referenceModel) : string.Empty);
 
             // verify reference model belongs to same project as parent model
-            if (modelProjectId == null)
+            if (!modelProjectId.HasValue)
                 return propertyValidationFailures;
 
             if (!referenceModelProperties.ContainsKey("ProjectId"))
                 return propertyValidationFailures;
 
             var projectId = referenceModelProperties["ProjectId"] as int?;
-            if (projectId == null)
+            if (!projectId.HasValue)
                 return propertyValidationFailures;
 
             if (modelProjectId != projectId)
             {
                 var message = $"{referenceModel} ProjectId {projectId} belongs to a different project than its parent model {modelProjectId}.";
-                // propertyValidationFailures.Add(new ValidationFailure("ProjectId", message));
+                propertyValidationFailures.Add(new ValidationFailure("ProjectId", message));
             }
             return propertyValidationFailures;
         }

@@ -32,7 +32,7 @@ namespace ModelRelief.Test.TestModels.Meshes
             ApiUrl = $"{RootApi}meshes";
             UxUrl = "/meshes";
 
-            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "MeshTransformId" };
+            ReferencePropertyNames = new List<string> { "ProjectId", "CameraId", "DepthBufferId", "NormalMapId", "MeshTransformId" };
             InvalidReferenceProperty = 0;
             ValidReferenceProperty   = 1;
 

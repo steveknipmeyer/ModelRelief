@@ -49,5 +49,34 @@ namespace ModelRelief.Domain
 
             return true;
         }
+
+        /// <summary>
+        /// Creates the default element of a GeneratedFileDomainModel.
+        /// </summary>
+        /// <returns>Byte array of default element.</returns>
+        public virtual byte[] CreateDefaultElement()
+        {
+            return default;
+        }
+
+        /// <summary>
+        /// Creates a byte array representing the default GeneratedFileDomainModel.
+        /// </summary>
+        /// <param name="width">Width.</param>
+        /// <param name="height">Height.</param>
+        /// <returns>Byte array of default content.</returns>
+        public virtual byte[] CreateDefaultContent(int width, int height)
+        {
+            var numberElements = width * height;
+            var defaultElement = CreateDefaultElement();
+            var sizeDefaultElement = defaultElement.Length;
+
+            var content = new byte[numberElements * sizeDefaultElement];
+            for (int element = 0; element < numberElements; element++)
+            {
+                Buffer.BlockCopy(defaultElement, 0, content, element * sizeDefaultElement, sizeDefaultElement);
+            }
+            return content;
+        }
     }
 }

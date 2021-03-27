@@ -1,10 +1,12 @@
-#### Commit           
+#### Commit       
+    
 ### General          
-    FileDomainModel
+    GeneratedFileDomainModel Constructors
         Create seed DepthBuffer, NormalMap and Mesh files.
-   
-    How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
-        FileIsSynchronized?
+ 
+    Convert MeshTransform, DepthBuffer, NormalMap (Width, Height) to int. 
+
+    Complete the Upload workflow to use DbFactory.AddModel3d.
 
     Projects
         Project Control
@@ -36,6 +38,12 @@
                     The back end should assign the Format only after validation.
                 Assign Format to model based on file content.
 
+    
+    Convert Mesh to OBJ default to support download of generated Mesh.
+
+    How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
+        FileIsSynchronized?
+
     Verify Resolution.Image setting.
 
     Test new user creation.
@@ -45,6 +53,11 @@
         Every property validation causes a database read.
 
     Support query by wildcard and exact mode.
+
+    Reduce model sizes in MeshLab.
+        remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+        remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+
 
     Settings
         Paths:ResourceFolders:Camera

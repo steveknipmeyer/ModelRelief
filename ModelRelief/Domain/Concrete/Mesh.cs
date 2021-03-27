@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Domain
 {
+    using System;
     using ModelRelief.Services.Relationships;
 
     public enum MeshFormat
@@ -41,11 +42,34 @@ namespace ModelRelief.Domain
         [GeneratedFileProperty]
         public int? MeshTransformId { get; set; }
         public MeshTransform MeshTransform { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mesh"/> class.
+        /// Constructor
+        /// </summary>
         public Mesh()
         {
             Name = "Default Mesh";
 
             Format = Defaults.Mesh.Format;
+        }
+
+        /// <summary>
+        /// Creates the default element of a Mesh.
+        /// </summary>
+        /// <returns>Byte array of default Mesh element.</returns>
+        public override byte[] CreateDefaultElement()
+        {
+            switch (Format)
+            {
+                case MeshFormat.SFP:
+                    float defaultElement = 0.0f;
+                    return BitConverter.GetBytes(defaultElement);
+
+                default:
+                    var message = $"Mesh format {Format} not implemented";
+                    throw new NotImplementedException(message);
+            }
         }
     }
 }
