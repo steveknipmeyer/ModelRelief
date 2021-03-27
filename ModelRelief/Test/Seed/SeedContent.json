@@ -1,17 +1,88 @@
 {
-    "Projects":
-        [
-            {
-                "Name": "Stanford",
-                "Description": "Stanford model repository",
-                "Models":
-                [
-                    {
-                        "Name": "Lucy",
-                        "Description": "Stanford model repository",
-                        "File": "lucy.obj"
-                    },
-                ]
-            }
-        ]
+    "Projects": [
+        {
+            "Name": "Examples",
+            "Description": "Example models",
+            "Models": [
+                {
+                    "Name": "lucy",
+                    "Description": "Stanford Model Repository"
+                },
+                {
+                    "Name": "horse",
+                    "Description": "Prancing Horse"
+                },
+                {
+                    "Name": "plunderbusspete",
+                    "Description": "Plunderbuss Pete Pirate"
+                },
+                {
+                    "Name": "house",
+                    "Description": "San Francisco House"
+                },
+                {
+                    "Name": "scallop",
+                    "Description": "Scallop Shell"
+                },
+                {
+                    "Name": "dragon",
+                    "Description": "Chinese Dragon"
+                }
+            ]
+        },
+        {
+            "Name": "Stanford",
+            "Description": "Stanford model repository",
+            "Models": [
+                {
+                    "Name": "bunny",
+                    "Description": "Stanford Model Repository"
+                },
+                {
+                    "Name": "armadillo",
+                    "Description": "Stanford Model Repository"
+                },
+                {
+                    "Name": "buddha",
+                    "Description": "Stanford Model Repository"
+                },
+                {
+                    "Name": "statue",
+                    "Description": "Stanford Model Repository"
+                },
+                {
+                    "Name": "tyrannosaurus",
+                    "Description": "Stanford Model Repository"
+                }
+            ]
+        },
+        {
+            "Name": "Jewelry",
+            "Description": "Jewelry watch faces, bracelets and pendants",
+            "Models": [
+                {
+                    "Name": "dolphin",
+                    "Description": "Ocean Dolphin"
+                },
+                {
+                    "Name": "roadster",
+                    "Description": "Duesen Bayern Mystar 190 SL"
+                }
+            ]
+        },
+        {
+            "Name": "ModelRelief",
+            "Description": "Development test models",
+            "Models": [
+                {
+                    "Name": "lowresolution",
+                    "Description": "Low resolution test model"
+                },
+                {
+                    "Name": "test",
+                    "Description": "Reference Test Model"
+                }
+            ]
+        }
+    ]
 }

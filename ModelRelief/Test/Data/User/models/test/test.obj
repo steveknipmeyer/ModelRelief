@@ -1,6 +1,6 @@
 # Rhino
 
-mtllib Test.mtl
+mtllib test.mtl
 usemtl Default
 v 40 50 -38
 v 40.923851013183594 50 -38

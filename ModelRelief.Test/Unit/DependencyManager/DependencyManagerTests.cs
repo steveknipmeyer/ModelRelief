@@ -89,30 +89,31 @@ namespace ModelRelief.Test.Unit.DependencyManager
         }
 
         /// <summary>
-        /// Finds all dependents of the Lucy Camera.
+        /// Finds all dependents of the lucy Camera.
         /// </summary>
         [Fact]
         [Trait("Category", "DependencyManager")]
-        public async Task LucyCameraFindsAllDependents()
+        public async Task LucyGenerateCameraFindsAllDependents()
         {
             // Arrange
             var factory = new TestModels.Cameras.CameraTestModelFactory(ClassFixture);
-            var lucyCamera = await factory.FindModelByName("Lucy");
-            var lucyCameraPrimaryKey = lucyCamera.Id;
+            var lucyGenerateCamera = await factory.FindModelByName("lucy.MeshTransform");
+            var lucyGenerateCameraPrimaryKey = lucyGenerateCamera.Id;
 
             // Act
-            var dependentModels = await FindDependentModels(typeof(Domain.Camera), lucyCameraPrimaryKey);
+            var dependentModels = await FindDependentModels(typeof(Domain.Camera), lucyGenerateCameraPrimaryKey);
 
             // Assert
             dependentModels.Count.Should().Be(3);
 
-            // TopCamera <= DepthBuffer("lucy.sdb") <= Mesh("lucy.sfp")
+            // lucy <= [DepthBuffer("lucy.sdb"), NormalMap("lucy.nmap"]
             AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.sdb");
+            AssertModelExists(dependentModels, typeof(Domain.NormalMap), "lucy.nmap");
             AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.sfp");
         }
 
         /// <summary>
-        /// Finds all dependents of the Armadillo DepthBuffer.
+        /// Finds all dependents of the lucy DepthBuffer.
         /// </summary>
         [Fact]
         [Trait("Category", "DependencyManager")]
@@ -120,7 +121,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         {
             // Arrange
             var factory = new TestModels.DepthBuffers.DepthBufferTestFileModelFactory(ClassFixture);
-            var lucyDepthBuffer = await factory.FindModelByName("Lucy");
+            var lucyDepthBuffer = await factory.FindModelByName("lucy.sdb");
             var lucyDepthBufferPrimaryKey = lucyDepthBuffer.Id;
 
             // Act
@@ -129,12 +130,12 @@ namespace ModelRelief.Test.Unit.DependencyManager
             // Assert
             dependentModels.Count.Should().Be(1);
 
-            // DepthBuffer("lucy.sdb") <= Mesh("lucy.sfp")
+            // DepthBuffer("lucy.sdb") <= [Mesh("lucy.sfp")]
             AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.sfp");
         }
 
         /// <summary>
-        /// Finds two dependents on the Lucy Model3d.
+        /// Finds two dependents on the lucy Model3d.
         /// Mesh(DepthBuffer(Model)
         /// </summary>
         [Fact]
@@ -143,14 +144,19 @@ namespace ModelRelief.Test.Unit.DependencyManager
         {
             // Arrange
             var factory = new TestModels.Models.Model3dTestFileModelFactory(ClassFixture);
-            var lucyModel = await factory.FindModelByName("Lucy");
+            var lucyModel = await factory.FindModelByName("lucy.obj");
             var lucyPrimaryKey = lucyModel.Id;
 
             // Act
             var dependentModels = await FindDependentModels(typeof(Domain.Model3d), lucyPrimaryKey);
 
             // Assert
-            dependentModels.Count.Should().Be(2);
+            dependentModels.Count.Should().Be(3);
+
+            // lucy <= [DepthBuffer("lucy.sdb"), NormalMap("lucy.nmap"]
+            AssertModelExists(dependentModels, typeof(Domain.DepthBuffer), "lucy.sdb");
+            AssertModelExists(dependentModels, typeof(Domain.NormalMap), "lucy.nmap");
+            AssertModelExists(dependentModels, typeof(Domain.Mesh), "lucy.sfp");
         }
 
         /// <summary>
@@ -194,7 +200,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         public void Model3dHasExpectedDependentFiles()
         {
             // Assert
-            AssertClassHasExpectedDependentFiles(typeof(Domain.Model3d), typeof(Domain.DepthBuffer));
+            AssertClassHasExpectedDependentFiles(typeof(Domain.Model3d), typeof(Domain.DepthBuffer), typeof(Domain.NormalMap));
         }
     }
 }

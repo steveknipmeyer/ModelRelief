@@ -1,6 +1,6 @@
 # Rhino
 
-mtllib LowResolution.mtl
+mtllib lowresolution.mtl
 usemtl diffuse_Aqua
 v 0 0 0
 v 0 0 -2.2857143878936768

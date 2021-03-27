@@ -7,51 +7,6 @@
     "GradientThreshold": 5.0,
     "AttenuationEnabled": true,
     "AttenuationFactor": 10.0,
-    "AttenuationDecay": 0.6,
-    "UnsharpMaskingEnabled": true,
-    "UnsharpGaussianLow": 4.0,
-    "UnsharpGaussianHigh": 1.0,
-    "UnsharpHighFrequencyScale": 3.0,
-    "PlanarBackground": true,
-    "TranslateMeshZPositive": true,
-    "SilhouetteEnabled": true,
-    "SilhouetteSigma": 4.0,
-    "SilhouetteEdgeWidth": 5,
-    "ReliefScale": 0.03,
-    "P1Enabled": false,
-    "P1": 0.0,
-    "P2Enabled": false,
-    "P2": 0.0,
-    "P3Enabled": false,
-    "P3": 0.0,
-    "P4Enabled": true,
-    "P4": 0.0,
-    "P5Enabled": false,
-    "P5": 0.0,
-    "P6Enabled": false,
-    "P6": 0.0,
-    "P7Enabled": false,
-    "P7": 0.0,
-    "P8Enabled": false,
-    "P8": 0.0,
-    "ProjectId": 3,
-    "Project": {
-      "Id": 3,
-      "Name": "ModelRelief",
-      "Description": "Development and Test (development@modelrelief.com)"
-    },
-    "Id": 1,
-    "Name": "Identity",
-    "Description": "Default transform (development@modelrelief.com)"
-  },
-  {
-    "Width": 100.0,
-    "Height": 100.0,
-    "Depth": 1.0,
-    "GradientThresholdEnabled": true,
-    "GradientThreshold": 5.0,
-    "AttenuationEnabled": true,
-    "AttenuationFactor": 10.0,
     "AttenuationDecay": 0.9,
     "UnsharpMaskingEnabled": true,
     "UnsharpGaussianLow": 4.0,
@@ -83,11 +38,11 @@
     "Project": {
       "Id": 4,
       "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Description": "Stanford model repository"
     },
     "Id": 2,
-    "Name": "Armadillo",
-    "Description": "Armadillo transform (development@modelrelief.com)"
+    "Name": "armadillo",
+    "Description": "Armadillo Transform"
   },
   {
     "Width": 100.0,
@@ -128,11 +83,11 @@
     "Project": {
       "Id": 4,
       "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Description": "Stanford model repository"
     },
     "Id": 3,
-    "Name": "Bunny",
-    "Description": "Bunny transform (development@modelrelief.com)"
+    "Name": "bunny",
+    "Description": "Bunny Transform"
   },
   {
     "Width": 100.0,
@@ -173,11 +128,11 @@
     "Project": {
       "Id": 4,
       "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Description": "Stanford model repository"
     },
     "Id": 4,
-    "Name": "Buddha",
-    "Description": "Buddha transform (development@modelrelief.com)"
+    "Name": "buddha",
+    "Description": "Buddha Transform"
   },
   {
     "Width": 100.0,
@@ -218,11 +173,11 @@
     "Project": {
       "Id": 2,
       "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 5,
-    "Name": "Dolphin",
-    "Description": "Dolphin transform (development@modelrelief.com)"
+    "Name": "dolphin",
+    "Description": "Dolphin Transform"
   },
   {
     "Width": 100.0,
@@ -262,12 +217,12 @@
     "ProjectId": 4,
     "Project": {
       "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Stanford model repository"
     },
     "Id": 6,
-    "Name": "Dragon",
-    "Description": "Dragon transform (development@modelrelief.com)"
+    "Name": "dragon",
+    "Description": "Dragon Transform"
   },
   {
     "Width": 100.0,
@@ -307,12 +262,12 @@
     "ProjectId": 2,
     "Project": {
       "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 7,
-    "Name": "Horse",
-    "Description": "Horse transform (development@modelrelief.com)"
+    "Name": "horse",
+    "Description": "Horse Transform"
   },
   {
     "Width": 100.0,
@@ -352,12 +307,12 @@
     "ProjectId": 1,
     "Project": {
       "Id": 1,
-      "Name": "Architecture",
-      "Description": "Architectural structures, woodwork, panels and details (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Architectural structures, woodwork, panels and details"
     },
     "Id": 8,
-    "Name": "House",
-    "Description": "House transform (development@modelrelief.com)"
+    "Name": "house",
+    "Description": "House Transform"
   },
   {
     "Width": 100.0,
@@ -398,11 +353,11 @@
     "Project": {
       "Id": 3,
       "Name": "ModelRelief",
-      "Description": "Development and Test (development@modelrelief.com)"
+      "Description": "Development and Test"
     },
     "Id": 9,
-    "Name": "LowResolution",
-    "Description": "LowResolution transform (development@modelrelief.com)"
+    "Name": "lowresolution",
+    "Description": "LowResolution Transform"
   },
   {
     "Width": 100.0,
@@ -442,12 +397,12 @@
     "ProjectId": 4,
     "Project": {
       "Id": 4,
-      "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Stanford model repository"
     },
     "Id": 10,
-    "Name": "Lucy",
-    "Description": "Lucy transform (development@modelrelief.com)"
+    "Name": "lucy",
+    "Description": "Lucy Transform"
   },
   {
     "Width": 100.0,
@@ -487,12 +442,12 @@
     "ProjectId": 2,
     "Project": {
       "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 11,
-    "Name": "PlunderbussPete",
-    "Description": "Plunderbuss Pete transform (development@modelrelief.com)"
+    "Name": "plunderbusspete",
+    "Description": "Plunderbuss Pete Transform"
   },
   {
     "Width": 100.0,
@@ -533,11 +488,11 @@
     "Project": {
       "Id": 2,
       "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 12,
-    "Name": "Roadster",
-    "Description": "Roadster transform (development@modelrelief.com)"
+    "Name": "roadster",
+    "Description": "Roadster Transform"
   },
   {
     "Width": 100.0,
@@ -577,12 +532,12 @@
     "ProjectId": 2,
     "Project": {
       "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Name": "Examples",
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 13,
-    "Name": "Scallop",
-    "Description": "Scallop transform (development@modelrelief.com)"
+    "Name": "scallop",
+    "Description": "Scallop Transform"
   },
   {
     "Width": 100.0,
@@ -622,12 +577,12 @@
     "ProjectId": 2,
     "Project": {
       "Id": 2,
-      "Name": "Jewelry",
-      "Description": "Jewelry watch faces, bracelets and pendants (development@modelrelief.com)"
+      "Name": "Stanford",
+      "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Id": 14,
-    "Name": "Statue",
-    "Description": "Statue transform (development@modelrelief.com)"
+    "Name": "statue",
+    "Description": "Statue Transform"
   },
   {
     "Width": 100.0,
@@ -668,11 +623,11 @@
     "Project": {
       "Id": 3,
       "Name": "ModelRelief",
-      "Description": "Development and Test (development@modelrelief.com)"
+      "Description": "Development and Test"
     },
     "Id": 15,
-    "Name": "Test",
-    "Description": "Test transform (development@modelrelief.com)"
+    "Name": "test",
+    "Description": "Test Transform"
   },
   {
     "Width": 100.0,
@@ -713,10 +668,10 @@
     "Project": {
       "Id": 4,
       "Name": "Stanford",
-      "Description": "Stanford model repository (development@modelrelief.com)"
+      "Description": "Stanford model repository"
     },
     "Id": 16,
-    "Name": "Tyrannosaurus",
-    "Description": "Tyrannosaurus transform (development@modelrelief.com)"
+    "Name": "tyrannosaurus",
+    "Description": "Tyrannosaurus Transform"
   }
 ]

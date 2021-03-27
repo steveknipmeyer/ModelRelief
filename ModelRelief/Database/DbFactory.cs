@@ -154,12 +154,6 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task SeedDatabaseForTestUsersAsync()
         {
-            var rootContentFile = SeedContent.ContentFile;
-            var contentFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.TestSeed)}/{rootContentFile}";
-            contentFile = Path.GetFullPath(contentFile);
-
-            var seedContent = JsonConvert.DeserializeObject<SeedContent>(System.IO.File.ReadAllText(contentFile));
-
             var userAccounts = new List<Account>
             {
                 Accounts.Development,
@@ -301,6 +295,7 @@ namespace ModelRelief.Database
         /// <returns>true if all entities are valid</returns>
         public bool ValidateAll(ApplicationUser user)
         {
+            Console.WriteLine($"{Environment.NewLine}{user.Name}");
             var validationFailures = new List<ValidationFailure>();
             var entityValidationFailures = new List<ValidationFailure>();
 
@@ -326,14 +321,6 @@ namespace ModelRelief.Database
             // database
             AddSettings(user);
             AddProjects(user);
-            AddCameras(user);                   // JSON
-            AddModels(user);
-            AddMeshTransforms(user);            // JSON
-
-            AddDepthBuffers(user);
-            AddNormalMaps(user);
-            AddMeshes(user);
-
             AddSession(user);
 
             // user store
@@ -395,16 +382,14 @@ namespace ModelRelief.Database
         {
             var session = new Session
             {
+                UserId = user.Id,
                 Name = SettingsNames.Session,
                 Description = "Cross-project session settings",
-                UserId = user.Id,
                 Project = FindByName<Project>(user, ProjectNames.Examples),
             };
 
             DbContext.Add(session);
             DbContext.SaveChanges();
-
-            QualifyDescription<Session>(user);
         }
 
         /// <summary>
@@ -415,7 +400,12 @@ namespace ModelRelief.Database
         {
             var settings = new Settings[]
             {
-                new Settings { Name = SettingsNames.Project, Description = "User interface and project settings", UserId = user.Id },
+                new Settings
+                {
+                    UserId = user.Id,
+                    Name = SettingsNames.Project,
+                    Description = "User interface and project settings",
+                },
             };
 
             foreach (var item in settings)
@@ -423,8 +413,6 @@ namespace ModelRelief.Database
                 DbContext.Add(item);
                 DbContext.SaveChanges();
             }
-
-            QualifyDescription<Settings>(user);
         }
 
         /// <summary>
@@ -433,557 +421,260 @@ namespace ModelRelief.Database
         /// <param name="user">Owning user.</param>
         private void AddProjects(ApplicationUser user)
         {
-            var projects = new Project[]
-            {
-                new Project { Name = ProjectNames.Examples, Description = "Example models", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
-                new Project { Name = ProjectNames.Architecture, Description = "Architectural structures, woodwork, panels and details", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
-                new Project { Name = ProjectNames.Jewelry, Description = "Jewelry watch faces, bracelets and pendants", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
-                new Project { Name = ProjectNames.ModelRelief, Description = "Development and Test", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
-                new Project { Name = ProjectNames.Stanford, Description = "Stanford model repository", Settings = FindByName<Settings>(user, SettingsNames.Project), UserId = user.Id },
-            };
+            var rootContentFile = SeedContent.ContentFile;
+            var contentFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.TestSeed)}/{rootContentFile}";
+            contentFile = Path.GetFullPath(contentFile);
 
-            foreach (var project in projects)
+            var seedContent = JsonConvert.DeserializeObject<SeedContent>(System.IO.File.ReadAllText(contentFile));
+
+            foreach (var seedProject in seedContent.Projects)
             {
+                var project = new Project()
+                {
+                    UserId = user.Id,
+                    Name = seedProject.Name,
+                    Description = seedProject.Description,
+                    Settings = FindByName<Settings>(user, SettingsNames.Project),
+                };
                 DbContext.Add(project);
                 DbContext.SaveChanges();
-            }
 
-            QualifyDescription<Project>(user);
+                AddProjectModels(user, seedProject, project.Id);
+            }
         }
 
         /// <summary>
-        /// Add test cameras.
+        /// Add a default entity.
         /// </summary>
         /// <param name="user">Owning user.</param>
-        private void AddCameras(ApplicationUser user)
+        /// <param name="projectId">Parent Project.</param>
+        /// <param name="name">Name.</param>
+        /// <param name="description">Description.</param>
+        private int AddEntity<TEntity>(ApplicationUser user, int projectId, string name = "", string description = "")
+            where TEntity : DomainModel, IProjectModel, new()
         {
+            var entity = new TEntity();
+
+            entity.Name = name;
+            entity.Description = description;
+            entity.UserId = user.Id;
+            entity.ProjectId = projectId;
+
+            DbContext.Add(entity);
+            DbContext.SaveChanges();
+
+            return entity.Id;
+        }
+
+        /// <summary>
+        ///  Initialize DepthBuffer and NormalMap cameras from exported JSON.
+        /// </summary>
+        /// <param name="user">ApplicationUser</param>
+        private void InitializeCameras(ApplicationUser user)
+        {
+            DbContext.DetachUnchangedTrackedEntities();
             var cameraList = ImportEntityJSON<Camera>("Paths:ResourceFolders:Camera");
-            foreach (var camera in cameraList)
-            {
-                camera.Id = 0;
-                camera.UserId = user.Id;
+            var depthBuffers = DbContext.DepthBuffers
+                                   .Where(db => (db.UserId == user.Id))
+                                   .Include(db => db.Camera)
+                                   .AsNoTracking()
+                                   .ToList<DepthBuffer>();
+            depthBuffers.ForEach(depthBuffer =>
+                {
+                    var defaultCamera = depthBuffer.Camera;
+                    var exportedCamera = cameraList.Where(c => (Path.GetFileNameWithoutExtension(c.Name) == Path.GetFileNameWithoutExtension(depthBuffer.Name))).SingleOrDefault();
+                    if (exportedCamera == null)
+                        Console.WriteLine("null");
 
-                camera.Project = FindByName<Project>(user, camera.Project?.Name);
-                camera.ProjectId = camera.Project.Id;
-            }
+                    exportedCamera.Id = defaultCamera.Id;
+                    exportedCamera.UserId = user.Id;
+                    exportedCamera.Project = null;
+                    exportedCamera.ProjectId = defaultCamera.ProjectId;
 
-            foreach (var camera in cameraList)
-            {
-                DbContext.Add(camera);
-                DbContext.SaveChanges();
-            }
-
-            QualifyDescription<Camera>(user);
+                    DbContext.Update(exportedCamera);
+                    DbContext.SaveChanges();
+                });
         }
 
         /// <summary>
-        /// Add test models.
+        ///  Initialize mesh transforms from exported JSON.
         /// </summary>
-        /// <param name="user">Owning user.</param>
-        private void AddModels(ApplicationUser user)
+        /// <param name="user">ApplicationUser</param>
+        private void InitializeMeshTransforms(ApplicationUser user)
         {
-            var models = new Model3d[]
-            {
-                new Model3d
-                {
-                    Name = "armadillo.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Lucy"),
-                },
-                new Model3d
-                {
-                    Name = "buddha.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "bunny.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "dolphin.obj", Description = "Ocean dolphin", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "dragon.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "horse.obj", Description = "Prancing horse", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "house.obj", Description = "San Francisco house", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "lowresolution.obj", Description = "Low resolution test model", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "lucy.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "plunderbusspete.obj", Description = "Plunder Buss Pete pirate", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "roadster.obj", Description = "Duesen Bayern Mystar 190 SL", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "scallop.obj", Description = "Scallop shell", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Examples), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "statue.obj", Description = "Stanford model repository", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "test.obj", Description = "Reference test model", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief), Camera = FindByName<Camera>(user, "Top Camera"),
-                },
-                new Model3d
-                {
-                    Name = "tyrannosaurus.obj", Description = "Stanford test model", Format = Model3dFormat.OBJ,
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford), Camera = FindByName<Camera>(user, "Isometric Camera"),
-                },
-            };
-
-            foreach (var model in models)
-            {
-                DbContext.Add(model);
-                DbContext.SaveChanges();
-            }
-
-            SetFileProperties(models);
-            QualifyDescription<Model3d>(user);
-        }
-
-        /// <summary>
-        /// Add mesh transforms.
-        /// </summary>
-        /// <param name="user">Owning user.</param>
-        private void AddMeshTransforms(ApplicationUser user)
-        {
+            DbContext.DetachUnchangedTrackedEntities();
             var meshTransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
-            foreach (var meshtransform in meshTransformList)
-            {
-                meshtransform.Id = 0;
-                meshtransform.UserId = user.Id;
+            var meshes = DbContext.Meshes
+                                   .Where(db => (db.UserId == user.Id))
+                                   .Include(db => db.MeshTransform)
+                                   .AsNoTracking()
+                                   .ToList<Mesh>();
+            meshes.ForEach(mesh =>
+                {
+                    var defaultMeshTransform = mesh.MeshTransform;
+                    var exportedMeshTransform = meshTransformList.Where(mt => mt.Name == Path.GetFileNameWithoutExtension(mesh.Name)).SingleOrDefault();
+                    if (exportedMeshTransform == null)
+                        Console.WriteLine("null");
 
-                meshtransform.Project = FindByName<Project>(user, meshtransform.Project?.Name);
-                meshtransform.ProjectId = meshtransform.Project.Id;
-            }
+                    exportedMeshTransform.Id = defaultMeshTransform.Id;
+                    exportedMeshTransform.UserId = user.Id;
+                    exportedMeshTransform.Project = null;
+                    exportedMeshTransform.ProjectId = defaultMeshTransform.ProjectId;
 
-            foreach (var mesh in meshTransformList)
-            {
-                DbContext.Add(mesh);
-                DbContext.SaveChanges();
-            }
-
-            QualifyDescription<MeshTransform>(user);
+                    DbContext.Update(exportedMeshTransform);
+                    DbContext.SaveChanges();
+                });
         }
 
         /// <summary>
-        /// Add test depth buffers.
+        /// Add seed models for a project.
         /// </summary>
-        /// <param name="user">Owning user.</param>
-        private void AddDepthBuffers(ApplicationUser user)
+        /// <param name="user">Application user.</param>
+        /// <param name="seedProject">Seed project.</param>
+        /// <param name="projectId">Project Id</param>
+        private void AddProjectModels(ApplicationUser user, SeedProject seedProject, int projectId)
         {
-            var depthBuffers = new DepthBuffer[]
-            {
-                new DepthBuffer
+            seedProject.Models.ForEach(seedModel =>
                 {
-                    Name = "armadillo.sdb", Description = "Generated in Rhino",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "buddha.sdb", Description = "Generated in Rhino",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "bunny.sdb", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "dolphin.sdb", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "dolphin.obj"), Camera = FindByName<Camera>(user, "Dolphin"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new DepthBuffer
-                {
-                    Name = "dragon.sdb", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "horse.sdb", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "horse.obj"), Camera = FindByName<Camera>(user, "Horse"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new DepthBuffer
-                {
-                    Name = "house.sdb", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-                new DepthBuffer
-                {
-                    Name = "lowresolution.sdb", Description = "Generated in ModelRelief",
-                    Width = 16, Height = 16,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "lowresolution.obj"), Camera = FindByName<Camera>(user, "LowResolution"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new DepthBuffer
-                {
-                    Name = "lucy.sdb", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "plunderbusspete.sdb", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "plunderbusspete.obj"), Camera = FindByName<Camera>(user, "PlunderbussPete"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new DepthBuffer
-                {
-                    Name = "roadster.sdb", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new DepthBuffer
-                {
-                    Name = "scallop.sdb", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "scallop.obj"), Camera = FindByName<Camera>(user, "Scallop"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new DepthBuffer
-                {
-                    Name = "statue.sdb", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new DepthBuffer
-                {
-                    Name = "test.sdb", Description = "Generated in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "test.obj"), Camera = FindByName<Camera>(user, "Test"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new DepthBuffer
-                {
-                    Name = "tyrannosaurus.sdb", Description = "Generated in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = DepthBufferFormat.SDB,
-                    Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-            };
+                    AddModel3d(user, projectId, seedModel.Name, seedModel.Description);
+                });
 
-            foreach (var depthBuffer in depthBuffers)
-            {
-                DbContext.Add(depthBuffer);
-                DbContext.SaveChanges();
-            }
-
-            SetFileProperties(depthBuffers);
-            QualifyDescription<DepthBuffer>(user);
+            InitializeCameras(user);
+            InitializeMeshTransforms(user);
         }
 
         /// <summary>
-        /// Add test meshes.
+        /// Add a mew Model3d.
         /// </summary>
-        /// <param name="user">Owning user.</param>
-        private void AddMeshes(ApplicationUser user)
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project Id for new Model3d.</param>
+        /// <param name="modelName">Name.</param>
+        /// <param name="modelDescription">Description.</param>
+        private Model3d AddModel3d(ApplicationUser user, int projectId, string modelName, string modelDescription)
         {
-            var meshes = new Mesh[]
+            // Model3d Relationships
+            // ------------------------
+            // Mesh
+            //     MeshTransform
+            //     DepthBuffer
+            //         Camera
+            //         Model3d
+            //             Camera
+            //     NormalMap
+            //         Camera
+            //         Model3d
+            //             Camera
+            //     Camera
+
+            var qualifiedModelName = $"{modelName}.obj";
+            var model = new Model3d
             {
-                new Mesh
-                {
-                    Name = "armadillo.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "armadillo.sdb"), NormalMap = FindByName<NormalMap>(user, "armadillo.nmap"), MeshTransform = FindByName<MeshTransform>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "buddha.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "buddha.sdb"), NormalMap = FindByName<NormalMap>(user, "buddha.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Buddha"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "bunny.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "bunny.sdb"), NormalMap = FindByName<NormalMap>(user, "bunny.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Bunny"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "dolphin.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "dolphin.sdb"), NormalMap = FindByName<NormalMap>(user, "dolphin.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Dolphin"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Mesh
-                {
-                    Name = "dragon.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "dragon.sdb"), NormalMap = FindByName<NormalMap>(user, "dragon.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Dragon"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "horse.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "horse.sdb"), NormalMap = FindByName<NormalMap>(user, "horse.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Horse"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Mesh
-                {
-                    Name = "house.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "house.sdb"), NormalMap = FindByName<NormalMap>(user, "house.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "House"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-                new Mesh
-                {
-                    Name = "lowresolution.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "lowresolution.sdb"), NormalMap = FindByName<NormalMap>(user, "lowresolution.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "LowResolution"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new Mesh
-                {
-                    Name = "lucy.sfp", Description = "Isometric", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Isometric Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "lucy.sdb"), NormalMap = FindByName<NormalMap>(user, "lucy.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Lucy"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "plunderbusspete.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "plunderbusspete.sdb"), NormalMap = FindByName<NormalMap>(user, "plunderbusspete.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "PlunderbussPete"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Mesh
-                {
-                    Name = "roadster.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "roadster.sdb"), NormalMap = FindByName<NormalMap>(user, "roadster.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Roadster"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Mesh
-                {
-                    Name = "scallop.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "scallop.sdb"), NormalMap = FindByName<NormalMap>(user, "scallop.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Scallop"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new Mesh
-                {
-                    Name = "statue.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "statue.sdb"), NormalMap = FindByName<NormalMap>(user, "statue.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Statue"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new Mesh
-                {
-                    Name = "test.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "test.sdb"), NormalMap = FindByName<NormalMap>(user, "test.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Test"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new Mesh
-                {
-                    Name = "tyrannosaurus.sfp", Description = "Top", Format = MeshFormat.SFP, Camera = FindByName<Camera>(user, "Top Camera"),
-                    DepthBuffer = FindByName<DepthBuffer>(user, "tyrannosaurus.sdb"), NormalMap = FindByName<NormalMap>(user, "tyrannosaurus.nmap"), MeshTransform =  FindByName<MeshTransform>(user, "Tyrannosaurus"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
+                UserId = user.Id,
+                Name = qualifiedModelName,
+                Description = modelDescription,
+
+                Format = Model3dFormat.OBJ,
+                ProjectId = projectId,
+                CameraId = AddEntity<Camera>(user, projectId, qualifiedModelName, modelDescription),
             };
+            DbContext.Add(model);
+            DbContext.SaveChanges();
+            SetFileProperties<Model3d>(model);
 
-            foreach (var mesh in meshes)
-            {
-                DbContext.Add(mesh);
-                DbContext.SaveChanges();
-            }
+            // add related
+            var depthBuffer = AddDepthBuffer(user, projectId, model.Id, modelName, modelDescription);
+            var normalMap = AddNormalMap(user, projectId, depthBuffer.CameraId, model.Id, modelName, modelDescription);
+            AddMesh(user, projectId, depthBuffer.Id, normalMap.Id, modelName, modelDescription);
 
-            SetFileProperties(meshes);
-            QualifyDescription<Mesh>(user);
+            return model;
         }
 
         /// <summary>
-        /// Add test normal maps.
+        /// Add a new DepthBuffer.
         /// </summary>
-        /// <param name="user">Owning user.</param>
-        private void AddNormalMaps(ApplicationUser user)
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project Id for new DepthBuffer.</param>
+        /// <param name="modelId">Id of related Model3d.</param>
+        /// <param name="modelName">Name of related Model3d.</param>
+        /// <param name="modelDescription">Description of related Model3d.</param>
+        private DepthBuffer AddDepthBuffer(ApplicationUser user, int projectId, int modelId, string modelName, string modelDescription)
         {
-            var normalMaps = new NormalMap[]
+            var depthBufferName = $"{modelName}.sdb";
+            var depthBuffer = new DepthBuffer
             {
-                new NormalMap
-                {
-                    Name = "armadillo.nmap", Description = "Generated in Rhino",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "armadillo.obj"), Camera = FindByName<Camera>(user, "Armadillo"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "buddha.nmap", Description = "Generated in Rhino",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "buddha.obj"), Camera = FindByName<Camera>(user, "Buddha"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "bunny.nmap", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "bunny.obj"), Camera = FindByName<Camera>(user, "Bunny"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "dolphin.nmap", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "dolphin.obj"), Camera = FindByName<Camera>(user, "Dolphin"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new NormalMap
-                {
-                    Name = "dragon.nmap", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "dragon.obj"), Camera = FindByName<Camera>(user, "Dragon"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "horse.nmap", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "horse.obj"), Camera = FindByName<Camera>(user, "Horse"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new NormalMap
-                {
-                    Name = "house.nmap", Description = "Generated in VRay",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "house.obj"), Camera = FindByName<Camera>(user, "House"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Architecture),
-                },
-                new NormalMap
-                {
-                    Name = "lowresolution.nmap", Description = "Generated in ModelRelief",
-                    Width = 16, Height = 16,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "lowresolution.obj"), Camera = FindByName<Camera>(user, "LowResolution"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new NormalMap
-                {
-                    Name = "lucy.nmap", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "lucy.obj"), Camera = FindByName<Camera>(user, "Lucy"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "plunderbusspete.nmap", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "plunderbusspete.obj"), Camera = FindByName<Camera>(user, "PlunderbussPete"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new NormalMap
-                {
-                    Name = "roadster.nmap", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "roadster.obj"), Camera = FindByName<Camera>(user, "Roadster"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new NormalMap
-                {
-                    Name = "scallop.nmap", Description = "Created in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "scallop.obj"), Camera = FindByName<Camera>(user, "Scallop"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Jewelry),
-                },
-                new NormalMap
-                {
-                    Name = "statue.nmap", Description = "Generated in Maya",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "statue.obj"), Camera = FindByName<Camera>(user, "Statue"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
-                new NormalMap
-                {
-                    Name = "test.nmap", Description = "Generated in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "test.obj"), Camera = FindByName<Camera>(user, "Test"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.ModelRelief),
-                },
-                new NormalMap
-                {
-                    Name = "tyrannosaurus.nmap", Description = "Generated in ModelRelief",
-                    Width = 512, Height = 512,
-                    Format = NormalMapFormat.NMAP, Space = NormalMapSpace.Tangent,
-                    Model3d = FindByName<Model3d>(user, "tyrannosaurus.obj"), Camera = FindByName<Camera>(user, "Tyrannosaurus"),
-                    UserId = user.Id, Project = FindByName<Project>(user, ProjectNames.Stanford),
-                },
+                UserId = user.Id,
+                Name = depthBufferName,
+                Description = modelDescription,
+
+                Format = DepthBufferFormat.SDB,
+                ProjectId = projectId,
+                CameraId = AddEntity<Camera>(user, projectId, $"{modelName}MeshTransform", modelDescription),
+                Model3dId = modelId,
             };
+            DbContext.Add(depthBuffer);
+            DbContext.SaveChanges();
+            SetFileProperties<DepthBuffer>(depthBuffer);
 
-            foreach (var normalMap in normalMaps)
+            return depthBuffer;
+        }
+
+        /// <summary>
+        /// Add a new NormalMap.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project Id for new NormalMap.</param>
+        /// <param name="cameraId">Id of camera.</param>
+        /// <param name="modelId">Id of related Model3d.</param>
+        /// <param name="modelName">Name of related Model3d.</param>
+        /// <param name="modelDescription">Description of related Model3d.</param>
+        private NormalMap AddNormalMap(ApplicationUser user, int projectId, int? cameraId, int modelId, string modelName, string modelDescription)
+        {
+            var normalMap = new NormalMap
             {
-                DbContext.Add(normalMap);
-                DbContext.SaveChanges();
-            }
+                UserId = user.Id,
+                Name = $"{modelName}.nmap",
+                Description = modelDescription,
+                Format = NormalMapFormat.NMAP,
+                ProjectId = projectId,
+                CameraId = cameraId,
+                Model3dId = modelId,
+            };
+            DbContext.Add(normalMap);
+            DbContext.SaveChanges();
+            SetFileProperties<NormalMap>(normalMap);
 
-            SetFileProperties(normalMaps);
-            QualifyDescription<NormalMap>(user);
+            return normalMap;
+        }
+
+        /// <summary>
+        /// Add a new Mesh.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project Id for new Mesh.</param>
+        /// <param name="depthBufferId">Id of related DepthBuffer.</param>
+        /// <param name="normalMapId">Id of related NormalMap.</param>
+        /// <param name="modelName">Name of related Model3d.</param>
+        /// <param name="modelDescription">Description of related Model3d.</param>
+        private Mesh AddMesh(ApplicationUser user, int projectId, int depthBufferId, int normalMapId, string modelName, string modelDescription)
+        {
+            var meshName = $"{modelName}.sfp";
+            var mesh = new Mesh
+            {
+                UserId = user.Id,
+                Name = meshName,
+                Description = modelDescription,
+                Format = MeshFormat.SFP,
+                ProjectId = projectId,
+                MeshTransformId = AddEntity<MeshTransform>(user, projectId, modelName, modelDescription),
+                DepthBufferId = depthBufferId,
+                NormalMapId = normalMapId,
+                CameraId = AddEntity<Camera>(user, projectId, meshName, modelDescription),
+            };
+            DbContext.Add(mesh);
+            DbContext.SaveChanges();
+            SetFileProperties<Mesh>(mesh);
+
+            return mesh;
         }
 
         /// <summary>
@@ -1008,7 +699,8 @@ namespace ModelRelief.Database
             {
                 // parent directory name = database resource ID
                 var model = DbContext.Set<TEntity>()
-                    .Where(m => m.Name.StartsWith(dirInfo.Name))
+                    .AsEnumerable()
+                    .Where(m => m.Name.StartsWith(dirInfo.Name, true, null))
                     .Where(m => (m.UserId == user.Id))
                     .SingleOrDefault();
 
@@ -1078,19 +770,15 @@ namespace ModelRelief.Database
         /// Sets the file properties of the model.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="models">Collection of models to update.</param>
-        private void SetFileProperties<TEntity>(IEnumerable<TEntity> models)
+        /// <param name="model">Models to update.</param>
+        private void SetFileProperties<TEntity>(TEntity model)
             where TEntity : FileDomainModel
         {
-            // model Ids are known now; set paths, etc.
-            foreach (TEntity model in models)
-            {
-                model.FileTimeStamp = DateTime.Now;
-                model.Path = StorageManager.GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
+            model.FileTimeStamp = DateTime.Now;
+            model.Path = StorageManager.GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
 
-                if (model is GeneratedFileDomainModel generatedModel)
-                    generatedModel.FileIsSynchronized = true;
-            }
+            if (model is GeneratedFileDomainModel generatedModel)
+                generatedModel.FileIsSynchronized = true;
 
             DbContext.SaveChanges();
         }

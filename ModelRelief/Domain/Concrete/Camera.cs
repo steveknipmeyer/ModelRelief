@@ -94,6 +94,8 @@ namespace ModelRelief.Domain
         /// </summary>
         public Camera()
         {
+            Name = "Default Camera";
+
             IsPerspective = true;
 
             // Clipping Planes

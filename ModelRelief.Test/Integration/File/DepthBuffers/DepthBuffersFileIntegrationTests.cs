@@ -42,11 +42,11 @@ namespace ModelRelief.Test.Integration.DepthBuffers
             {
                 // Camera
                 var cameraNode = NodeCollection[typeof(Domain.Camera)];
-                await cameraNode.FromExistingModel("Lucy");
+                await cameraNode.FromExistingModel("lucy.MeshTransform");
 
                 // DepthBuffer
                 var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
-                await depthBufferNode.FromExistingModel("Lucy");
+                await depthBufferNode.FromExistingModel("lucy.sdb");
             }
         }
 

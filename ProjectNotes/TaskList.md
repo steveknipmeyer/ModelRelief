@@ -1,24 +1,12 @@
-#### Commit
-#### General          
+#### Commit           
+### General          
+    FileDomainModel
+        Create seed DepthBuffer, NormalMap and Mesh files.
+   
+    How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
+        FileIsSynchronized?
 
     Projects
-        Projects
-            projects.ForEach
-            {
-                New Model
-                    Add support for creating supporting resources for a new model.               
-
-                    Mesh
-                        MeshTransform            
-                        DepthBuffer
-                            Camera
-                            Model
-                                Camera
-                        Camera
-                DbInitializer: FindByName must filter by project.
-            }
-
-
         Project Control
             Should the Menu label link to the active project?
                 This requires using the dropdown arrow to activate the menu.
@@ -48,7 +36,7 @@
                     The back end should assign the Format only after validation.
                 Assign Format to model based on file content.
 
-    Verify Resolutin.Image setting.
+    Verify Resolution.Image setting.
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
@@ -56,8 +44,11 @@
     Optimize SettingsManager.Initialize[UserSession|Settings]Async
         Every property validation causes a database read.
 
-    Reference properties override the foreign key if different.
-        True only for PUT or all HTTP? 
+    Support query by wildcard and exact mode.
+
+    Settings
+        Paths:ResourceFolders:Camera
+        Paths:ResourceFolders:MeshTransform
 
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initiialize the database....

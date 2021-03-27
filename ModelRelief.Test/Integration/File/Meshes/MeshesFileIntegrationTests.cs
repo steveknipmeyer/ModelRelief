@@ -45,19 +45,19 @@ namespace ModelRelief.Test.Integration.Meshes
             {
                 // Camera
                 var cameraNode = NodeCollection[typeof(Domain.Camera)];
-                await cameraNode.FromExistingModel("Lucy");
+                await cameraNode.FromExistingModel("lucy.MeshTransform");
 
                 // MeshTransform
                 var meshTransformNode = NodeCollection[typeof(Domain.MeshTransform)];
-                await meshTransformNode.FromExistingModel("Lucy");
+                await meshTransformNode.FromExistingModel("lucy");
 
                 // DepthBuffer
                 var depthBufferNode = NodeCollection[typeof(Domain.DepthBuffer)];
-                await depthBufferNode.FromExistingModel("Lucy");
+                await depthBufferNode.FromExistingModel("lucy.sdb");
 
                 // Mesh
                 var meshNode = NodeCollection[typeof(Domain.Mesh)];
-                await meshNode.FromExistingModel("Lucy");
+                await meshNode.FromExistingModel("lucy.sfp");
             }
         }
 

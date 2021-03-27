@@ -24,6 +24,7 @@ namespace ModelRelief.Domain
         /// </summary>
         public Project()
         {
+            Name = "Default Project";
         }
     }
 }

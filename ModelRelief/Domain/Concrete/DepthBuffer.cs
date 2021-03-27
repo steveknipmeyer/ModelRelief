@@ -41,6 +41,8 @@ namespace ModelRelief.Domain
         public ICollection<Mesh> Meshes { get; set; }
         public DepthBuffer()
         {
+            Name = "Default DepthBuffer";
+
             Width  = Defaults.Resolution.Image;
             Height = Defaults.Resolution.Image;
 

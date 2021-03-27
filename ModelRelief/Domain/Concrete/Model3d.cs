@@ -16,7 +16,7 @@ namespace ModelRelief.Domain
         STL,            // Stereolithography
     }
 
-    [DependentFiles(typeof(DepthBuffer))]
+    [DependentFiles(typeof(DepthBuffer), typeof(NormalMap))]
     public class Model3d : FileDomainModel, IProjectModel
     {
         public Model3dFormat Format { get; set; }
@@ -37,6 +37,8 @@ namespace ModelRelief.Domain
         /// </summary>
         public Model3d()
         {
+            Name = "Default Model3d";
+
             Format = Defaults.Model3d.Format;
         }
     }

@@ -146,7 +146,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
             dynamic referenceModel = Convert.ChangeType(task.Result, referenceType);
             if (referenceModel == null)
             {
-                propertyValidationFailures.Add(new ValidationFailure(foreignKeyPropertyName, $"Property '{foreignKeyPropertyName}' references an entity that does not exist."));
+                propertyValidationFailures.Add(new ValidationFailure(foreignKeyPropertyName, $"{typeof(TEntity).Name}:{model.Id} references {foreignKeyPropertyName}:{foreignKey} which does not exist."));
                 return propertyValidationFailures;
             }
             Dictionary<string, object> referenceModelProperties = ((object)referenceModel)

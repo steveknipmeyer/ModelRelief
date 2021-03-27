@@ -40,11 +40,11 @@ namespace ModelRelief.Test.Integration.NormalMaps
             {
                 // Camera
                 var cameraNode = NodeCollection[typeof(Domain.Camera)];
-                await cameraNode.FromExistingModel("Lucy");
+                await cameraNode.FromExistingModel("lucy.MeshTransform");
 
                 // NormalMap
-                var depthBufferNode = NodeCollection[typeof(Domain.NormalMap)];
-                await depthBufferNode.FromExistingModel("Lucy");
+                var normalMapNode = NodeCollection[typeof(Domain.NormalMap)];
+                await normalMapNode.FromExistingModel("lucy.nmap");
             }
         }
 

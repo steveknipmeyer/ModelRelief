@@ -43,6 +43,8 @@ namespace ModelRelief.Domain
         public MeshTransform MeshTransform { get; set; }
         public Mesh()
         {
+            Name = "Default Mesh";
+
             Format = Defaults.Mesh.Format;
         }
     }

@@ -20,6 +20,7 @@ namespace ModelRelief.Domain
         /// </summary>
         public Session()
         {
+            Name = "Default Session";
         }
     }
 }

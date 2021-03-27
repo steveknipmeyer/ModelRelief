@@ -97,6 +97,8 @@ namespace ModelRelief.Domain
         /// </summary>
         public MeshTransform()
         {
+            Name = "Default MeshTransform";
+
             Width = Defaults.MeshTransform.Width;
             Height = Defaults.MeshTransform.Height;
             Depth = Defaults.MeshTransform.Depth;
