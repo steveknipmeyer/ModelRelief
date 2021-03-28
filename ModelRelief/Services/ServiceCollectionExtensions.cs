@@ -14,11 +14,11 @@ namespace ModelRelief.Services
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Features.Email;
     using ModelRelief.Features.Errors;
@@ -183,6 +183,8 @@ namespace ModelRelief.Services
             services.AddTransient<IDependencyManager, DependencyManager>();
             services.AddTransient<IDispatcher, Dispatcher>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IModelReferenceValidator, ModelReferenceValidator>();
+            services.AddTransient<IDbFactory, DbFactory>();
         }
 
         /// <summary>

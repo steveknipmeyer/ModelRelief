@@ -27,7 +27,6 @@ namespace ModelRelief.Domain
 
         public int? CameraId { get; set; }
         public Camera Camera { get; set; }
-
         public ICollection<DepthBuffer> DepthBuffers { get; set; }
         public ICollection<NormalMap> NormalMaps { get; set; }
 

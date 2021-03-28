@@ -29,7 +29,7 @@ namespace ModelRelief.Features
         protected ViewControllerOptions ViewControllerOptions { get; }
         protected new ILogger Logger { get; }                     // base class Logger category is UxController
         protected ISettingsManager SettingsManager { get; set; }
-        public Query Query { get; set; }
+        protected Query Query { get; set; }
         protected string UserId { get; set; }
 
         /// <summary>

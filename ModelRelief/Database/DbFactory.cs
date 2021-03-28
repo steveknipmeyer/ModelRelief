@@ -28,7 +28,7 @@ namespace ModelRelief.Database
     using ModelRelief.Utility;
     using Newtonsoft.Json;
 
-    public class DbFactory
+    public class DbFactory : IDbFactory
     {
         public string SqlitePath { get; set; }
 
@@ -109,6 +109,18 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Returns the unique user Id for an account.
+        /// </summary>
+        /// <param name="account">Target Account.</param>
+        /// <returns></returns>
+        public ApplicationUser ConstructUserFromAccount(Account account)
+        {
+            var user = new ApplicationUser(account.NameIdentifier, account.Name);
+
+            return user;
+        }
+
+        /// <summary>
         /// Delete the user store.
         /// </summary>
         public void InitializeUserStore()
@@ -127,61 +139,6 @@ namespace ModelRelief.Database
 
             Files.DeleteFolder(StoreUsersPath, true);
             Logger.LogWarning($"User store ({StoreUsersPath}) deleted.");
-        }
-
-        /// <summary>
-        /// Seeds the database with test data for a new user.
-        /// </summary>
-        /// <param name="claimsPrincipal">Newly-logged in user.</param>
-        public async Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal)
-        {
-            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
-                return;
-
-            ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            IQueryable<Model3d> results = DbContext.Models
-                                            .Where(m => (m.UserId == user.Id));
-
-            // models exist; not brand new user
-            if (results.Any())
-                return;
-
-            SeedDatabaseForUser(user);
-        }
-
-        /// <summary>
-        /// Seeds the database with test data.
-        /// </summary>
-        public async Task SeedDatabaseForTestUsersAsync()
-        {
-            var userAccounts = new List<Account>
-            {
-                Accounts.Development,
-                Accounts.Sales,
-                Accounts.Support,
-            };
-
-            foreach (var account in userAccounts)
-            {
-                ApplicationUser user = ConstructUserFromAccount(account);
-                SeedDatabaseForUser(user);
-
-                ValidateAll(user);
-            }
-            CreateTestDatabase();
-            await Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Returns the unique user Id for an account.
-        /// </summary>
-        /// <param name="account">Target Account.</param>
-        /// <returns></returns>
-        public ApplicationUser ConstructUserFromAccount(Account account)
-        {
-            var user = new ApplicationUser(account.NameIdentifier, account.Name);
-
-            return user;
         }
 
         /// <summary>
@@ -238,6 +195,67 @@ namespace ModelRelief.Database
             {
                 Debug.Assert(false, $"RefreshTestDatabase: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Seeds the database with test data.
+        /// </summary>
+        public async Task SeedDatabaseForTestUsersAsync()
+        {
+            var userAccounts = new List<Account>
+            {
+                Accounts.Development,
+                Accounts.Sales,
+                Accounts.Support,
+            };
+
+            foreach (var account in userAccounts)
+            {
+                ApplicationUser user = ConstructUserFromAccount(account);
+                SeedDatabaseForUser(user);
+
+                ValidateAll(user);
+            }
+            CreateTestDatabase();
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Seeds the database with test data for a new user.
+        /// </summary>
+        /// <param name="claimsPrincipal">Newly-logged in user.</param>
+        public async Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            if ((claimsPrincipal == null) || (!claimsPrincipal.Identity.IsAuthenticated))
+                return;
+
+            ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
+            IQueryable<Model3d> results = DbContext.Models
+                                            .Where(m => (m.UserId == user.Id));
+
+            // models exist; not brand new user
+            if (results.Any())
+                return;
+
+            SeedDatabaseForUser(user);
+        }
+
+        /// <summary>
+        /// Add supporting models for a new Model3d.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="model">Model3d to add supporting related models.</param>
+        public Model3d AddModel3dRelated(ApplicationUser user, Model3d model)
+        {
+            model.CameraId = AddEntity<Camera>(user, model.ProjectId, model.Name, model.Description);
+
+            // add related
+            var rootModelName = Path.GetFileNameWithoutExtension(model.Name);
+            var depthBuffer = AddDepthBuffer(user, model.ProjectId, model.Id, rootModelName, model.Description);
+            var normalMap = AddNormalMap(user, model.ProjectId, depthBuffer.CameraId, model.Id, rootModelName, model.Description);
+            AddMesh(user, model.ProjectId, depthBuffer.Id, normalMap.Id, rootModelName, model.Description);
+
+            return model;
         }
 
         /// <summary>
@@ -450,7 +468,7 @@ namespace ModelRelief.Database
         /// <param name="projectId">Parent Project.</param>
         /// <param name="name">Name.</param>
         /// <param name="description">Description.</param>
-        private int AddEntity<TEntity>(ApplicationUser user, int projectId, string name = "", string description = "")
+        private int AddEntity<TEntity>(ApplicationUser user, int? projectId, string name = "", string description = "")
             where TEntity : DomainModel, IProjectModel, new()
         {
             var entity = new TEntity();
@@ -543,13 +561,6 @@ namespace ModelRelief.Database
             InitializeMeshTransforms(user);
         }
 
-        /// <summary>
-        /// Add a mew Model3d.
-        /// </summary>
-        /// <param name="user">Application user.</param>
-        /// <param name="projectId">Project Id for new Model3d.</param>
-        /// <param name="modelName">Name.</param>
-        /// <param name="modelDescription">Description.</param>
         private Model3d AddModel3d(ApplicationUser user, int projectId, string modelName, string modelDescription)
         {
             // Model3d Relationships
@@ -575,16 +586,14 @@ namespace ModelRelief.Database
 
                 Format = Model3dFormat.OBJ,
                 ProjectId = projectId,
-                CameraId = AddEntity<Camera>(user, projectId, qualifiedModelName, modelDescription),
+                // N.B. Camera created in AddModel3dRelated
             };
+
             DbContext.Add(model);
             DbContext.SaveChanges();
             SetFileProperties<Model3d>(model);
 
-            // add related
-            var depthBuffer = AddDepthBuffer(user, projectId, model.Id, modelName, modelDescription);
-            var normalMap = AddNormalMap(user, projectId, depthBuffer.CameraId, model.Id, modelName, modelDescription);
-            AddMesh(user, projectId, depthBuffer.Id, normalMap.Id, modelName, modelDescription);
+            AddModel3dRelated(user, model);
 
             return model;
         }
@@ -597,7 +606,7 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private DepthBuffer AddDepthBuffer(ApplicationUser user, int projectId, int modelId, string modelName, string modelDescription)
+        private DepthBuffer AddDepthBuffer(ApplicationUser user, int? projectId, int modelId, string modelName, string modelDescription)
         {
             var depthBufferName = $"{modelName}.sdb";
             var depthBuffer = new DepthBuffer
@@ -608,7 +617,7 @@ namespace ModelRelief.Database
 
                 Format = DepthBufferFormat.SDB,
                 ProjectId = projectId,
-                CameraId = AddEntity<Camera>(user, projectId, $"{modelName}MeshTransform", modelDescription),
+                CameraId = AddEntity<Camera>(user, projectId, $"{modelName}.MeshTransform", modelDescription),
                 Model3dId = modelId,
             };
             DbContext.Add(depthBuffer);
@@ -630,7 +639,7 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private NormalMap AddNormalMap(ApplicationUser user, int projectId, int? cameraId, int modelId, string modelName, string modelDescription)
+        private NormalMap AddNormalMap(ApplicationUser user, int? projectId, int? cameraId, int modelId, string modelName, string modelDescription)
         {
             var normalMap = new NormalMap
             {
@@ -661,7 +670,7 @@ namespace ModelRelief.Database
         /// <param name="normalMapId">Id of related NormalMap.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private Mesh AddMesh(ApplicationUser user, int projectId, int depthBufferId, int normalMapId, string modelName, string modelDescription)
+        private Mesh AddMesh(ApplicationUser user, int? projectId, int depthBufferId, int normalMapId, string modelName, string modelDescription)
         {
             var meshName = $"{modelName}.sfp";
             var mesh = new Mesh

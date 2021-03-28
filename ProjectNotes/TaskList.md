@@ -1,13 +1,10 @@
 #### Commit       
-    
 ### General          
-    GeneratedFileDomainModel Constructors
-        Create seed DepthBuffer, NormalMap and Mesh files.
- 
-    Convert MeshTransform, DepthBuffer, NormalMap (Width, Height) to int. 
 
-    Complete the Upload workflow to use DbFactory.AddModel3d.
-
+    Upload
+        Add a busy indicator.
+        How/when should the Model3d extension be added?
+    
     Projects
         Project Control
             Should the Menu label link to the active project?
@@ -41,7 +38,12 @@
     
     Convert Mesh to OBJ default to support download of generated Mesh.
 
+    Final Height MeshTransform Setting
+        Review the description of the control.
+            This setting controls the height of the final relief. It is a percentage of the depth of the original model.
+
     How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
+        getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
         FileIsSynchronized?
 
     Verify Resolution.Image setting.
@@ -58,13 +60,12 @@
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
         remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
 
-
     Settings
         Paths:ResourceFolders:Camera
         Paths:ResourceFolders:MeshTransform
 
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
-        testrunner does initiialize the database....
+        testrunner does initialize the database....
         Restore logic?
 
     Investigate Chrome page warnings.
