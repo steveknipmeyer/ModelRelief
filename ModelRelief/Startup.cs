@@ -41,15 +41,17 @@ namespace ModelRelief
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetSingleRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GetMultipleRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(GetFileRequestHandler<>)).AsImplementedInterfaces();
+
             builder.RegisterGeneric(typeof(PostRequestHandler<,,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PutRequestHandler<,,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PostFileRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PatchRequestHandler<,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
+
+            builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(GetFileRequestHandler<>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PostFileRequestHandler<,>)).AsImplementedInterfaces();
 
             AutofacExperiments.Register(builder);
         }

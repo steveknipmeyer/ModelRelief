@@ -55,7 +55,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Gnerates a file-backed resource when its dependencies have changed.
+        /// Generates a file-backed resource when its dependencies have changed.
         /// </summary>
         /// <param name="fileRequest">FileRequest created during dependency processing.</param>
         /// <param name="generatedFileDomainModel">Domain model.</param>

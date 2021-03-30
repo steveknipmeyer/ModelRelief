@@ -25,7 +25,7 @@ namespace ModelRelief.Infrastructure
             // This method fires after these validation checks have been applied to model-bound objects.
             //    IValidatableObject interface
             //    DataAnnotation attributes
-            //    <T>Validator class implementing FluentValidation: AbstractValidator<T> (found by Mediator through reflection)
+            //    <T>Validator class implementing FluentValidation: AbstractValidator<T>
 
             if (filterContext.ModelState.IsValid)
                 return;

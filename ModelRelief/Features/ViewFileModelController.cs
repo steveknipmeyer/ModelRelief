@@ -70,7 +70,12 @@ namespace ModelRelief.Features
                 return View(postRequest);
             }
 
-            await PostProcessCreate(User, newModel.Id);
+            newModel = await PostProcessCreate(User, newModel);
+            if (newModel == null)
+            {
+                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
+                return View(postRequest);
+            }
 
             return this.RedirectToAction(nameof(Index));
         }
@@ -79,29 +84,11 @@ namespace ModelRelief.Features
         /// Post process a Create request.
         /// </summary>
         /// <param name="user">Active user</param>
-        /// <param name="id">Id of model added</param>
-        protected virtual async Task PostProcessCreate(ClaimsPrincipal user, int id)
+        /// <param name="newModel">Newly added model to post-process.</param>
+        protected virtual async Task<TGetModel> PostProcessCreate(ClaimsPrincipal user, TGetModel newModel)
         {
             await Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Creates a PostFile command from a file POST request
-        /// </summary>
-        /// <param name="postRequest">POST request.</param>
-        private static async Task<PostFile> PostFileCommandFromRequestAsync(TRequestModel postRequest)
-        {
-            byte[] fileContent = null;
-            using (var memoryStream = new MemoryStream(2048))
-            {
-                await postRequest.FormFile.CopyToAsync(memoryStream);
-                fileContent = memoryStream.ToArray();
-            }
-            var postFile = new PostFile
-            {
-                Raw = fileContent,
-            };
-            return postFile;
+            return newModel;
         }
 
         /// <summary>
@@ -117,10 +104,27 @@ namespace ModelRelief.Features
                 NewModel = postRequest,
             }) as TGetModel;
 
-            if ((newModel == null) || (!ModelState.IsValid))
-                return null;
-
             return newModel;
+        }
+
+        /// <summary>
+        /// Creates a PostFile command from a file POST request
+        /// </summary>
+        /// <param name="postRequest">POST request.</param>
+        private async Task<PostFile> PostFileCommandFromRequestAsync(TRequestModel postRequest)
+        {
+            byte[] fileContent = null;
+            using (var memoryStream = new MemoryStream(2048))
+            {
+                await postRequest.FormFile.CopyToAsync(memoryStream);
+                fileContent = memoryStream.ToArray();
+            }
+            var postFile = new PostFile
+            {
+                Name = postRequest.Name,
+                Raw = fileContent,
+            };
+            return postFile;
         }
 
         /// <summary>
@@ -140,9 +144,6 @@ namespace ModelRelief.Features
                 Id = id,
                 NewFile = postFile,
             }) as TGetModel;
-
-            if ((newModel == null) || (!ModelState.IsValid))
-                return null;
 
             return newModel;
         }

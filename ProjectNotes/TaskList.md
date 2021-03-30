@@ -1,50 +1,55 @@
 #### Commit       
-### General          
+### General        
+    Add validation for the FormFile.
+        /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
+        How can an OBJ file be validated?
+            The back end should assign the Format only after validation.
+        Assign Format to model based on file content.
 
-    Upload
+    Review Validation processing order.
+        Client
+        Server
+
+    Export Project data.
+    Test adding new Example files.
+        Edit SeedContent.json.
+
+    Thumbnails
+        Add support for creating mesh "thumbnails" from the mesh canvas.
+            Add a new endpoint mesh/preview for a preview image of the mesh. 
+                mesh/{id}/thumbnail
+            Create using the Canvas image of the last generated Mesh.  
+
+        Project Index
+            Use Index page as a template for the Project page.
+                Each user model is hosted in a tile.
+
+    Create
         Add a busy indicator.
-        How/when should the Model3d extension be added?
+
+        Why is the FormFile binding lost?
+            The focus has to leave the input field.
+
+        Style the Create page.
     
+        How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
+            getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
+            FileIsSynchronized?
+
     Projects
-        Project Control
+        Project DropDowwn Control
             Should the Menu label link to the active project?
                 This requires using the dropdown arrow to activate the menu.
 
         Create Project
             How should a new project be created?
-                Projects/Create is the basis.
-
-        Project Details
-            Use Index page as a template for the Project page.
-                Each user model is hosted in a tile.
-
-            Add support for creating mesh "thumbnails" from the mesh canvas.
-                Add a new endpoint mesh/preview for a preview image of the mesh. 
-                    mesh/{id}/thumbnail
-                Create using the Canvas image of the last generated Mesh.  
-
-            Create View        
-                Why is the FormFile binding lost?
-                    The focus has to leave the input field.
-
-                Style the Create page.
-
-            Add validation for the FormFile.
-                /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
-                How can an OBJ file be validated?
-                    The back end should assign the Format only after validation.
-                Assign Format to model based on file content.
-
+                Projects/Create is the baseline.
     
     Convert Mesh to OBJ default to support download of generated Mesh.
 
     Final Height MeshTransform Setting
         Review the description of the control.
             This setting controls the height of the final relief. It is a percentage of the depth of the original model.
-
-    How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
-        getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
-        FileIsSynchronized?
 
     Verify Resolution.Image setting.
 
@@ -97,12 +102,14 @@
 #### Solver
     Runtime error does not propagate back to UI.
         The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
-            The Solver could mark the output mesh has invalid amd emcode the status result in the contents.
-        Should the GeneratedFile be deleted if the Solver fails?
+            The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
+                Should the GeneratedFile be deleted if the Solver fails?
+            A subsequent Get can read the metadata file and report the results (successful or unsuccessful).
         Generate result
             Result
             Processing time
             Polygons
+    Can the CancellationToken be used to handle aborted processing?    
 
     Silhouette
         Blend profile into mesh form.

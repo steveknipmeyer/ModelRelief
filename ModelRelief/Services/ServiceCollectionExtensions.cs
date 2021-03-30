@@ -159,7 +159,10 @@ namespace ModelRelief.Services
                     o.ViewLocationExpanders.Add(expander);
                 })
                 // automatically register all validators within this assembly
-                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Startup>(); })
+                .AddFluentValidation(config =>
+                {
+                    config.RegisterValidatorsFromAssemblyContaining<Startup>();
+                })
                 // disable .NET Core System.Text.Json in middleware
                 .AddNewtonsoftJson(opt =>
                 {

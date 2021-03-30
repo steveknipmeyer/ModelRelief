@@ -7,10 +7,12 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
@@ -28,7 +30,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
     public class PostFileRequestHandler<TEntity, TGetModel> : ValidatedHandler<PostFileRequest<TEntity, TGetModel>, TGetModel>
-        where TEntity    : DomainModel, new()
+        where TEntity    : DomainModel
         where TGetModel  : IModel
     {
         private IStorageManager StorageManager { get; }
@@ -44,6 +46,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="storageManager">Services for file system storage.</param>
+        /// <param name="validators">All validators matching IValidator for the given request.</param>
         public PostFileRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -51,8 +54,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager,
-            IStorageManager storageManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+            IStorageManager storageManager,
+            IEnumerable<IValidator<PostFileRequest<TEntity, TGetModel>>> validators)
+
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
         {
             StorageManager = storageManager;
         }

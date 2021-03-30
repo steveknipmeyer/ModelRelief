@@ -107,7 +107,6 @@ namespace ModelRelief.Api.V1.Shared.Validation
             // All request validators will run through here first before moving onto the OnHandle request.
             if (Validators != null)
             {
-                // WIP Exactly how does this LINQ produce a list of errors?
                 var validationResult = (await Task.WhenAll(Validators
                     .Where(v => v != null)
                     .Select(v => v.ValidateAsync(message))))

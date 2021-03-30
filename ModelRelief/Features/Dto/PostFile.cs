@@ -13,6 +13,7 @@ namespace ModelRelief.Dto
     /// </summary>
     public class PostFile
     {
+        public string Name { get; set; }
         public byte[] Raw { get; set; }
 
         /// <summary>
@@ -24,6 +25,9 @@ namespace ModelRelief.Dto
         }
     }
 
+    /// <summary>
+    /// Validator for a PostFile object.
+    /// </summary>
     public class PostFileValidator : AbstractValidator<Dto.PostFile>
     {
         public PostFileValidator()

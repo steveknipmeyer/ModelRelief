@@ -537,24 +537,15 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule.
             ModelState will contain errors when the controller action is called.
     
-        N.B. ContosoUniversityCore uses server-side validation (in conjunction with site.js and HtmlHelperExtensions error handling).
-            Any DataAnnotation attributes on the DTO are ignored. No data-val attributes are added to the View.
-                Is this because the jquery-validation-unobtrusive scripts are not include in the View page?
-            If a DataAnnotation rule was violated (e.g. [Required]) and there was no FluentValidation (AbstractValidator rule), the property was not marked as invalid.
-            * This seems odd because although the form did not contain the client-side validation attributes, why did MVC not validate the object on the incoming model-bound object?
-                Is this due to the custom model-binding?
-            However, if the Domain model contains DataAnnotation attributes these are processed when the model is transacted to the database.
-    
         [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
-    
+
     Aggregating Validation Rules
         If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
             FluentValidation.AbstractValidator<T> : (runs first by default)
             DataAnnotation
             IValidatableObject
         N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
-
 ###### Server-Side Validation
     The controller action parameters (e.g. Create.Command) control the server-side validation rules.
         Any associated validators for this specific type will run.
@@ -562,7 +553,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     
     Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action.
         By default, MVC supports a limited number of formatters.
-    
+
     All validation providers can contribute rules to the validation.
         DataAnnotation Attribute
         IValidatableObject

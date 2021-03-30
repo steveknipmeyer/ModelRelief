@@ -61,14 +61,21 @@ namespace ModelRelief.Features.Models
         /// Post process a Create request.
         /// </summary>
         /// <param name="user">Active user</param>
-        /// <param name="id">Id of model added</param>
-        protected override async Task PostProcessCreate(ClaimsPrincipal user, int id)
+        /// <param name="newModel">New model to post-processs.</param>
+        protected override async Task<Dto.Model3d> PostProcessCreate(ClaimsPrincipal user, Dto.Model3d newModel)
         {
-            var model3d = await Query.FindDomainModelAsync<Model3d>(User, id);
+            var model3d = await Query.FindDomainModelAsync<Model3d>(User, newModel.Id);
             model3d.Format = Model3dFormat.OBJ;
 
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
-            DbFactory.AddModel3dRelated(applicationUser, model3d);
+            model3d = DbFactory.AddModel3dRelated(applicationUser, model3d);
+            if (model3d == null)
+            {
+                ModelState.AddModelError(nameof(PostProcessCreate), $"An error happened while adding the related resources for {newModel.Name}.");
+                return null;
+            }
+
+            return Mapper.Map<Model3d, Dto.Model3d>(model3d);
         }
     }
 }

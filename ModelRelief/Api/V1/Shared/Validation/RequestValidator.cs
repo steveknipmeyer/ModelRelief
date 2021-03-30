@@ -6,11 +6,8 @@
 
 namespace ModelRelief.Api.V1.Shared.Validation
 {
-    using System.Threading;
-    using System.Threading.Tasks;
     using FluentValidation;
     using ModelRelief.Database;
-    using ModelRelief.Domain;
 
     /// <summary>
     /// Abstract representation of a REST request validator.
@@ -33,19 +30,6 @@ namespace ModelRelief.Api.V1.Shared.Validation
             //      Currently, only requests that modify the database (PostRequest, PutRequest, PatchRequest) have validators defined.
             //      Also a specialized type of RequestValidator would be needed that used a generic type parameter (e.g. IExistingModelRequest)
             //      to ensure that the User and Id properties are present in the request.
-        }
-
-        /// <summary>
-        /// Determines if a given model exists.
-        /// </summary>
-        /// <typeparam name="TEntity">Domain model.</typeparam>
-        /// <param name="id">Primary key of model.</param>
-        /// <param name="cancellationToken">Token to allow async request to be cancelled.</param>
-        /// <returns>True if model exists.</returns>
-        protected async Task<bool> ExistAsync<TEntity>(int id, CancellationToken cancellationToken)
-            where TEntity : DomainModel
-        {
-            return (await DbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken)) != null;
         }
     }
 }
