@@ -2,13 +2,10 @@
 
 ### General           
     Add a busy indicator.
+        http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
 
     Review the semantics of Mesh and Model editing (Compose).
         ComposerController uses a Mesh endpoint.
-
-    Review Validation processing order.
-        Client
-        Server
 
     Export Project data.
     Test adding new Example files.

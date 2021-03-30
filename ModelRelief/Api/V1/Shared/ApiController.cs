@@ -80,7 +80,6 @@ namespace ModelRelief.Api.V1.Shared
 
                 return apiValidationResult.ObjectResult();
             }
-
             try
             {
                 // dispatch to registered handler

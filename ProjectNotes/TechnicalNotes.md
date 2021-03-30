@@ -519,7 +519,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
 
 ##### Best Practices
     DataAnnotation rules also should be used for DTO.
-        They <complement> FV. They (and any other registered validators) run after FV.
+        They <complement> FV. 
         They provide display formatting and other UX support.
     The Domain models should also use DataAnnotation attributes.
         Validation will be done when a model (created OUTSIDE) the UX is transacted with the database.
@@ -527,43 +527,51 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     The DTO should expose only those properies which are editable!
         Missing properties in the View will override the target during mapping because they will have a default value.
 
+    All validation providers can contribute rules to the validation.
+        DataAnnotation Attribute
+        IValidatableObject [not used in ModelRelief]
+        FluentValidation
 ---
-###### Client-side Validation
-    The View model (e.g. Dto.Mesh) determines the client-side validation rules.
-        Any associated validators for this specific type will run.
-    
+######  Validation Flow
+    Client (Brower)
+        ViewModel DataAnnotation rules generate JavaScript validation rules.
+
+    Server (.NET Core)
+        Model-binding uses FV AbstractValidators to validate controller parameters.
+        ValidatedHandlers use FV AbstractValidators to validate requests (and their DTO models).
+        Domain DataAnnotation rules validate entities at the last step before persistence.
+###### Client-side Validation  
     DataAnnotation Attributes
+        The ViewModel and its DataAnnotation rules determine what validation is done in the browser.
+        Client side validation is done with Javascript and data attributes added by .NET Core to the HTML fields.
         Property ON form: A client-side error will be displayed and the controller action will not be called.
-        Property not present on form: Validation will be done in the server IF the model-bound action parameter contains a validation rule.
-            ModelState will contain errors when the controller action is called.
     
         [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
-
-    Aggregating Validation Rules
-        If View model implements any of these interfaces then additional validation checks will be added the complete list of checks, adding additional results to ModelState.
-            FluentValidation.AbstractValidator<T> : (runs first by default)
-            DataAnnotation
-            IValidatableObject
-        N.B. These are all used by a View if present! Each of these validations contribute rules (in the form of data-val attributes) that are used in the client-side processing.
 ###### Server-Side Validation
-    The controller action parameters (e.g. Create.Command) control the server-side validation rules.
-        Any associated validators for this specific type will run.
-        This happens during model-binding.
-    
-    Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action.
-        By default, MVC supports a limited number of formatters.
+    Model Binding
+        Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action.
+            By default, MVC supports a limited number of formatters.
 
-    All validation providers can contribute rules to the validation.
-        DataAnnotation Attribute
-        IValidatableObject
-        FluentValidation
+        Validation will be done during model-binding IF the model-bound controller parameter has an associated FV validator.
+            Any model-bound parameters (e.g. DTO modles) that have FluentValidation AbstractValidators are run.
+            ModelState will contain errors when the controller action is called.
+
+    Handlers (CQRS Mediatr)
+        ValidatedHandlers receive the list of request-specific validators as IEnumerable[IValidator<TRequestType>].
+            FluentValidation validators implement AbstractValidator.
+            Both handler requests and DTO models have AbstractValidators.
+            A handler usually employs the DTO FV validators to do its work.
+
+        The ValidatedHandler.Handle method executes the validators.
+            If there are any validation errors, an ApiValidationError exception is thrown.
+                UxController exception transfers the ValidationErrors to ModelState and returns null which leads to the View being presented again.
+                ApiController converts the ValidtionErrors to an ApiErrorResult.
     
-    ValidationActionFilter
+    ValidationActionFilter [not currently enabled in ModelRelief]
         If an ActionFilter is registered, control passes there.
             The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
-    
-    Finally, the controller action is invoked.
+
 ---
 
     Can the request handlers share common validation code?
