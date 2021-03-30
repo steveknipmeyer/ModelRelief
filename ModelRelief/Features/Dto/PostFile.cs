@@ -33,7 +33,7 @@ namespace ModelRelief.Dto
         public PostFileValidator()
         {
             RuleFor(m => m.Raw)
-                .NotNull().WithMessage("An array of bytes is required.");
+                .NotNull().WithMessage("No file content was provided.");
         }
     }
 }

@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Shared
 {
     using System;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using MediatR;
@@ -14,6 +15,7 @@ namespace ModelRelief.Api.V1.Shared
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Api.V1.Shared.Rest;
@@ -42,6 +44,22 @@ namespace ModelRelief.Api.V1.Shared
             DbContext   = dbContext;
             Logger      = loggerFactory.CreateLogger(typeof(ApiController<TEntity>).Name);
             Mediator    = mediator;
+        }
+
+        /// <summary>
+        /// Finds a model by Id.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <returns>TEntity.</returns>
+        protected async Task<TEntity> FindModelById(int id)
+        {
+            var model = await DbContext.Set<TEntity>()
+                                       .Where(m => (m.Id == id))
+                                       .SingleOrDefaultAsync<TEntity>();
+            if (model == null)
+                throw new EntityNotFoundException(typeof(TEntity), id);
+
+            return model;
         }
 
         /// <summary>

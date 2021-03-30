@@ -8,6 +8,7 @@ namespace ModelRelief.Api.V1.Shared
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -139,16 +140,21 @@ namespace ModelRelief.Api.V1.Shared
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> PostFile()
         {
+            // POST file requies an existing model
+            var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
+            var model = await FindModelById(modelId);
+
             // construct from request body
             var postFile = new PostFile
             {
+                Name = model.Name,
                 Raw = await Files.ReadToEnd(Request.Body),
             };
 
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
                 User = User,
-                Id = System.Convert.ToInt32(this.RouteData.Values["id"]),
+                Id = modelId,
                 NewFile = postFile,
             });
 

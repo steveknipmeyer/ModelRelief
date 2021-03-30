@@ -11,6 +11,7 @@ namespace ModelRelief.Features.Models
     using AutoMapper;
     using MediatR;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Models;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features;
@@ -65,7 +66,9 @@ namespace ModelRelief.Features.Models
         protected override async Task<Dto.Model3d> PostProcessCreate(ClaimsPrincipal user, Dto.Model3d newModel)
         {
             var model3d = await Query.FindDomainModelAsync<Model3d>(User, newModel.Id);
-            model3d.Format = Model3dFormat.OBJ;
+
+            // contents validated upstream; assign format now
+            model3d.Format = ModelPostFileRequestValidator.MapFormatFromExtension(newModel.Name);
 
             var applicationUser = await IdentityUtility.FindApplicationUserAsync(User);
             model3d = DbFactory.AddModel3dRelated(applicationUser, model3d);

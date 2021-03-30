@@ -1,10 +1,14 @@
 #### Commit       
+
 ### General        
-    Add validation for the FormFile.
-        /home/stephen/projects/AspNetCore.Docs/aspnetcore/mvc/models/file-uploads/samples/3.x/SampleApp
-        How can an OBJ file be validated?
-            The back end should assign the Format only after validation.
-        Assign Format to model based on file content.
+    TestFactory should provice the test file for integration testing.
+
+    Verify Id queries do not also test User.Id.
+    
+    Add a busy indicator.
+
+    Review the semantics of Mesh and Model editing (Compose).
+        ComposerController uses a Mesh endpoint.
 
     Review Validation processing order.
         Client
@@ -25,8 +29,6 @@
                 Each user model is hosted in a tile.
 
     Create
-        Add a busy indicator.
-
         Why is the FormFile binding lost?
             The focus has to leave the input field.
 

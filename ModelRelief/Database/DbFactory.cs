@@ -217,6 +217,7 @@ namespace ModelRelief.Database
                 ValidateAll(user);
             }
             CreateTestDatabase();
+
             await Task.CompletedTask;
         }
 

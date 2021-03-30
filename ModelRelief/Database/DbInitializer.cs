@@ -124,6 +124,9 @@ namespace ModelRelief.Database
                     DbFactory.SeedDatabaseForTestUsersAsync().Wait();
                 }
             }
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Initialization complete; listening...");
+            Console.ForegroundColor = ConsoleColor.White;
         }
         /// <summary>
         /// Ensure the database server is initialized and available.
