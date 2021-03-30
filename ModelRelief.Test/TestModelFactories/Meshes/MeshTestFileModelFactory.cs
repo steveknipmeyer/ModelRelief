@@ -37,6 +37,8 @@ namespace ModelRelief.Test.TestModels.Meshes
             ValidReferenceProperty   = 1;
 
             EnumPropertyName = "Format";
+
+            BackingFile = "mesh.sfp";
         }
 
         /// <summary>
@@ -46,7 +48,8 @@ namespace ModelRelief.Test.TestModels.Meshes
         public override IModel ConstructValidModel()
         {
             var validModel = base.ConstructValidModel() as Dto.Mesh;
-            validModel.Name = "TestMesh.sfp";
+
+            validModel.Name   = BackingFile;
             validModel.Format = Domain.MeshFormat.SFP;
 
             return validModel;

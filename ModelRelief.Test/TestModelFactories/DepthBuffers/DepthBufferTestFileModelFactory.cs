@@ -38,6 +38,8 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
             ValidReferenceProperty   = 1;
 
             EnumPropertyName = "Format";
+
+            BackingFile = "depthbuffer.sdb";
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
         {
             var depthBuffer = base.ConstructValidModel() as Dto.DepthBuffer;
 
-            depthBuffer.Name = "testdepthbuffer.sdb";
+            depthBuffer.Name   = BackingFile;
             depthBuffer.Width  = Defaults.Resolution.Image;
             depthBuffer.Height = Defaults.Resolution.Image;
             depthBuffer.Format = Domain.DepthBufferFormat.SDB;

@@ -1,10 +1,6 @@
 #### Commit       
 
-### General        
-    TestFactory should provice the test file for integration testing.
-
-    Verify Id queries do not also test User.Id.
-    
+### General           
     Add a busy indicator.
 
     Review the semantics of Mesh and Model editing (Compose).

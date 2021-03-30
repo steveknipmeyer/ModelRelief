@@ -22,6 +22,8 @@ namespace ModelRelief.Test.TestModels
         where TEntity   : FileDomainModel
         where TGetModel : class, IModel, new()
     {
+        public string BackingFile { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TestFileModelFactory{TEntity, TGetModel}"/> class.
         /// </summary>
@@ -29,6 +31,16 @@ namespace ModelRelief.Test.TestModels
         public TestFileModelFactory(ClassFixture classFixture)
             : base(classFixture)
         {
+        }
+
+        /// <summary>
+        /// Initialize the model-specific settings such as the API endpoints.
+        /// </summary>
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            BackingFile = string.Empty;
         }
 
         /// <summary>

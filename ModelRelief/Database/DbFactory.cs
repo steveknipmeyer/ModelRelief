@@ -231,8 +231,7 @@ namespace ModelRelief.Database
                 return;
 
             ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            IQueryable<Model3d> results = DbContext.Models
-                                            .Where(m => (m.UserId == user.Id));
+            IQueryable<Model3d> results = DbContext.Models.Where(m => (m.UserId == user.Id));
 
             // models exist; not brand new user
             if (results.Any())
@@ -770,8 +769,7 @@ namespace ModelRelief.Database
             where TEntity : DomainModel
         {
             var descriptionSuffix = user.Name;
-            var models = DbContext.Set<TEntity>()
-                            .Where(m => (m.UserId == user.Id));
+            var models = DbContext.Set<TEntity>().Where(m => (m.UserId == user.Id));
 
             foreach (var model in models)
             {

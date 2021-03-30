@@ -47,13 +47,12 @@ namespace ModelRelief.Utility
                     if (totalBytesRead == readBuffer.Length)
                     {
                         // double read buffer every time if end of stream not reached
-                        // int nextByte = stream.ReadByte();
                         int nextByte = await stream.ReadAsync(probeBuffer, 0, 1);
-                        if (nextByte != -1)
+                        if (nextByte != 0)
                         {
                             byte[] temp = new byte[readBuffer.Length * 2];
                             Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
-                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
+                            Buffer.SetByte(temp, totalBytesRead, (byte)probeBuffer[0]);
                             readBuffer = temp;
                             totalBytesRead++;
                         }

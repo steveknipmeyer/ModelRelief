@@ -11,6 +11,8 @@ namespace ModelRelief.Test.TestModels
 
     public interface ITestFileModelFactory : ITestModelFactory
     {
+        string BackingFile { get; set; }
+
         Task<IModel> PostNewFile(int modelId, string fileName);
         Task<IModel> PutFile(int modelId, string fileName);
     }

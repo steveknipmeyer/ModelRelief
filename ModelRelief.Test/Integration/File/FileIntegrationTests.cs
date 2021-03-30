@@ -108,7 +108,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            var fileName = "unitcubeA.obj";
+            var fileName = TestFileModelFactory.BackingFile;
             newModel = await PostNewFile(newModel.Id, fileName);
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
@@ -139,7 +139,7 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            newModel = await PostNewFile(newModel.Id, "unitcubeA.obj");
+            newModel = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
 
             // Assert
             // performed in PostNewFile
@@ -160,7 +160,7 @@ namespace ModelRelief.Test.Integration
             var newGeneratedFileModel = newModel as IGeneratedFileModel;
 
             // Act
-            var updatedModel = await PostNewFile(newModel.Id, "unitcubeA.obj");
+            var updatedModel = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
 
             // Assert
             // before PostFile
@@ -185,9 +185,9 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            var modelAfterFirstPost   = await PostNewFile(newModel.Id, "unitcubeA.obj");
+            var modelAfterFirstPost   = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
             Files.SleepForTimeStamp();
-            var modelAfterSecondPost = await PostNewFile(newModel.Id, "unitcubeB.obj");
+            var modelAfterSecondPost = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
 
             // Assert
             var originalModel = modelAfterFirstPost as IGeneratedFileModel;
@@ -215,7 +215,7 @@ namespace ModelRelief.Test.Integration
             var newModel = await PostNewModel();
 
             // Act
-            newModel = await PutFile(newModel.Id, "unitcubeA.obj");
+            newModel = await PutFile(newModel.Id, TestFileModelFactory.BackingFile);
 
             // Assert
             // performed in PutFile
@@ -235,9 +235,9 @@ namespace ModelRelief.Test.Integration
             // Arrange
             var newModel = await PostNewModel();
             // initial create
-            newModel = await PostNewFile(newModel.Id, "unitcubeA.obj");
+            newModel = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
             // update
-            var fileName = "unitcubeA.obj";
+            var fileName = TestFileModelFactory.BackingFile;
             newModel = await PutFile(newModel.Id, fileName);
             var writtenByteArray = Utility.ByteArrayFromFile(fileName);
 
@@ -266,7 +266,7 @@ namespace ModelRelief.Test.Integration
         {
             // Arrange
             var newModel = await PostNewModel();
-            newModel = await PostNewFile(newModel.Id, "unitcubeA.obj");
+            newModel = await PostNewFile(newModel.Id, TestFileModelFactory.BackingFile);
 
             // rename model (and file)
             newModel.Name = "New Name";

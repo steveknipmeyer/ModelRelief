@@ -135,7 +135,7 @@ namespace ModelRelief.Test.Integration.Meshes
                 var depthBufferNode     = dependencyGraph.NodeCollection[typeof(Domain.DepthBuffer)];
                 var depthBufferModel    = depthBufferNode.Model as Dto.DepthBuffer;
                 var depthBufferFactory  = depthBufferNode.Factory as ITestFileModelFactory;
-                await depthBufferFactory.PostNewFile(depthBufferModel.Id, "depthbuffer.sdb");
+                await depthBufferFactory.PostNewFile(depthBufferModel.Id, TestFileModelFactory.BackingFile);
 
                 // Assert
                 meshModel = await TestModelFactory.FindModel(meshModel.Id) as Dto.Mesh;

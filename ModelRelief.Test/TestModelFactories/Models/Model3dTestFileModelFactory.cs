@@ -37,6 +37,8 @@ namespace ModelRelief.Test.TestModels.Models
             ValidReferenceProperty   = 1;
 
             EnumPropertyName = "Format";
+
+            BackingFile = "unitcube.obj";
         }
 
         /// <summary>
@@ -46,7 +48,8 @@ namespace ModelRelief.Test.TestModels.Models
         public override IModel ConstructValidModel()
         {
             var model = base.ConstructValidModel() as Dto.Model3d;
-            model.Name = "testmodel3d.obj";
+
+            model.Name   = BackingFile;
             model.Format = Domain.Model3dFormat.OBJ;
 
             return model;

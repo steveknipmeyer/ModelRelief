@@ -38,6 +38,8 @@ namespace ModelRelief.Test.TestModels.NormalMaps
             ValidReferenceProperty   = 1;
 
             EnumPropertyName = "Format";
+
+            BackingFile = "normalmap.nmap";
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace ModelRelief.Test.TestModels.NormalMaps
         {
             var normalMap = base.ConstructValidModel() as Dto.NormalMap;
 
-            normalMap.Name = "testnormalmap.sdb";
+            normalMap.Name   = BackingFile;
             normalMap.Width  = Defaults.Resolution.Image;
             normalMap.Height = Defaults.Resolution.Image;
             normalMap.Format = Domain.NormalMapFormat.NMAP;
