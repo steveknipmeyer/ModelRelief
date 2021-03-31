@@ -19,15 +19,15 @@ namespace ModelRelief.Features.Accounts
     /// </summary>
     public class AccountController : Controller
         {
-        private readonly IServiceProvider _services;
+        private readonly IDbFactory _dbFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
-        /// <param name="services">IServiceProvider.</param>
-        public AccountController(IServiceProvider services)
+        /// <param name="dbFactory">IDBFactory.</param>
+        public AccountController(IDbFactory dbFactory)
             {
-            _services = services;
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
             }
 
         /// <summary>
@@ -44,8 +44,7 @@ namespace ModelRelief.Features.Accounts
         /// </summary>
         public async Task<RedirectResult> LoginComplete()
         {
-            var dbInitializer = new DbInitializer(_services, exitAfterInitialization: false);
-            await dbInitializer.DbFactory.SeedDatabaseForNewUserAsync(this.User);
+            await _dbFactory.SeedDatabaseForNewUserAsync(this.User);
 
             return Redirect("/");
         }

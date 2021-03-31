@@ -27,11 +27,11 @@ namespace ModelRelief.Utility
     /// <summary>
     /// Utility support for database queries.
     /// </summary>
-    public class Query
+    public class Query : IQuery
     {
-        public ModelReliefDbContext DbContext { get; }
-        public ILogger Logger { get; }
-        public IMapper Mapper { get; }
+        private ModelReliefDbContext DbContext { get; }
+        private ILogger Logger { get; }
+        private IMapper Mapper { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Query"/> class.
@@ -48,19 +48,6 @@ namespace ModelRelief.Utility
             DbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(Query).Name);
             Mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
-        }
-
-        /// <summary>
-        /// Return the PropertyInfo for a (case-insensitive) property name.
-        /// </summary>
-        /// <param name="propertyName">Case-insensitive property name</param>
-        /// <typeparam name="T">Class type</typeparam>
-        /// <returns>PropertyInfo</returns>
-        private PropertyInfo GetProperty<T>(string propertyName)
-        {
-            Type classType = typeof(T);
-            PropertyInfo propertyInfo = classType.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-            return propertyInfo;
         }
 
         /// <summary>
@@ -296,6 +283,19 @@ namespace ModelRelief.Utility
         {
             var domainModel = await FindDomainModelAsync<TEntity>(claimsPrincipal, id, throwIfNotFound: false);
             return domainModel != null;
+        }
+
+        /// <summary>
+        /// Return the PropertyInfo for a (case-insensitive) property name.
+        /// </summary>
+        /// <param name="propertyName">Case-insensitive property name</param>
+        /// <typeparam name="T">Class type</typeparam>
+        /// <returns>PropertyInfo</returns>
+        private PropertyInfo GetProperty<T>(string propertyName)
+        {
+            Type classType = typeof(T);
+            PropertyInfo propertyInfo = classType.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            return propertyInfo;
         }
     }
 }

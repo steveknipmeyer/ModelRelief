@@ -1,13 +1,7 @@
 #### Commit       
 
 ### General           
-    Test adding new Example files.
-        MRUpdateSeedData
-        Add new model to SeedContent.json.
-            {
-                "Name": "venus",
-                "Description": "Venus de Milo (Aphrodite of Milos)"
-            }
+
     Default Camera is Back not Front.
     
     The Compose link in the Projects View has the wrong Id for a newly-updated model.
@@ -22,10 +16,8 @@
         Verify all models are attributed.
 
     SMK
-        https://www.smk.dk/en/article/digitale-casts/
-        Discobulus
-            https://www.turbosquid.com/3d-models/free-obj-mode-sculpture-discobolus-discus-thrower/1093054
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
+        https://www.smk.dk/en/article/digitale-casts/
 
     Initialization
         Where should database initialization be done?
@@ -33,8 +25,9 @@
         How can a DomainModel have access to DI services?
         DI
             DbInitializer
-            DbFactory
-            ModelReferenceValidator
+            DbFactory: I DbFactory
+            ModelReferenceValidator: IModelReferenceValidator
+            Query: IQuery
 
         DbInitializer
             InitializeCamera logic needs to be refactored to handle multiple cameras with the same root name.
@@ -50,6 +43,7 @@
 
         Initializer
             Can SettingsManager be a DI constructor parameter?
+
 
     Add a busy indicator.
         https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
