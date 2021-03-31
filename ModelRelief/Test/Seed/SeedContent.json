@@ -31,6 +31,16 @@
             ]
         },
         {
+            "Name": "National Gallery of Denmark (SMK)",
+            "Description": "Statue Scans [Royal Casts]",
+            "Models": [
+                {
+                    "Name": "discus",
+                    "Description": "Discobolus (The Discus Thrower)"
+                }
+            ]
+        },
+        {
             "Name": "Stanford",
             "Description": "Stanford model repository",
             "Models": [

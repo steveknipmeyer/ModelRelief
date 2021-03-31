@@ -1,6 +1,24 @@
 #### Commit       
 
 ### General           
+    Test adding new Example files.
+        MRUpdateSeedData
+        Add new model to SeedContent.json.
+
+    If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
+        Should there be a mechanism to update an <existing> Model3d file?
+
+    Profile the startup code.
+
+    Licenses
+        Verify all models are attributed.
+
+    SMK
+        https://www.smk.dk/en/article/digitale-casts/
+        Discobulus
+            https://www.turbosquid.com/3d-models/free-obj-mode-sculpture-discobolus-discus-thrower/1093054
+        https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
+
     Initialization
         Where should database initialization be done?
         Where should StorageManager be assigned?
@@ -9,7 +27,7 @@
             DbInitializer
             DbFactory
             ModelReferenceValidator
-            
+
         DbInitializer
             InitializeCamera logic needs to be refactored to handle multiple cameras with the same root name.
             Set control flags in initialization rather than reading the configuration in methods.
@@ -24,10 +42,6 @@
 
         Initializer
             Can SettingsManager be a DI constructor parameter?
-
-    Export Project data.
-    Test adding new Example files.
-        Edit SeedContent.json.
 
     Add a busy indicator.
         https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
@@ -81,7 +95,7 @@
 
     Support query by wildcard and exact mode.
 
-    Reduce model sizes in MeshLab.
+    Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
         remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
 

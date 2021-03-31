@@ -61,6 +61,7 @@ namespace ModelRelief.Database
             public static readonly string Jewelry = "Jewelry";
             public static readonly string Stanford = "Stanford";
             public static readonly string ModelRelief = "ModelRelief";
+            public static readonly string SMK = "National Gallery of Denmark";
         }
 
         /// <summary>
@@ -725,7 +726,9 @@ namespace ModelRelief.Database
 
                 if (model == null)
                 {
-                    Debug.Assert(false, $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.");
+                    var message = $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.";
+                    // Debug.Assert(false, message);
+                    Console.WriteLine(message);
                     continue;
                 }
 

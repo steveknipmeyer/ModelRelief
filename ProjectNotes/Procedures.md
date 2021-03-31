@@ -183,24 +183,16 @@ OR
 |project|.git/config||
 
 #### Adding a New Test Model
-    Create a new folder in the source location for test models.
-        ModelRelief/Test/Data/Users/models
-    Add the .OBJ and the material file .mtl.
-    
-    Update DbInitializer:
-        [X] AddModels
-        [X] AddDepthBuffers
-        [X] AddMeshes
-        [X] AddNormalMaps
-    
-    Update JSON files (Camera.json, MeshTransform.json).
-        Place the new entities at the end and increment the Id.
-        Update the Project Id to reflect the Project that was assigned to the model.
-        [X] Camera.json (placeholder, values not important)
-        [X] MeshTransform.json (placeholder, values not important)
-    
-    Copy an existing mesh file to create a placeholder in Test/Data/Users/meshes.
-    
-    In ModelRelief, open the new model and generate a relief.
-    Add the generated Mesh, DepthBuffer and NormalMap from the store folder to ModelRelief/Test.
-    Update the Solver/Test JSON files using MRUpdateSeedData.
+    For a new Project, add an empty Project entry in SeedContent.json.
+
+    ModelRelief
+        Create a new Model3d and upload the OBJ file.
+            The model name must end with ".obj".
+        Generate a new Mesh.
+
+    Set UpdateSeedData and restart ModelRelief.
+        The DepthBuffer, Mesh, Model3d and NornalMap files will be added to ModelRelief/Test/Data/Users.
+        The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
+
+    Add the new model to SeedContent.json.    
+       

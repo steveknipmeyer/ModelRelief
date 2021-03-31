@@ -276,6 +276,7 @@ namespace ModelRelief.Database
 
                 var sourceFolderPath = Path.Combine(rootSourceFolderPath, model.Id.ToString());
                 var destinationFolderPath = Path.Combine(rootDestinationFolderPath, modelName);
+                Directory.CreateDirectory(destinationFolderPath);
 
                 var rootSourceDirectory = new System.IO.DirectoryInfo(sourceFolderPath);
                 System.IO.FileInfo[] files = rootSourceDirectory.GetFiles("*.*");
@@ -296,6 +297,7 @@ namespace ModelRelief.Database
         {
             UpdateSeedDataFilesFromStore<Domain.DepthBuffer>("Paths:ResourceFolders:DepthBuffer");
             UpdateSeedDataFilesFromStore<Domain.Mesh>("Paths:ResourceFolders:Mesh");
+            UpdateSeedDataFilesFromStore<Domain.Model3d>("Paths:ResourceFolders:Model3d");
             UpdateSeedDataFilesFromStore<Domain.NormalMap>("Paths:ResourceFolders:NormalMap");
 
             return true;
@@ -343,7 +345,7 @@ namespace ModelRelief.Database
             if (!exportJSONSuccess)
                 return false;
 
-            // data files (e.g. DepthBuffer, Mesh, NormalMap)
+            // data files (e.g. DepthBuffer, Mesh, Model, NormalMap)
             bool updateSuccess = UpdateSeedDataFiles();
             if (!updateSuccess)
                 return false;
