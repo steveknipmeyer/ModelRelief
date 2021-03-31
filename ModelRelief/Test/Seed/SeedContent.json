@@ -37,6 +37,10 @@
                 {
                     "Name": "discus",
                     "Description": "Discobolus (The Discus Thrower)"
+                },
+                {
+                    "Name": "venus",
+                    "Description": "Venus de Milo (Aphrodite of Milos)"
                 }
             ]
         },

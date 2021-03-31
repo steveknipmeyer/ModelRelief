@@ -190,14 +190,13 @@ OR
             The model name must end with ".obj".
         Generate a new Mesh.
 
-    Set UpdateSeedData and restart ModelRelief.
-        The DepthBuffer, Mesh, Model3d and NornalMap files will be added to ModelRelief/Test/Data/Users.
-        N.B. The new model will have the largest Id because it is the newest model.
-
     Add the new model to SeedContent.json.    
 
     Set UpdateSeedData and restart ModelRelief.
-        The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
+        The DepthBuffer, Mesh, Model3d and NornalMap files will be added to ModelRelief/Test/Data/Users.
+        N.B. In the expoerted JSON, the new model will have the largest Id because it is the newest model.
 
+    Set UpdateSeedData and restart ModelRelief.
+        The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
         N.B. The entity Ids are now correct in the exported Cameras.json and MeshTransforms.json files.
 

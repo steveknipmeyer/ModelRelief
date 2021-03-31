@@ -69,7 +69,7 @@ namespace ModelRelief.Api.V1.Shared
                 UrlHelperContainer  = this,
 
                 // results presentation
-                UsePaging = RestControllerOptions.UsePaging,
+                UsePaging           = RestControllerOptions.UsePaging,
 
                 PageNumber          = pagedQueryParameters.PageNumber,
                 NumberOfRecords     = pagedQueryParameters.NumberOfRecords,

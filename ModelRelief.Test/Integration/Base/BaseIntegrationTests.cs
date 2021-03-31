@@ -85,7 +85,7 @@ namespace ModelRelief.Test.Integration
             // Arrange
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, TestModelFactory.ApiUrl);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/?NumberofRecords=-1");
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);

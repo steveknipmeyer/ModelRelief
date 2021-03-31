@@ -101,6 +101,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var projectiion = Query.ProjectAll<TEntity, TGetModel>(queryable, queryParameters);
             var totalNumberOfRecords = queryable.Count();
 
+            if (pageSize == -1)
+                pageSize = totalNumberOfRecords;
             var mod = totalNumberOfRecords % pageSize;
             var totalPageCount = (totalNumberOfRecords / pageSize) + (mod == 0 ? 0 : 1);
 

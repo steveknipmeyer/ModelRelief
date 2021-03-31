@@ -726,8 +726,7 @@ namespace ModelRelief.Database
 
                 if (model == null)
                 {
-                    var message = $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.";
-                    Debug.Assert(false, message);
+                    var message = $"DbInitializer: File system folder '{dirInfo.Name}' not found in database for type {typeof(TEntity).Name}.";
                     Console.WriteLine(message);
                     continue;
                 }

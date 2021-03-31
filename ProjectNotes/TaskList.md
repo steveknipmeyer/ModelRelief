@@ -4,7 +4,12 @@
     Test adding new Example files.
         MRUpdateSeedData
         Add new model to SeedContent.json.
-
+            {
+                "Name": "venus",
+                "Description": "Venus de Milo (Aphrodite of Milos)"
+            }
+    Default Camera is Back not Front.
+    
     The Compose link in the Projects View has the wrong Id for a newly-updated model.
         When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
 

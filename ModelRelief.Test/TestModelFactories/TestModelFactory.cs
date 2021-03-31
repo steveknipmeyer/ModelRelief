@@ -76,7 +76,7 @@ namespace ModelRelief.Test.TestModels
             FirstModelName = firstModel.Name;
 
             // range of model IDs
-            requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}").GetAwaiter().GetResult();
+            requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?NumberofRecords=-1").GetAwaiter().GetResult();
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
             var queryList = JsonConvert.DeserializeObject<PagedResults<TEntity>>(requestResponse.ContentString);
             var totalNumberOfRecords = queryList.TotalNumberOfRecords;
