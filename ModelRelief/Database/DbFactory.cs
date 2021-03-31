@@ -727,7 +727,7 @@ namespace ModelRelief.Database
                 if (model == null)
                 {
                     var message = $"DbInitializer: Model name ${dirInfo.Name} not found in database for type ${typeof(TEntity).Name}.";
-                    // Debug.Assert(false, message);
+                    Debug.Assert(false, message);
                     Console.WriteLine(message);
                     continue;
                 }

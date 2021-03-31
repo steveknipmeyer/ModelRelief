@@ -5,6 +5,9 @@
         MRUpdateSeedData
         Add new model to SeedContent.json.
 
+    The Compose link in the Projects View has the wrong Id for a newly-updated model.
+        When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
+
     If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
         Should there be a mechanism to update an <existing> Model3d file?
 
