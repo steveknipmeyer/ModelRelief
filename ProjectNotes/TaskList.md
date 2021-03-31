@@ -1,15 +1,40 @@
 #### Commit       
 
 ### General           
-    Add a busy indicator.
-        http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
+    Initialization
+        Where should database initialization be done?
+        Where should StorageManager be assigned?
+        How can a DomainModel have access to DI services?
+        DI
+            DbInitializer
+            DbFactory
+            ModelReferenceValidator
+            
+        DbInitializer
+            InitializeCamera logic needs to be refactored to handle multiple cameras with the same root name.
+            Set control flags in initialization rather than reading the configuration in methods.
+            Can DbFactory be a DI parameter?
 
-    Review the semantics of Mesh and Model editing (Compose).
-        ComposerController uses a Mesh endpoint.
+        AccountController
+            Change constructor to receive a DI DbFactory.
+
+        DatabaseCollectionFixture
+            Can DatabaseCollectionFixture be a DI constructor parameter?
+            https://stackoverflow.com/questions/39131219/is-it-possible-to-use-dependency-injection-with-xunit
+
+        Initializer
+            Can SettingsManager be a DI constructor parameter?
 
     Export Project data.
     Test adding new Example files.
         Edit SeedContent.json.
+
+    Add a busy indicator.
+        https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
+        http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
+
+    Review the semantics of Mesh and Model editing (Compose).
+        ComposerController uses a Mesh endpoint.
 
     Thumbnails
         Add support for creating mesh "thumbnails" from the mesh canvas.

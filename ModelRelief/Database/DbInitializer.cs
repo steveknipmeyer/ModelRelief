@@ -97,6 +97,9 @@ namespace ModelRelief.Database
             StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
 
             DbFactory = new DbFactory(HostingEnvironment, ConfigurationProvider, DbContext, loggerFactory, Mapper, StorageManager, accountSettings, ModelReferenceValidator);
+
+            // service provider for contexts without DI
+            ServicesRepository.StorageManager = StorageManager;
         }
 
         /// <summary>

@@ -500,7 +500,8 @@ namespace ModelRelief.Database
             depthBuffers.ForEach(depthBuffer =>
                 {
                     var defaultCamera = depthBuffer.Camera;
-                    var exportedCamera = cameraList.Where(c => (Path.GetFileNameWithoutExtension(c.Name) == Path.GetFileNameWithoutExtension(depthBuffer.Name))).SingleOrDefault();
+                    var rootDepthBufferName = Path.GetFileNameWithoutExtension(depthBuffer.Name);
+                    var exportedCamera = cameraList.Where(c => (c.Name == $"{rootDepthBufferName}.MeshTransform")).SingleOrDefault();
                     if (exportedCamera == null)
                         Console.WriteLine("null");
 
