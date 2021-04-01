@@ -25,16 +25,15 @@ namespace ModelRelief.Features.Settings
     /// </summary>
     public class SettingsManager : ISettingsManager
     {
-        private  IWebHostEnvironment HostingEnvironment { get; set; }
-        public  Services.IConfigurationProvider ConfigurationProvider { get; set; }
-        private IMapper Mapper { get; set; }
-        private ILogger Logger { get; set; }
-        private  ModelReliefDbContext DbContext { get; set; }
-
-        private Query Query { get; set; }
-
+        public Services.IConfigurationProvider ConfigurationProvider { get; set; }
         public Dto.Settings UserSettings { get; set; }
         public Dto.Session UserSession { get; set; }
+
+        private  IWebHostEnvironment HostingEnvironment { get; set; }
+        private IMapper _mapper { get; set; }
+        private ILogger _logger { get; set; }
+        private  ModelReliefDbContext _dbContext { get; set; }
+        private IQuery _query { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsManager"/> class.
@@ -45,18 +44,24 @@ namespace ModelRelief.Features.Settings
         /// <param name="mapper">IMapper</param>
         /// <param name="loggerFactory">ILoggerFactory.</param>
         /// <param name="dbContext">ModelReliefDBContext</param>
-        public SettingsManager(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, IMapper mapper, ILoggerFactory loggerFactory, ModelReliefDbContext dbContext)
+        /// <param name="query">IQuery</param>
+        public SettingsManager(
+            IWebHostEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IMapper mapper,
+            ILoggerFactory loggerFactory,
+            ModelReliefDbContext dbContext,
+            IQuery query)
         {
-            this.HostingEnvironment = hostingEnvironment;
-            this.ConfigurationProvider = configurationProvider;
-            this.Mapper = mapper;
-            this.Logger = loggerFactory.CreateLogger<SettingsManager>();
-            this.DbContext = dbContext;
+            HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
+            ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
+            _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
+            _logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(SettingsManager).Name);
+            _dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
+            _query = query ?? throw new System.ArgumentNullException(nameof(query));
 
-            this.Query = new Query(DbContext, loggerFactory, Mapper);
-
-            this.UserSession = new Dto.Session();
-            this.UserSettings = new Dto.Settings();
+            UserSession = new Dto.Session();
+            UserSettings = new Dto.Settings();
         }
 
         /// <summary>
@@ -74,13 +79,13 @@ namespace ModelRelief.Features.Settings
             try
             {
                 var queryParameters = new GetQueryParameters() { Name = DbFactory.SettingsNames.Session };
-                this.UserSession = await Query.FindDtoModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
+                this.UserSession = await _query.FindDtoModelAsync<Domain.Session, Dto.Session>(user, id: 0, queryParameters);
 
                 return this.UserSession;
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Unable to initialize user session for user {user.Identity.Name}: {ex.Message}");
+                _logger.LogError($"Unable to initialize user session for user {user.Identity.Name}: {ex.Message}");
                 return this.UserSession;
             }
         }
@@ -104,13 +109,13 @@ namespace ModelRelief.Features.Settings
 
             try
             {
-                this.UserSettings = await this.Query.FindDtoModelAsync<Domain.Settings, Dto.Settings>(user, this.UserSession.Project.SettingsId);
+                this.UserSettings = await this._query.FindDtoModelAsync<Domain.Settings, Dto.Settings>(user, this.UserSession.Project.SettingsId);
 
                 return this.UserSettings;
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Unable to initialize user settings for user {user.Identity.Name}: {ex.Message}");
+                _logger.LogError($"Unable to initialize user settings for user {user.Identity.Name}: {ex.Message}");
                 return this.UserSettings;
             }
         }

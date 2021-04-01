@@ -35,7 +35,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
         public IWebHostEnvironment              HostingEnvironment { get; }
         public Services.IConfigurationProvider  ConfigurationProvider { get; }
         public ISettingsManager                 SettingsManager { get; set; }
-        public Query Query { get; set; }
+        public IQuery Query { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelReferenceValidator"/> class.
@@ -46,21 +46,24 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
         public ModelReferenceValidator(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
-            Services.IConfigurationProvider configurationProvider)
+            Services.IConfigurationProvider configurationProvider,
+            ISettingsManager settingsManager,
+            IQuery query)
         {
             DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Logger =                (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(ModelReferenceValidator).Name);
             Mapper =                mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
-
-            SettingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider, Mapper, loggerFactory, DbContext);
-            Query = new Query(DbContext, loggerFactory, Mapper);
+            SettingsManager =       settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
+            Query =                 query ?? throw new System.ArgumentNullException(nameof(query));
         }
         /// <summary>
         /// Determines if a model property should be validated.
