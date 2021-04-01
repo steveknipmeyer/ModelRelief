@@ -14,29 +14,16 @@ namespace ModelRelief.Database
 
     public class Initializer : IInitializer
     {
-        private ISettingsManager SettingsManager { get; set; }
+        private ISettingsManager _settingsManager { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Initializer"/> class.
         /// Constructor
         /// </summary>
-        /// <param name="scope">Service scope provider.</param>
-        public Initializer(IServiceScope scope)
-        : this(scope.ServiceProvider)
+        /// <param name="settingsManager">ISettingsManager.</param>
+        public Initializer(ISettingsManager settingsManager)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Initializer"/> class.
-        /// Constructor
-        /// </summary>
-        /// <param name="services">Service provider.</param>
-        public Initializer(IServiceProvider services)
-        {
-            if (services == null)
-                throw new ArgumentNullException(nameof(IServiceScope));
-
-            SettingsManager = services.GetRequiredService<ISettingsManager>();
+            _settingsManager = settingsManager ?? throw new ArgumentNullException(nameof(settingsManager));
         }
 
         /// <summary>
@@ -44,7 +31,7 @@ namespace ModelRelief.Database
         /// </summary>
         public async Task InitializeDefaultSettingsAsync()
         {
-            dynamic defaultSettings = await SettingsManager.GetSettingsAsync(SettingsType.Default);
+            dynamic defaultSettings = await _settingsManager.GetSettingsAsync(SettingsType.Default);
             Defaults.Initialize(defaultSettings);
         }
 

@@ -32,15 +32,15 @@ namespace ModelRelief.Database
     {
         public string SqlitePath { get; set; }
 
-        private IWebHostEnvironment HostingEnvironment { get; set; }
-        private Services.IConfigurationProvider ConfigurationProvider { get; set; }
-        private ModelReliefDbContext DbContext { get; set; }
-        private ILogger Logger { get; set; }
-        private IStorageManager StorageManager { get; set; }
-        private IModelReferenceValidator ModelReferenceValidator { get; set; }
-        private AccountsSettings Accounts { get; set; }
-        private IMapper Mapper { get; set; }
-        private string StoreUsersPath { get; set; }
+        private IWebHostEnvironment _hostingEnvironment { get; set; }
+        private Services.IConfigurationProvider _configurationProvider { get; set; }
+        private ModelReliefDbContext _dbContext { get; set; }
+        private ILogger _logger { get; set; }
+        private IStorageManager _storageManager { get; set; }
+        private IModelReferenceValidator _modelReferenceValidator { get; set; }
+        private AccountsSettings _accounts { get; set; }
+        private IMapper _mapper { get; set; }
+        private string _storeUsersPath { get; set; }
 
         /// <summary>
         /// Settings Names
@@ -86,27 +86,27 @@ namespace ModelRelief.Database
             IOptions<AccountsSettings> accountSettings,
             IModelReferenceValidator modelReferenceValidator)
         {
-            HostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(HostingEnvironment));
+            _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(_hostingEnvironment));
 
-            ConfigurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(ConfigurationProvider));
+            _configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(_configurationProvider));
 
-            DbContext = dbContext ?? throw new ArgumentNullException(nameof(DbContext));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
 
-            _ = loggerFactory ?? throw new System.ArgumentNullException(nameof(Logger));
-            Logger = loggerFactory.CreateLogger(typeof(DbFactory).Name);
+            _ = loggerFactory ?? throw new System.ArgumentNullException(nameof(_logger));
+            _logger = loggerFactory.CreateLogger(typeof(DbFactory).Name);
 
-            Mapper = mapper ?? throw new ArgumentNullException(nameof(Mapper));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(_mapper));
 
-            StorageManager = storageManager ?? throw new ArgumentNullException(nameof(StorageManager));
+            _storageManager = storageManager ?? throw new ArgumentNullException(nameof(_storageManager));
 
-            Accounts = accountSettings.Value as AccountsSettings ?? throw new ArgumentNullException(nameof(Accounts));
+            _accounts = accountSettings.Value as AccountsSettings ?? throw new ArgumentNullException(nameof(_accounts));
 
-            ModelReferenceValidator = modelReferenceValidator ?? throw new ArgumentNullException(nameof(ModelReferenceValidator));
+            _modelReferenceValidator = modelReferenceValidator ?? throw new ArgumentNullException(nameof(_modelReferenceValidator));
 
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
+            var storeUsersPartialPath = _configurationProvider.GetSetting(Paths.StoreUsers);
+            _storeUsersPath = _storageManager.GetAbsolutePath(storeUsersPartialPath);
 
-            SqlitePath = Path.GetFullPath($"{StorageManager.GetAbsolutePath(ConfigurationProvider.GetSetting(Paths.StoreDatabase))}{ConfigurationSettings.SQLite}");
+            SqlitePath = Path.GetFullPath($"{_storageManager.GetAbsolutePath(_configurationProvider.GetSetting(Paths.StoreDatabase))}{ConfigurationSettings.SQLite}");
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace ModelRelief.Database
                     return;
             }
 #endif
-            Files.DeleteFolder(StoreUsersPath, true);
-            Logger.LogWarning($"User store ({StoreUsersPath}) deleted.");
+            Files.DeleteFolder(_storeUsersPath, true);
+            _logger.LogWarning($"User store ({_storeUsersPath}) deleted.");
         }
 
         /// <summary>
@@ -151,8 +151,8 @@ namespace ModelRelief.Database
             string databaseFolder;
             Dictionary<string, string> fileList;
 
-            Logger.LogInformation($"SynchronizeDatabase {ConfigurationProvider.Database} : restore = {restore}");
-            switch (ConfigurationProvider.Database)
+            _logger.LogInformation($"SynchronizeDatabase {_configurationProvider.Database} : restore = {restore}");
+            switch (_configurationProvider.Database)
             {
                 default:
                 case RelationalDatabaseProvider.SQLite:
@@ -179,13 +179,13 @@ namespace ModelRelief.Database
                         {
                             sourcePath = Path.Combine(databaseFolder, restore ? entry.Key : entry.Value);
                             targetPath = Path.Combine(databaseFolder, restore ? entry.Value : entry.Key);
-                            Logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
+                            _logger.LogInformation($"Database file copy : ({sourcePath} -> {targetPath})");
                             File.Copy(sourcePath, targetPath, overwrite: true);
                             fileCopied = true;
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogError($"Retrying file copy after exception {ex.Message}");
+                            _logger.LogError($"Retrying file copy after exception {ex.Message}");
                             Thread.Sleep(1000);
                             copyAttemptsRemaining--;
                         }
@@ -205,9 +205,9 @@ namespace ModelRelief.Database
         {
             var userAccounts = new List<Account>
             {
-                Accounts.Development,
-                Accounts.Sales,
-                Accounts.Support,
+                _accounts.Development,
+                _accounts.Sales,
+                _accounts.Support,
             };
 
             foreach (var account in userAccounts)
@@ -232,7 +232,7 @@ namespace ModelRelief.Database
                 return;
 
             ApplicationUser user = await IdentityUtility.FindApplicationUserAsync(claimsPrincipal);
-            IQueryable<Model3d> results = DbContext.Models.Where(m => (m.UserId == user.Id));
+            IQueryable<Model3d> results = _dbContext.Models.Where(m => (m.UserId == user.Id));
 
             // models exist; not brand new user
             if (results.Any())
@@ -266,8 +266,8 @@ namespace ModelRelief.Database
         /// <param name="folderType">Folder type.</param>
         public string GetEntityJSONFileName<TEntity>(string folderType)
         {
-            var jsonFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var jsonFolder = $"{HostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
+            var jsonFolderPartialPath = $"{_configurationProvider.GetSetting(Paths.TestDataUser)}/{_configurationProvider.GetSetting(folderType)}";
+            var jsonFolder = $"{_hostingEnvironment.ContentRootPath}{jsonFolderPartialPath}";
 
             var modelType = typeof(TEntity).Name;
             var jsonFile = $"{Path.Combine(jsonFolder, modelType)}.json";
@@ -291,17 +291,17 @@ namespace ModelRelief.Database
             var validationFailures = new List<ValidationFailure>();
             var modelValidationFailures = new List<ValidationFailure>();
 
-            IQueryable<TEntity> models = DbContext.Set<TEntity>()
+            IQueryable<TEntity> models = _dbContext.Set<TEntity>()
                                                   .Where(m => (m.UserId == user.Id));
             await models.ForEachAsync(async (model) =>
             {
-                modelValidationFailures = await ModelReferenceValidator.ValidateAsync<TEntity>(model, claimsPrincipal, throwIfError: false);
+                modelValidationFailures = await _modelReferenceValidator.ValidateAsync<TEntity>(model, claimsPrincipal, throwIfError: false);
                 validationFailures.AddRange(modelValidationFailures);
             });
 
             validationFailures.ForEach((failure) =>
             {
-                Logger.LogError(failure.ErrorMessage);
+                _logger.LogError(failure.ErrorMessage);
             });
 
             return validationFailures;
@@ -314,11 +314,11 @@ namespace ModelRelief.Database
         /// <returns>true if all entities are valid</returns>
         public bool ValidateAll(ApplicationUser user)
         {
-            Logger.LogInformation($"{Environment.NewLine}Validation: {user.Name}");
+            _logger.LogInformation($"{Environment.NewLine}Validation: {user.Name}");
             var validationFailures = new List<ValidationFailure>();
             var entityValidationFailures = new List<ValidationFailure>();
 
-            var entityTypes = DbContext.GetAllEntityTypes();
+            var entityTypes = _dbContext.GetAllEntityTypes();
             entityTypes.ForEach(async (entityType) =>
             {
                 var validateEntityMethod = typeof(DbFactory).GetMethod(nameof(ValidateEntityAsync)).MakeGenericMethod(entityType);
@@ -345,7 +345,7 @@ namespace ModelRelief.Database
             // user store
             SeedUserStore(user);
 
-            Logger.LogInformation($"User {user.Name} database and sample data sets created.");
+            _logger.LogInformation($"User {user.Name} database and sample data sets created.");
         }
 
         /// <summary>
@@ -366,11 +366,11 @@ namespace ModelRelief.Database
         /// </summary>
         private void CreateTestDatabase()
         {
-            if (string.Equals(HostingEnvironment.EnvironmentName, "Development", StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(_hostingEnvironment.EnvironmentName, "Development", StringComparison.CurrentCultureIgnoreCase))
             {
                 // create the baseline copy of the test
-                DbContext.SaveChanges();
-                switch (ConfigurationProvider.Database)
+                _dbContext.SaveChanges();
+                switch (_configurationProvider.Database)
                 {
                     default:
                     case RelationalDatabaseProvider.SQLite:
@@ -407,8 +407,8 @@ namespace ModelRelief.Database
                 Project = FindByName<Project>(user, ProjectNames.Examples),
             };
 
-            DbContext.Add(session);
-            DbContext.SaveChanges();
+            _dbContext.Add(session);
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -429,8 +429,8 @@ namespace ModelRelief.Database
 
             foreach (var item in settings)
             {
-                DbContext.Add(item);
-                DbContext.SaveChanges();
+                _dbContext.Add(item);
+                _dbContext.SaveChanges();
             }
         }
 
@@ -441,7 +441,7 @@ namespace ModelRelief.Database
         private void AddProjects(ApplicationUser user)
         {
             var rootContentFile = SeedContent.ContentFile;
-            var contentFile = $"{HostingEnvironment.ContentRootPath}{ConfigurationProvider.GetSetting(Paths.TestSeed)}/{rootContentFile}";
+            var contentFile = $"{_hostingEnvironment.ContentRootPath}{_configurationProvider.GetSetting(Paths.TestSeed)}/{rootContentFile}";
             contentFile = Path.GetFullPath(contentFile);
 
             var seedContent = JsonConvert.DeserializeObject<SeedContent>(System.IO.File.ReadAllText(contentFile));
@@ -455,8 +455,8 @@ namespace ModelRelief.Database
                     Description = seedProject.Description,
                     Settings = FindByName<Settings>(user, SettingsNames.Project),
                 };
-                DbContext.Add(project);
-                DbContext.SaveChanges();
+                _dbContext.Add(project);
+                _dbContext.SaveChanges();
 
                 AddProjectModels(user, seedProject, project.Id);
             }
@@ -479,8 +479,8 @@ namespace ModelRelief.Database
             entity.UserId = user.Id;
             entity.ProjectId = projectId;
 
-            DbContext.Add(entity);
-            DbContext.SaveChanges();
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
 
             return entity.Id;
         }
@@ -491,9 +491,9 @@ namespace ModelRelief.Database
         /// <param name="user">ApplicationUser</param>
         private void InitializeCameras(ApplicationUser user)
         {
-            DbContext.DetachUnchangedTrackedEntities();
+            _dbContext.DetachUnchangedTrackedEntities();
             var cameraList = ImportEntityJSON<Camera>("Paths:ResourceFolders:Camera");
-            var depthBuffers = DbContext.DepthBuffers
+            var depthBuffers = _dbContext.DepthBuffers
                                    .Where(db => (db.UserId == user.Id))
                                    .Include(db => db.Camera)
                                    .AsNoTracking()
@@ -511,8 +511,8 @@ namespace ModelRelief.Database
                     exportedCamera.Project = null;
                     exportedCamera.ProjectId = defaultCamera.ProjectId;
 
-                    DbContext.Update(exportedCamera);
-                    DbContext.SaveChanges();
+                    _dbContext.Update(exportedCamera);
+                    _dbContext.SaveChanges();
                 });
         }
 
@@ -522,9 +522,9 @@ namespace ModelRelief.Database
         /// <param name="user">ApplicationUser</param>
         private void InitializeMeshTransforms(ApplicationUser user)
         {
-            DbContext.DetachUnchangedTrackedEntities();
+            _dbContext.DetachUnchangedTrackedEntities();
             var meshTransformList = ImportEntityJSON<MeshTransform>("Paths:ResourceFolders:MeshTransform");
-            var meshes = DbContext.Meshes
+            var meshes = _dbContext.Meshes
                                    .Where(db => (db.UserId == user.Id))
                                    .Include(db => db.MeshTransform)
                                    .AsNoTracking()
@@ -541,8 +541,8 @@ namespace ModelRelief.Database
                     exportedMeshTransform.Project = null;
                     exportedMeshTransform.ProjectId = defaultMeshTransform.ProjectId;
 
-                    DbContext.Update(exportedMeshTransform);
-                    DbContext.SaveChanges();
+                    _dbContext.Update(exportedMeshTransform);
+                    _dbContext.SaveChanges();
                 });
         }
 
@@ -591,8 +591,8 @@ namespace ModelRelief.Database
                 // N.B. Camera created in AddModel3dRelated
             };
 
-            DbContext.Add(model);
-            DbContext.SaveChanges();
+            _dbContext.Add(model);
+            _dbContext.SaveChanges();
             SetFileProperties<Model3d>(model);
 
             AddModel3dRelated(user, model);
@@ -622,11 +622,11 @@ namespace ModelRelief.Database
                 CameraId = AddEntity<Camera>(user, projectId, $"{modelName}.MeshTransform", modelDescription),
                 Model3dId = modelId,
             };
-            DbContext.Add(depthBuffer);
-            DbContext.SaveChanges();
+            _dbContext.Add(depthBuffer);
+            _dbContext.SaveChanges();
             SetFileProperties<DepthBuffer>(depthBuffer);
 
-            var path = $"{HostingEnvironment.ContentRootPath}/{depthBuffer.Path}{depthBuffer.Name}";
+            var path = $"{_hostingEnvironment.ContentRootPath}/{depthBuffer.Path}{depthBuffer.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, depthBuffer.CreateDefaultContent(depthBuffer.Width, depthBuffer.Height)).Wait();
 
             return depthBuffer;
@@ -653,11 +653,11 @@ namespace ModelRelief.Database
                 CameraId = cameraId,
                 Model3dId = modelId,
             };
-            DbContext.Add(normalMap);
-            DbContext.SaveChanges();
+            _dbContext.Add(normalMap);
+            _dbContext.SaveChanges();
             SetFileProperties<NormalMap>(normalMap);
 
-            var path = $"{HostingEnvironment.ContentRootPath}/{normalMap.Path}{normalMap.Name}";
+            var path = $"{_hostingEnvironment.ContentRootPath}/{normalMap.Path}{normalMap.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, normalMap.CreateDefaultContent(normalMap.Width, normalMap.Height)).Wait();
 
             return normalMap;
@@ -687,11 +687,11 @@ namespace ModelRelief.Database
                 NormalMapId = normalMapId,
                 CameraId = AddEntity<Camera>(user, projectId, meshName, modelDescription),
             };
-            DbContext.Add(mesh);
-            DbContext.SaveChanges();
+            _dbContext.Add(mesh);
+            _dbContext.SaveChanges();
             SetFileProperties<Mesh>(mesh);
 
-            var path = $"{HostingEnvironment.ContentRootPath}/{mesh.Path}{mesh.Name}";
+            var path = $"{_hostingEnvironment.ContentRootPath}/{mesh.Path}{mesh.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, mesh.CreateDefaultContent(Defaults.Resolution.Image, Defaults.Resolution.Image)).Wait();
 
             return mesh;
@@ -706,10 +706,10 @@ namespace ModelRelief.Database
         private void CopySeedDataFilesToStore<TEntity>(ApplicationUser user, string folderType)
             where TEntity : DomainModel
         {
-            var sourceFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var sourceFolderPath = $"{HostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
+            var sourceFolderPartialPath = $"{_configurationProvider.GetSetting(Paths.TestDataUser)}/{_configurationProvider.GetSetting(folderType)}";
+            var sourceFolderPath = $"{_hostingEnvironment.ContentRootPath}{sourceFolderPartialPath}";
 
-            var destinationFolderPath = $"{StoreUsersPath}{user.Id}/{ConfigurationProvider.GetSetting(folderType)}";
+            var destinationFolderPath = $"{_storeUsersPath}{user.Id}/{_configurationProvider.GetSetting(folderType)}";
             Directory.CreateDirectory(destinationFolderPath);
 
             // iterate over all folders
@@ -718,7 +718,7 @@ namespace ModelRelief.Database
             foreach (System.IO.DirectoryInfo dirInfo in subDirs)
             {
                 // parent directory name = database resource ID
-                var model = DbContext.Set<TEntity>()
+                var model = _dbContext.Set<TEntity>()
                     .AsEnumerable()
                     .Where(m => m.Name.StartsWith(dirInfo.Name, true, null))
                     .Where(m => (m.UserId == user.Id))
@@ -754,7 +754,7 @@ namespace ModelRelief.Database
         private TEntity FindByName<TEntity>(ApplicationUser user, string name)
             where TEntity : DomainModel
         {
-            var resource = DbContext.Set<TEntity>()
+            var resource = _dbContext.Set<TEntity>()
                 .Where(r => ((r.Name == name) && (r.UserId == user.Id))).SingleOrDefault();
 
             if (resource == null)
@@ -772,7 +772,7 @@ namespace ModelRelief.Database
             where TEntity : DomainModel
         {
             var descriptionSuffix = user.Name;
-            var models = DbContext.Set<TEntity>().Where(m => (m.UserId == user.Id));
+            var models = _dbContext.Set<TEntity>().Where(m => (m.UserId == user.Id));
 
             foreach (var model in models)
             {
@@ -783,7 +783,7 @@ namespace ModelRelief.Database
 
                 model.Description += $" ({descriptionSuffix})";
             }
-            DbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -795,12 +795,12 @@ namespace ModelRelief.Database
             where TEntity : FileDomainModel
         {
             model.FileTimeStamp = DateTime.Now;
-            model.Path = StorageManager.GetRelativePath(StorageManager.DefaultModelStorageFolder(model));
+            model.Path = _storageManager.GetRelativePath(_storageManager.DefaultModelStorageFolder(model));
 
             if (model is GeneratedFileDomainModel generatedModel)
                 generatedModel.FileIsSynchronized = true;
 
-            DbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
     }
 }

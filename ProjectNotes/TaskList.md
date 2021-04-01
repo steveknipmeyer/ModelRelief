@@ -23,18 +23,12 @@
         https://www.smk.dk/en/article/digitale-casts/
 
     Initialization
-        DbInitializer
-            Set control flags in initialization rather than reading the configuration in methods.
-
-        Initializer
-            Can SettingsManager be a DI constructor parameter?
-
         DI
-            DbFactory: I DbFactory
             ModelReferenceValidator: IModelReferenceValidator
             Query: IQuery
             SettingsManager: ISettingsManager
 
+            DbFactory: IDbFactory
             DbInitializer: IDbInitializer           
             Initializer: IInitializer
             StorageManager: IStorageManager
