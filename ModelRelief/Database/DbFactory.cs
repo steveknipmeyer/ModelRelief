@@ -250,13 +250,28 @@ namespace ModelRelief.Database
         {
             model.CameraId = AddEntity<Camera>(user, model.ProjectId, model.Name, model.Description);
 
-            // add related
             var rootModelName = Path.GetFileNameWithoutExtension(model.Name);
-            var depthBuffer = AddDepthBuffer(user, model.ProjectId, model.Id, rootModelName, model.Description);
-            var normalMap = AddNormalMap(user, model.ProjectId, depthBuffer.CameraId, model.Id, rootModelName, model.Description);
-            AddMesh(user, model.ProjectId, depthBuffer.Id, normalMap.Id, rootModelName, model.Description);
+            AddMeshRelated(user, model.ProjectId, model.Id, rootModelName, model.Description);
 
             return model;
+        }
+
+        /// <summary>
+        /// Add supporting models for a new Mesh.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project for new Mesh.</param>
+        /// <param name="modelId">Parent Model3d for the Mesh.</param>
+        /// <param name="rootName">Base name for Mesh and supporting models.</param>
+        /// <param name="description">Description for Mesh and supporting models.</param>
+        public Mesh AddMeshRelated(ApplicationUser user, int? projectId, int? modelId, string rootName, string description)
+        {
+            // add related Mesh models
+            var depthBuffer = AddDepthBuffer(user, projectId, modelId, rootName, description);
+            var normalMap = AddNormalMap(user, projectId, depthBuffer.CameraId, modelId, rootName, description);
+            var mesh = AddMesh(user, projectId, depthBuffer.Id, normalMap.Id, rootName, description);
+
+            return mesh;
         }
 
         /// <summary>
@@ -608,7 +623,7 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private DepthBuffer AddDepthBuffer(ApplicationUser user, int? projectId, int modelId, string modelName, string modelDescription)
+        private DepthBuffer AddDepthBuffer(ApplicationUser user, int? projectId, int? modelId, string modelName, string modelDescription)
         {
             var depthBufferName = $"{modelName}.sdb";
             var depthBuffer = new DepthBuffer
@@ -641,7 +656,7 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private NormalMap AddNormalMap(ApplicationUser user, int? projectId, int? cameraId, int modelId, string modelName, string modelDescription)
+        private NormalMap AddNormalMap(ApplicationUser user, int? projectId, int? cameraId, int? modelId, string modelName, string modelDescription)
         {
             var normalMap = new NormalMap
             {

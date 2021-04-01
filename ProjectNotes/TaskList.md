@@ -1,16 +1,25 @@
 #### Commit       
-    Default Camera is Back not Front.
-        Set a default value to Position.
 
-### General           
-    
-        Refactor AddModel3dRelated to extract AddMeshRelated to support multiple Meshes per Model3d.    
+### General     
+    Remove Jewelry Project?
 
-    If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
-        Should a database transaction be used to remove all related models?       
+    Review FileModel creation.
+        New Handler?
+        If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
+            Should a database transaction be used to remove all related models?       
 
-    Should there be a mechanism to update an <existing> Model3d file?
-        Model3d.Edit View
+    What Create pages are valid semantically?
+        Invalid
+            Camera
+            NormalMap
+            DepthBuffer
+            MeshTransform
+            Settings
+            Session
+        Valid
+            Mesh
+            Model3d
+            Project
 
     SMK
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
@@ -64,6 +73,9 @@
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
+
+    Should there be a mechanism to update an <existing> Model3d file?
+        Model3d.Edit View
 
     Optimize SettingsManager.Initialize[UserSession|Settings]Async
         Every property validation causes a database read.
