@@ -22,7 +22,7 @@ namespace ModelRelief.Database
     using ModelRelief.Settings;
     using ModelRelief.Utility;
 
-    public class DbInitializer
+    public class DbInitializer : IDbInitializer
     {
         public DbFactory DbFactory { get; set; }
 

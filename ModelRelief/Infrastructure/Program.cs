@@ -55,7 +55,7 @@ namespace ModelRelief.Infrastructure
                 var initializer = serviceProvider.GetRequiredService<IInitializer>();
                 initializer.Initialize();
 
-                var dbInitializer = new DbInitializer(serviceProvider);
+                var dbInitializer = serviceProvider.GetRequiredService<IDbInitializer>();
                 dbInitializer.Initialize();
             }
         }

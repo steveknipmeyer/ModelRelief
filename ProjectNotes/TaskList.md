@@ -7,13 +7,14 @@
     The Compose link in the Projects View has the wrong Id for a newly-updated model.
         When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
         N.B. A Model3d may have multiple Meshes.
+        Refactor AddModel3dRelated to extract AddMeshRelated to support multiple Meshes per Model3d.    
 
     If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
         Should a database transaction be used to remove all related models?       
 
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
-        
+
     Licenses
         Verify all models are attributed.
 
@@ -29,15 +30,14 @@
             Can SettingsManager be a DI constructor parameter?
 
         DI
-            DbInitializer
-
-            Initializer: IInitializer
             DbFactory: I DbFactory
             ModelReferenceValidator: IModelReferenceValidator
             Query: IQuery
             SettingsManager: ISettingsManager
-            StorageManager: IStorageManager
 
+            DbInitializer: IDbInitializer           
+            Initializer: IInitializer
+            StorageManager: IStorageManager
 
     Add a busy indicator.
         https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
