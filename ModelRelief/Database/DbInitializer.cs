@@ -26,7 +26,6 @@ namespace ModelRelief.Database
     {
         public DbFactory DbFactory { get; set; }
 
-        private bool ExitAfterInitialization { get; set; }
         private IServiceProvider Services { get; set; }
         private IWebHostEnvironment HostingEnvironment { get; set; }
         private Services.IConfigurationProvider ConfigurationProvider { get; set; }
@@ -43,8 +42,7 @@ namespace ModelRelief.Database
         /// Constructor
         /// </summary>
         /// <param name="services">Service provider.</param>
-        /// <param name="exitAfterInitialization">Exit after initialization. Do not start web server.</param>
-        public DbInitializer(IServiceProvider services, bool exitAfterInitialization)
+        public DbInitializer(IServiceProvider services)
         {
             Services = services;
             if (services == null)
@@ -78,12 +76,10 @@ namespace ModelRelief.Database
             if (Mapper == null)
                 throw new ArgumentNullException(nameof(Mapper));
 
-            ExitAfterInitialization = exitAfterInitialization;
-
-            ModelReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
-
             var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
             StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
+
+            ModelReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
 
             DbFactory = new DbFactory(HostingEnvironment, ConfigurationProvider, DbContext, loggerFactory, Mapper, StorageManager, accountSettings, ModelReferenceValidator);
         }
@@ -114,7 +110,7 @@ namespace ModelRelief.Database
                 }
             }
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Initialization complete; listening...");
+            Console.WriteLine("Initialization complete.");
             Console.ForegroundColor = ConsoleColor.White;
         }
         /// <summary>

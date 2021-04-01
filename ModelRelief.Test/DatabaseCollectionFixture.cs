@@ -34,7 +34,6 @@ namespace ModelRelief.Test
                 // N.B. XUnit ICollectionFixture cannot use DI.
                 var serviceProvider = scope.ServiceProvider;
 
-                // var initializer = new Initializer(serviceProvider);
                 var initializer = serviceProvider.GetRequiredService<IInitializer>();
                 initializer.Initialize();
 

@@ -52,10 +52,10 @@ namespace ModelRelief.Infrastructure
             {
                 var serviceProvider = scope.ServiceProvider;
 
-                var initializer = new Initializer(serviceProvider);
+                var initializer = serviceProvider.GetRequiredService<IInitializer>();
                 initializer.Initialize();
 
-                var dbInitializer = new DbInitializer(serviceProvider, ExitAfterInitialization);
+                var dbInitializer = new DbInitializer(serviceProvider);
                 dbInitializer.Initialize();
             }
         }
@@ -67,6 +67,7 @@ namespace ModelRelief.Infrastructure
         {
             Services.IConfigurationProvider configurationProvider = host.Services.GetRequiredService<Services.IConfigurationProvider>();
             configurationProvider.LogConfigurationSettings();
+
             ExitAfterInitialization = configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRExitAferInitialization);
         }
 

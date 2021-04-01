@@ -1,7 +1,6 @@
 #### Commit       
 
 ### General           
-
     Default Camera is Back not Front.
         Set a default value to Position.
     
@@ -22,31 +21,22 @@
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
-    A new user does not receive the Default settings
-
     Initialization
-        Where should database initialization be done?
-        Where should (global) StorageManager be assigned?
-        How can a DomainModel have access to DI services?
+        DbInitializer
+            Set control flags in initialization rather than reading the configuration in methods.
+
+        Initializer
+            Can SettingsManager be a DI constructor parameter?
+
         DI
-            Initializer (?)
             DbInitializer
+
+            Initializer: IInitializer
             DbFactory: I DbFactory
             ModelReferenceValidator: IModelReferenceValidator
             Query: IQuery
             SettingsManager: ISettingsManager
             StorageManager: IStorageManager
-
-        DbInitializer
-            Set control flags in initialization rather than reading the configuration in methods.
-            Can DbFactory be a DI parameter?
-
-        DatabaseCollectionFixture
-            Can DatabaseCollectionFixture be a DI constructor parameter?
-            https://stackoverflow.com/questions/39131219/is-it-possible-to-use-dependency-injection-with-xunit
-
-        Initializer
-            Can SettingsManager be a DI constructor parameter?
 
 
     Add a busy indicator.

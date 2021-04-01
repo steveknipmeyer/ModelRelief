@@ -127,7 +127,8 @@ namespace ModelRelief.Database
         public void InitializeUserStore()
         {
 #if false
-            if (!ExitAfterInitialization)
+            var exitAfterInitialization = ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRExitAferInitialization);
+            if (!exitAfterInitialization)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Delete the user store folder: {StoreUsersPath} (Y/N)?");
@@ -137,7 +138,6 @@ namespace ModelRelief.Database
                     return;
             }
 #endif
-
             Files.DeleteFolder(StoreUsersPath, true);
             Logger.LogWarning($"User store ({StoreUsersPath}) deleted.");
         }
