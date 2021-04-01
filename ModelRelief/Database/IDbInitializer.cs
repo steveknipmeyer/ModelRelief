@@ -24,7 +24,7 @@ namespace ModelRelief.Database
 
     public interface IDbInitializer
     {
-        DbFactory DbFactory { get; set; }
+        IDbFactory DbFactory { get; set; }
 
         void Initialize();
     }

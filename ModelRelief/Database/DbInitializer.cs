@@ -24,64 +24,56 @@ namespace ModelRelief.Database
 
     public class DbInitializer : IDbInitializer
     {
-        public DbFactory DbFactory { get; set; }
+        public IDbFactory DbFactory { get; set; }
 
-        private IServiceProvider Services { get; set; }
-        private IWebHostEnvironment HostingEnvironment { get; set; }
-        private Services.IConfigurationProvider ConfigurationProvider { get; set; }
-        private ModelReliefDbContext DbContext { get; set; }
-        private ILogger Logger { get; set; }
-        private IStorageManager StorageManager { get; set; }
-        private ModelReferenceValidator ModelReferenceValidator { get; set; }
-        private AccountsSettings Accounts { get; set; }
-        private IMapper Mapper { get; set; }
-        private string StoreUsersPath { get; set; }
+        private IServiceProvider _services { get; set; }
+        private IWebHostEnvironment _hostingEnvironment { get; set; }
+        private Services.IConfigurationProvider _configurationProvider { get; set; }
+        private ModelReliefDbContext _dbContext { get; set; }
+        private ILogger _logger { get; set; }
+        private IStorageManager _storageManager { get; set; }
+        private IModelReferenceValidator _modelReferenceValidator { get; set; }
+        private AccountsSettings _accounts { get; set; }
+        private IMapper _mapper { get; set; }
+        private string _storeUsersPath { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbInitializer"/> class.
         /// Constructor
         /// </summary>
-        /// <param name="services">Service provider.</param>
-        public DbInitializer(IServiceProvider services)
+        /// <param name="hostingEnvironment">IWebHostingEnvironment.</param>
+        /// <param name="configurationProvider">Services.IConfigurationProvider.</param>
+        /// <param name="dbContext">ModelReliefDbContext.</param>
+        /// <param name="loggerFactory">ILoggerFactory.</param>
+        /// <param name="storageManager">IStorageManager.</param>
+        /// <param name="accountSettings">IOptions[AccountsSettings].</param>
+        /// <param name="mapper">IMapper.</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator.</param>
+        /// <param name="dbFactory">IDbFactory.</param>
+        public DbInitializer(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IStorageManager storageManager, IOptions<AccountsSettings> accountSettings, IMapper mapper, IModelReferenceValidator modelReferenceValidator, IDbFactory dbFactory)
         {
-            Services = services;
-            if (services == null)
-                throw new ArgumentNullException(nameof(IServiceProvider));
+            _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(_hostingEnvironment));
 
-            HostingEnvironment = Services.GetRequiredService<IWebHostEnvironment>();
-            if (HostingEnvironment == null)
-                throw new ArgumentNullException(nameof(HostingEnvironment));
+            _configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(_configurationProvider));
 
-            ConfigurationProvider = services.GetRequiredService<Services.IConfigurationProvider>();
-            if (ConfigurationProvider == null)
-                throw new ArgumentNullException(nameof(ConfigurationProvider));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
 
-            DbContext = Services.GetRequiredService<ModelReliefDbContext>();
-            if (DbContext == null)
-                throw new ArgumentNullException(nameof(DbContext));
+            loggerFactory = loggerFactory ?? throw new System.ArgumentNullException(nameof(loggerFactory));
+            _logger = loggerFactory.CreateLogger(typeof(DbInitializer).Name);
 
-            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-            Logger = (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(DbInitializer).Name);
+            _storageManager = storageManager ?? throw new ArgumentNullException(nameof(_storageManager));
 
-            StorageManager = services.GetRequiredService<IStorageManager>();
-            if (StorageManager == null)
-                throw new ArgumentNullException(nameof(StorageManager));
+            accountSettings = accountSettings ?? throw new ArgumentNullException(nameof(accountSettings));
+            _accounts = accountSettings.Value as AccountsSettings ?? throw new ArgumentNullException(nameof(_accounts));
 
-            var accountSettings = services.GetRequiredService<IOptions<AccountsSettings>>();
-            Accounts = accountSettings.Value as AccountsSettings;
-            if (Accounts == null)
-                throw new ArgumentNullException(nameof(Accounts));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(_mapper));
 
-            Mapper = services.GetRequiredService<IMapper>();
-            if (Mapper == null)
-                throw new ArgumentNullException(nameof(Mapper));
+            var storeUsersPartialPath = _configurationProvider.GetSetting(Paths.StoreUsers);
+            _storeUsersPath = _storageManager.GetAbsolutePath(storeUsersPartialPath);
 
-            var storeUsersPartialPath = ConfigurationProvider.GetSetting(Paths.StoreUsers);
-            StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
+            _modelReferenceValidator = modelReferenceValidator ?? throw new ArgumentNullException(nameof(_modelReferenceValidator));
 
-            ModelReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
-
-            DbFactory = new DbFactory(HostingEnvironment, ConfigurationProvider, DbContext, loggerFactory, Mapper, StorageManager, accountSettings, ModelReferenceValidator);
+            DbFactory = dbFactory ?? throw new ArgumentNullException(nameof(DbFactory));
         }
 
         /// <summary>
@@ -92,18 +84,18 @@ namespace ModelRelief.Database
             EnsureServerInitialized();
 
             // update test data from existing data
-            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
+            if (_configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRUpdateSeedData))
             {
                 UpdateSeedData();
             }
 
             // create new database
-            if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
+            if (_configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRInitializeDatabase))
             {
                 InitializeDatabaseAsync().Wait();
 
                 // add test data
-                if (ConfigurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
+                if (_configurationProvider.ParseBooleanSetting(ConfigurationSettings.MRSeedDatabase))
                 {
                     DbFactory.InitializeUserStore();
                     DbFactory.SeedDatabaseForTestUsersAsync().Wait();
@@ -119,7 +111,7 @@ namespace ModelRelief.Database
         /// </summary>
         private bool EnsureServerInitialized()
         {
-            switch (ConfigurationProvider.Database)
+            switch (_configurationProvider.Database)
             {
                 default:
                 case RelationalDatabaseProvider.SQLite:
@@ -133,21 +125,21 @@ namespace ModelRelief.Database
         /// </summary>
         private async Task InitializeDatabaseAsync()
         {
-            Logger.LogInformation($"Preparing to initialize database.");
+            _logger.LogInformation($"Preparing to initialize database.");
             try
             {
-                await DbContext.Database.EnsureDeletedAsync();
+                await _dbContext.Database.EnsureDeletedAsync();
 
                 // SQLite Error 1: 'table "AspNetRoles" already exists'.
                 // https://github.com/aspnet/EntityFrameworkCore/issues/4649
-                await DbContext.Database.EnsureCreatedAsync();
+                await _dbContext.Database.EnsureCreatedAsync();
             }
             catch (Exception ex)
             {
-                Logger.LogError($"An error occurred while initializing the database: {ex.Message}");
+                _logger.LogError($"An error occurred while initializing the database: {ex.Message}");
                 return;
             }
-            Logger.LogInformation("Database initialized.");
+            _logger.LogInformation("Database initialized.");
         }
 
         #region UpdateSeedData
@@ -157,7 +149,7 @@ namespace ModelRelief.Database
         /// <returns>Development user.</returns>
         private ApplicationUser GetDevelopmentUser()
         {
-            ApplicationUser user = DbFactory.ConstructUserFromAccount(Accounts.Development);
+            ApplicationUser user = DbFactory.ConstructUserFromAccount(_accounts.Development);
 
             return user;
         }
@@ -182,35 +174,35 @@ namespace ModelRelief.Database
             switch (typeof(TEntity).Name)
             {
                 case "Camera":
-                    modelList = (IQueryable<TEntity>)DbContext.Cameras
+                    modelList = (IQueryable<TEntity>)_dbContext.Cameras
                                     .Where(c => c.UserId == user.Id)
                                     .Include(c => c.Project)
                                     .AsNoTracking();
                     break;
 
                 case "MeshTransform":
-                    modelList = (IQueryable<TEntity>)DbContext.MeshTransforms
+                    modelList = (IQueryable<TEntity>)_dbContext.MeshTransforms
                                     .Where(m => m.UserId == user.Id)
                                     .Include(m => m.Project)
                                     .AsNoTracking();
                     break;
 
                 default:
-                    Logger.LogError($"ExportEntityJSON: unsupported entity type {typeof(TEntity).Name}");
+                    _logger.LogError($"ExportEntityJSON: unsupported entity type {typeof(TEntity).Name}");
                     return;
             }
 
             // verify models present; export only when database is populated
             if (modelList.Count() <= 0)
             {
-                Logger.LogError($"ExportEntityJSON: No models were found for type {typeof(TEntity).Name}. No export was done.");
+                _logger.LogError($"ExportEntityJSON: No models were found for type {typeof(TEntity).Name}. No export was done.");
                 return;
             }
 
             var jsonFile = DbFactory.GetEntityJSONFileName<TEntity>(folderType);
-            Files.SerializeJSON(modelList, jsonFile, Logger);
+            Files.SerializeJSON(modelList, jsonFile, _logger);
 
-            Logger.LogInformation($"Writing JSON definitions for {user.Name} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
+            _logger.LogInformation($"Writing JSON definitions for {user.Name} amd model = {typeof(TEntity).Name}, file = {jsonFile}");
         }
 
         /// <summary>
@@ -221,7 +213,7 @@ namespace ModelRelief.Database
             ApplicationUser developmentUser = GetDevelopmentUser();
             if (developmentUser == null)
             {
-                Logger.LogError($"ExportJSON: The Development user was not found so the update was aborted.");
+                _logger.LogError($"ExportJSON: The Development user was not found so the update was aborted.");
                 return false;
             }
             ExportEntityJSON<Camera>(developmentUser, "Paths:ResourceFolders:Camera");
@@ -242,13 +234,13 @@ namespace ModelRelief.Database
             var developmentUser = GetDevelopmentUser();
 
             // Source: e.g. ModelRelief/store/development/users/auth05bedab58aa237e078600530b/depthbuffers
-            var rootSourceFolderPath = Path.GetFullPath($"{StoreUsersPath}{developmentUser.Id}/{ConfigurationProvider.GetSetting(folderType)}");
+            var rootSourceFolderPath = Path.GetFullPath($"{_storeUsersPath}{developmentUser.Id}/{_configurationProvider.GetSetting(folderType)}");
 
             // Destination: ModelRelief/Test/Data/Users/depthbuffers
-            var rootDestinationFolderPartialPath = $"{ConfigurationProvider.GetSetting(Paths.TestDataUser)}/{ConfigurationProvider.GetSetting(folderType)}";
-            var rootDestinationFolderPath = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
+            var rootDestinationFolderPartialPath = $"{_configurationProvider.GetSetting(Paths.TestDataUser)}/{_configurationProvider.GetSetting(folderType)}";
+            var rootDestinationFolderPath = Path.GetFullPath($"{_hostingEnvironment.ContentRootPath}{rootDestinationFolderPartialPath}");
 
-            var modelList = DbContext.Set<TEntity>()
+            var modelList = _dbContext.Set<TEntity>()
                                 .Where(m => (m.UserId == developmentUser.Id))
                                 .AsNoTracking();
 
@@ -294,7 +286,7 @@ namespace ModelRelief.Database
             // Test user provides the source of the data files.
             var developmentUser = GetDevelopmentUser();
 
-            var expandedMeshList = DbContext.Meshes
+            var expandedMeshList = _dbContext.Meshes
                                         .Where(m => (m.UserId == developmentUser.Id))
                                         .Include(m => m.DepthBuffer)
                                             .ThenInclude(d => d.Camera)
@@ -302,13 +294,13 @@ namespace ModelRelief.Database
                                         .Include(m => m.NormalMap)
                                         .AsNoTracking();
 
-            var destinationFolder = Path.GetFullPath($"{HostingEnvironment.ContentRootPath}/../Solver/Test");
+            var destinationFolder = Path.GetFullPath($"{_hostingEnvironment.ContentRootPath}/../Solver/Test");
             foreach (var mesh in expandedMeshList)
             {
                 var modelName = Path.GetFileNameWithoutExtension(mesh.Name);
                 var destinationFile = Path.GetFullPath($"{destinationFolder}/{modelName}.json");
-                Logger.LogInformation($"Creating {destinationFile}");
-                Files.SerializeJSON(mesh, destinationFile, Logger);
+                _logger.LogInformation($"Creating {destinationFile}");
+                Files.SerializeJSON(mesh, destinationFile, _logger);
             }
 
             return true;
