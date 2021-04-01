@@ -42,17 +42,6 @@ namespace ModelRelief.Database
         /// Initializes a new instance of the <see cref="DbInitializer"/> class.
         /// Constructor
         /// </summary>
-        /// <param name="scope">Service scope provider.</param>
-        /// <param name="exitAfterInitialization">Exit after initialization. Do not start web server.</param>
-        public DbInitializer(IServiceScope scope, bool exitAfterInitialization)
-        : this(scope.ServiceProvider, exitAfterInitialization)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DbInitializer"/> class.
-        /// Constructor
-        /// </summary>
         /// <param name="services">Service provider.</param>
         /// <param name="exitAfterInitialization">Exit after initialization. Do not start web server.</param>
         public DbInitializer(IServiceProvider services, bool exitAfterInitialization)
@@ -97,9 +86,6 @@ namespace ModelRelief.Database
             StoreUsersPath = StorageManager.GetAbsolutePath(storeUsersPartialPath);
 
             DbFactory = new DbFactory(HostingEnvironment, ConfigurationProvider, DbContext, loggerFactory, Mapper, StorageManager, accountSettings, ModelReferenceValidator);
-
-            // service provider for contexts without DI
-            ServicesRepository.StorageManager = StorageManager;
         }
 
         /// <summary>

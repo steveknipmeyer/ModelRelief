@@ -50,10 +50,12 @@ namespace ModelRelief.Infrastructure
             var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
             using (var scope = services.CreateScope())
             {
-                var initializer = new Initializer(scope);
+                var serviceProvider = scope.ServiceProvider;
+
+                var initializer = new Initializer(serviceProvider);
                 initializer.Initialize();
 
-                var dbInitializer = new DbInitializer(scope, ExitAfterInitialization);
+                var dbInitializer = new DbInitializer(serviceProvider, ExitAfterInitialization);
                 dbInitializer.Initialize();
             }
         }

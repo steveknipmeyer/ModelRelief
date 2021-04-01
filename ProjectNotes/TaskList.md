@@ -3,15 +3,18 @@
 ### General           
 
     Default Camera is Back not Front.
+        Set a default value to Position.
     
     The Compose link in the Projects View has the wrong Id for a newly-updated model.
         When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
+        N.B. A Model3d may have multiple Meshes.
 
     If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
-        Should there be a mechanism to update an <existing> Model3d file?
+        Should a database transaction be used to remove all related models?       
 
-    Profile the startup code.
-
+    Should there be a mechanism to update an <existing> Model3d file?
+        Model3d.Edit View
+        
     Licenses
         Verify all models are attributed.
 
@@ -19,23 +22,24 @@
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
+    A new user does not receive the Default settings
+
     Initialization
         Where should database initialization be done?
-        Where should StorageManager be assigned?
+        Where should (global) StorageManager be assigned?
         How can a DomainModel have access to DI services?
         DI
+            Initializer (?)
             DbInitializer
             DbFactory: I DbFactory
             ModelReferenceValidator: IModelReferenceValidator
             Query: IQuery
+            SettingsManager: ISettingsManager
+            StorageManager: IStorageManager
 
         DbInitializer
-            InitializeCamera logic needs to be refactored to handle multiple cameras with the same root name.
             Set control flags in initialization rather than reading the configuration in methods.
             Can DbFactory be a DI parameter?
-
-        AccountController
-            Change constructor to receive a DI DbFactory.
 
         DatabaseCollectionFixture
             Can DatabaseCollectionFixture be a DI constructor parameter?
@@ -82,6 +86,8 @@
                 Projects/Create is the baseline.
     
     Convert Mesh to OBJ default to support download of generated Mesh.
+
+    Profile the startup code.
 
     Final Height MeshTransform Setting
         Review the description of the control.

@@ -12,7 +12,7 @@ namespace ModelRelief.Database
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
 
-    public class Initializer
+    public class Initializer : IInitializer
     {
         private ISettingsManager SettingsManager { get; set; }
 

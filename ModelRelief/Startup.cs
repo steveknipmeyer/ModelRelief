@@ -192,6 +192,9 @@ namespace ModelRelief
 
             // validate AutoMapper configuration
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
+
+            // service provider for contexts without DI (e.g. FileDomainModel)
+            ServicesRepository.StorageManager = storageManager;
         }
     }
 }

@@ -187,6 +187,7 @@ namespace ModelRelief.Services
             services.AddTransient<IDispatcher, Dispatcher>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IModelReferenceValidator, ModelReferenceValidator>();
+            services.AddTransient<IInitializer, Initializer>();
             services.AddTransient<IDbFactory, DbFactory>();
         }
 

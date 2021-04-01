@@ -11,7 +11,7 @@ namespace ModelRelief.Test.Integration.Models
     using Xunit;
 
     /// <summary>
-    /// DepthBuffer integration Tests.
+    /// Model3d integration Tests.
     /// http://asp.net-hacker.rocks/2017/09/27/testing-aspnetcore.html
     /// </summary>
     public class ModelsFileIntegrationTests : FileIntegrationTests<Domain.Model3d, Dto.Model3d>
