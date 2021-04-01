@@ -42,8 +42,8 @@ namespace ModelRelief.Api.V1.Shared.Validation
         public IDependencyManager               DependencyManager { get; }
         public ISettingsManager                 SettingsManager { get; set; }
         public IEnumerable<IValidator<TRequest>> Validators { get; }
-        public Query Query { get; set; }
-        public ModelReferenceValidator ReferenceValidator { get; set; }
+        public IQuery Query { get; set; }
+        public IModelReferenceValidator ReferenceValidator { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatedHandler{TRequest, TResponse}"/> class.
@@ -54,8 +54,11 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <param name="mapper">IMapper</param>
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="dependencyManager">IDependencyManager.</param>
         /// <param name="validators">List of validators</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         public ValidatedHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -63,24 +66,26 @@ namespace ModelRelief.Api.V1.Shared.Validation
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
-            IEnumerable<IValidator<TRequest>> validators)
+            IEnumerable<IValidator<TRequest>> validators,
+            ISettingsManager settingsManager,
+            IQuery query,
+            IModelReferenceValidator modelReferenceValidator)
         {
-            DbContext =             dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
+            DbContext  =            dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             Logger =                (loggerFactory == null) ? throw new System.ArgumentNullException(nameof(loggerFactory)) : loggerFactory.CreateLogger(typeof(ValidatedHandler<TRequest, TResponse>).Name);
             Mapper =                mapper ?? throw new System.ArgumentNullException(nameof(mapper));
             HostingEnvironment =    hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));
             DependencyManager =     dependencyManager ?? throw new System.ArgumentNullException(nameof(dependencyManager));
+            SettingsManager =       settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
+            Query =                 query ?? throw new System.ArgumentNullException(nameof(query));
+            ReferenceValidator =    modelReferenceValidator ?? throw new System.ArgumentNullException(nameof(modelReferenceValidator));
 
-            // WIP Why are duplicate validators injected here?
+            // WIP Are duplicate validators injected here?
             //     Remove duplicates by grouping by Type name.
             Validators = validators?
                 .GroupBy(v => v.GetType().Name)
                 .Select(group => group.First());
-
-            SettingsManager = new SettingsManager(HostingEnvironment, ConfigurationProvider, Mapper, loggerFactory, DbContext);
-            Query = new Query(DbContext, loggerFactory, Mapper);
-            ReferenceValidator = new ModelReferenceValidator(DbContext, loggerFactory, Mapper, HostingEnvironment, ConfigurationProvider);
         }
 
         /// <summary>

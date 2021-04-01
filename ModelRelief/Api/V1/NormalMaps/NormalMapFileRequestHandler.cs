@@ -13,12 +13,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using FluentValidation;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents the concrete handler for a NormalMap FileRequest.
@@ -40,6 +42,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
         /// <param name="dispatcher">Dispatcher for long-runnning processes.</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         public NormalMapFileRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -49,8 +54,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<FileRequest<Domain.NormalMap>>> validators,
             IStorageManager storageManager,
-            IDispatcher dispatcher)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager)
+            IDispatcher dispatcher,
+            ISettingsManager settingsManager,
+            IQuery query,
+            IModelReferenceValidator modelReferenceValidator)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, storageManager, settingsManager, query, modelReferenceValidator)
         {
             Dispatcher = dispatcher ?? throw new System.ArgumentNullException(nameof(dispatcher));
         }

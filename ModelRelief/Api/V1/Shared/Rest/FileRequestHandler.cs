@@ -6,6 +6,7 @@
 
 namespace ModelRelief.Api.V1.Shared.Rest
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading;
@@ -18,8 +19,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents the concrete handler for a FileRequest.
@@ -42,6 +45,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="validators">List of validators</param>
         /// <param name="storageManager">Services for file system storage.</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         public FileRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -50,10 +56,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
             IEnumerable<IValidator<FileRequest<TEntity>>> validators,
-            IStorageManager storageManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators)
+            IStorageManager storageManager,
+            ISettingsManager settingsManager,
+            IQuery query,
+            IModelReferenceValidator modelReferenceValidator)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, settingsManager, query, modelReferenceValidator)
         {
-            StorageManager = storageManager;
+            StorageManager = storageManager ?? throw new ArgumentNullException(nameof(storageManager));
         }
 
         /// <summary>

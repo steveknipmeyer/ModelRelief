@@ -17,7 +17,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents the concrete handler for a GET single file request.
@@ -36,14 +38,20 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         public GetFileRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
-            IDependencyManager dependencyManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+            IDependencyManager dependencyManager,
+            ISettingsManager settingsManager,
+            IQuery query,
+            IModelReferenceValidator modelReferenceValidator)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null, settingsManager, query, modelReferenceValidator)
         {
         }
 

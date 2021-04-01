@@ -50,7 +50,16 @@ namespace ModelRelief.Database
         /// <param name="mapper">IMapper.</param>
         /// <param name="modelReferenceValidator">IModelReferenceValidator.</param>
         /// <param name="dbFactory">IDbFactory.</param>
-        public DbInitializer(IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider, ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IStorageManager storageManager, IOptions<AccountsSettings> accountSettings, IMapper mapper, IModelReferenceValidator modelReferenceValidator, IDbFactory dbFactory)
+        public DbInitializer(
+            IWebHostEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IStorageManager storageManager,
+            IOptions<AccountsSettings> accountSettings,
+            IMapper mapper,
+            IModelReferenceValidator modelReferenceValidator,
+            IDbFactory dbFactory)
         {
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(_hostingEnvironment));
 

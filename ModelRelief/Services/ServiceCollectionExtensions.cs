@@ -27,6 +27,7 @@ namespace ModelRelief.Services
     using ModelRelief.Services.Jobs;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Settings;
+    using ModelRelief.Utility;
     using Newtonsoft.Json;
     using OdeToCode.AddFeatureFolders;
 
@@ -190,6 +191,7 @@ namespace ModelRelief.Services
             services.AddTransient<IInitializer, Initializer>();
             services.AddTransient<IDbInitializer, DbInitializer>();
             services.AddTransient<IDbFactory, DbFactory>();
+            services.AddTransient<IQuery, Query>();
         }
 
         /// <summary>

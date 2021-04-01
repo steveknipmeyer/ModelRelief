@@ -16,6 +16,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Features.Settings;
     using ModelRelief.Services;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
@@ -40,6 +41,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="configurationProvider">IConfigurationProvider.</param>
         /// <param name="dependencyManager">Services for dependency processing.</param>
         /// <param name="storageManager">Services for file system storage.</param>
+        /// <param name="settingsManager">ISettingsManager</param>
+        /// <param name="query">IQuery</param>
+        /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         public DeleteRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -47,8 +51,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider configurationProvider,
             IDependencyManager dependencyManager,
-            IStorageManager storageManager)
-            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null)
+            IStorageManager storageManager,
+            ISettingsManager settingsManager,
+            IQuery query,
+            IModelReferenceValidator modelReferenceValidator)
+            : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, null, settingsManager, query, modelReferenceValidator)
         {
             StorageManager = storageManager;
         }

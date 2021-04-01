@@ -24,13 +24,13 @@
 
     Initialization
         DI
-            ModelReferenceValidator: IModelReferenceValidator
             Query: IQuery
             SettingsManager: ISettingsManager
 
             DbFactory: IDbFactory
             DbInitializer: IDbInitializer           
             Initializer: IInitializer
+            ModelReferenceValidator: IModelReferenceValidator
             StorageManager: IStorageManager
 
     Add a busy indicator.
