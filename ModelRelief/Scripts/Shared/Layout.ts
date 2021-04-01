@@ -57,7 +57,8 @@ export class Layout {
 
                     projectMenuLabel.innerText = projectName;
 
-                    const projectUrl = `/projects/details?name=${projectName}&relations=models`;
+                    // const projectUrl = `/projects/details?name=${projectName}&relations=models`;
+                    const projectUrl = "/meshes";
                     window.location.href = projectUrl;
                 });
             });

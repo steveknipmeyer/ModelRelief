@@ -4,9 +4,6 @@
 
 ### General           
     
-    The Compose link in the Projects View has the wrong Id for a newly-updated model.
-        When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
-        N.B. A Model3d may have multiple Meshes.
         Refactor AddModel3dRelated to extract AddMeshRelated to support multiple Meshes per Model3d.    
 
     If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
