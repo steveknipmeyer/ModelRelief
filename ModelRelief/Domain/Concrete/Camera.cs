@@ -106,6 +106,10 @@ namespace ModelRelief.Domain
             ScaleY = 1.0;
             ScaleZ = 1.0;
 
+            PositionX = 0.0;
+            PositionY = 0.0;
+            PositionZ = 100.0;
+
             UpX = 0.0;
             UpY = 1.0;
             UpZ = 0.0;

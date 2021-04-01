@@ -447,6 +447,60 @@
     "PlanarBackground": true,
     "TranslateMeshZPositive": true,
     "SilhouetteEnabled": true,
+    "SilhouetteEdgeWidth": 4,
+    "SilhouetteSigma": 5.0,
+    "ReliefScale": 0.03,
+    "P1Enabled": false,
+    "P1": 0.0,
+    "P2Enabled": false,
+    "P2": 0.0,
+    "P3Enabled": false,
+    "P3": 0.0,
+    "P4Enabled": false,
+    "P4": 0.0,
+    "P5Enabled": false,
+    "P5": 0.0,
+    "P6Enabled": false,
+    "P6": 0.0,
+    "P7Enabled": false,
+    "P7": 0.0,
+    "P8Enabled": false,
+    "P8": 0.0,
+    "ProjectId": 2,
+    "Project": {
+      "SettingsId": 1,
+      "Settings": null,
+      "Cameras": null,
+      "DepthBuffers": null,
+      "Meshes": null,
+      "MeshTransforms": [],
+      "Models": null,
+      "NormalMaps": null,
+      "Id": 2,
+      "Name": "National Gallery of Denmark (SMK)",
+      "Description": "Statue Scans [Royal Casts]"
+    },
+    "Meshes": null,
+    "Id": 9,
+    "Name": "apollo",
+    "Description": "Apollo Belvedere"
+  },
+  {
+    "Width": 100.0,
+    "Height": 100.0,
+    "Depth": 1.0,
+    "GradientThresholdEnabled": true,
+    "GradientThreshold": 5.0,
+    "AttenuationEnabled": true,
+    "AttenuationFactor": 10.0,
+    "AttenuationDecay": 0.6,
+    "UnsharpMaskingEnabled": true,
+    "UnsharpGaussianLow": 4.0,
+    "UnsharpGaussianHigh": 1.0,
+    "UnsharpHighFrequencyScale": 3.0,
+    "PlanarBackground": true,
+    "TranslateMeshZPositive": true,
+    "SilhouetteEnabled": true,
     "SilhouetteEdgeWidth": 5,
     "SilhouetteSigma": 4.0,
     "ReliefScale": 0.03,
@@ -481,7 +535,7 @@
       "Description": "Stanford model repository"
     },
     "Meshes": null,
-    "Id": 9,
+    "Id": 10,
     "Name": "bunny",
     "Description": "Bunny Transform"
   },
@@ -535,7 +589,7 @@
       "Description": "Stanford model repository"
     },
     "Meshes": null,
-    "Id": 10,
+    "Id": 11,
     "Name": "armadillo",
     "Description": "Armadillo Transform"
   },
@@ -589,7 +643,7 @@
       "Description": "Stanford model repository"
     },
     "Meshes": null,
-    "Id": 11,
+    "Id": 12,
     "Name": "buddha",
     "Description": "Buddha Transform"
   },
@@ -643,7 +697,7 @@
       "Description": "Stanford model repository"
     },
     "Meshes": null,
-    "Id": 12,
+    "Id": 13,
     "Name": "statue",
     "Description": "Statue Transform"
   },
@@ -697,7 +751,7 @@
       "Description": "Stanford model repository"
     },
     "Meshes": null,
-    "Id": 13,
+    "Id": 14,
     "Name": "tyrannosaurus",
     "Description": "Tyrannosaurus Transform"
   },
@@ -751,7 +805,7 @@
       "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Meshes": null,
-    "Id": 14,
+    "Id": 15,
     "Name": "dolphin",
     "Description": "Dolphin Transform"
   },
@@ -805,7 +859,7 @@
       "Description": "Jewelry watch faces, bracelets and pendants"
     },
     "Meshes": null,
-    "Id": 15,
+    "Id": 16,
     "Name": "roadster",
     "Description": "Roadster Transform"
   },
@@ -859,7 +913,7 @@
       "Description": "Development test models"
     },
     "Meshes": null,
-    "Id": 16,
+    "Id": 17,
     "Name": "lowresolution",
     "Description": "LowResolution Transform"
   },
@@ -913,7 +967,7 @@
       "Description": "Development test models"
     },
     "Meshes": null,
-    "Id": 17,
+    "Id": 18,
     "Name": "test",
     "Description": "Test Transform"
   }

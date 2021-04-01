@@ -11,6 +11,5 @@ namespace ModelRelief.Database
     public interface IInitializer
     {
         void Initialize();
-        Task InitializeDefaultSettingsAsync();
     }
 }

@@ -1,8 +1,8 @@
 #### Commit       
-
-### General           
     Default Camera is Back not Front.
         Set a default value to Position.
+
+### General           
     
     The Compose link in the Projects View has the wrong Id for a newly-updated model.
         When the database is built from SeedContent.json, the Model and Mesh Ids are the same.
@@ -14,9 +14,6 @@
 
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
-
-    Licenses
-        Verify all models are attributed.
 
     SMK
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark

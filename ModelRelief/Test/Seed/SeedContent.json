@@ -41,6 +41,10 @@
                 {
                     "Name": "venus",
                     "Description": "Venus de Milo (Aphrodite of Milos)"
+                },
+                {
+                    "Name": "apollo",
+                    "Description": "Apollo Belvedere"
                 }
             ]
         },
