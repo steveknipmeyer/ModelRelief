@@ -15,6 +15,7 @@ namespace ModelRelief.Features.Meshes
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle Mesh Ux requests.
@@ -30,8 +31,15 @@ namespace ModelRelief.Features.Meshes
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        public MeshesController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
+        /// <param name="query">IQuery</param>
+        public MeshesController(
+                ModelReliefDbContext dbContext,
+                ILoggerFactory loggerFactory,
+                IMapper mapper,
+                ISettingsManager settingsManager,
+                IMediator mediator,
+                IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
         }
 

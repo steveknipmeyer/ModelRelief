@@ -9,12 +9,11 @@ namespace ModelRelief.Features.NormalMaps
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
+    using ModelRelief.Utility;
 
     /// <summary>
     /// Represents a controller to handle NormalMap Ux requests.
@@ -30,8 +29,15 @@ namespace ModelRelief.Features.NormalMaps
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        public NormalMapsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
+        /// <param name="query">IQuery</param>
+        public NormalMapsController(
+                ModelReliefDbContext dbContext,
+                ILoggerFactory loggerFactory,
+                IMapper mapper,
+                ISettingsManager settingsManager,
+                IMediator mediator,
+                IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
         }
 

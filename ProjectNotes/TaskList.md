@@ -22,17 +22,6 @@
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
-    Initialization
-        DI
-            Query: IQuery
-            SettingsManager: ISettingsManager
-
-            DbFactory: IDbFactory
-            DbInitializer: IDbInitializer           
-            Initializer: IInitializer
-            ModelReferenceValidator: IModelReferenceValidator
-            StorageManager: IStorageManager
-
     Add a busy indicator.
         https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
         http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/

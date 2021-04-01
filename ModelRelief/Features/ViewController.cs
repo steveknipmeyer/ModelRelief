@@ -29,7 +29,7 @@ namespace ModelRelief.Features
         protected ViewControllerOptions ViewControllerOptions { get; }
         protected new ILogger Logger { get; }                     // base class Logger category is UxController
         protected ISettingsManager SettingsManager { get; set; }
-        protected Query Query { get; set; }
+        protected IQuery Query { get; set; }
         protected string UserId { get; set; }
 
         /// <summary>
@@ -41,9 +41,16 @@ namespace ModelRelief.Features
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
+        /// <param name="query">IQuery</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
-            : this(dbContext, loggerFactory, mapper, settingsManager, mediator, new ViewControllerOptions { UsePaging = true })
+        protected ViewController(
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            ISettingsManager settingsManager,
+            IMediator mediator,
+            IQuery query)
+            : this(dbContext, loggerFactory, mapper, settingsManager, mediator, query, new ViewControllerOptions { UsePaging = true })
         {
         }
 
@@ -56,15 +63,22 @@ namespace ModelRelief.Features
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
+        /// <param name="query">IQuery</param>
         /// <param name="viewControllerOptions">Options for paging, etc.</param>
-        protected ViewController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, ViewControllerOptions viewControllerOptions)
+        protected ViewController(
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            ISettingsManager settingsManager,
+            IMediator mediator,
+            IQuery query,
+            ViewControllerOptions viewControllerOptions)
             : base(dbContext, loggerFactory, mapper, mediator)
         {
             ViewControllerOptions = viewControllerOptions;
             Logger                = loggerFactory.CreateLogger(typeof(ViewController<TEntity, TGetModel, TRequestModel>).Name);
             SettingsManager       = settingsManager ?? throw new System.ArgumentNullException(nameof(settingsManager));
-
-            Query = new Query(DbContext, loggerFactory, Mapper);
+            Query                 = query ?? throw new System.ArgumentNullException(nameof(query));
         }
 
         #region Get

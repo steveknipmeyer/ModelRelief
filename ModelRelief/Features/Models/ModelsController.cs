@@ -36,8 +36,17 @@ namespace ModelRelief.Features.Models
         /// <param name="mediator">IMediator</param>
         /// <param name="configurationProvider">Configuration provider.</param>
         /// <param name="dbFactory">IDbFactory</param>
-        public ModelsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, Services.IConfigurationProvider configurationProvider, IDbFactory dbFactory)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, dbFactory)
+        /// <param name="query">IQuery</param>
+        public ModelsController(
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            ISettingsManager settingsManager,
+            IMediator mediator,
+            Services.IConfigurationProvider configurationProvider,
+            IDbFactory dbFactory,
+            IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, dbFactory, query)
         {
             ConfigurationProvider = configurationProvider;
         }

@@ -42,8 +42,17 @@ namespace ModelRelief.Features.Settings
         /// <param name="mediator">IMediator</param>
         /// <param name="hostingEnvironment">IWebHostEnvironment.</param>
         /// <param name="configurationProvider">IConfigurationProvider.</param>
-        public SettingsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, IWebHostEnvironment hostingEnvironment, Services.IConfigurationProvider configurationProvider)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
+        /// <param name="query">IQuery</param>
+        public SettingsController(
+            ModelReliefDbContext dbContext,
+            ILoggerFactory loggerFactory,
+            IMapper mapper,
+            ISettingsManager settingsManager,
+            IMediator mediator,
+            IWebHostEnvironment hostingEnvironment,
+            Services.IConfigurationProvider configurationProvider,
+            IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
             HostingEnvironment = hostingEnvironment ?? throw new System.ArgumentNullException(nameof(hostingEnvironment));
             ConfigurationProvider = configurationProvider ?? throw new System.ArgumentNullException(nameof(configurationProvider));

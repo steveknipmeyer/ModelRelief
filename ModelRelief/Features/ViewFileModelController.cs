@@ -18,6 +18,7 @@ namespace ModelRelief.Features
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Features.Settings;
+    using ModelRelief.Utility;
 
     public abstract class ViewFileModelController<TEntity, TGetModel, TRequestModel> : ViewController<TEntity, TGetModel, TRequestModel>
         where TEntity         : DomainModel
@@ -36,9 +37,17 @@ namespace ModelRelief.Features
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="dbFactory">IDbFactory</param>
+        /// <param name="query">IQuery</param>
         /// <remarks>Defaults to use paging.</remarks>
-        protected ViewFileModelController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator, IDbFactory dbFactory)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
+        protected ViewFileModelController(
+                ModelReliefDbContext dbContext,
+                ILoggerFactory loggerFactory,
+                IMapper mapper,
+                ISettingsManager settingsManager,
+                IMediator mediator,
+                IDbFactory dbFactory,
+                IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
             DbFactory = dbFactory ?? throw new System.ArgumentNullException(nameof(dbFactory));
         }

@@ -6,14 +6,8 @@
 
 namespace ModelRelief.Features.Projects
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
     using MediatR;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Database;
     using ModelRelief.Features.Settings;
@@ -33,8 +27,15 @@ namespace ModelRelief.Features.Projects
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        public ProjectsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMapper mapper, ISettingsManager settingsManager, IMediator mediator)
-            : base(dbContext, loggerFactory, mapper, settingsManager, mediator)
+        /// <param name="query">IQuery</param>
+        public ProjectsController(
+                ModelReliefDbContext dbContext,
+                ILoggerFactory loggerFactory,
+                IMapper mapper,
+                ISettingsManager settingsManager,
+                IMediator mediator,
+                IQuery query)
+            : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
         }
     }
