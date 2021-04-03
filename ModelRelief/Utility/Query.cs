@@ -232,6 +232,21 @@ namespace ModelRelief.Utility
         /// Returns the domain model for a given Id.
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
+        /// <param name="applicationUser">Current ApplicationUser.</param>
+        /// <param name="id">Target id to retrieve.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <param name="throwIfNotFound">Throw EntityNotFoundException if not found.</param>
+        /// <returns>Domain model if exists, null otherwise.</returns>
+        public virtual async Task<TEntity> FindDomainModelAsync<TEntity>(ApplicationUser applicationUser, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel
+        {
+            return await FindDomainModelAsync<TEntity>(applicationUser.Id, id, queryParameters, throwIfNotFound);
+        }
+
+        /// <summary>
+        /// Returns the domain model for a given Id.
+        /// </summary>
+        /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="claimsPrincipal">Current HttpContext User.</param>
         /// <param name="id">Target id to retrieve.</param>
         /// <param name="queryParameters">Query parameters.</param>

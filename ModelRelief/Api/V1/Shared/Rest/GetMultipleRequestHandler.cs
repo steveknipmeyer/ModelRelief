@@ -65,9 +65,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
         {
-            var user = await IdentityUtility.FindApplicationUserAsync(message.User);
+            var applicationUser = await message.ApplicationUserAsync();
             int? multipleModels = null;
-            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(user.Id, multipleModels, message.QueryParameters);
+            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(applicationUser.Id, multipleModels, message.QueryParameters);
 
             if (message.UsePaging)
             {

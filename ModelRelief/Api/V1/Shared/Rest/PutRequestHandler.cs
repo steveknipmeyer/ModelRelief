@@ -83,7 +83,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             targetModel.Id = message.Id;
 
             // set ownership
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(message.User);
+            var applicationUser = await message.ApplicationUserAsync();
             targetModel.UserId = applicationUser.Id;
 
             DbContext.Set<TEntity>().Update(targetModel);

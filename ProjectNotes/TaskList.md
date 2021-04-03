@@ -16,10 +16,6 @@
             The endpoint will be a Ux endpoint rather than an Api endpoint.
             Verify Rollback by testing model count.
 
-    Create a BaseRequest base class for all Requests.
-        User
-        ApplicationUser
-
     Review need for file extension on View Models3dCreate.
 
     ApiValidationException -> RequestValidationException?

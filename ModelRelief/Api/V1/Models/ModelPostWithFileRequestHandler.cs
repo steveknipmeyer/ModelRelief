@@ -19,6 +19,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
+    using ModelRelief.Domain;
     using ModelRelief.Features.Settings;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Utility;
@@ -63,16 +64,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Post process a PostWithFileRequest.
         /// </summary>
-        /// <param name="user">Active user</param>
+        /// <param name="applicationUser">Active user</param>
         /// <param name="newModel">New model to post-processs.</param>
-        protected override async Task<Dto.Model3d> PostProcessAsync(ClaimsPrincipal user, Dto.Model3d newModel)
+        protected override async Task<Dto.Model3d> PostProcessAsync(ApplicationUser applicationUser, Dto.Model3d newModel)
         {
-            var model3d = await Query.FindDomainModelAsync<Domain.Model3d>(user, newModel.Id);
+            var model3d = await Query.FindDomainModelAsync<Domain.Model3d>(applicationUser, newModel.Id);
 
             // contents validated upstream; assign format now
             model3d.Format = ModelPostFileRequestValidator.MapFormatFromExtension(newModel.Name);
-
-            var applicationUser = await IdentityUtility.FindApplicationUserAsync(user);
 
             model3d = DbFactory.AddModel3dRelated(applicationUser, model3d);
             if (model3d == null)

@@ -92,7 +92,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (newModel == null)
                 return null;
 
-            newModel = await PostProcessAsync(request.User, newModel);
+            newModel = await PostProcessAsync(await request.ApplicationUserAsync(), newModel);
             if (newModel == null)
                 return null;
 
@@ -104,7 +104,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// </summary>
         /// <param name="user">Active user</param>
         /// <param name="newModel">New model to post-processs.</param>
-        protected virtual async Task<TGetModel> PostProcessAsync(ClaimsPrincipal user, TGetModel newModel)
+        protected virtual async Task<TGetModel> PostProcessAsync(ApplicationUser user, TGetModel newModel)
         {
             await Task.CompletedTask;
             return newModel;

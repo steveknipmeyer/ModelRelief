@@ -20,16 +20,19 @@ namespace ModelRelief.Utility
             where TEntity : DomainModel;
         IQueryable<TEntity> BuildQueryable<TEntity>(string userId, int? id, GetQueryParameters queryParameters = null)
             where TEntity : DomainModel;
-        Task<TEntity> FindDomainModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
-            where TEntity : DomainModel;
-        Task<TEntity> FindDomainModelAsync<TEntity>(string userId, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
-            where TEntity : DomainModel;
         Task<TGetModel> FindDtoModelAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
             where TEntity : DomainModel
             where TGetModel : IModel;
         Task<ICollection<TGetModel>> FindDtoModelsAsync<TEntity, TGetModel>(ClaimsPrincipal claimsPrincipal, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
             where TEntity : DomainModel
             where TGetModel : IModel;
+        Task<TEntity> FindDomainModelAsync<TEntity>(ApplicationUser applicationUser, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel;
+        Task<TEntity> FindDomainModelAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel;
+        Task<TEntity> FindDomainModelAsync<TEntity>(string userId, int? id, GetQueryParameters queryParameters = null, bool throwIfNotFound = true)
+            where TEntity : DomainModel;
+
         Task<bool> ModelExistsAsync<TEntity>(ClaimsPrincipal claimsPrincipal, int id)
             where TEntity : DomainModel;
         ICollection<TGetModel> ProjectAll<TEntity, TGetModel>(IQueryable<TEntity> domainQueryable, GetQueryParameters queryParameters = null)

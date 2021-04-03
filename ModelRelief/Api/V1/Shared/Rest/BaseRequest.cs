@@ -27,7 +27,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Returns the ApplicationUser of the request.
         /// </summary>
         /// <returns>ApplicationUser</returns>
-        public async Task<ApplicationUser> ApplicationUser()
+        public async Task<ApplicationUser> ApplicationUserAsync()
         {
             return await IdentityUtility.FindApplicationUserAsync(User);
         }
