@@ -16,15 +16,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
-    public class GetSingleRequest<TEntity, TGetModel> : IRequest<TGetModel>
+    public class GetSingleRequest<TEntity, TGetModel> : BaseRequest, IRequest<TGetModel>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {
-        /// <summary>
-        /// Gets or sets the User posting the GetSingle request.
-        /// </summary>
-        public ClaimsPrincipal User { get; set; }
-
         /// <summary>
         /// Gets or sets the Id for the single model to be returned.
         /// </summary>

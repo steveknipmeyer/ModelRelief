@@ -36,7 +36,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <remarks>The returned object represents the status of the operation.</remarks>
-    public class FileRequest<TEntity> : IFileRequest, IRequest<bool>
+    public class FileRequest<TEntity> : BaseRequest, IFileRequest, IRequest<bool>
         where TEntity : DomainModel
     {
         /// <summary>

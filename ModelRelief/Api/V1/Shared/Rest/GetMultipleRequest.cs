@@ -17,15 +17,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
     /// <typeparam name="TGetModel">The DTO model in the collection.</typeparam>
     /// <remarks>Returned request object is a PagedResult which contains a collection of TGetModel.</remarks>
-    public class GetMultipleRequest<TEntity, TGetModel> : IRequest<object>
+    public class GetMultipleRequest<TEntity, TGetModel> : BaseRequest, IRequest<object>
         where TEntity   : DomainModel
         where TGetModel : IModel
     {
-        /// <summary>
-        /// Gets or sets the User posting the GetList request.
-        /// </summary>
-        public ClaimsPrincipal User { get; set; }
-
         /// <summary>
         /// Gets or sets the UrlHelper from the active controller; used for generating paging links.
         /// </summary>

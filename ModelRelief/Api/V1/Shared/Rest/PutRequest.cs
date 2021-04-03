@@ -19,15 +19,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TRequestModel">The DTO PUT model. Contains a model Id</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     /// <remarks>This request is used to update all the properties of an existing model.</remarks>
-    public class PutRequest<TEntity, TRequestModel, TGetModel> : IRequest<TGetModel>
+    public class PutRequest<TEntity, TRequestModel, TGetModel> : BaseRequest, IRequest<TGetModel>
         where TEntity    : DomainModel
         where TGetModel  : IModel
     {
-        /// <summary>
-        /// Gets or sets the User posting the Put request.
-        /// </summary>
-        public ClaimsPrincipal User { get; set; }
-
         /// <summary>
         /// Gets or sets the Id for the single model to be updated.
         /// </summary>

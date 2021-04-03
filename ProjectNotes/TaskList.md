@@ -2,14 +2,19 @@
 
 ### General     
     Remove Jewelry Project?
+
     Strengthen the 
         https://github.com/stefangordon/ObjParser
 
     An OBJ loader exception leaves the Composer in an indeterminate state.
         Add a status panel to Composer for messages.
 
-    
-        Verify Rollback by testing model count.
+    Integration Tests   
+        Can a database transaction wrap a Fact?
+            This would allow the Rollback step to be removed.
+        Add a Model3d.Create integration test that Posts an invalid file.
+            The endpoint will be a Ux endpoint rather than an Api endpoint.
+            Verify Rollback by testing model count.
 
     Create a BaseRequest base class for all Requests.
         User
@@ -18,11 +23,8 @@
     Review need for file extension on View Models3dCreate.
 
     ApiValidationException -> RequestValidationException?
-    Should UxController log exceptions?
 
-    PostWithFileRequestHandler
-        HandleRequestAsnyc
-        Should <ValidatedHandler>.OnHandle have a transaction block?
+    Should UxController log exceptions?
 
     What Create pages are valid semantically?
         Invalid

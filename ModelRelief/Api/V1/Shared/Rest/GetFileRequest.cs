@@ -15,14 +15,9 @@ namespace ModelRelief.Api.V1.Shared.Rest
     ///  Represents a GET request for a single file.
     /// </summary>
     /// <typeparam name="TEntity">The domain type of the model.</typeparam>
-    public class GetFileRequest<TEntity> : IRequest<FileContentResult>
+    public class GetFileRequest<TEntity> : BaseRequest, IRequest<FileContentResult>
         where TEntity   : DomainModel
     {
-        /// <summary>
-        /// Gets or sets the User posting the GetFile request.
-        /// </summary>
-        public ClaimsPrincipal User { get; set; }
-
         /// <summary>
         /// Gets or sets the Id for the single file to be returned.
         /// </summary>
