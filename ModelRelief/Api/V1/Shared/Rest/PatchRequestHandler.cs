@@ -67,28 +67,28 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Builds the UpdatedModel property containing the complete composition of old and new properties.
         /// </summary>
-        /// <param name="message">PATCH request.</param>
+        /// <param name="request">PATCH request.</param>
         /// <returns>TGetModel</returns>
-        public async Task<TGetModel> BuildUpdatedTGetModel(PatchRequest<TEntity, TGetModel> message)
+        public async Task<TGetModel> BuildUpdatedTGetModel(PatchRequest<TEntity, TGetModel> request)
         {
-            var domainModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
+            var domainModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id);
 
-            var updatedDomainModel = BuildUpdatedDomainModel(message, domainModel);
-            message.UpdatedModel = Mapper.Map<TEntity, TGetModel>(updatedDomainModel);
+            var updatedDomainModel = BuildUpdatedDomainModel(request, domainModel);
+            request.UpdatedModel = Mapper.Map<TEntity, TGetModel>(updatedDomainModel);
 
-            return message.UpdatedModel;
+            return request.UpdatedModel;
         }
 
         /// <summary>
         /// Converts a PATCH request to a domain model (for validation).
         /// </summary>
-        /// <param name="message">PATCH request.</param>
+        /// <param name="request">PATCH request.</param>
         /// <param name="model">Domain model.</param>
         /// <returns>Domain model</returns>
-        public TEntity BuildUpdatedDomainModel(PatchRequest<TEntity, TGetModel> message, TEntity model)
+        public TEntity BuildUpdatedDomainModel(PatchRequest<TEntity, TGetModel> request, TEntity model)
         {
             var properties = typeof(TEntity).GetProperties();
-            foreach (var patchProperty in message.Parameters)
+            foreach (var patchProperty in request.Parameters)
             {
                 var name  = patchProperty.Key;
                 var value = patchProperty.Value;
@@ -131,34 +131,34 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Pre-handler; performns any initialization or setup required before the request is handled.
         /// </summary>
-        /// <param name="message">Request object</param>
+        /// <param name="request">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        public override async Task PreHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task PreHandle(PatchRequest<TEntity, TGetModel> request, CancellationToken cancellationToken)
         {
             // construct to support validation
-            await BuildUpdatedTGetModel(message);
+            await BuildUpdatedTGetModel(request);
         }
 
         /// <summary>
         /// Handles a PATCH model request.
         /// </summary>
-        /// <param name="message">PATCH request.</param>
+        /// <param name="request">PATCH request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns>Patched TGetModel</returns>
-        public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PatchRequest<TEntity, TGetModel> request, CancellationToken cancellationToken)
         {
             // find target model
-            var targetModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
+            var targetModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id);
 
             // update from request
-            var updatedModel = BuildUpdatedDomainModel(message, targetModel);
+            var updatedModel = BuildUpdatedDomainModel(request, targetModel);
 
             // validate all references are owned
-            await ReferenceValidator.ValidateAsync<TEntity>(updatedModel, message.User);
+            await ReferenceValidator.ValidateAsync<TEntity>(updatedModel, request.User);
 
             await DependencyManager.PersistChangesAsync(updatedModel, cancellationToken);
 
-            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(message.User, message.Id);
+            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(request.User, request.Id);
             return projectedModel;
         }
     }

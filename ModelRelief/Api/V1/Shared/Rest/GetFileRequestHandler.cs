@@ -58,16 +58,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles the Get single file request.
         /// </summary>
-        /// <param name="message">Request message</param>
+        /// <param name="request">Request</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// https://stackoverflow.com/questions/42460198/return-file-in-asp-net-core-web-api
-        public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> message, CancellationToken cancellationToken)
+        public override async Task<FileContentResult> OnHandle(GetFileRequest<TEntity> request, CancellationToken cancellationToken)
         {
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var domainModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var domainModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
 
             var fileName = fileDomainModel.FileName;

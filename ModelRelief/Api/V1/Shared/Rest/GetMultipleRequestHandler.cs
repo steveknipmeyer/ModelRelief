@@ -61,21 +61,21 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles a GetListRequest, paging if needed.
         /// </summary>
-        /// <param name="message">GetListRequest.</param>
+        /// <param name="request">GetListRequest.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
-        public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<object> OnHandle(GetMultipleRequest<TEntity, TGetModel> request, CancellationToken cancellationToken)
         {
-            var applicationUser = await message.ApplicationUserAsync();
+            var applicationUser = await request.ApplicationUserAsync();
             int? multipleModels = null;
-            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(applicationUser.Id, multipleModels, message.QueryParameters);
+            IQueryable<TEntity> queryable = Query.BuildQueryable<TEntity>(applicationUser.Id, multipleModels, request.QueryParameters);
 
-            if (message.UsePaging)
+            if (request.UsePaging)
             {
-                var page = CreatePagedResultsAsync(queryable, message.UrlHelperContainer, message.PageNumber, message.NumberOfRecords, message.OrderBy, message.Ascending, message.QueryParameters);
+                var page = CreatePagedResultsAsync(queryable, request.UrlHelperContainer, request.PageNumber, request.NumberOfRecords, request.OrderBy, request.Ascending, request.QueryParameters);
                 return page;
             }
 
-            return Query.ProjectAll<TEntity, TGetModel>(queryable, message.QueryParameters);
+            return Query.ProjectAll<TEntity, TGetModel>(queryable, request.QueryParameters);
         }
 
         /// <summary>

@@ -66,30 +66,30 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles a PUT model request.
         /// </summary>
-        /// <param name="message">PUT request.</param>
+        /// <param name="request">PUT request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns>TGetModel for model0</returns>
-        public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PutRequest<TEntity, TRequestModel, TGetModel> request, CancellationToken cancellationToken)
         {
-            var targetModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
+            var targetModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id);
 
             // update domain model
-            targetModel = Mapper.Map<TRequestModel, TEntity>(message.UpdatedModel, targetModel);
+            targetModel = Mapper.Map<TRequestModel, TEntity>(request.UpdatedModel, targetModel);
 
             // validate all references are owned
-            await ReferenceValidator.ValidateAsync<TEntity>(targetModel, message.User);
+            await ReferenceValidator.ValidateAsync<TEntity>(targetModel, request.User);
 
             // ensure Id is set; PutModel may not have included the Id but it is always present in the PutRequest.
-            targetModel.Id = message.Id;
+            targetModel.Id = request.Id;
 
             // set ownership
-            var applicationUser = await message.ApplicationUserAsync();
+            var applicationUser = await request.ApplicationUserAsync();
             targetModel.UserId = applicationUser.Id;
 
             DbContext.Set<TEntity>().Update(targetModel);
             await DependencyManager.PersistChangesAsync(targetModel, cancellationToken);
 
-            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(message.User, message.Id);
+            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(request.User, request.Id);
             return projectedModel;
         }
     }

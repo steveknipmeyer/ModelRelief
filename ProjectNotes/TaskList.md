@@ -1,26 +1,28 @@
 #### Commit       
 
 ### General     
+    ApiValidationException -> RequestValidationException?
+
+    Should UxController log exceptions?
+
+    Integration Tests   
+        AutoRollback
+            This would allow the Rollback step to be removed.
+        Add a Model3d.Create integration test that Posts an invalid file.
+            The endpoint will be a Ux endpoint rather than an Api endpoint.
+            Verify Rollback by testing model count.
+            FormFile
+                https://stackoverflow.com/questions/51704805/how-to-instantiate-an-instance-of-formfile-in-c-sharp-without-moq
+
     Remove Jewelry Project?
+
+    Review need for file extension on View Models3dCreate.
 
     Strengthen the 
         https://github.com/stefangordon/ObjParser
 
     An OBJ loader exception leaves the Composer in an indeterminate state.
         Add a status panel to Composer for messages.
-
-    Integration Tests   
-        Can a database transaction wrap a Fact?
-            This would allow the Rollback step to be removed.
-        Add a Model3d.Create integration test that Posts an invalid file.
-            The endpoint will be a Ux endpoint rather than an Api endpoint.
-            Verify Rollback by testing model count.
-
-    Review need for file extension on View Models3dCreate.
-
-    ApiValidationException -> RequestValidationException?
-
-    Should UxController log exceptions?
 
     What Create pages are valid semantically?
         Invalid

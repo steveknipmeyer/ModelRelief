@@ -91,10 +91,10 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <summary>
         /// Abstract pre-handler; performns any initialization or setup required before the request is handled.
         /// </summary>
-        /// <param name="message">Request object</param>
+        /// <param name="request">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
         /// <returns>Task</returns>
-        public virtual async Task PreHandle(TRequest message, CancellationToken cancellationToken)
+        public virtual async Task PreHandle(TRequest request, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }
@@ -102,19 +102,19 @@ namespace ModelRelief.Api.V1.Shared.Validation
         /// <summary>
         /// Validation pre-processor for request.
         /// </summary>
-        /// <param name="message">Request object</param>
+        /// <param name="request">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        public async Task<TResponse> Handle(TRequest message, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
             // perform any setup required before validation
-            await PreHandle(message, cancellationToken);
+            await PreHandle(request, cancellationToken);
 
             // All request validators will run through here first before moving onto the OnHandle request.
             if (Validators != null)
             {
                 var validationResult = (await Task.WhenAll(Validators
                     .Where(v => v != null)
-                    .Select(v => v.ValidateAsync(message))))
+                    .Select(v => v.ValidateAsync(request))))
                     .SelectMany(v => v.Errors);
 
                 if (validationResult.Any())
@@ -123,14 +123,14 @@ namespace ModelRelief.Api.V1.Shared.Validation
                     throw new ApiValidationException(typeof(TRequest), validationResult);
                 }
             }
-            return await OnHandle(message, cancellationToken);
+            return await OnHandle(request, cancellationToken);
         }
 
         /// <summary>
         /// Abstract request handler; implemented in concrete class.
         /// </summary>
-        /// <param name="message">Request object</param>
+        /// <param name="request">Request object</param>
         /// <param name="cancellationToken">Token to allow asyn request to be cancelled.</param>
-        public abstract Task<TResponse> OnHandle(TRequest message, CancellationToken cancellationToken);
+        public abstract Task<TResponse> OnHandle(TRequest request, CancellationToken cancellationToken);
     }
 }

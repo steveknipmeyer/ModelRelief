@@ -60,12 +60,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles the Get single model request.
         /// </summary>
-        /// <param name="message">Request message</param>
+        /// <param name="request">Request</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>TGetModel for request</returns>
-        public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(GetSingleRequest<TEntity, TGetModel> request, CancellationToken cancellationToken)
         {
-            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(message.User, message.Id, message.QueryParameters);
+            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(request.User, request.Id, request.QueryParameters);
             return projectedModel;
         }
     }

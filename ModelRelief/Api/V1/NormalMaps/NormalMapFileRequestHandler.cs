@@ -80,11 +80,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles the FileRequest.
         /// </summary>
-        /// <param name="message">Request message</param>
+        /// <param name="request">Request</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
-        public override async Task<bool> OnHandle(FileRequest<Domain.NormalMap> message, CancellationToken cancellationToken)
+        public override async Task<bool> OnHandle(FileRequest<Domain.NormalMap> request, CancellationToken cancellationToken)
         {
-            return await base.OnHandle(message, cancellationToken);
+            return await base.OnHandle(request, cancellationToken);
         }
     }
 }

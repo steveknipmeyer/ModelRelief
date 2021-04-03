@@ -63,24 +63,24 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles a POST model request.
         /// </summary>
-        /// <param name="message">POST request.</param>
+        /// <param name="request">POST request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns>TGetModel for model</returns>
-        public override async Task<TGetModel> OnHandle(PostRequest<TEntity, TRequestModel, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PostRequest<TEntity, TRequestModel, TGetModel> request, CancellationToken cancellationToken)
         {
-            var newModel = Mapper.Map<TEntity>(message.NewModel);
+            var newModel = Mapper.Map<TEntity>(request.NewModel);
 
              // validate all references are owned
-            await ReferenceValidator.ValidateAsync<TEntity>(newModel, message.User);
+            await ReferenceValidator.ValidateAsync<TEntity>(newModel, request.User);
 
             // set ownership
-            var applicationUser = await message.ApplicationUserAsync();
+            var applicationUser = await request.ApplicationUserAsync();
             newModel.UserId = applicationUser.Id;
 
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
-            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(message.User, newModel.Id);
+            var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(request.User, newModel.Id);
             return projectedModel;
         }
     }

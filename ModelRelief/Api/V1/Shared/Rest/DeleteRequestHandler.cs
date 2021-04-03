@@ -110,12 +110,12 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles the DELETE model request.
         /// </summary>
-        /// <param name="message">Request message</param>
+        /// <param name="request">Request</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>Null object</returns>
-        public override async Task<object> OnHandle(DeleteRequest<TEntity> message, CancellationToken cancellationToken)
+        public override async Task<object> OnHandle(DeleteRequest<TEntity> request, CancellationToken cancellationToken)
         {
-            var modelToRemove = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id);
+            var modelToRemove = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id);
 
             // remove model file if present
             DeleteModelStorage(modelToRemove);

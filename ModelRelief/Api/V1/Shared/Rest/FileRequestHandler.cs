@@ -108,32 +108,32 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles the FileRequest.
         /// </summary>
-        /// <param name="message">Request message</param>
+        /// <param name="request">Request</param>
         /// <param name="cancellationToken">Token to allows operation to be cancelled</param>
         /// <returns>True if handled</returns>
-        public override async Task<bool> OnHandle(FileRequest<TEntity> message, CancellationToken cancellationToken)
+        public override async Task<bool> OnHandle(FileRequest<TEntity> request, CancellationToken cancellationToken)
         {
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var fileDomainModel = await Query.FindDomainModelAsync<TEntity>(message.TransactionEntity.UserId, message.TransactionEntity.PrimaryKey, throwIfNotFound: true) as FileDomainModel;
+            var fileDomainModel = await Query.FindDomainModelAsync<TEntity>(request.TransactionEntity.UserId, request.TransactionEntity.PrimaryKey, throwIfNotFound: true) as FileDomainModel;
 
-            switch (message.Operation)
+            switch (request.Operation)
             {
                 case FileOperation.Rename:
                     {
-                        return await ProcessRename(message, fileDomainModel);
+                        return await ProcessRename(request, fileDomainModel);
                     }
 
                 case FileOperation.Generate:
                     {
                         var generatedFileDomainModel = fileDomainModel as GeneratedFileDomainModel;
-                        return await ProcessGenerate(message, generatedFileDomainModel, cancellationToken);
+                        return await ProcessGenerate(request, generatedFileDomainModel, cancellationToken);
                     }
 
                 default:
-                    Logger.LogError($"FileRequestHandler: Invalid operation {message.Operation}, UserId = {message.TransactionEntity.UserId}, Model Id = {message.TransactionEntity.PrimaryKey}");
+                    Logger.LogError($"FileRequestHandler: Invalid operation {request.Operation}, UserId = {request.TransactionEntity.UserId}, Model Id = {request.TransactionEntity.PrimaryKey}");
                     return false;
             }
         }

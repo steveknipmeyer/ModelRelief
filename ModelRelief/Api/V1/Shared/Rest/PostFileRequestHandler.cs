@@ -71,24 +71,24 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Handles a POST file request.
         /// </summary>
-        /// <param name="message">POST file request.</param>
+        /// <param name="request">POST file request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns>TGetModel for file</returns>
-        public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> message, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PostFileRequest<TEntity, TGetModel> request, CancellationToken cancellationToken)
         {
             // not a file-backed model?
             if (!typeof(FileDomainModel).IsAssignableFrom(typeof(TEntity)))
                 throw new ModelNotBackedByFileException(typeof(TEntity));
 
-            var domainModel = await Query.FindDomainModelAsync<TEntity>(message.User, message.Id, throwIfNotFound: true);
+            var domainModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
 
             var fileName = Path.Combine(StorageManager.DefaultModelStorageFolder(domainModel), domainModel.Name);
 
-            await Files.WriteRawFileFromByteArray(fileName, message.NewFile.Raw);
+            await Files.WriteRawFileFromByteArray(fileName, request.NewFile.Raw);
 
             // if (domainModel.GetType() == typeof(Domain.DepthBuffer))
-            //    Images.WriteImageFileFromByteArray(fileName, message.NewFile.Raw);
+            //    Images.WriteImageFileFromByteArray(fileName, request.NewFile.Raw);
 
             // update file metadata; normalize path
             fileDomainModel.Path = StorageManager.GetRelativePath(Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/"));
