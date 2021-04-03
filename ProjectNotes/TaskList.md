@@ -12,9 +12,9 @@
             FormFile
                 https://stackoverflow.com/questions/51704805/how-to-instantiate-an-instance-of-formfile-in-c-sharp-without-moq
 
-    Remove Jewelry Project?
-
     Review need for file extension on View Models3dCreate.
+
+    Remove Jewelry Project?
 
     Strengthen the 
         https://github.com/stefangordon/ObjParser

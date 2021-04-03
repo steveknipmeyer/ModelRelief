@@ -78,6 +78,7 @@ namespace ModelRelief.Features
                     ex is EntityNotFoundException ||
                     ex is UserAuthenticationException)
                 {
+                    Logger.LogError($"[UxController, {request.GetType()}]: {ex.Message}");
                     DbContext.Database.RollbackTransaction();
                     throw;
                 }

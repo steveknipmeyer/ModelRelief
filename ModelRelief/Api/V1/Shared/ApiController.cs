@@ -141,6 +141,7 @@ namespace ModelRelief.Api.V1.Shared
             }
             catch (Exception ex)
             {
+                Logger.LogError($"[ApiController, {request.GetType()}]: {ex.Message}");
                 throw ex;
             }
         }
