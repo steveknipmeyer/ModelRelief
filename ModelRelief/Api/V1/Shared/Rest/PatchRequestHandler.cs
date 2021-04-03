@@ -103,7 +103,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 catch (Exception)
                 {
                     var validationFailure = new ValidationFailure(name, $"The property {name} is not a valid property for this resource.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
+                    throw new RequestValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
 
                 // now set property in target
@@ -119,7 +119,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 {
                     var conversionException = ex;
                     var validationFailure = new ValidationFailure(name, $"The property value {value} cannot be converted to a valid property value.");
-                    throw new ApiValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
+                    throw new RequestValidationException(typeof(PatchRequest<TEntity, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
 
                 property.SetValue(model, value: domainValue);

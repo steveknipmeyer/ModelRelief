@@ -212,7 +212,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
             if (throwIfError && (modelValidationFailures.Count() > 0))
             {
                 // package TRequest type with FV ValidationException
-                throw new ApiValidationException(typeof(ModelReferenceValidator), modelValidationFailures);
+                throw new RequestValidationException(typeof(ModelReferenceValidator), modelValidationFailures);
             }
             return modelValidationFailures;
         }

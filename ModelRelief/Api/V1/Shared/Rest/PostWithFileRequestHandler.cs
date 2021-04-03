@@ -144,7 +144,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 catch (Exception ex)
                 {
                     var validationFailure = new ValidationFailure(nameof(PostFileFromRequestAsync), $"An error occurred reading FormFile: {postRequest.FormFile.Name}: {ex.Message}");
-                    throw new ApiValidationException(typeof(PostWithFileRequest<TEntity, TRequestModel, TGetModel>), new List<ValidationFailure> { validationFailure });
+                    throw new RequestValidationException(typeof(PostWithFileRequest<TEntity, TRequestModel, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
             }
             var postFile = new PostFile

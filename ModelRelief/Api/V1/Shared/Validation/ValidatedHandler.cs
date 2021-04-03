@@ -120,7 +120,7 @@ namespace ModelRelief.Api.V1.Shared.Validation
                 if (validationResult.Any())
                 {
                     // package TRequest type with FV ValidationException
-                    throw new ApiValidationException(typeof(TRequest), validationResult);
+                    throw new RequestValidationException(typeof(TRequest), validationResult);
                 }
             }
             return await OnHandle(request, cancellationToken);

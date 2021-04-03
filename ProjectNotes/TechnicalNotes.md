@@ -618,7 +618,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     This is the error handling control flow:
         RestController:ApiController
             Mediator.Send
-                ApiValidationException
+                RequestValidationException
                 EntityNotFoundException
                 ModelFileNotFoundException              API only
                 ModelNotBackedByFileException           API only
@@ -630,7 +630,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         ViewController:UxController
             NullRequestException                        null request; Ux only
             Mediator.Send
-                ApiValidationException
+                RequestValidationException
                 EntityNotFoundException
                 UserAuthenticationException
                 Exception

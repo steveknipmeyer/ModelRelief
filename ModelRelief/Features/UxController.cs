@@ -62,7 +62,7 @@ namespace ModelRelief.Features
                     transaction.Commit();
                     return response;
                 }
-                catch (ApiValidationException ex)
+                catch (RequestValidationException ex)
                 {
                     foreach (var validationError in ex.ValidationException.Errors)
                     {

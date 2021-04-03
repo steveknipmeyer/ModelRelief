@@ -1,8 +1,6 @@
 #### Commit       
 
 ### General     
-    ApiValidationException -> RequestValidationException?
-
     Should UxController log exceptions?
 
     Integration Tests   

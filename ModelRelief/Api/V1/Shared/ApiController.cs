@@ -87,7 +87,7 @@ namespace ModelRelief.Api.V1.Shared
 
                 return Ok(response);
             }
-            catch (ApiValidationException ex)
+            catch (RequestValidationException ex)
             {
                 var typeArguments = ex.RequestType.GenericTypeArguments;
 
