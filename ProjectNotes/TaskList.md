@@ -1,11 +1,8 @@
 #### Commit       
 
 ### General     
-    Should UxController log exceptions?
-
     Integration Tests   
-        AutoRollback
-            This would allow the Rollback step to be removed.
+        Why does AutoRollback not perform a database rollback?
         Add a Model3d.Create integration test that Posts an invalid file.
             The endpoint will be a Ux endpoint rather than an Api endpoint.
             Verify Rollback by testing model count.
