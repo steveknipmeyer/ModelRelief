@@ -54,6 +54,26 @@ namespace ModelRelief.Test.Integration.Models
 
             await Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Tests whether an invalid file can be posted to the resource.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostFile")]
+        public virtual async Task PostFile_InvalidFileCannotBePosted()
+        {
+            // Arrange
+            var newModel = await PostNewModel();
+
+            // Act
+            await PostInvalidNewFile(newModel.Id, "invalidOBJ.obj");
+
+            // Assert
+            // performed in PostInvalidNewFile
+
+            // Rollback
+            await DeleteModel(newModel);
+        }
         #endregion
     }
 }

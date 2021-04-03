@@ -50,17 +50,41 @@ namespace ModelRelief.Test.TestModels
         /// <param name="fileName">Name of the file to POST.</param>
         public virtual async Task<IModel> PostNewFile(int modelId, string fileName)
         {
-            // Arrange
-            var byteArray = Utility.ByteArrayFromFile(fileName);
-
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+            var requestResponse = await Post(modelId, fileName);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
 
             var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
             return model;
+        }
+
+        /// <summary>
+        /// Posts an invalid new file.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the invalid file to POST.</param>
+        public virtual async Task PostInvalidNewFile(int modelId, string fileName)
+        {
+            // Act
+            var requestResponse = await Post(modelId, fileName);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Posts a file.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the file to POST.</param>
+        public virtual async Task<RequestResponse> Post(int modelId, string fileName)
+        {
+            var byteArray = Utility.ByteArrayFromFile(fileName);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, binaryContent: true);
+
+            return requestResponse;
         }
 
         /// <summary>

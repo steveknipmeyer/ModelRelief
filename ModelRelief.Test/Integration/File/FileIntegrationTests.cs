@@ -53,6 +53,16 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
+        /// Posts an invalid new file.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the invalid file to POST.</param>
+        public virtual async Task PostInvalidNewFile(int modelId, string fileName)
+        {
+            await TestFileModelFactory.PostInvalidNewFile(modelId, fileName);
+        }
+
+        /// <summary>
         /// Puts a file.
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
