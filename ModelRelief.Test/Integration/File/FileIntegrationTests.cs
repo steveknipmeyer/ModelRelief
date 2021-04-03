@@ -27,7 +27,7 @@ namespace ModelRelief.Test.Integration
     /// <typeparam name="TGetModel">DTO Get model.</typeparam>
     public abstract class FileIntegrationTests<TEntity, TGetModel> : IntegrationTests<TEntity, TGetModel>
         where TEntity   : FileDomainModel
-        where TGetModel : class, IModel, new()
+        where TGetModel : class, IFileModel, new()
     {
         public TestFileModelFactory<TEntity, TGetModel> TestFileModelFactory => TestModelFactory as TestFileModelFactory<TEntity, TGetModel>;
 
@@ -50,6 +50,15 @@ namespace ModelRelief.Test.Integration
         public virtual async Task<IModel> PostNewFile(int modelId,  string fileName)
         {
             return await TestFileModelFactory.PostNewFile(modelId, fileName);
+        }
+
+        /// <summary>
+        /// Posts a new model and file together to the Ux Create endpoint.
+        /// </summary>
+        /// <param name="fileName">Name of the file to POST.</param>
+        public virtual async Task<IModel> PostUxCreate(string fileName)
+        {
+            return await TestFileModelFactory.PostUxCreate(fileName);
         }
 
         /// <summary>

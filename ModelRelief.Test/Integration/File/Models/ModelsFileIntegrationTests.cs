@@ -74,6 +74,33 @@ namespace ModelRelief.Test.Integration.Models
             // Rollback
             await DeleteModel(newModel);
         }
+
+        /// <summary>
+        /// Tests whether a model and backing file can be posted to the Ux Create endpoint.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostFile")]
+        public virtual async Task PostFile_ModelandFileCanBePostedToUxCreate()
+        {
+#if false
+            // Arrange
+            var newModel = await PostUxCreate(TestFileModelFactory.BackingFile);
+
+            // Act
+
+            // Assert
+
+            // Rollback
+            await DeleteModel(newModel);
+            // Camera Model3d
+            // Camera Mesh
+            // Camera Meshtransform
+            // Mesh
+            // DepthBuffer
+            // NormalMap
+#endif
+        await Task.CompletedTask;
+        }
         #endregion
     }
 }

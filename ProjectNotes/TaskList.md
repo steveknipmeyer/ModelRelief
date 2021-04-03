@@ -1,13 +1,21 @@
 #### Commit       
 
 ### General     
+    Add API support for PostWithFileRequest?
+
+    Should Post requests also add related resources?
+    Should Delete requests also remove related resources?
+    
     Integration Tests   
-        Why does AutoRollback not perform a database rollback?
-        Add a Model3d.Create integration test that Posts an invalid file.
-            The endpoint will be a Ux endpoint rather than an Api endpoint.
+        PostFile_ModelandFileCanBePostedToUxCreate
+            SubmitHttpRequestAsync
+                Extend to support "multipart/form-data"
+                    https://softwareengineering.stackexchange.com/questions/350991/why-would-anyone-use-multipart-form-data-for-mixed-data-and-file-transfers
+                    content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
+                Will the Create.Post ValidateAntiForgeryToken attribute be an issue?          
             Verify Rollback by testing model count.
-            FormFile
-                https://stackoverflow.com/questions/51704805/how-to-instantiate-an-instance-of-formfile-in-c-sharp-without-moq
+
+        Why does AutoRollback not perform a database rollback?              
 
     Review need for file extension on View Models3dCreate.
 
@@ -31,7 +39,7 @@
             Mesh
             Model3d
             Project
-
+  
     SMK
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/

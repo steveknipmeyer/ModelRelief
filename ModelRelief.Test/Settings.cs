@@ -42,13 +42,27 @@ namespace ModelRelief.Test
         /// Returns the root of the test files folder.
         /// </summary>
         /// <returns>Test files folder.</returns>
-        public static string GetTestFilesPath()
+        public static string GetTestFilesFolder()
         {
             var contentRootPath = GetContentRootPath();
             var testFilesFolder = $"{contentRootPath}/{Settings.TestFilesFolder}";
 
             return testFilesFolder;
         }
+
+        /// <summary>
+        /// Returns the full path of a test file.
+        /// </summary>
+        /// <param name="fileName">File to locate.</param>
+        public static string GetTestFilePath(string fileName)
+        {
+            var fileNamePath = $"{Settings.GetTestFilesFolder()}/{fileName}";
+            if (!File.Exists(fileNamePath))
+                return null;
+
+            return fileNamePath;
+        }
+
         /// <summary>
         /// Constructs a test ConfigurationProvider.
         /// </summary>

@@ -20,8 +20,8 @@ namespace ModelRelief.Test
         /// <param name="fileName">File to read.</param>
         public static byte[] ByteArrayFromFile(string fileName)
         {
-            var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";
-            if (!File.Exists(fileNamePath))
+            var fileNamePath = Settings.GetTestFilePath(fileName);
+            if (fileNamePath == null)
                 return null;
 
             var byteArray = File.ReadAllBytes(fileNamePath);
@@ -35,8 +35,8 @@ namespace ModelRelief.Test
         /// <param name="fileName">File to read.</param>
         public static List<float> FloatListFromFile(string fileName)
         {
-            var fileNamePath = $"{Settings.GetTestFilesPath()}/{fileName}";
-            if (!File.Exists(fileNamePath))
+            var fileNamePath = Settings.GetTestFilePath(fileName);
+            if (fileNamePath == null)
                 return null;
 
             var floatList = new List<float>();

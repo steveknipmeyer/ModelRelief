@@ -23,20 +23,11 @@
     Orthogonal planes (e.g. House) do not generate constant Z depths.
     
     Close in Orthogonal views of House yield malformed meshes.
-
-#### Relief Size
-    Review Mesh, DepthBuffer and NormalMap properties:
-        Width
-        Height
-
-    DepthBuffer
-        Width, Height : Should this be a calculated property based on the image/ raw file format?
-    
+#### Relief Size   
     MeshTransform
         Height : Should this be a calculated property?
             Height = Width * (DepthBuffer aspect ratio)?
         Depth : What is the relationship of this property to LambdaLinearScaling?
-
 #### Composer
     How should the initial camera of the ModelViewer be defined in a ComposerView?
         Mesh.DepthBuffer.Camera is used.

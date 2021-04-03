@@ -3,7 +3,6 @@
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-
 namespace ModelRelief.Features
 {
     using System;
