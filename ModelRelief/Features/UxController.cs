@@ -47,38 +47,40 @@ namespace ModelRelief.Features
         /// </summary>
         /// <typeparam name="TReturn">Return type of request</typeparam>
         /// <param name="request">IRequest returning TReturn</param>
-        /// <returns>IActionResult (to be converted to application/json)</returns>
         protected async Task<object> HandleRequestAsync<TReturn>(IRequest<TReturn> request)
         {
             if (request == null)
                 throw new NullRequestException(this.Request.Path, request.GetType());
 
-            try
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                // dispatch to registered handler
-                var response = await Mediator.Send(request);
-                return response;
-            }
-            catch (ApiValidationException ex)
-            {
-                foreach (var validationError in ex.ValidationException.Errors)
+                try
                 {
-                    ModelState.AddModelError(validationError.PropertyName, validationError.ToString());
+                    // dispatch to registered handler
+                    var response = await Mediator.Send(request);
+
+                    transaction.Commit();
+                    return response;
                 }
-                // action method returns View(model) when result is null
-                return null;
-            }
-            catch (EntityNotFoundException)
-            {
-                throw;
-            }
-            catch (UserAuthenticationException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
+                catch (ApiValidationException ex)
+                {
+                    foreach (var validationError in ex.ValidationException.Errors)
+                    {
+                        ModelState.AddModelError(validationError.PropertyName, validationError.ToString());
+                    }
+
+                    // controller Action method returns View(model) when result is null
+                    DbContext.Database.RollbackTransaction();
+                    return null;
+                }
+                catch (Exception ex) when (
+                    ex is Exception ||
+                    ex is EntityNotFoundException ||
+                    ex is UserAuthenticationException)
+                {
+                    DbContext.Database.RollbackTransaction();
+                    throw;
+                }
             }
         }
     }

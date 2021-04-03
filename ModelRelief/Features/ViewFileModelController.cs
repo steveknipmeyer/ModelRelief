@@ -6,8 +6,6 @@
 
 namespace ModelRelief.Features
 {
-    using System.IO;
-    using System.Security.Claims;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
@@ -36,7 +34,6 @@ namespace ModelRelief.Features
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>
-        /// <param name="dbFactory">IDbFactory</param>
         /// <param name="query">IQuery</param>
         /// <remarks>Defaults to use paging.</remarks>
         protected ViewFileModelController(
@@ -45,11 +42,9 @@ namespace ModelRelief.Features
                 IMapper mapper,
                 ISettingsManager settingsManager,
                 IMediator mediator,
-                IDbFactory dbFactory,
                 IQuery query)
             : base(dbContext, loggerFactory, mapper, settingsManager, mediator, query)
         {
-            DbFactory = dbFactory ?? throw new System.ArgumentNullException(nameof(dbFactory));
         }
 
         #region Create
@@ -61,25 +56,13 @@ namespace ModelRelief.Features
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ValidateAntiForgeryToken]
-        public async override Task<IActionResult> Create(TRequestModel postRequest)
+        public override async Task<IActionResult> Create(TRequestModel postRequest)
         {
-            // model
-            TGetModel newModel = await CreateModel(postRequest);
-            if (newModel == null)
+            var newModel = await HandleRequestAsync(new PostWithFileRequest<TEntity, TRequestModel, TGetModel>
             {
-                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
-                return View(postRequest);
-            }
-
-            // file
-            newModel = await CreateFile(postRequest, newModel.Id);
-            if (newModel == null)
-            {
-                await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
-                return View(postRequest);
-            }
-
-            newModel = await PostProcessCreate(User, newModel);
+                User = User,
+                FileModel = postRequest,
+            });
             if (newModel == null)
             {
                 await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
@@ -88,74 +71,6 @@ namespace ModelRelief.Features
 
             return this.RedirectToAction(nameof(Index));
         }
-
-        /// <summary>
-        /// Post process a Create request.
-        /// </summary>
-        /// <param name="user">Active user</param>
-        /// <param name="newModel">Newly added model to post-process.</param>
-        protected virtual async Task<TGetModel> PostProcessCreate(ClaimsPrincipal user, TGetModel newModel)
-        {
-            await Task.CompletedTask;
-            return newModel;
-        }
-
-        /// <summary>
-        /// Helper method for creating the FileModel model.
-        /// </summary>
-        /// <param name="postRequest">Model to create.</param>
-        /// <returns>TModel if successful</returns>
-        private async Task<TGetModel> CreateModel(TRequestModel postRequest)
-        {
-            TGetModel newModel = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
-            {
-                User = User,
-                NewModel = postRequest,
-            }) as TGetModel;
-
-            return newModel;
-        }
-
-        /// <summary>
-        /// Creates a PostFile command from a file POST request
-        /// </summary>
-        /// <param name="postRequest">POST request.</param>
-        private async Task<PostFile> PostFileCommandFromRequestAsync(TRequestModel postRequest)
-        {
-            byte[] fileContent = null;
-            using (var memoryStream = new MemoryStream(2048))
-            {
-                await postRequest.FormFile.CopyToAsync(memoryStream);
-                fileContent = memoryStream.ToArray();
-            }
-            var postFile = new PostFile
-            {
-                Name = postRequest.Name,
-                Raw = fileContent,
-            };
-            return postFile;
-        }
-
-        /// <summary>
-        /// Helper method for creating the FileModel file.
-        /// </summary>
-        /// <param name="postRequest">File to create.</param>
-        /// <param name="id">Id of model.</param>
-        /// <returns>TModel if successful</returns>
-        private async Task<TGetModel> CreateFile(TRequestModel postRequest, int id)
-        {
-            ModelState.Clear();
-
-            PostFile postFile = await PostFileCommandFromRequestAsync(postRequest);
-            TGetModel newModel = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
-            {
-                User = User,
-                Id = id,
-                NewFile = postFile,
-            }) as TGetModel;
-
-            return newModel;
-        }
-        #endregion
+       #endregion
     }
 }

@@ -2,11 +2,29 @@
 
 ### General     
     Remove Jewelry Project?
+    Strengthen the 
+        https://github.com/stefangordon/ObjParser
 
-    Review FileModel creation.
-        New Handler?
-        If an uploaded Model3d fails the file validation, an orphan Model3d remains in the database.
-            Should a database transaction be used to remove all related models?       
+    An OBJ loader exception leaves the Composer in an indeterminate state.
+        Add a status panel to Composer for messages.
+
+    Add "invalid model" integration test for PostFile.
+        Verify Rollback by testing model count.
+
+    Create a BaseRequest base class for all Requests.
+        User
+        ApplicationUser
+
+    Review need for file extension on View Models3dCreate.
+
+    Introduce a new Exception (not ApiValidationException) for processing related models.
+
+    ApiValidationException -> RequestValidationException?
+    Should UxController log exceptions?
+
+    PostWithFileRequestHandler
+        HandleRequestAsnyc
+        Should <ValidatedHandler>.OnHandle have a transaction block?
 
     What Create pages are valid semantically?
         Invalid

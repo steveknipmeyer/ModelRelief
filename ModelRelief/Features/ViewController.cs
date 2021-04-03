@@ -163,7 +163,7 @@ namespace ModelRelief.Features
                 NewModel = postRequest,
             });
 
-            // validation failed; return to View
+            // request failed; return to View
             if (newModel == null)
                 {
                 await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
@@ -221,7 +221,7 @@ namespace ModelRelief.Features
                 UpdatedModel = postRequest,
             });
 
-            // validation failed; return to View
+            // request failed; return to View
             if (model == null)
                 {
                 await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));

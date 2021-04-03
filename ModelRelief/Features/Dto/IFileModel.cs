@@ -10,8 +10,7 @@ namespace ModelRelief.Dto
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// Common interface for all file-backed models (e.g. Model3d, Mesh, DepthBuffer).
-    /// This interface is used only for integration testing. File-backed domain models inherit from GeneratedFileDomainModel.
+    /// Common interface for all DTO file-backed models (e.g. Model3d, Mesh, DepthBuffer).
     /// </summary>
     public interface IFileModel : IModel
     {

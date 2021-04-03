@@ -29,7 +29,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <summary>
         /// Gets or sets the associated resource Id of the file.
         /// </summary>
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         /// <summary>
         ///  Gets or sets the incoming file to be used to create the new domain model.
