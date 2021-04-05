@@ -27,10 +27,13 @@ namespace ModelRelief.Api.V1.Models
         public ModelPostFileRequestValidator(ModelReliefDbContext dbContext)
             : base(dbContext)
         {
+#if false
             RuleFor(r => Path.GetExtension(r.NewFile.Name)).MinimumLength(3).WithMessage("The model filename must have an extension.");
             RuleFor(r => r).Must(r => ValidateFileExtension(r)).WithMessage("Only OBJ models are supported now.").WithName(nameof(ModelPostFileRequestValidator));
+#endif
             RuleFor(r => r).Must(r => ValidateModel3dContents(r)).WithMessage("The uploaded model file is not valid.").WithName(nameof(ModelPostFileRequestValidator));
         }
+
         public bool ValidateFileExtension(PostFileRequest<Domain.Model3d, Dto.Model3d> request)
         {
             Model3dFormat format = MapFormatFromExtension(request.NewFile.Name);
@@ -47,11 +50,9 @@ namespace ModelRelief.Api.V1.Models
             Model3dFormat format = MapFormatFromExtension(request.NewFile.Name);
             switch (format)
             {
+                default:
                 case Model3dFormat.OBJ:
                     return ValidateModel3dOBJ(request.NewFile.Raw);
-
-                default:
-                    return false;
             }
         }
 
@@ -85,12 +86,12 @@ namespace ModelRelief.Api.V1.Models
             var extension = Path.GetExtension(name);
             switch (extension.ToUpper())
             {
-                case ".OBJ":
-                    return Model3dFormat.OBJ;
                 case ".STL":
                     return Model3dFormat.STL;
+
                 default:
-                    return Model3dFormat.None;
+                case ".OBJ":
+                    return Model3dFormat.OBJ;
             }
         }
     }

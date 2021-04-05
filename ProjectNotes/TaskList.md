@@ -1,7 +1,18 @@
 #### Commit       
-
 ### General     
-    Add API support for PostWithFileRequest?
+    Today
+        Remove Jewelry Project?
+
+        Add a busy indicator.
+            https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
+            http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
+
+        An OBJ loader exception leaves the Composer in an indeterminate state.
+            Add a status panel to Composer for messages.
+
+        How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
+            getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
+            FileIsSynchronized?
 
     Should Post requests also add related resources?
     Should Delete requests also remove related resources?
@@ -13,21 +24,15 @@
                     https://softwareengineering.stackexchange.com/questions/350991/why-would-anyone-use-multipart-form-data-for-mixed-data-and-file-transfers
                     content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
                 Will the Create.Post ValidateAntiForgeryToken attribute be an issue?          
+                    https://code-maze.com/testing-anti-forgery-token-asp-net-core-mvc/
             Verify Rollback by testing model count.
 
         Why does AutoRollback not perform a database rollback?              
 
-    Review need for file extension on View Models3dCreate.
-
-    Remove Jewelry Project?
-
-    Strengthen the 
+    Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
 
-    An OBJ loader exception leaves the Composer in an indeterminate state.
-        Add a status panel to Composer for messages.
-
-    What Create pages are valid semantically?
+    What Create/Edit pages are valid semantically?
         Invalid
             Camera
             NormalMap
@@ -43,10 +48,6 @@
     SMK
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
-
-    Add a busy indicator.
-        https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
-        http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
 
     Review the semantics of Mesh and Model editing (Compose).
         ComposerController uses a Mesh endpoint.
@@ -65,11 +66,7 @@
         Why is the FormFile binding lost?
             The focus has to leave the input field.
 
-        Style the Create page.
-    
-        How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
-            getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
-            FileIsSynchronized?
+        Style the Create page.   
 
     Projects
         Project DropDowwn Control
@@ -83,6 +80,8 @@
     Convert Mesh to OBJ default to support download of generated Mesh.
 
     Profile the startup code.
+        Optimize SettingsManager.Initialize[UserSession|Settings]Async
+            Every property validation causes a database read.
 
     Final Height MeshTransform Setting
         Review the description of the control.
@@ -95,9 +94,6 @@
 
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
-
-    Optimize SettingsManager.Initialize[UserSession|Settings]Async
-        Every property validation causes a database read.
 
     Support query by wildcard and exact mode.
 
@@ -117,7 +113,7 @@
         Compose has multiple progressBar ids.
         
     Session    
-        Wrap Http.Context?
+        Wrap HttpContext.Session?
 
     [ApiCcontroller]
     ModelState
@@ -154,9 +150,6 @@
     Silhouette
         Blend profile into mesh form.
 #### Issues
-    How does lucy.sfp get corrupted?
-        -rw-r--r--  1 stephen stephen 1048576 Feb  4 14:22 lucy.sfp (1 additional byte)
-        -rw-r--r--  1 stephen stephen 1048577 Feb  5 15:19 lucy.sfp
 #### UI
     Create a video or an animation?
     Workflow page
@@ -203,7 +196,7 @@
         SystemSettings.json
             logging
             developmentgui
-        Features not published
+        Ux Features not published
             clipping planes
             perspective cameras
         API

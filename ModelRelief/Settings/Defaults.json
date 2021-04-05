@@ -59,7 +59,7 @@
     "Settings":
     {
         "LoggingEnabled": true,
-        "DevelopmentUI": true,
+        "DevelopmentUI": false,
 
         "ModelViewerExtendedControls": true,
         "MeshViewerExtendedControls": false,
