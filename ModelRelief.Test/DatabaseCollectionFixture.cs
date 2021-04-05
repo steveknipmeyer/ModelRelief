@@ -26,6 +26,7 @@ namespace ModelRelief.Test
         public DatabaseCollectionFixture()
         {
             ServerFramework = new ServerFramework();
+            ServerFramework.Initialize().Wait();
 
             // create a scope to get scoped services
             // https://stackoverflow.com/questions/59774559/how-do-i-get-a-instance-of-a-service-in-asp-net-core-3-1

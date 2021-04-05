@@ -44,7 +44,7 @@ class TestRunner:
             The database provider (SQLite | TBD)
         """
         self.logger.logInformation("\nBegin initialize database for {}".format(database), Colors.BrightYellow)
-        status = subprocess.call (["dotnet", "run", "--no-launch-profile", "-p", "ModelRelief", "--MRExitAfterInitialization=True", "--MRUpdateSeedData=False", "--MRInitializeDatabase=True", "--MRSeedDatabase=True" "--MRDatabaseProvider={}".format(database)])
+        status = subprocess.call (["dotnet", "run", "--no-launch-profile", "-p", "ModelRelief", "--MRExitAfterInitialization=True", "--MRUpdateSeedData=False", "--MRInitializeDatabase=True", "--MRSeedDatabase=True", "--MRDatabaseProvider={}".format(database)])
         self.logger.logInformation("End initialize database for {}".format(database), Colors.BrightYellow)
 
         return status == 0

@@ -1,6 +1,17 @@
 #### Commit       
 ### General     
     Today
+    Integration Tests   
+        PostFile_ModelandFileCanBePostedToUxCreate
+            SubmitHttpRequestAsync
+                Extend to support "multipart/form-data"
+                    https://stackoverflow.com/questions/1203811/how-to-submit-a-multipart-form-data-http-post-request-from-c-sharp
+                    https://softwareengineering.stackexchange.com/questions/350991/why-would-anyone-use-multipart-form-data-for-mixed-data-and-file-transfers
+                    content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
+                Will the Create.Post ValidateAntiForgeryToken attribute be an issue?          
+                    https://code-maze.com/testing-anti-forgery-token-asp-net-core-mvc/
+            Verify Rollback by testing model count.
+
         Remove Jewelry Project?
 
         Add a busy indicator.
@@ -18,15 +29,6 @@
     Should Delete requests also remove related resources?
     
     Integration Tests   
-        PostFile_ModelandFileCanBePostedToUxCreate
-            SubmitHttpRequestAsync
-                Extend to support "multipart/form-data"
-                    https://softwareengineering.stackexchange.com/questions/350991/why-would-anyone-use-multipart-form-data-for-mixed-data-and-file-transfers
-                    content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
-                Will the Create.Post ValidateAntiForgeryToken attribute be an issue?          
-                    https://code-maze.com/testing-anti-forgery-token-asp-net-core-mvc/
-            Verify Rollback by testing model count.
-
         Why does AutoRollback not perform a database rollback?              
 
     Strengthen the OBJ validation.

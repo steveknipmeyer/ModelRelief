@@ -168,7 +168,7 @@ namespace ModelRelief.Test.Integration
                         {
                             if (node.Baseline.File != null)
                             {
-                                var requestResponse = await node.Factory.ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{node.Factory.ApiUrl}/{node.Model.Id}/file", node.Baseline.File, binaryContent: true);
+                                var requestResponse = await node.Factory.ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{node.Factory.ApiUrl}/{node.Model.Id}/file", node.Baseline.File, HttpMimeType.OctetStream);
                             }
                         }
                         // restore database model

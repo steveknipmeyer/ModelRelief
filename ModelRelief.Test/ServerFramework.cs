@@ -78,39 +78,29 @@ namespace ModelRelief.Test
 
             Server = host.GetTestServer();
             Client = Server.CreateClient();
-
-            SetAuthorizationHeaderAsync().Wait();
         }
 
         /// <summary>
-        /// Requests an API JWT Bearer token from Auth0.
-        /// The token is set as the default Authorization for all client requests.
+        /// Perform server initialization.
         /// </summary>
-        /// <returns>True</returns>
-        private async Task<bool> SetAuthorizationHeaderAsync()
+        /// <returns>true if successful.</returns>
+        public async Task<bool> Initialize()
         {
-            var accounts = Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
-            var auth0 = Server.Services.GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
-            var configuration = ConfigurationProvider.Configuration;
-            var passwordGrantRequest = new
-            {
-                grant_type      = "password",
-                username        = accounts.Development.Name,
-                password        = accounts.Development.Password,
-                audience        = auth0.ApiAudience,
-                client_id       = auth0.ApiClientId,
-                client_secret   = auth0.ApiClientSecret,
-            };
-
-            var client = new HttpClient();
-            var endpoint = "https://modelrelief.auth0.com/oauth/token";
-            var requestResponse = await SubmitHttpRequestAsync(client, HttpRequestType.Post, endpoint, passwordGrantRequest);
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-
-            var passwordGrant = JsonConvert.DeserializeObject<PasswordGrant>(requestResponse.ContentString);
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", passwordGrant.Access_token);
-
+            await SetAuthorizationHeaderAsync();
             return true;
+        }
+
+        /// <summary>
+        /// Submits an object to a given endpoint using the HTTP method.
+        /// </summary>
+        /// <param name="requestType">HTTP request type.</param>
+        /// <param name="endPoint">Endpoint.</param>
+        /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
+        /// <param name="mimeType">HTTP Mime type.</param>
+        public async Task<RequestResponse> SubmitHttpRequestAsync(HttpRequestType requestType, string endPoint, object contentObject = null, string mimeType = HttpMimeType.Json)
+        {
+            // use TestServer HTTPClient
+            return await SubmitHttpRequestAsync(Client, requestType, endPoint, contentObject, mimeType);
         }
 
         /// <summary>
@@ -120,19 +110,24 @@ namespace ModelRelief.Test
         /// <param name="requestType">HTTP request type.</param>
         /// <param name="endPoint">Endpoint.</param>
         /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
-        /// <param name="binaryContent">File content for the requwst.</param>
-        public async Task<RequestResponse> SubmitHttpRequestAsync(HttpClient client, HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
+        /// <param name="mimeType">HTTP Mime type.</param>
+        private async Task<RequestResponse> SubmitHttpRequestAsync(HttpClient client, HttpRequestType requestType, string endPoint, object contentObject = null, string mimeType = HttpMimeType.Json)
         {
             HttpContent content = null;
-            if (!binaryContent)
+            switch (mimeType)
             {
-                var jsonContent = JsonConvert.SerializeObject(contentObject);
-                content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            }
-            else
-            {
-                content = new ByteArrayContent(contentObject as byte[]);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                case HttpMimeType.Json:
+                    var jsonContent = JsonConvert.SerializeObject(contentObject);
+                    content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                    break;
+
+                case HttpMimeType.OctetStream:
+                    content = new ByteArrayContent(contentObject as byte[]);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    break;
+
+                case HttpMimeType.MultiPartFormData:
+                    break;
             }
 
             HttpResponseMessage response = new HttpResponseMessage();
@@ -168,16 +163,34 @@ namespace ModelRelief.Test
         }
 
         /// <summary>
-        /// Submits an object to a given endpoint using the HTTP method.
+        /// Requests an API JWT Bearer token from Auth0.
+        /// The token is set as the default Authorization for all client requests.
         /// </summary>
-        /// <param name="requestType">HTTP request type.</param>
-        /// <param name="endPoint">Endpoint.</param>
-        /// <param name="contentObject">Object to serlize and send in the body of the request.</param>
-        /// <param name="binaryContent">File content for the requwst.</param>
-        public async Task<RequestResponse> SubmitHttpRequestAsync(HttpRequestType requestType, string endPoint, object contentObject = null, bool binaryContent = false)
+        /// <returns>True</returns>
+        private async Task<bool> SetAuthorizationHeaderAsync()
         {
-            // use TestServer HTTPClient
-            return await SubmitHttpRequestAsync(Client, requestType, endPoint, contentObject, binaryContent);
+            var accounts = Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
+            var auth0 = Server.Services.GetRequiredService<IOptions<Auth0Settings>>().Value as Auth0Settings;
+            var passwordGrantRequest = new
+            {
+                grant_type      = "password",
+                username        = accounts.Development.Name,
+                password        = accounts.Development.Password,
+                audience        = auth0.ApiAudience,
+                client_id       = auth0.ApiClientId,
+                client_secret   = auth0.ApiClientSecret,
+            };
+
+            // construct a regular HttpClient (not TestServer) as the endpoint is on the Auth0 server
+            var endpoint = "https://modelrelief.auth0.com/oauth/token";
+            var client = new HttpClient();
+            var requestResponse = await SubmitHttpRequestAsync(new HttpClient(), HttpRequestType.Post, endpoint, passwordGrantRequest);
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+
+            var passwordGrant = JsonConvert.DeserializeObject<PasswordGrant>(requestResponse.ContentString);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", passwordGrant.Access_token);
+
+            return true;
         }
-    }
+   }
 }
