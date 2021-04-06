@@ -1,9 +1,6 @@
 #### Commit       
 ### General     
     Today
-        Add transaction wrapper to ApiController.
-            PostForm_InValidFileReturnsBadRequest
-            
         Remove Jewelry Project?
 
         Add a busy indicator.

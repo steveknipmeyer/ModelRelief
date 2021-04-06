@@ -80,69 +80,81 @@ namespace ModelRelief.Api.V1.Shared
 
                 return apiValidationResult.ObjectResult();
             }
-            try
-            {
-                // dispatch to registered handler
-                var response = await Mediator.Send(request);
 
-                return Ok(response);
-            }
-            catch (RequestValidationException ex)
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                var typeArguments = ex.RequestType.GenericTypeArguments;
+                try
+                {
+                    // dispatch to registered handler
+                    var response = await Mediator.Send(request);
 
-                var apiValidationResult = new ApiErrorResult(
-                    this,
-                    HttpStatusCode.BadRequest,
-                    ApiValidationHelper.MapRequestToApiErrorCode(this.Request, ex.RequestType),
-                    $"One or more of the properties are invalid in the submitted request: {ex.RequestType}.");
+                    transaction.Commit();
+                    return Ok(response);
+                }
+                catch (Exception theException)
+                {
+                    DbContext.Database.RollbackTransaction();
+                    switch (theException)
+                    {
+                        case RequestValidationException ex:
+                        {
+                            var typeArguments = ex.RequestType.GenericTypeArguments;
 
-                return apiValidationResult.ObjectResult(ex.ValidationException.Errors);
-            }
-            catch (EntityNotFoundException ex)
-            {
-                var apiValidationResult = new ApiErrorResult(
-                    this,
-                    HttpStatusCode.NotFound,
-                    ApiErrorCode.NotFound,
-                    ex.Message);
+                            var apiValidationResult = new ApiErrorResult(
+                                this,
+                                HttpStatusCode.BadRequest,
+                                ApiValidationHelper.MapRequestToApiErrorCode(this.Request, ex.RequestType),
+                                $"One or more of the properties are invalid in the submitted request: {ex.RequestType}.");
 
-                return apiValidationResult.ObjectResult();
-            }
-            catch (ModelFileNotFoundException ex)
-            {
-                var apiValidationResult = new ApiErrorResult(
-                    this,
-                    HttpStatusCode.NotFound,
-                    ApiErrorCode.NotFound,
-                    ex.Message);
+                            return apiValidationResult.ObjectResult(ex.ValidationException.Errors);
+                        }
+                        case EntityNotFoundException ex:
+                        {
+                            var apiValidationResult = new ApiErrorResult(
+                                this,
+                                HttpStatusCode.NotFound,
+                                ApiErrorCode.NotFound,
+                                ex.Message);
 
-                return apiValidationResult.ObjectResult();
-            }
-            catch (ModelNotBackedByFileException ex)
-            {
-                var apiValidationResult = new ApiErrorResult(
-                    this,
-                    HttpStatusCode.NotFound,
-                    ApiErrorCode.NoBackingFile,
-                    ex.Message);
+                            return apiValidationResult.ObjectResult();
+                        }
+                        case ModelFileNotFoundException ex:
+                        {
+                            var apiValidationResult = new ApiErrorResult(
+                                this,
+                                HttpStatusCode.NotFound,
+                                ApiErrorCode.NotFound,
+                                ex.Message);
 
-                return apiValidationResult.ObjectResult();
-            }
-            catch (UserAuthenticationException ex)
-            {
-                var apiValidationResult = new ApiErrorResult(
-                    this,
-                    HttpStatusCode.Unauthorized,
-                    ApiErrorCode.Unauthorized,
-                    ex.Message);
+                            return apiValidationResult.ObjectResult();
+                        }
+                        case ModelNotBackedByFileException ex:
+                        {
+                            var apiValidationResult = new ApiErrorResult(
+                                this,
+                                HttpStatusCode.NotFound,
+                                ApiErrorCode.NoBackingFile,
+                                ex.Message);
 
-                return apiValidationResult.ObjectResult();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"[ApiController, {request.GetType()}]: {ex.Message}");
-                throw ex;
+                            return apiValidationResult.ObjectResult();
+                        }
+                        case UserAuthenticationException ex:
+                        {
+                            var apiValidationResult = new ApiErrorResult(
+                                this,
+                                HttpStatusCode.Unauthorized,
+                                ApiErrorCode.Unauthorized,
+                                ex.Message);
+
+                            return apiValidationResult.ObjectResult();
+                        }
+                        default:
+                        {
+                            Logger.LogError($"[ApiController, {request.GetType()}]: {theException.Message}");
+                            throw theException;
+                        }
+                    }
+                }
             }
         }
     }

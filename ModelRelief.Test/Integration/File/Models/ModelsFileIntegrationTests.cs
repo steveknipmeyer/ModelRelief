@@ -138,7 +138,6 @@ namespace ModelRelief.Test.Integration.Models
         [Trait("Category", "Api PostForm")]
         public virtual async Task PostForm_InValidFileReturnsBadRequest()
         {
-#if false
             // Arrange
             int originalModelCount = await TestModelFactory.QueryModelCountAsync();
             var validModel = TestModelFactory.ConstructValidModel() as IFileModel;
@@ -150,8 +149,6 @@ namespace ModelRelief.Test.Integration.Models
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             Assert.True(modelCount == originalModelCount);
-#endif
-            await Task.CompletedTask;
         }
 #endregion
     }
