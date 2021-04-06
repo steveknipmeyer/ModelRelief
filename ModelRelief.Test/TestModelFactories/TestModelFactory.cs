@@ -202,26 +202,6 @@ namespace ModelRelief.Test.TestModels
         /// <summary>
         /// Creates a new resource.
         /// </summary>
-        /// <param name="model">New model to POST.</param>
-        public virtual async Task<IModel> PostNewModel(IModel model)
-        {
-            // Arrange
-
-            // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, model);
-
-            // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
-            newModel.Name.Should().Be(model.Name);
-
-            return newModel;
-        }
-
-        /// <summary>
-        /// Creates a new resource.
-        /// </summary>
         public virtual async Task<IModel> PostNewModel()
         {
             return await PostNewModel(ConstructValidModel());
@@ -260,6 +240,26 @@ namespace ModelRelief.Test.TestModels
 
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
+        }
+
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="model">New model to POST.</param>
+        private async Task<IModel> PostNewModel(IModel model)
+        {
+            // Arrange
+
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, model);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            newModel.Name.Should().Be(model.Name);
+
+            return newModel;
         }
     }
 }

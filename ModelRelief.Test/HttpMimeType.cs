@@ -13,8 +13,6 @@ namespace ModelRelief.Test
     {
         public  const string Json = "application/json";
         public const string OctetStream = "application/octet-stream";
-
-        public const string FormBoundary = "----WebKitFormBoundaryNmAHwOtiyVAhKTjF";
-        public const string MultiPartFormData = "multipart/form-data; boundary=" + FormBoundary;
+        public const string MultiPartFormData = "multipart/form-data";
     }
 }

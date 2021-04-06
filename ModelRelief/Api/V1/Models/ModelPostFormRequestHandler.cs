@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="ModelPostWithFileRequestHandler.cs" company="ModelRelief">
+// <copyright file="ModelPostFormRequestHandler.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -27,10 +27,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <summary>
     /// Represents a handler for a POST request to create a new model and the backing file.
     /// </summary>
-    public class ModelPostWithFileRequestHandler : PostWithFileRequestHandler<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+    public class ModelPostFormRequestHandler : PostFormRequestHandler<Domain.Model3d, Dto.Model3d, Dto.Model3d>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelPostWithFileRequestHandler"/> class.
+        /// Initializes a new instance of the <see cref="ModelPostFormRequestHandler"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -45,14 +45,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="dbFactory">IDbFactory</param>
-        public ModelPostWithFileRequestHandler(
+        public ModelPostFormRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager,
-            IEnumerable<IValidator<PostWithFileRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>>> validators,
+            IEnumerable<IValidator<PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>>> validators,
             ISettingsManager settingsManager,
             IQuery query,
             IModelReferenceValidator modelReferenceValidator,
@@ -62,7 +62,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         {
         }
         /// <summary>
-        /// Post process a PostWithFileRequest.
+        /// Post process a PostFormRequest.
         /// </summary>
         /// <param name="applicationUser">Active user</param>
         /// <param name="newModel">New model to post-processs.</param>
@@ -77,7 +77,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (model3d == null)
             {
                 var validationFailure = new ValidationFailure(nameof(PostProcessAsync), $"An error happened while adding the related resources for {newModel.Name}.");
-                throw new RequestValidationException(typeof(PostWithFileRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>), new List<ValidationFailure> { validationFailure });
+                throw new RequestValidationException(typeof(PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>), new List<ValidationFailure> { validationFailure });
             }
 
             return Mapper.Map<Domain.Model3d, Dto.Model3d>(model3d);

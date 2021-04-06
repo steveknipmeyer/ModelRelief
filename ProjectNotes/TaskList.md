@@ -2,14 +2,7 @@
 ### General     
     Today
     Integration Tests   
-        PostFile_ModelandFileCanBePostedToUxCreate
-            SubmitHttpRequestAsync
-                Extend to support "multipart/form-data"
-                    https://stackoverflow.com/questions/1203811/how-to-submit-a-multipart-form-data-http-post-request-from-c-sharp
-                    https://softwareengineering.stackexchange.com/questions/350991/why-would-anyone-use-multipart-form-data-for-mixed-data-and-file-transfers
-                    content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
-                Will the Create.Post ValidateAntiForgeryToken attribute be an issue?          
-                    https://code-maze.com/testing-anti-forgery-token-asp-net-core-mvc/
+        PostFile_ModelandFileCanBePostedToPostForm                   
             Verify Rollback by testing model count.
 
         Remove Jewelry Project?
@@ -27,6 +20,8 @@
 
     Should Post requests also add related resources?
     Should Delete requests also remove related resources?
+        Model3d
+        Project
     
     Integration Tests   
         Why does AutoRollback not perform a database rollback?              
@@ -183,6 +178,7 @@
 ### Project
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
+    Add PostMan ModelRelief collection.
     Documentation
         Document DepthBufferView and analyze tools (e.g. HtmlLogger).
         Document VcXsrv

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="PostWithFileRequest.cs" company="ModelRelief">
+// <copyright file="PostFormRequest.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -18,7 +18,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TRequestModel">The DTO POST model.  Does not contain an Id because it is assigned.</typeparam>
     /// <typeparam name="TGetModel">The DTO GET model.</typeparam>
     /// <remarks>This request is used to create a new model and its backing file.</remarks>
-    public class PostWithFileRequest<TEntity, TRequestModel, TGetModel> : BaseRequest, IRequest<TGetModel>
+    public class PostFormRequest<TEntity, TRequestModel, TGetModel> : BaseRequest, IRequest<TGetModel>
         where TEntity    : DomainModel
         where TGetModel  : IFileModel
         where TRequestModel : IFileModel

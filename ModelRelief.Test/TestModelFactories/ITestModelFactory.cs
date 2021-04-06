@@ -21,7 +21,7 @@ namespace ModelRelief.Test.TestModels
 
         IModel ConstructValidModel();
         Task<IModel> PostNewModel();
-        Task<IModel> PostNewModel(IModel model);
+
         Task<IModel> PutModel(IModel model);
         Task DeleteModel(IModel existingModel);
     }

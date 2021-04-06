@@ -50,7 +50,7 @@ namespace ModelRelief
             builder.RegisterGeneric(typeof(DeleteRequestHandler<>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PostRequestHandler<,,>)).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(PostFileRequestHandler<,>)).AsImplementedInterfaces();
-            builder.RegisterGeneric(typeof(PostWithFileRequestHandler<,,>)).AsImplementedInterfaces();
+            builder.RegisterGeneric(typeof(PostFormRequestHandler<,,>)).AsImplementedInterfaces();
 
             builder.RegisterGeneric(typeof(FileRequestHandler<>)).AsImplementedInterfaces();
 

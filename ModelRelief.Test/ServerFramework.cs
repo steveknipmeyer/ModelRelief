@@ -22,6 +22,7 @@ namespace ModelRelief.Test
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using ModelRelief.Dto;
     using ModelRelief.Settings;
     using Newtonsoft.Json;
     using Xunit;
@@ -104,6 +105,27 @@ namespace ModelRelief.Test
         }
 
         /// <summary>
+        /// Constructs content for a multipart-formdata request.
+        /// </summary>
+        /// <param name="model">Model to POST.</param>
+        /// <param name="fileName">Full path filename for request.</param>
+        public MultipartFormDataContent CreateMultipartFormDataContent(IFileModel model, string fileName)
+        {
+            // https://codeburst.io/upload-download-files-using-httpclient-in-c-f29051dea40c
+
+            var form = new MultipartFormDataContent();
+
+            form.Add(new StringContent(model.Name), "Name");
+            form.Add(new StringContent(model.Description), "Description");
+
+            var fileContent = new ByteArrayContent(File.ReadAllBytes(fileName));
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            form.Add(fileContent, "FormFile", Path.GetFileName(fileName));
+
+            return form;
+        }
+
+        /// <summary>
         /// Submits an object to a given endpoint using the HTTP method.
         /// </summary>
         /// <param name="client">HTTP client to send request..</param>
@@ -127,6 +149,7 @@ namespace ModelRelief.Test
                     break;
 
                 case HttpMimeType.MultiPartFormData:
+                    content = contentObject as HttpContent;
                     break;
             }
 

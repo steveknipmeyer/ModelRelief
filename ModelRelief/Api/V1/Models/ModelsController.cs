@@ -6,10 +6,13 @@
 
 namespace ModelRelief.Api.V1.Models
 {
+    using System;
+    using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Shared;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
 
     /// <summary>
@@ -28,6 +31,24 @@ namespace ModelRelief.Api.V1.Models
         public ModelsController(ModelReliefDbContext dbContext, ILoggerFactory loggerFactory, IMediator mediator)
             : base(dbContext, loggerFactory, mediator)
         {
+        }
+
+        /// <summary>
+        /// Action method for a PostRequest to create a new model.
+        /// </summary>
+        /// <param name="postRequest">TRequestModel of model to create. Does not contain a model Id.</param>
+        /// <returns>TGetModel of the newly-created model.</returns>
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PostForm([FromForm] Dto.Model3d postRequest)
+        {
+            var newModel = await HandleRequestAsync(new PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+            {
+                User = User,
+                FileModel = postRequest,
+            });
+
+            return PostCreatedResult(newModel);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="PostWithFileRequestHandler.cs" company="ModelRelief">
+// <copyright file="PostFormRequestHandler.cs" company="ModelRelief">
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
     /// <typeparam name="TEntity">Domain model</typeparam>
     /// <typeparam name="TRequestModel">DTO Post model.</typeparam>
     /// <typeparam name="TGetModel">DTO GET model.</typeparam>
-    public class PostWithFileRequestHandler<TEntity, TRequestModel, TGetModel> : ValidatedHandler<PostWithFileRequest<TEntity, TRequestModel, TGetModel>, TGetModel>
+    public class PostFormRequestHandler<TEntity, TRequestModel, TGetModel> : ValidatedHandler<PostFormRequest<TEntity, TRequestModel, TGetModel>, TGetModel>
         where TEntity    : DomainModel
         where TGetModel  : class, IFileModel
         where TRequestModel  : class, IFileModel
@@ -42,7 +42,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         protected IDbFactory DbFactory { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostWithFileRequestHandler{TEntity, TRequestModel, TGetModel}"/> class.
+        /// Initializes a new instance of the <see cref="PostFormRequestHandler{TEntity, TRequestModel, TGetModel}"/> class.
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
@@ -57,14 +57,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
         /// <param name="mediator">IMediator</param>
         /// <param name="dbFactory">IDbFactory</param>
-        public PostWithFileRequestHandler(
+        public PostFormRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
             IMapper mapper,
             IWebHostEnvironment hostingEnvironment,
             Services.IConfigurationProvider  configurationProvider,
             IDependencyManager dependencyManager,
-            IEnumerable<IValidator<PostWithFileRequest<TEntity, TRequestModel, TGetModel>>> validators,
+            IEnumerable<IValidator<PostFormRequest<TEntity, TRequestModel, TGetModel>>> validators,
             ISettingsManager settingsManager,
             IQuery query,
             IModelReferenceValidator modelReferenceValidator,
@@ -82,7 +82,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="request">POST file request.</param>
         /// <param name="cancellationToken">Token to allow the async operation to be cancelled.</param>
         /// <returns>TGetModel for file</returns>
-        public override async Task<TGetModel> OnHandle(PostWithFileRequest<TEntity, TRequestModel, TGetModel> request, CancellationToken cancellationToken)
+        public override async Task<TGetModel> OnHandle(PostFormRequest<TEntity, TRequestModel, TGetModel> request, CancellationToken cancellationToken)
         {
             var newModel = await CreateModelAsync(request.User, request.FileModel);
             if (newModel == null)
@@ -100,7 +100,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         }
 
         /// <summary>
-        /// Post process a PostWithFileRequest.
+        /// Post process a PostFormRequest.
         /// </summary>
         /// <param name="user">Active user</param>
         /// <param name="newModel">New model to post-processs.</param>
@@ -144,7 +144,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 catch (Exception ex)
                 {
                     var validationFailure = new ValidationFailure(nameof(PostFileFromRequestAsync), $"An error occurred reading FormFile: {postRequest.FormFile.Name}: {ex.Message}");
-                    throw new RequestValidationException(typeof(PostWithFileRequest<TEntity, TRequestModel, TGetModel>), new List<ValidationFailure> { validationFailure });
+                    throw new RequestValidationException(typeof(PostFormRequest<TEntity, TRequestModel, TGetModel>), new List<ValidationFailure> { validationFailure });
                 }
             }
             var postFile = new PostFile

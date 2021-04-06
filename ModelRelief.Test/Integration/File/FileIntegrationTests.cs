@@ -53,12 +53,12 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Posts a new model and file together to the Ux Create endpoint.
+        /// Posts a new model and file together to the PostForm endpoint([multipart/form-data] PostForm).
         /// </summary>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<IModel> PostUxCreate(string fileName)
+        public virtual async Task<IModel> PostForm(string fileName)
         {
-            return await TestFileModelFactory.PostUxCreate(fileName);
+            return await TestFileModelFactory.PostForm(fileName);
         }
 
         /// <summary>

@@ -269,7 +269,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="result">IActionResult from processing.</param>
         /// <returns>Created(201) is successful; otherwise raw result (typically ApiError)</returns>
         /// <param name="postFile">File resource posted; not metadata</param>
-        private IActionResult PostCreatedResult(IActionResult result, bool postFile = false)
+        protected IActionResult PostCreatedResult(IActionResult result, bool postFile = false)
         {
             // return ApiError if not OK; all successful requests return OK
             if (!(result is OkObjectResult))

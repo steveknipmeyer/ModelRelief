@@ -79,13 +79,16 @@ namespace ModelRelief.Test.TestModels
         }
 
         /// <summary>
-        /// Posts a new model and file together to the Ux Create endpoint.
+        /// Posts a new model and file together to the PostForm endpoint ([multipart/form-data] PostForm).
         /// </summary>
         /// <param name="fileName">Name of the file to POST.</param>
-        public virtual async Task<IModel> PostUxCreate(string fileName)
+        public virtual async Task<IModel> PostForm(string fileName)
         {
+            // Arrange
+            var fileModel = ConstructValidModel() as IFileModel;
+
             // Act
-            var requestResponse = await PostCreate(fileName);
+            var requestResponse = await PostForm(fileModel, fileName);
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -128,37 +131,20 @@ namespace ModelRelief.Test.TestModels
         }
 
         /// <summary>
-        /// Posts a model and file together to the Create endpoint.
+        /// Posts a model and file together to the PostForm endpoint.
         /// </summary>
+        /// <param name="model">Model to POST.</param>
         /// <param name="fileName">Name of the file to POST.</param>
-        private async Task<RequestResponse> PostCreate(string fileName)
+        private async Task<RequestResponse> PostForm(IFileModel model, string fileName)
         {
             var fileNamePath = ModelRelief.Test.Settings.GetTestFilePath(fileName);
             if (fileNamePath == null)
                 return null;
 
-            using (var stream = File.OpenRead(fileNamePath))
-            {
-                // https://stackoverflow.com/questions/51704805/how-to-instantiate-an-instance-of-formfile-in-c-sharp-without-moq
-                var formFile = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = "application/octet-stream",
-                };
+            var content = ClassFixture.ServerFramework.CreateMultipartFormDataContent(model, fileNamePath);
 
-                var fileModel = ConstructValidModel() as IFileModel;
-                fileModel.FormFile = formFile;
-
-                var request = new PostWithFileRequest<TEntity, TGetModel, TGetModel>()
-                {
-                    User = null,
-                    FileModel = fileModel,
-                };
-
-                // WIP: content-type = "multipart/form-data; boundary=----WebKitFormBoundaryNmAHwOtiyVAhKTjF"
-                var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{UxUrl}/create", request);
-                return requestResponse;
-            }
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, content, HttpMimeType.MultiPartFormData);
+            return requestResponse;
         }
     }
 }

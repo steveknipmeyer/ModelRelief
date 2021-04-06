@@ -58,7 +58,7 @@ namespace ModelRelief.Features
         [ValidateAntiForgeryToken]
         public override async Task<IActionResult> Create(TRequestModel postRequest)
         {
-            var newModel = await HandleRequestAsync(new PostWithFileRequest<TEntity, TRequestModel, TGetModel>
+            var newModel = await HandleRequestAsync(new PostFormRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
                 FileModel = postRequest,

@@ -76,15 +76,15 @@ namespace ModelRelief.Test.Integration.Models
         }
 
         /// <summary>
-        /// Tests whether a model and backing file can be posted to the Ux Create endpoint.
+        /// Tests whether a valid model and file can be successfully posted in a Form.
         /// </summary>
         [Fact]
-        [Trait("Category", "Api PostFile")]
-        public virtual async Task PostFile_ModelandFileCanBePostedToUxCreate()
+        [Trait("Category", "Api PostForm")]
+        public virtual async Task PostForm_ValidModelandFileCanBePosted()
         {
 #if false
             // Arrange
-            var newModel = await PostUxCreate(TestFileModelFactory.BackingFile);
+            var newModel = await PostForm(TestFileModelFactory.BackingFile);
 
             // Act
 
@@ -99,7 +99,7 @@ namespace ModelRelief.Test.Integration.Models
             // DepthBuffer
             // NormalMap
 #endif
-        await Task.CompletedTask;
+            await Task.CompletedTask;
         }
         #endregion
     }
