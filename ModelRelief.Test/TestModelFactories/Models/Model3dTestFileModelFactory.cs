@@ -39,6 +39,7 @@ namespace ModelRelief.Test.TestModels.Models
             EnumPropertyName = "Format";
 
             BackingFile = "unitcube.obj";
+            InvalidBackingFile = "invalid.obj";
         }
 
         /// <summary>

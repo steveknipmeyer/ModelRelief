@@ -42,13 +42,13 @@ namespace ModelRelief.Api.V1.Models
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> PostForm([FromForm] Dto.Model3d postRequest)
         {
-            var newModel = await HandleRequestAsync(new PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
+            var result = await HandleRequestAsync(new PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
             {
                 User = User,
                 FileModel = postRequest,
             });
 
-            return PostCreatedResult(newModel);
+            return PostCreatedResult(result);
         }
     }
 }

@@ -53,6 +53,16 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
+        /// Posts an invalid new file.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the invalid file to POST.</param>
+        public virtual async Task PostInvalidNewFile(int modelId, string fileName)
+        {
+            await TestFileModelFactory.PostInvalidNewFile(modelId, fileName);
+        }
+
+        /// <summary>
         /// Posts a new model and file together to the PostForm endpoint([multipart/form-data] PostForm).
         /// </summary>
         /// <param name="fileName">Name of the file to POST.</param>
@@ -62,13 +72,13 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
-        /// Posts an invalid new file.
+        /// Posts a new model and file together to the PostForm endpoint([multipart/form-data] PostForm).
         /// </summary>
-        /// <param name="modelId">Id of the backing metadata model.</param>
-        /// <param name="fileName">Name of the invalid file to POST.</param>
-        public virtual async Task PostInvalidNewFile(int modelId, string fileName)
+        /// <param name="model">New model to POST.</param>
+        /// <param name="fileName">Name of the file to POST.</param>
+        public virtual async Task<RequestResponse> PostForm(IFileModel model, string fileName)
         {
-            await TestFileModelFactory.PostInvalidNewFile(modelId, fileName);
+            return await TestFileModelFactory.PostForm(model, fileName);
         }
 
         /// <summary>

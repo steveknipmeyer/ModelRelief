@@ -83,16 +83,13 @@ namespace ModelRelief.Test.Integration
         public async Task GetQuery_QueryReturnsCorrectCount()
         {
             // Arrange
+            var expectedCount = TestModelFactory.IdRange.Max() - TestModelFactory.IdRange.Min() + 1;
 
             // Act
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/?NumberofRecords=-1");
+            int modelCount = await TestModelFactory.QueryModelCountAsync();
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-
-            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
-            var expectedCount = TestModelFactory.IdRange.Max() - TestModelFactory.IdRange.Min() + 1;
-            pagedResults.Results.Count().Should().Be(expectedCount);
+            Assert.True(modelCount == expectedCount);
         }
 
         #endregion
@@ -135,7 +132,6 @@ namespace ModelRelief.Test.Integration
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>

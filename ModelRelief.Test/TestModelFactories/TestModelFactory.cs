@@ -129,6 +129,18 @@ namespace ModelRelief.Test.TestModels
             var model = pagedResults.Results.Single();
             return model;
         }
+        /// <summary>
+        /// Returns the current number of models.
+        /// </summary>
+        /// <returns>Number of models</returns>
+        public async Task<int> QueryModelCountAsync()
+        {
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?NumberofRecords=-1");
+
+            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
+
+            return pagedResults.Results.Count();
+        }
 
         /// <summary>
         /// Returns the reference property.

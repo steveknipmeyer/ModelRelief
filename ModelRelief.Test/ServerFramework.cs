@@ -115,8 +115,8 @@ namespace ModelRelief.Test
 
             var form = new MultipartFormDataContent();
 
-            form.Add(new StringContent(model.Name), "Name");
-            form.Add(new StringContent(model.Description), "Description");
+            form.Add(new StringContent(model.Name ?? string.Empty), "Name");
+            form.Add(new StringContent(model.Description ?? string.Empty), "Description");
 
             var fileContent = new ByteArrayContent(File.ReadAllBytes(fileName));
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");

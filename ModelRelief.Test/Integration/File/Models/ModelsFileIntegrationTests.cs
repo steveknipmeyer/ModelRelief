@@ -6,7 +6,10 @@
 
 namespace ModelRelief.Test.Integration.Models
 {
+    using System.Net;
     using System.Threading.Tasks;
+    using FluentAssertions;
+    using ModelRelief.Dto;
     using ModelRelief.Test.TestModels.Models;
     using Xunit;
 
@@ -66,7 +69,7 @@ namespace ModelRelief.Test.Integration.Models
             var newModel = await PostNewModel();
 
             // Act
-            await PostInvalidNewFile(newModel.Id, "invalidOBJ.obj");
+            await PostInvalidNewFile(newModel.Id, TestFileModelFactory.InvalidBackingFile);
 
             // Assert
             // performed in PostInvalidNewFile
@@ -74,7 +77,9 @@ namespace ModelRelief.Test.Integration.Models
             // Rollback
             await DeleteModel(newModel);
         }
+        #endregion
 
+        #region PostForm
         /// <summary>
         /// Tests whether a valid model and file can be successfully posted in a Form.
         /// </summary>
@@ -84,14 +89,19 @@ namespace ModelRelief.Test.Integration.Models
         {
 #if false
             // Arrange
-            var newModel = await PostForm(TestFileModelFactory.BackingFile);
+            var validModel = TestModelFactory.ConstructValidModel() as IFileModel;
 
             // Act
+            RequestResponse requestResponse = await PostForm(validModel, TestFileModelFactory.BackingFile);
 
             // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
 
             // Rollback
-            await DeleteModel(newModel);
+            await DeleteModel(validModel);
+
+            // WIP: Add support for deleting the related resources added when a new Model3d is created.
+
             // Camera Model3d
             // Camera Mesh
             // Camera Meshtransform
@@ -101,6 +111,48 @@ namespace ModelRelief.Test.Integration.Models
 #endif
             await Task.CompletedTask;
         }
-        #endregion
+
+        /// <summary>
+        /// Tests whether an invalid model cannot be posted to PostForm.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostForm")]
+        public virtual async Task PostForm_InValidModelReturnsBadRequest()
+        {
+            // Arrange
+            int originalModelCount = await TestModelFactory.QueryModelCountAsync();
+            var invalidModel = TestModelFactory.ConstructInvalidModel() as IFileModel;
+
+            // Act
+            RequestResponse requestResponse = await PostForm(invalidModel, TestFileModelFactory.BackingFile);
+            int modelCount = await TestModelFactory.QueryModelCountAsync();
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Tests whether an invalid file cannot be posted to PostForm.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostForm")]
+        public virtual async Task PostForm_InValidFileReturnsBadRequest()
+        {
+#if false
+            // Arrange
+            int originalModelCount = await TestModelFactory.QueryModelCountAsync();
+            var validModel = TestModelFactory.ConstructValidModel() as IFileModel;
+
+            // Act
+            RequestResponse requestResponse = await PostForm(validModel, TestFileModelFactory.InvalidBackingFile);
+            int modelCount = await TestModelFactory.QueryModelCountAsync();
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.True(modelCount == originalModelCount);
+#endif
+            await Task.CompletedTask;
+        }
+#endregion
     }
 }

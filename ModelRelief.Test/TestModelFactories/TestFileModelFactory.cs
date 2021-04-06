@@ -27,6 +27,7 @@ namespace ModelRelief.Test.TestModels
         where TGetModel : class, IFileModel, new()
     {
         public string BackingFile { get; set; }
+        public string InvalidBackingFile { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestFileModelFactory{TEntity, TGetModel}"/> class.
@@ -45,6 +46,7 @@ namespace ModelRelief.Test.TestModels
             base.Initialize();
 
             BackingFile = string.Empty;
+            InvalidBackingFile = string.Empty;
         }
 
         /// <summary>
@@ -98,6 +100,23 @@ namespace ModelRelief.Test.TestModels
         }
 
         /// <summary>
+        /// Posts a model and file together to the PostForm endpoint.
+        /// </summary>
+        /// <param name="model">Model to POST.</param>
+        /// <param name="fileName">Name of the file to POST.</param>
+        public async Task<RequestResponse> PostForm(IFileModel model, string fileName)
+        {
+            var fileNamePath = ModelRelief.Test.Settings.GetTestFilePath(fileName);
+            if (fileNamePath == null)
+                return null;
+
+            var content = ClassFixture.ServerFramework.CreateMultipartFormDataContent(model, fileNamePath);
+
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, content, HttpMimeType.MultiPartFormData);
+            return requestResponse;
+        }
+
+        /// <summary>
         /// Puts a file.
         /// </summary>
         /// <param name="modelId">Id of the backing metadata model.</param>
@@ -127,23 +146,6 @@ namespace ModelRelief.Test.TestModels
             var byteArray = Utility.ByteArrayFromFile(fileName);
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, HttpMimeType.OctetStream);
 
-            return requestResponse;
-        }
-
-        /// <summary>
-        /// Posts a model and file together to the PostForm endpoint.
-        /// </summary>
-        /// <param name="model">Model to POST.</param>
-        /// <param name="fileName">Name of the file to POST.</param>
-        private async Task<RequestResponse> PostForm(IFileModel model, string fileName)
-        {
-            var fileNamePath = ModelRelief.Test.Settings.GetTestFilePath(fileName);
-            if (fileNamePath == null)
-                return null;
-
-            var content = ClassFixture.ServerFramework.CreateMultipartFormDataContent(model, fileNamePath);
-
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, content, HttpMimeType.MultiPartFormData);
             return requestResponse;
         }
     }
