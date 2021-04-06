@@ -1,6 +1,9 @@
 #### Commit       
 ### General     
     Today
+        Why does the view shift the first time a new Mesh is generated?
+                  this.meshViewer.setCameraToStandardView(StandardView.Top);
+
         Remove Jewelry Project?
 
         Add a busy indicator.
@@ -10,17 +13,7 @@
         An OBJ loader exception leaves the Composer in an indeterminate state.
             Add a status panel to Composer for messages.
 
-        How will the Mesh/Model Camera be handled for a new model (before a Mesh has been generated)?
-            getBoundingClippingPlanes: nearPlane = -5.132047176361084 (BaseCamera.ts:131)
-            FileIsSynchronized?
 
-    Should Post requests also add related resources?
-    Should Delete requests also remove related resources?
-        Model3d
-        Project
-    
-    Integration Tests   
-        Why does AutoRollback not perform a database rollback?              
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
@@ -81,6 +74,14 @@
             This setting controls the height of the final relief. It is a percentage of the depth of the original model.
 
     Verify Resolution.Image setting.
+
+    Should Post requests also add related resources?
+    Should Delete requests also remove related resources?
+        Model3d
+        Project
+    
+    Integration Tests   
+        Why does AutoRollback not perform a database rollback?              
 
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe

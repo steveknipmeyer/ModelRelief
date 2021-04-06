@@ -179,11 +179,13 @@ export class ComposerView {
     private initializeMeshModel(): Promise<Mesh> {
         /*
             Mesh
-                DepthBuffer
+                Camera.sfp
+                DepthBuffer || NormalMap
                     Model3d
-                        Camera (= DepthBuffer.Camera)
-                    Camera
+                    Camera.MeshTransform
                 MeshTransform
+            Model3d
+                Camera.obj
         */
         return Mesh.fromDtoModelAsync(composerMeshModel);
     }

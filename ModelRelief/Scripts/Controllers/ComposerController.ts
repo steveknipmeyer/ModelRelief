@@ -13,6 +13,7 @@ import {DtoNormalMap} from "Scripts/Api/V1/Models/DtoNormalMap";
 import {Loader} from "Scripts/ModelLoaders/Loader";
 import {BaseCamera} from "Scripts/Models/Camera/BaseCamera";
 import {CameraFactory} from "Scripts/Models/Camera/CameraFactory";
+import {CameraHelper} from "Scripts/Models/Camera/CameraHelper";
 import {Defaults} from "Scripts/Models/Settings/Defaults";
 import {DepthBuffer} from "Scripts/Models/DepthBuffer/DepthBuffer";
 import {DepthBufferFactory} from "Scripts/Models/DepthBuffer/DepthBufferFactory";
@@ -29,6 +30,7 @@ import {MeshViewer} from "Scripts/Viewers/MeshViewer";
 import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
 import {ComposerView} from "Scripts/Views/ComposerView";
+import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
 
 /**
  * @description ComposerViewSettings
@@ -225,6 +227,7 @@ export class ComposerController {
         const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
 
         this.meshViewer.setModelGroup(meshGraphics);
+        this.meshViewer.setCameraToStandardView(StandardView.Top);
 
         this.meshViewer.enableProgressBar(false);
         this._logger.addMessage("Mesh generated");
@@ -424,6 +427,14 @@ export class ComposerController {
      * @private
      */
     private initializeModelViewerCamera() {
+
+        // unsynchronized (new mesh)? : set mesh relief camera to Top
+        if (!this._composerView.meshView.meshViewer.mesh.fileIsSynchronized)
+        {
+            const modelModelGroup = this.modelViewer.modelGroup;
+            const modelViewerAspectRatio = this.modelViewer.aspectRatio;
+            this.activeMeshReliefCamera.viewCamera = CameraHelper.getStandardViewCamera(StandardView.Top, this.activeMeshReliefCamera.viewCamera, modelViewerAspectRatio, modelModelGroup);
+        }
 
         // model camera = relief camera (default clipping planes)
         const modelViewCamera = this.activeMeshReliefCamera.viewCamera.clone();

@@ -806,13 +806,14 @@ namespace ModelRelief.Database
         /// </summary>
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Models to update.</param>
-        private void SetFileProperties<TEntity>(TEntity model)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        private void SetFileProperties<TEntity>(TEntity model, bool fileIsSynchronized = false)
             where TEntity : FileDomainModel
         {
             model.FileTimeStamp = DateTime.Now;
             model.Path = _storageManager.GetRelativePath(_storageManager.DefaultModelStorageFolder(model));
 
-            if (model is GeneratedFileDomainModel generatedModel)
+            if (fileIsSynchronized && model is GeneratedFileDomainModel generatedModel)
                 generatedModel.FileIsSynchronized = true;
 
             _dbContext.SaveChanges();

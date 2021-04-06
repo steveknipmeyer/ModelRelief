@@ -428,7 +428,7 @@ export class Viewer {
     /**
      * @description Removes all scene objects
      */
-    public clearAllAssests(): void {
+    public clearAllAssets(): void {
 
         Graphics.removeObjectChildren(this._root, false);
     }
