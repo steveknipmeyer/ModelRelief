@@ -246,12 +246,13 @@ namespace ModelRelief.Database
         /// </summary>
         /// <param name="user">Application user.</param>
         /// <param name="model">Model3d to add supporting related models.</param>
-        public Model3d AddModel3dRelated(ApplicationUser user, Model3d model)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        public Model3d AddModel3dRelated(ApplicationUser user, Model3d model, bool fileIsSynchronized)
         {
             model.CameraId = AddEntity<Camera>(user, model.ProjectId, model.Name, model.Description);
 
             var rootModelName = Path.GetFileNameWithoutExtension(model.Name);
-            AddMeshRelated(user, model.ProjectId, model.Id, rootModelName, model.Description);
+            AddMeshRelated(user, model.ProjectId, model.Id, rootModelName, model.Description, fileIsSynchronized);
 
             return model;
         }
@@ -264,12 +265,13 @@ namespace ModelRelief.Database
         /// <param name="modelId">Parent Model3d for the Mesh.</param>
         /// <param name="rootName">Base name for Mesh and supporting models.</param>
         /// <param name="description">Description for Mesh and supporting models.</param>
-        public Mesh AddMeshRelated(ApplicationUser user, int? projectId, int? modelId, string rootName, string description)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        public Mesh AddMeshRelated(ApplicationUser user, int? projectId, int? modelId, string rootName, string description, bool fileIsSynchronized)
         {
             // add related Mesh models
-            var depthBuffer = AddDepthBuffer(user, projectId, modelId, rootName, description);
-            var normalMap = AddNormalMap(user, projectId, depthBuffer.CameraId, modelId, rootName, description);
-            var mesh = AddMesh(user, projectId, depthBuffer.Id, normalMap.Id, rootName, description);
+            var depthBuffer = AddDepthBuffer(user, projectId, modelId, rootName, description, fileIsSynchronized);
+            var normalMap = AddNormalMap(user, projectId, depthBuffer.CameraId, modelId, rootName, description, fileIsSynchronized);
+            var mesh = AddMesh(user, projectId, depthBuffer.Id, normalMap.Id, rootName, description, fileIsSynchronized);
 
             return mesh;
         }
@@ -571,14 +573,23 @@ namespace ModelRelief.Database
         {
             seedProject.Models.ForEach(seedModel =>
                 {
-                    AddModel3d(user, projectId, seedModel.Name, seedModel.Description);
+                    AddModel3d(user, projectId, seedModel.Name, seedModel.Description, fileIsSynchronized: true);
                 });
 
             InitializeCameras(user);
             InitializeMeshTransforms(user);
         }
 
-        private Model3d AddModel3d(ApplicationUser user, int projectId, string modelName, string modelDescription)
+        /// <summary>
+        /// Add a Model3d and the related models.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="projectId">Project Id for new DepthBuffer.</param>
+        /// <param name="modelName">Name of related Model3d.</param>
+        /// <param name="modelDescription">Description of related Model3d.</param>
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        /// <returns></returns>
+        private Model3d AddModel3d(ApplicationUser user, int projectId, string modelName, string modelDescription, bool fileIsSynchronized)
         {
             // Model3d Relationships
             // ------------------------
@@ -608,9 +619,9 @@ namespace ModelRelief.Database
 
             _dbContext.Add(model);
             _dbContext.SaveChanges();
-            SetFileProperties<Model3d>(model);
+            SetFileProperties<Model3d>(model, fileIsSynchronized);
 
-            AddModel3dRelated(user, model);
+            AddModel3dRelated(user, model, fileIsSynchronized: true);
 
             return model;
         }
@@ -623,7 +634,8 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private DepthBuffer AddDepthBuffer(ApplicationUser user, int? projectId, int? modelId, string modelName, string modelDescription)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        private DepthBuffer AddDepthBuffer(ApplicationUser user, int? projectId, int? modelId, string modelName, string modelDescription, bool fileIsSynchronized)
         {
             var depthBufferName = $"{modelName}.sdb";
             var depthBuffer = new DepthBuffer
@@ -639,7 +651,7 @@ namespace ModelRelief.Database
             };
             _dbContext.Add(depthBuffer);
             _dbContext.SaveChanges();
-            SetFileProperties<DepthBuffer>(depthBuffer);
+            SetFileProperties<DepthBuffer>(depthBuffer, fileIsSynchronized);
 
             var path = $"{_hostingEnvironment.ContentRootPath}/{depthBuffer.Path}{depthBuffer.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, depthBuffer.CreateDefaultContent(depthBuffer.Width, depthBuffer.Height)).Wait();
@@ -656,7 +668,8 @@ namespace ModelRelief.Database
         /// <param name="modelId">Id of related Model3d.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private NormalMap AddNormalMap(ApplicationUser user, int? projectId, int? cameraId, int? modelId, string modelName, string modelDescription)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        private NormalMap AddNormalMap(ApplicationUser user, int? projectId, int? cameraId, int? modelId, string modelName, string modelDescription, bool fileIsSynchronized)
         {
             var normalMap = new NormalMap
             {
@@ -670,7 +683,7 @@ namespace ModelRelief.Database
             };
             _dbContext.Add(normalMap);
             _dbContext.SaveChanges();
-            SetFileProperties<NormalMap>(normalMap);
+            SetFileProperties<NormalMap>(normalMap, fileIsSynchronized);
 
             var path = $"{_hostingEnvironment.ContentRootPath}/{normalMap.Path}{normalMap.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, normalMap.CreateDefaultContent(normalMap.Width, normalMap.Height)).Wait();
@@ -687,7 +700,8 @@ namespace ModelRelief.Database
         /// <param name="normalMapId">Id of related NormalMap.</param>
         /// <param name="modelName">Name of related Model3d.</param>
         /// <param name="modelDescription">Description of related Model3d.</param>
-        private Mesh AddMesh(ApplicationUser user, int? projectId, int depthBufferId, int normalMapId, string modelName, string modelDescription)
+        /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
+        private Mesh AddMesh(ApplicationUser user, int? projectId, int depthBufferId, int normalMapId, string modelName, string modelDescription, bool fileIsSynchronized)
         {
             var meshName = $"{modelName}.sfp";
             var mesh = new Mesh
@@ -704,7 +718,7 @@ namespace ModelRelief.Database
             };
             _dbContext.Add(mesh);
             _dbContext.SaveChanges();
-            SetFileProperties<Mesh>(mesh);
+            SetFileProperties<Mesh>(mesh, fileIsSynchronized);
 
             var path = $"{_hostingEnvironment.ContentRootPath}/{mesh.Path}{mesh.Name}";
             Utility.Files.WriteRawFileFromByteArray(path, mesh.CreateDefaultContent(Defaults.Resolution.Image, Defaults.Resolution.Image)).Wait();
@@ -807,7 +821,7 @@ namespace ModelRelief.Database
         /// <typeparam name="TEntity">Domain model.</typeparam>
         /// <param name="model">Models to update.</param>
         /// <param name="fileIsSynchronized">Set FileIsSynchronized.</param>
-        private void SetFileProperties<TEntity>(TEntity model, bool fileIsSynchronized = false)
+        private void SetFileProperties<TEntity>(TEntity model, bool fileIsSynchronized)
             where TEntity : FileDomainModel
         {
             model.FileTimeStamp = DateTime.Now;

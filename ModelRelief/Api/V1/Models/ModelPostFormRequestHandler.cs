@@ -73,7 +73,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             // contents validated upstream; assign format now
             model3d.Format = ModelPostFileRequestValidator.MapFormatFromExtension(newModel.Name);
 
-            model3d = DbFactory.AddModel3dRelated(applicationUser, model3d);
+            model3d = DbFactory.AddModel3dRelated(applicationUser, model3d, fileIsSynchronized: false);
             if (model3d == null)
             {
                 var validationFailure = new ValidationFailure(nameof(PostProcessAsync), $"An error happened while adding the related resources for {newModel.Name}.");

@@ -22,7 +22,7 @@ namespace ModelRelief.Database
         void SynchronizeTestDatabase(bool restore);
         Task SeedDatabaseForTestUsersAsync();
         Task SeedDatabaseForNewUserAsync(ClaimsPrincipal claimsPrincipal);
-        Model3d AddModel3dRelated(ApplicationUser user, Model3d model);
+        Model3d AddModel3dRelated(ApplicationUser user, Model3d model, bool fileIsSynchronized);
         string GetEntityJSONFileName<TEntity>(string folderType);
         Task<List<ValidationFailure>> ValidateEntityAsync<TEntity>(ApplicationUser user)
                 where TEntity : DomainModel;

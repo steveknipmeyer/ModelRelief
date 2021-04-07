@@ -1,19 +1,13 @@
 # Enhancements
-
 Electron platform?
-
 #### Python
     How can Python binary extensions be resolved (e.g. sys, time)?
-
-#### .NET Core
-   
+#### .NET Core  
     Complete implementation of DependencyManager.GetAllDependencyTypes.
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
-
 #### UI
     Provide a histogram in the web UI representing the distribution of gradients.
-
 #### WebGL2
     WebGL2 Support
         https://www.khronos.org/assets/uploads/developers/library/2017-webgl-webinar/Khronos-Webinar-WebGL-20-is-here_What-you-need-to-know_Apr17.pdf
@@ -32,7 +26,6 @@ Electron platform?
 
 #### NormalMaps
     What NormalMap integration tests are appropriate?
-
 ##### TypeScript Image Class
     PNG Creation
         Integrate with Files utility class.
@@ -125,13 +118,8 @@ Some Views are identical. Should they use a shared ViewComponent?
     Details, Delete
 
 ##### Composer
-What controls are (ultimately) present in Composer?
- - Model: models/?project=id
- - Mesh: meshes/?projectId=activeProjectId & model3dId=activeModel3dId
-
 ###### Improve rollback handling in integration tests.
     try/catch/finally?
-
 ###### FileOperationGenerate
     Validate the required properties are present.
         Implement a FluentValidation validator.
@@ -229,12 +217,9 @@ namespace Microsoft.Extensions.Logging
 
 #### StorageManager
 An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
-
 ##### Relationships
-    Express relationships as "href" properties to absolute URLs.
     Provide "reference expansion" to allow references to be expanded into the principal object.
-
-
+        Extended 'related' query parameter.
 #### Viewer
     Large Models
         Design: Should all models be scaled to fit within the default view frustrum?

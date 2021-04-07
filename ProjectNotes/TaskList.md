@@ -1,8 +1,8 @@
 #### Commit       
 ### General     
     Today
-        Why does the view shift the first time a new Mesh is generated?
-                  this.meshViewer.setCameraToStandardView(StandardView.Top);
+        Why does the Mesh view shift the first time a new Mesh is generated?
+            this.meshViewer.setCameraToStandardView(StandardView.Top);
 
         Remove Jewelry Project?
 
@@ -12,8 +12,6 @@
 
         An OBJ loader exception leaves the Composer in an indeterminate state.
             Add a status panel to Composer for messages.
-
-
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
@@ -80,9 +78,6 @@
         Model3d
         Project
     
-    Integration Tests   
-        Why does AutoRollback not perform a database rollback?              
-
     Test new user creation.
         52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
 
@@ -143,7 +138,6 @@
 
     Silhouette
         Blend profile into mesh form.
-#### Issues
 #### UI
     Create a video or an animation?
     Workflow page

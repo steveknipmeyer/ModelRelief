@@ -28,14 +28,11 @@
         Height : Should this be a calculated property?
             Height = Width * (DepthBuffer aspect ratio)?
         Depth : What is the relationship of this property to LambdaLinearScaling?
-#### Composer
-    How should the initial camera of the ModelViewer be defined in a ComposerView?
-        Mesh.DepthBuffer.Camera is used.
-        Mesh.NormalMap.Camera is equivalent.  
-    
+#### Composer   
     Clipping planes are not preserved when a Composer view is initialized.
 
 #### StandardView
+    The StandardView does not show the currently selected view.
     When the view camera is interactively changed, it should invalidate the StandardView in the UI.
     Mesh view opens with the UI set to StandardCamera.Front but the view is Top.
 
@@ -50,10 +47,6 @@ Perspective <-> Orthographic
         Could the events be intercepted by the TrackBall?
     Does repeated adjustment of the clipping planes leads to bad mesh results?
     Should the near clipping plane always be adjusted to the front extent?
-
-#### Routing
-    FE uses depthbuffers while API uses depth-buffers.
-
 #### Entity Framework
 How does EF and AutoMapper handle object graphs (with populated navigation properties) during updates?
 
@@ -114,7 +107,7 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
             https://andrewlock.net/using-scrutor-to-automatically-register-your-services-with-the-asp-net-core-di-container/
             https://www.thereformedprogrammer.net/asp-net-core-fast-and-automatic-dependency-injection-setup/       
 #### Integration Testing
-    Can dataabase rollbacks be used instead of SynchronizeTestDatabase?
+    Why does the AutoRollback xUnit attribute not perform a database rollback?              
 #### Documentation
      routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
      Create the documentation content for the endpoints.

@@ -348,16 +348,12 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             <Model><Request>Validator
     
         Pipeline
-            Custom authentication middleware (e.g. Test [now deprecated])
-                DbContextTransactionFilter.OnActionExecutionAsync
-                    begin transaction
-                        Validators (Model-binding before action method)
-                            RestController HTTP Action
-                                ApiController.HandleAsyncRequest
-                                    var response = await Mediator.Send(request);
-                                        ValidatatedHandler.Handle
-                                            RequestHandler.Handle
-                    end transaction
+            Validators (Model-binding before action method)
+                RestController HTTP Action
+                    ApiController.HandleAsyncRequest
+                        var response = await Mediator.Send(request);
+                            ValidatatedHandler.Handle
+                                RequestHandler.Handle
 
 #### REST API Best Practices
     e-Book on API Design
@@ -554,7 +550,8 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             By default, MVC supports a limited number of formatters.
 
         Validation will be done during model-binding IF the model-bound controller parameter has an associated FV validator.
-            Any model-bound parameters (e.g. DTO modles) that have FluentValidation AbstractValidators are run.
+            N.B. FV is not used in Model Binding in ModelRelief.
+            Any model-bound parameters (e.g. DTO modess) that have FluentValidation AbstractValidators are run.
             ModelState will contain errors when the controller action is called.
 
     Handlers (CQRS Mediatr)
@@ -631,44 +628,32 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             NullRequestException                        null request; Ux only
             Mediator.Send
                 RequestValidationException
-                EntityNotFoundException
-                UserAuthenticationException
-                Exception
-            These exceptions are thrown and then caught by GlobalExceptionFilter.OnException.
-    
+                    ValidatedHandlers throw RequestValidationException.
+                    The validation errors are converted to ModelState and a null result is returned.
+                These exceptions are caught and then rethrown where they are caught by GlobalExceptionFilter.OnException.
+                    EntityNotFoundException
+                    UserAuthenticationException
+                    Exception
+        
         GlobalExceptionFilter.OnException
             This logic is active only <outside> Development. Otherwise, the Developer exception pages are used.
             Sets the status code depending on the type of exception.
             Marks the exception as <handled>.
             Returns a StatusCodeResult which then flows to app.UseStatusCodePagesWithReExecute.
-                    NullRequestException            HttpStatusCode.BadRequest
-                    EntityNotFoundException         HttpStatusCode.NotFound
-                    UserAuthenticationException     HttpStatusCode.Unauthorized;
+                NullRequestException            HttpStatusCode.BadRequest
+                EntityNotFoundException         HttpStatusCode.NotFound
+                UserAuthenticationException     HttpStatusCode.Unauthorized;
     
         /Errors/Error/?statusCode={0}
             This controller action is called through UseStatusCodePagesWithReExecute.
             https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
-                    HttpStatusCode.BadRequest       BadRequest.cshtml
-                    HttpStatusCode.NotFound:        NotFound.cshtml
-                    default                         Error.cshtml
+                HttpStatusCode.BadRequest       BadRequest.cshtml
+                HttpStatusCode.NotFound:        NotFound.cshtml
+                default                         Error.cshtml
 
 #### ASPNET Core Environment Variables
 The XUnit tests cannot be run with any required prompts for user verification because *the console is not displayed*.
 ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Development" *however the environment variables from launchSettings.json are not used.*
-
-#### ContosoUniversity Core
-    Why is the project named "Core" when it has these dependencies?
-        AutoMapper.EF6
-            EntityFramework 6.13
-    
-    Why does Delete display the JSON ContentResult instead of the IndexView?
-        The site.js file includes a jQuery call back on all form post submits.
-        site.js provides client-side error validation.
-    
-    How is the ContosoUniversityCore model binding used?
-        public class EntityModelBinder : IModelBinder
-        It binds a database <model> looked up from the incoming Id.
-
 #### C#
     Conversion of List of derived class to the base class.
         // https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass

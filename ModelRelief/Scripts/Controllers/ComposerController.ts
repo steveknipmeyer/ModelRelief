@@ -206,7 +206,6 @@ export class ComposerController {
      * @returns {Promise<void>}
      */
     public async generateReliefAsync(): Promise<void> {
-
         // Camera
         const cameraModel: DtoCamera = await this.updateCameraAsync();
 

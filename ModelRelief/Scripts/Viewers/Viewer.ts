@@ -399,9 +399,11 @@ export class Viewer {
 
         const interval = 1000;
         window.setTimeout(() => {
-            InputControllerHelper.debugInputControllerProperties(this._logger, this.name, this.controls, this.scene, this.camera);
-            // loop
-            // this.initializeDiagnostics();
+            this.debugInputController();
+            this.debugCamera();
+
+            // restart
+            this.initializeDiagnostics();
         }, interval);
     }
 
@@ -532,6 +534,20 @@ export class Viewer {
 
         const progressBar = document.querySelector(`#${this.viewContainerId} #${ElementIds.ProgressBar}`) as HTMLDivElement;
         progressBar.style.visibility = enable ? "visible" : "hidden";
+    }
+
+    /**
+     * @description Displays diagnostics for the input controller.
+     */
+    public debugInputController(): void {
+        InputControllerHelper.debugInputControllerProperties(this._logger, this.name, this.controls, this.scene, this.camera);
+    }
+
+    /**
+     * @description Displays diagnostics for the camera.
+     */
+    public debugCamera(): void {
+        CameraHelper.debugCameraProperties(this._logger, this.camera, this.modelGroup, "debugCamera");
     }
 //#endregion
 }
