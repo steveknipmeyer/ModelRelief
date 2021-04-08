@@ -198,7 +198,7 @@ export class Viewer {
         Graphics.removeObjectChildren(this._root, false);
         this._root.add(modelGroup);
 
-        this.enableProgressBar(false);
+        this.enableBusyBar(false);
     }
 
     /**
@@ -530,10 +530,10 @@ export class Viewer {
      * @description Activates the progress bar.
      * @param {boolean} enable
      */
-    public enableProgressBar(enable: boolean): void {
+    public enableBusyBar(enable: boolean): void {
 
-        const progressBar = document.querySelector(`#${this.viewContainerId} #${ElementIds.ProgressBar}`) as HTMLDivElement;
-        progressBar.style.visibility = enable ? "visible" : "hidden";
+        const busyBar = document.querySelector(`#${this.viewContainerId} #${ElementIds.BusyBar}`) as HTMLDivElement;
+        busyBar.style.visibility = enable ? "visible" : "hidden";
     }
 
     /**

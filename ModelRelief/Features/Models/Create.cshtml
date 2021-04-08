@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form id="uploadForm" asp-action="Create" enctype="multipart/form-data" method="post" onsubmit="upload(this);return false;">
+        <form id="uploadForm" asp-action="Create" enctype="multipart/form-data" method="post" onsubmit="return false;">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group">
@@ -48,66 +48,17 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<script type="text/javascript">
-    //# sourceURL=Createcshtml.js
-    debugger;
+@section scripts {
+<script>
+    window.onload = (function (existingOnLoad) {
+        return function () {
+            existingOnLoad && existingOnLoad();
+            requirejs(['FileTransfer/FileUpload']);
+        }
+    })(window.onload)
 
-    function upload(formElement) {
-        // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
-
-        var antiForgeryToken = document.querySelector("#uploadForm input[name='__RequestVerificationToken']");
-
-        var name = document.getElementById('name');
-        var description = document.getElementById('description');
-        var fileButton = document.getElementById('fileButton');
-        var files = fileButton.files;
-        if (files.length === 0)
-            return;
-
-        var formData = new FormData();
-        formData.append("Name", name.value);
-        formData.append("Description", description.value);
-        formData.append("FormFile", files[0]);
-        formData.append("__RequestVerificationToken", antiForgeryToken.value);
-
-        $("#progressContainer").show();
-        $.ajax({
-            xhr: function () {
-                var xhr = new window.XMLHttpRequest();
-
-                xhr.upload.addEventListener("progress", function (event) {
-                    if (event.lengthComputable) {
-
-                        var percentComplete = event.loaded / event.total;
-                        percentComplete = parseInt(percentComplete * 100);
-                        updateProgressBar(percentComplete);
-                    }
-                }, false);
-
-                return xhr;
-            },
-            url: "/models/create",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                redirect = response.redirectToUrl;
-                if (redirect === undefined)
-                    console.log(response);
-                else
-                    window.location.href = redirect;
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-        updateProgressBar(0);
-    }
-
-    function updateProgressBar(percentComplete) {
-        console.log(percentComplete);
-        $('#progressBar').attr('aria-valuenow', percentComplete).css('width', percentComplete);
-        $('#progressBar').html(percentComplete + '%');
+    function overrideDefaultPOST() {
+        // NOOP: Suppress default .NET Core POST (but allow JavaScript validaiton to run.)
     }
 </script>
+}

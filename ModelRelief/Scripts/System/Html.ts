@@ -29,7 +29,11 @@ export enum ElementIds {
     ModelViewerControls         = "modelViewerControls",
     NormalMapViewerControls     = "normalMapViewerControls",
 
+    BusyBar                     = "busyBar",
+
+    // File Transfer
     ProgressBar                 = "progressBar",
+    UploadForm                  = "uploadForm",
 
     // MeshTransform
     GradientThresholdEnabled    = "gradientThresholdEnabled",

@@ -2,9 +2,11 @@
 ### General     
     Today
         Add a busy indicator.
-            Use fetch instead of jQuery?
-            Increase the default width of the Progress Bar.
-            How can a validation error return View(postrequest)?
+            Clear validation fields before POST.
+            Populate the ValidationSummary with POST errors.
+            Style the ProgressBar
+                Increase the default width of the Progress Bar.
+                Increase the height.
 
         Remove Jewelry Project?
 

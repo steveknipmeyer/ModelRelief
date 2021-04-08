@@ -228,7 +228,7 @@ export class ComposerController {
         this.meshViewer.setModelGroup(meshGraphics);
         this.meshViewer.setCameraToStandardView(StandardView.Top);
 
-        this.meshViewer.enableProgressBar(false);
+        this.meshViewer.enableBusyBar(false);
         this._logger.addMessage("Mesh generated");
     }
 
@@ -381,7 +381,7 @@ export class ComposerController {
         const generateMeshControl = document.querySelector(`#${ElementIds.GenerateMesh}`);
         generateMeshControl.addEventListener("click", (clickEvent) => {
 
-            this.meshViewer.enableProgressBar(true);
+            this.meshViewer.enableBusyBar(true);
             this.generateReliefAsync();
         });
     }

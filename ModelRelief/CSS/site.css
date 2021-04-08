@@ -353,30 +353,30 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 /* ----------------------
-    Progress
+    BusyBar
 ------------------------*/
 /* https://www.gradient-animator.com/ */
-#progressBar {
+#busyBar {
     height: 16px;
     background: linear-gradient(270deg, #e62088, #5adcea);
 
     background-size: 400% 400%;
 
-    -webkit-animation: ProgressBarAnimation 1s ease infinite;
-    -moz-animation: ProgressBarAnimation 1s ease infinite;
-    animation: ProgressBarAnimation 1s ease infinite;
+    -webkit-animation: BusyBarAnimation 1s ease infinite;
+    -moz-animation: BusyBarAnimation 1s ease infinite;
+    animation: BusyBarAnimation 1s ease infinite;
 }
-@-webkit-keyframes ProgressBarAnimation {
+@-webkit-keyframes BusyBarAnimation {
     0%{background-position:0% 54%}
     50%{background-position:100% 47%}
     100%{background-position:0% 54%}
 }
-@-moz-keyframes ProgressBarAnimation {
+@-moz-keyframes BusyBarAnimation {
     0%{background-position:0% 54%}
     50%{background-position:100% 47%}
     100%{background-position:0% 54%}
 }
-@keyframes ProgressBarAnimation {
+@keyframes BusyBarAnimation {
     0%{background-position:0% 54%}
     50%{background-position:100% 47%}
     100%{background-position:0% 54%}
