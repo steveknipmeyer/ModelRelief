@@ -66,10 +66,14 @@ namespace ModelRelief.Features
             if (newModel == null)
             {
                 await InitializeViewControlsAsync(Mapper.Map<TGetModel>(postRequest));
-                return View(postRequest);
+
+                // return View(postRequest);
+                return Json(ModelState);
             }
 
-            return this.RedirectToAction(nameof(Index));
+            // return this.RedirectToAction(nameof(Index));
+            // https://stackoverflow.com/questions/47903390/asp-net-mvc-redirecttoaction-doesnt-work-after-ajax-post-from-view
+            return Json(new { redirectToUrl = Url.Action("Index", "Models") });
         }
        #endregion
     }

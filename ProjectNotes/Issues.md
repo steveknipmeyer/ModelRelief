@@ -41,6 +41,10 @@ Perspective <-> Orthographic
     The new view does not match the previous view.
     Fit View is used after the conversion.
 
+Why does the Mesh view shift slightly after a new Mesh has been generated?  
+    The camera is not changed.
+    this.meshViewer.setCameraToStandardView(StandardView.Top) is used to ensure the resulting view is visible.
+
 ##### Clipping Planes
 
     Investigate why the clipping plane CameraControls are not editable.

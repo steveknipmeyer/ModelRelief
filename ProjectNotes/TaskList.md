@@ -1,14 +1,12 @@
 #### Commit       
 ### General     
     Today
-        Why does the Mesh view shift the first time a new Mesh is generated?
-            this.meshViewer.setCameraToStandardView(StandardView.Top);
+        Add a busy indicator.
+            Use fetch instead of jQuery?
+            Increase the default width of the Progress Bar.
+            How can a validation error return View(postrequest)?
 
         Remove Jewelry Project?
-
-        Add a busy indicator.
-            https://stackoverflow.com/questions/60427408/asp-net-core-busy-indicator-while-downloading-file
-            http://johnatten.com/2013/12/22/asp-net-mvc-show-busy-indicator-on-form-submit-using-jquery-and-ajax/
 
         An OBJ loader exception leaves the Composer in an indeterminate state.
             Add a status panel to Composer for messages.
@@ -22,7 +20,7 @@
             NormalMap
             DepthBuffer
             MeshTransform
-            Settings
+        Settings
             Session
         Valid
             Mesh

@@ -13,6 +13,7 @@ namespace ModelRelief.Api.V1.Models
     using ModelRelief.Api.V1.Shared.Validation;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
 
     /// <summary>
     /// Represents a validator for a Model3d PostRequest.
@@ -28,10 +29,10 @@ namespace ModelRelief.Api.V1.Models
             : base(dbContext)
         {
 #if false
-            RuleFor(r => Path.GetExtension(r.NewFile.Name)).MinimumLength(3).WithMessage("The model filename must have an extension.");
-            RuleFor(r => r).Must(r => ValidateFileExtension(r)).WithMessage("Only OBJ models are supported now.").WithName(nameof(ModelPostFileRequestValidator));
+            RuleFor(r => Path.GetExtension(r.NewFile.Name)).MinimumLength(3).WithMessage("The model filename must have an extension.").WithName(nameof(IFileModel.Name));
+            RuleFor(r => r).Must(r => ValidateFileExtension(r)).WithMessage("Only OBJ models are supported now.").WithName(nameof(IFileModel.Name));
 #endif
-            RuleFor(r => r).Must(r => ValidateModel3dContents(r)).WithMessage("The uploaded model file is not valid.").WithName(nameof(ModelPostFileRequestValidator));
+            RuleFor(r => r).Must(r => ValidateModel3dContents(r)).WithMessage("The uploaded model file is not valid.").WithName(nameof(IFileModel.FormFile));
         }
 
         public bool ValidateFileExtension(PostFileRequest<Domain.Model3d, Dto.Model3d> request)
