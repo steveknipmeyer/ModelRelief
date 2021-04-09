@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <form id="uploadForm" asp-action="Create" enctype="multipart/form-data" method="post" onsubmit="return false;">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -33,7 +33,7 @@
 
             <br><br>
             <div class="form-group">
-                <input type="submit" value="Upload File" class="actionButton btn button-rounded btn-sm" />
+                <input type="submit" value="Upload" class="actionButton btn button-rounded btn-sm" />
             </div>
 
             <br>
@@ -56,9 +56,5 @@
             requirejs(['FileTransfer/FileUpload']);
         }
     })(window.onload)
-
-    function overrideDefaultPOST() {
-        // NOOP: Suppress default .NET Core POST (but allow JavaScript validaiton to run.)
-    }
 </script>
 }

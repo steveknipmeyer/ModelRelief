@@ -529,29 +529,36 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
         FluentValidation
 ---
 ######  Validation Flow
-    Client (Brower)
-        ViewModel DataAnnotation rules generate JavaScript validation rules.
+    Client (Browser)
+        ViewModel DataAnnotation attributes and any available DTO FV AbstractValidators generate JavaScript validation rules.
 
     Server (.NET Core)
         Model-binding uses FV AbstractValidators to validate controller parameters.
         ValidatedHandlers use FV AbstractValidators to validate requests (and their DTO models).
         Domain DataAnnotation rules validate entities at the last step before persistence.
 ###### Client-side Validation  
+    Client side validation is done with Javascript and data attributes added by .NET Core to the HTML fields.
+    Property ON form: A client-side error will be displayed and the controller action will not be called.
+
     DataAnnotation Attributes
-        The ViewModel and its DataAnnotation rules determine what validation is done in the browser.
-        Client side validation is done with Javascript and data attributes added by .NET Core to the HTML fields.
-        Property ON form: A client-side error will be displayed and the controller action will not be called.
+        The ViewModel and its DataAnnotation rulescontribute to validation in the browser.
     
         [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
+
+    FV AbstractValidators
+        Any FV rules (AbstractValidator) for the DTO models contribute to validation  in the browser.
+
+        RuleFor(m => m.Description)
+            .NotNull().WithMessage("The Description property is required.")
+            .MinimumLength(3).WithMessage("The Description must be three or more characters.");
 ###### Server-Side Validation
     Model Binding
         Model-binding maps the Request.Body, route data and query strings to the parameters of the controller action.
             By default, MVC supports a limited number of formatters.
 
         Validation will be done during model-binding IF the model-bound controller parameter has an associated FV validator.
-            N.B. FV is not used in Model Binding in ModelRelief.
-            Any model-bound parameters (e.g. DTO modess) that have FluentValidation AbstractValidators are run.
+            Any model-bound parameters (e.g. DTO models) that have FluentValidation AbstractValidators are run.
             ModelState will contain errors when the controller action is called.
 
     Handlers (CQRS Mediatr)
@@ -568,7 +575,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     ValidationActionFilter [not currently enabled in ModelRelief]
         If an ActionFilter is registered, control passes there.
             The ActionFilter can check ModelState.Valid and then set the ActionExecutingContext.Result so the controller action is never called.
-
 ---
 
     Can the request handlers share common validation code?

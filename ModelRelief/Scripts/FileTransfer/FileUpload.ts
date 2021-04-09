@@ -25,43 +25,78 @@ export class FileUpload {
      * Creates an instance of FileUpload.
      */
     constructor() {
-        this._logger = Services.htmlLogger;
+        this._logger = Services.defaultLogger;
     }
 
     /**
-     * @description Initialize the file upload controls.
+     * @description Initialize the file upload form.
      */
-    public initializeControls(): void {
+    private initializeControls(): void {
 
         this._uploadForm = document.getElementById(ElementIds.UploadForm) as HTMLFormElement;
         this._uploadForm.addEventListener("submit", () => {
-            this.upload();
+            this.onSubmit();
         });
 
         this._progressBar = new ProgressBar(ElementIds.ProgressBar);
     }
 
     /**
-     * @description Upload a file and update the ProgressBar.
-     * @return {*}  {void}
+     * @description Clears all the validation messages on the form.
      */
-    public upload(): void {
-        // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
+    private clearValidationErrors(): void {
+        const summaryErrors = document.querySelectorAll(".validation-summary-errors");
+        summaryErrors.forEach((summaryError) => {
+            summaryError.innerHTML = "";
+        });
+        const summaryFields = document.querySelectorAll(".field-validation-error");
+        summaryFields.forEach((summaryField) => {
+            summaryField.innerHTML = "";
+        });
+    }
 
-        const antiForgeryToken: HTMLInputElement = document.querySelector("#uploadForm input[name='__RequestVerificationToken']") as HTMLInputElement;
-
-        const name: HTMLInputElement  = document.getElementById("name") as HTMLInputElement;
-        const description: HTMLInputElement = document.getElementById("description") as HTMLInputElement;
-        const fileButton: HTMLInputElement = document.getElementById("fileButton") as HTMLInputElement;
-        const files = fileButton.files;
-        if (files.length === 0)
-            return;
+    /**
+     * @description Construct the FormData payload for the upload.
+     * @return {*}  {FormData}
+     */
+    private buildFormData(): FormData {
 
         const formData = new FormData();
-        formData.append("Name", name.value);
-        formData.append("Description", description.value);
-        formData.append("FormFile", files[0]);
+        for (let index = 0; index < this._uploadForm.length; index++) {
+            const element = this._uploadForm.elements[index];
+            if (element instanceof HTMLInputElement) {
+
+                const modelField = element.name;
+                switch (element.type) {
+
+                    case "file":
+                        formData.append(modelField, element.files[0]);
+                        break;
+
+                    case "text":
+                        formData.append(modelField, element.value);
+                        break;
+
+                    default:
+                    case null:
+                    case "submit":
+                        break;
+                }
+            }
+        }
+        const antiForgeryToken: HTMLInputElement = document.querySelector(`#${ElementIds.UploadForm} input[name="__RequestVerificationToken"]`) as HTMLInputElement;
         formData.append("__RequestVerificationToken", antiForgeryToken.value);
+
+        return formData;
+    }
+
+    /**
+     * @description (AJAX) uploade the FormData to the create endpoint.
+     * @private
+     * @param {FormData} formData
+     */
+    private upload(formData: FormData): void {
+        // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
         this._progressBar.enable(true);
         $.ajax({
@@ -79,25 +114,48 @@ export class FileUpload {
 
                 return xhr;
             },
-            url: "/models/create",
+            url: window.location.href,
             type: "POST",
             data: formData,
             processData: false,
             contentType: false,
             success: (response) => {
                 this._progressBar.enable(false);
+
                 const redirect = response.redirectToUrl;
                 if (redirect === undefined) {
-                    console.log(response);
+                    // JSON object contains validation errors from ModelState
+                    const fields = Object.keys(response);
+                    fields.forEach((field, index) => {
+                        const inputField = document.querySelector(`[data-valmsg-for="${field}"]`);
+                        inputField.innerHTML = response[field];
+                    });
                 }
                 else
                     window.location.href = redirect;
             },
             error: (error) => {
                 this._progressBar.enable(false);
-                console.error(error);
-            }
+                this._logger.addErrorMessage(error.toString());
+            },
         });
+    }
+
+    /**
+     * @description Submit button handler.
+     * @return {*}  {void}
+     */
+    public onSubmit(): void {
+
+        // ensure valid form
+        const $form = $(`#${ElementIds.UploadForm}`);
+        const $validator = $form.validate();
+        if (!$form.valid())
+            return;
+        this.clearValidationErrors();
+
+        const formData = this.buildFormData();
+        this.upload(formData);
     }
 
     /**
@@ -114,3 +172,4 @@ export class FileUpload {
 }
 const fileUpload = new FileUpload();
 fileUpload.run();
+

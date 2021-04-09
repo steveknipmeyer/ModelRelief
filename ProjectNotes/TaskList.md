@@ -1,12 +1,9 @@
 #### Commit       
 ### General     
     Today
-        Add a busy indicator.
-            Clear validation fields before POST.
-            Populate the ValidationSummary with POST errors.
-            Style the ProgressBar
-                Increase the default width of the Progress Bar.
-                Increase the height.
+        Style the ProgressBar
+            Increase the default width of the Progress Bar.
+            Increase the height.
 
         Remove Jewelry Project?
 

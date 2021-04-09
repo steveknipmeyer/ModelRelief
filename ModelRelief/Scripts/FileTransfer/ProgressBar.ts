@@ -36,15 +36,17 @@ export class ProgressBar {
     public enable(enable: boolean): void {
 
         this._progressBar.style.visibility = enable ? "visible" : "hidden";
+        this.update(0);
     }
 
     /**
      * @description Update the ProgressBar with the current percentage complete.
      * @param {number} percentComplete
      */
-    public update(percentComplete: number): void {
-        percentComplete = Math.round(percentComplete);
-        $("#progressBar").attr("aria-valuenow", percentComplete).css("width", percentComplete);
-        $("#progressBar").html(percentComplete + "%");
+    public update(value: number): void {
+        const percentComplete: string = Math.round(value).toString();
+        this._progressBar.setAttribute("aria-valuenow", percentComplete);
+        this._progressBar.style.width = `${percentComplete}%`;
+        this._progressBar.innerHTML = `${percentComplete}%`;
     }
 }
