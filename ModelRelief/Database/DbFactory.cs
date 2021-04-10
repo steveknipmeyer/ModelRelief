@@ -767,7 +767,6 @@ namespace ModelRelief.Database
                 foreach (var file in files)
                 {
                     var destinationFileName = Path.Combine(targetDirectory, file.Name);
-                    // Console.WriteLine(destinationFileName);
                     File.Copy(file.FullName, destinationFileName, overwrite: true);
                 }
             }

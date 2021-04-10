@@ -1,6 +1,9 @@
 #### Commit       
 ### General     
     Today
+        Drag and Drop
+            https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
+
         Style the ProgressBar
             Increase the default width of the Progress Bar.
             Increase the height.
@@ -12,20 +15,7 @@
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
-
-    What Create/Edit pages are valid semantically?
-        Invalid
-            Camera
-            NormalMap
-            DepthBuffer
-            MeshTransform
-        Settings
-            Session
-        Valid
-            Mesh
-            Model3d
-            Project
-  
+ 
     SMK
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
@@ -47,8 +37,6 @@
         Why is the FormFile binding lost?
             The focus has to leave the input field.
 
-        Style the Create page.   
-
     Projects
         Project DropDowwn Control
             Should the Menu label link to the active project?
@@ -56,7 +44,7 @@
 
         Create Project
             How should a new project be created?
-                Projects/Create is the baseline.
+                Projects/Create is the baseline View.
     
     Convert Mesh to OBJ default to support download of generated Mesh.
 
@@ -64,11 +52,10 @@
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
             Every property validation causes a database read.
 
-    Final Height MeshTransform Setting
-        Review the description of the control.
-            This setting controls the height of the final relief. It is a percentage of the depth of the original model.
-
     Verify Resolution.Image setting.
+
+    How is a Mesh dependent on the Camera?
+        The camera clipping planes are used to scale from normalized DB units to Model3d units.
 
     Should Post requests also add related resources?
     Should Delete requests also remove related resources?
@@ -86,10 +73,6 @@
     Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
         remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-
-    Settings
-        Paths:ResourceFolders:Camera
-        Paths:ResourceFolders:MeshTransform
 
     Why is it (intermittently) necessary to run ModelRelief before testrunner?
         testrunner does initialize the database....
@@ -139,6 +122,18 @@
     Create a video or an animation?
     Workflow page
         Illustrate with images from Explorer!
+    What Create/Edit pages are valid semantically?
+        Invalid
+            Camera
+            NormalMap
+            DepthBuffer
+            MeshTransform
+        Settings
+            Session
+        Valid
+            Mesh
+            Model3d
+            Project
 #### Build
     Review target=nginx handling in Builder.py.
         python Build/builder.py --target nginx --deploy True

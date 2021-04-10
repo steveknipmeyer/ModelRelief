@@ -75,20 +75,6 @@
             ]
         },
         {
-            "Name": "Jewelry",
-            "Description": "Jewelry watch faces, bracelets and pendants",
-            "Models": [
-                {
-                    "Name": "dolphin",
-                    "Description": "Ocean Dolphin"
-                },
-                {
-                    "Name": "roadster",
-                    "Description": "Duesen Bayern Mystar 190 SL"
-                }
-            ]
-        },
-        {
             "Name": "ModelRelief",
             "Description": "Development test models",
             "Models": [

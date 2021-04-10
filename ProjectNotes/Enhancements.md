@@ -228,8 +228,6 @@ An ApplicationUser could have a storage folder property that is used by the Stor
             Fit View may not work because it calculates only the clip planes.
                 <It also needs to calculate the camera position.>
             The UI CameraControls need to be set based on the dimensions of the model.
-        Camera position now is always based on the loaded Camera DTO.
-            Support needs to be added to set a camera position for a brand new model (for which no Camera DTO exists).
     
     Transform Control
         This would allow the model to be positioned instead of the camera to set up the scene with much more control.
@@ -239,4 +237,19 @@ An ApplicationUser could have a storage folder property that is used by the Stor
     Add MaterialLoader.
     
     Create a set of sample materials such as wood, glass, plaster, etc.
-
+#### Sample Projects
+    Develop the Jewelry project with more examples.
+        {
+            "Name": "Jewelry",
+            "Description": "Jewelry watch faces, bracelets and pendants",
+            "Models": [
+                {
+                    "Name": "dolphin",
+                    "Description": "Ocean Dolphin"
+                },
+                {
+                    "Name": "roadster",
+                    "Description": "Duesen Bayern Mystar 190 SL"
+                }
+            ]
+        },

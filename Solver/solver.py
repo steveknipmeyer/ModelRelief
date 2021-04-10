@@ -79,8 +79,8 @@ class Solver:
         self.settings: dict = {}
         self.mesh: Optional[Mesh] = None
         self.depth_buffer: Optional[DepthBuffer] = None
-        self.mesh_transform: Optional[MeshTransform] = None
         self.normal_map: Optional[NormalMap] = None
+        self.mesh_transform: Optional[MeshTransform] = None
 
         self.initialize(settings_file)
 
@@ -246,7 +246,7 @@ class Solver:
         """
         Scales the mesh to the final dimensions.
         """
-        # linear scale original mesh
+        # linear scale original (untransformed) mesh
         self.results.mesh_scaled.image = self.results.depth_buffer_model.image * self.mesh_transform.relief_scale
 
         write_file = False
