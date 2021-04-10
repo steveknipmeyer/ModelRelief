@@ -32,8 +32,10 @@ export enum ElementIds {
     BusyBar                     = "busyBar",
 
     // File Transfer
-    ProgressBar                 = "progressBar",
     UploadForm                  = "uploadForm",
+    ProgressBarTemplate         = "progressBarTemplate",
+    FormProgressBarContainer    = "formProgressBarContainer",
+    DropProgressBarContainer    = "dropProgressBarContainer",
 
     // MeshTransform
     GradientThresholdEnabled    = "gradientThresholdEnabled",

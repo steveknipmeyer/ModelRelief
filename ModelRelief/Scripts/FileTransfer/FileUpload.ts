@@ -19,7 +19,6 @@ export class FileUpload {
 
     private _logger: ILogger;
     private _uploadForm: HTMLFormElement;
-    private _progressBar: ProgressBar;
 
     /**
      * Creates an instance of FileUpload.
@@ -38,7 +37,6 @@ export class FileUpload {
             this.onSubmit();
         });
 
-        this._progressBar = new ProgressBar(ElementIds.ProgressBar);
     }
 
     /**
@@ -59,7 +57,7 @@ export class FileUpload {
      * @description Construct the FormData payload for the upload.
      * @return {*}  {FormData}
      */
-    private buildFormData(): FormData {
+    private buildFormDataFromForm(): FormData {
 
         const formData = new FormData();
         for (let index = 0; index < this._uploadForm.length; index++) {
@@ -93,12 +91,13 @@ export class FileUpload {
     /**
      * @description (AJAX) uploade the FormData to the create endpoint.
      * @private
-     * @param {FormData} formData
+     * @param {FormData} formData The FormData to upload.
+     * @param {ProgressBar} progressBar ProgressBar to update with progress of upload.
      */
-    private upload(formData: FormData): void {
+    private upload(formData: FormData, progressBar: ProgressBar): void {
         // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
-        this._progressBar.enable(true);
+        progressBar.enable(true);
         $.ajax({
             xhr: () => {
                 const xhr = new window.XMLHttpRequest();
@@ -108,7 +107,7 @@ export class FileUpload {
 
                         let percentComplete: number = event.loaded / event.total;
                         percentComplete = percentComplete * 100;
-                        this._progressBar.update(percentComplete);
+                        progressBar.update(percentComplete);
                     }
                 }, false);
 
@@ -119,8 +118,9 @@ export class FileUpload {
             data: formData,
             processData: false,
             contentType: false,
+
             success: (response) => {
-                this._progressBar.enable(false);
+                progressBar.enable(false);
 
                 const redirect = response.redirectToUrl;
                 if (redirect === undefined) {
@@ -131,11 +131,11 @@ export class FileUpload {
                         inputField.innerHTML = response[field];
                     });
                 }
-                else
-                    window.location.href = redirect;
+                // else
+                //     window.location.href = redirect;
             },
             error: (error) => {
-                this._progressBar.enable(false);
+                progressBar.enable(false);
                 this._logger.addErrorMessage(error.toString());
             },
         });
@@ -154,8 +154,11 @@ export class FileUpload {
             return;
         this.clearValidationErrors();
 
-        const formData = this.buildFormData();
-        this.upload(formData);
+        const formData = this.buildFormDataFromForm();
+
+        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
+        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
+        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
     }
 
     /**

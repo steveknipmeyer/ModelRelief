@@ -4,11 +4,11 @@
         Drag and Drop
             https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
 
-        Style the ProgressBar
-            Increase the default width of the Progress Bar.
-            Increase the height.
-
-        Remove Jewelry Project?
+        Model3d Create
+            Style the View.
+            Style the ProgressBar
+                Increase the default width of the Progress Bar.
+                Increase the height.
 
         An OBJ loader exception leaves the Composer in an indeterminate state.
             Add a status panel to Composer for messages.
@@ -33,18 +33,13 @@
             Use Index page as a template for the Project page.
                 Each user model is hosted in a tile.
 
-    Create
+    Create Model3d
         Why is the FormFile binding lost?
             The focus has to leave the input field.
 
-    Projects
-        Project DropDowwn Control
-            Should the Menu label link to the active project?
-                This requires using the dropdown arrow to activate the menu.
-
-        Create Project
-            How should a new project be created?
-                Projects/Create is the baseline View.
+    Create Project
+        How should a new project be created?
+            Projects/Create is the baseline View.
     
     Convert Mesh to OBJ default to support download of generated Mesh.
 
