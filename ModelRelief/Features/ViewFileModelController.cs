@@ -14,6 +14,7 @@ namespace ModelRelief.Features
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.Extensions.Logging;
+    using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -69,17 +70,8 @@ namespace ModelRelief.Features
 
             if (newModel == null)
             {
-                var validationErrors = new Dictionary<string, string>();
-                foreach (KeyValuePair<string, ModelStateEntry> keyValuePair in ModelState)
-                {
-                    string key = keyValuePair.Key;
-                    ModelStateEntry modelStateEntry = keyValuePair.Value;
-                    foreach (var error in modelStateEntry.Errors)
-                    {
-                        validationErrors[key] = error.ErrorMessage;
-                    }
-                }
-                return Json(validationErrors);
+                var errorResponse = new PostFormErrorResponse(postRequest.Name, postRequest.FormFile.FileName, ModelState);
+                return Json(errorResponse);
             }
 
             // https://stackoverflow.com/questions/47903390/asp-net-mvc-redirecttoaction-doesnt-work-after-ajax-post-from-view

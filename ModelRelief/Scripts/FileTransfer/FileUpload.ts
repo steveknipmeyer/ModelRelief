@@ -5,9 +5,10 @@
 // ------------------------------------------------------------------------//
 "use strict";
 import {ProgressBar} from "Scripts/FileTransfer/ProgressBar";
+import {IPostFormErrorResponse} from "Scripts/FileTransfer/IPostFormErrorResponse";
 import {ElementIds} from "Scripts/System/Html";
 import {Initializer} from "Scripts/System/Initializer";
-import {ILogger} from "Scripts/System/Logger";
+import {ILogger, HTMLLogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
 
 /**
@@ -24,7 +25,7 @@ export class FileUpload {
      * Creates an instance of FileUpload.
      */
     constructor() {
-        this._logger = Services.defaultLogger;
+        this._logger = Services.htmlLogger;
     }
 
     /**
@@ -43,6 +44,8 @@ export class FileUpload {
      * @description Clears all the validation messages on the form.
      */
     private clearValidationErrors(): void {
+
+        this._logger.clearLog();
         const summaryErrors = document.querySelectorAll(".validation-summary-errors");
         summaryErrors.forEach((summaryError) => {
             summaryError.innerHTML = "";
@@ -124,20 +127,31 @@ export class FileUpload {
 
                 const redirect = response.redirectToUrl;
                 if (redirect === undefined) {
-                    // JSON object contains validation errors from ModelState
-                    const fields = Object.keys(response);
-                    fields.forEach((field, index) => {
-                        const inputField = document.querySelector(`[data-valmsg-for="${field}"]`);
-                        inputField.innerHTML = response[field];
-                    });
+                    this.logUploadErrors(response as IPostFormErrorResponse);
                 }
-                // else
-                //     window.location.href = redirect;
+                else
+                    window.location.href = redirect;
             },
             error: (error) => {
                 progressBar.enable(false);
                 this._logger.addErrorMessage(error.toString());
             },
+        });
+
+    }
+
+    /**
+     * @description Log error messages returned in the upload response.
+     * JSON response object contains an IPostFormErrorResponse which packages validation errors from ModelState.
+     */
+    private logUploadErrors(response: IPostFormErrorResponse): void {
+
+        this._logger.addErrorMessage(response.fileName);
+        response.errors.forEach((error) => {
+            this._logger.addErrorMessage(`    ${error.field}: ${error.message}`);
+
+            const inputField = document.querySelector(`[data-valmsg-for="${error.field}"]`);
+            inputField.innerHTML = error.message;
         });
     }
 
@@ -155,9 +169,6 @@ export class FileUpload {
         this.clearValidationErrors();
 
         const formData = this.buildFormDataFromForm();
-
-        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
-        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
         this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
     }
 

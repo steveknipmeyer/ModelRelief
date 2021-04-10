@@ -3,7 +3,6 @@
 // Copyright (c) ModelRelief. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
-
 namespace ModelRelief.Api.V1.Shared.Errors
 {
     using System;

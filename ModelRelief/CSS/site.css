@@ -470,15 +470,15 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .logMessage {
-    margin-left: 100PX;
+    margin-left: 10PX;
 }
 
 .logError {
-    color: #B6CFDC;
+    color: #f03030;
 }
 
 .logWarning {
-    color: #B771B7;
+    color: #ecf759;
 }
 
 .logInfo {
