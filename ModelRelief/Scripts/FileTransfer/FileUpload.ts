@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 import {ProgressBar} from "Scripts/FileTransfer/ProgressBar";
-import {IPostFormErrorResponse} from "Scripts/FileTransfer/IPostFormErrorResponse";
+import {IPostFormResponse} from "Scripts/FileTransfer/IPostFormResponse";
 import {ElementIds} from "Scripts/System/Html";
 import {Initializer} from "Scripts/System/Initializer";
 import {ILogger, HTMLLogger} from "Scripts/System/Logger";
@@ -122,31 +122,39 @@ export class FileUpload {
             processData: false,
             contentType: false,
 
-            success: (response) => {
+            success: (ajaxResponse) => {
                 progressBar.enable(false);
 
-                const redirect = response.redirectToUrl;
-                if (redirect === undefined) {
-                    this.logUploadErrors(response as IPostFormErrorResponse);
+                const response = ajaxResponse as IPostFormResponse;
+                if (!response. success)
+                    this.logUploadErrors(response);
+                else {
+                    this.logUploadSuccess(response);
+                    window.location.href = response.redirectToUrl;
                 }
-                else
-                    window.location.href = redirect;
             },
-            error: (error) => {
+            error: (ajaxError) => {
                 progressBar.enable(false);
-                this._logger.addErrorMessage(error.toString());
+                this._logger.addErrorMessage(ajaxError.toString());
             },
         });
 
     }
 
     /**
-     * @description Log error messages returned in the upload response.
-     * JSON response object contains an IPostFormErrorResponse which packages validation errors from ModelState.
+     * @description Log a successful file upload.
      */
-    private logUploadErrors(response: IPostFormErrorResponse): void {
+    private logUploadSuccess(response: IPostFormResponse): void {
 
-        this._logger.addErrorMessage(response.fileName);
+        this._logger.addInfoMessage(`${response.fileName}: successfully uploaded.`);
+    }
+
+    /**
+     * @description Log error messages returned in the upload response.
+     */
+    private logUploadErrors(response: IPostFormResponse): void {
+
+        this._logger.addErrorMessage(`${response.fileName}: errors during upload. `);
         response.errors.forEach((error) => {
             this._logger.addErrorMessage(`    ${error.field}: ${error.message}`);
 

@@ -7,12 +7,6 @@
 namespace ModelRelief.Api.V1.Shared.Errors
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using FluentValidation.Results;
-    using Microsoft.AspNetCore.Mvc;
-    using ModelRelief.Infrastructure;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// JSON error status result returned by the API.

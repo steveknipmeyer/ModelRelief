@@ -6,15 +6,12 @@
 
 namespace ModelRelief.Features
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.Extensions.Logging;
-    using ModelRelief.Api.V1.Shared.Errors;
+    using ModelRelief.Api.V1.Shared.Responses;
     using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
@@ -68,14 +65,18 @@ namespace ModelRelief.Features
                 FileModel = postRequest,
             });
 
+            var response = new PostFormResponse(postRequest.Name, postRequest.FormFile.FileName);
             if (newModel == null)
             {
-                var errorResponse = new PostFormErrorResponse(postRequest.Name, postRequest.FormFile.FileName, ModelState);
-                return Json(errorResponse);
+                response.AddErrors(ModelState);
+            }
+            else
+            {
+                response.Success = true;
+                response.RedirectToUrl = Url.Action("Index", "Models");
             }
 
-            // https://stackoverflow.com/questions/47903390/asp-net-mvc-redirecttoaction-doesnt-work-after-ajax-post-from-view
-            return Json(new { redirectToUrl = Url.Action("Index", "Models") });
+            return Json(response);
         }
        #endregion
     }
