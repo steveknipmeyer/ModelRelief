@@ -46,10 +46,9 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<div id="loggerRoot"></div>
+<div hidden id="progressBarTemplate" class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" , style="width: 0%">
 </div>
-<div hidden id="progressBarTemplate"  class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" , style="width: 0%">
-</div>
+<partial name="_StatusPanelPartial" />
 
 @section scripts {
 <script>

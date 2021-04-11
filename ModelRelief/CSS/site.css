@@ -460,9 +460,18 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 /* ----------------------
+    Status Panel
+------------------------*/
+#statusHeading {
+    background-color: slategray;
+}
+#statusHeading button{
+    color: lightgray;
+}
+
+/* ----------------------
     HTML Logger
 ------------------------*/
-
 #loggerRoot {
     list-style-type: none;
     padding: 0;
