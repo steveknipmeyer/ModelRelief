@@ -17,7 +17,7 @@ export class Services {
 
     public static consoleLogger: ConsoleLogger = new ConsoleLogger();
     public static htmlLogger: HTMLLogger       = new HTMLLogger();
-    public static defaultLogger: ILogger       = Services.consoleLogger;
+    public static defaultLogger: ILogger       = Services.htmlLogger;
 
     public static timer: StopWatch = new StopWatch("Master", Services.defaultLogger);
 

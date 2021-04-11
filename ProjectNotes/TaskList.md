@@ -12,8 +12,7 @@
                 Increase the default width of the Progress Bar.
                 Increase the height.
 
-        An OBJ loader exception leaves the Composer in an indeterminate state.
-            Add a status panel to Composer for messages.
+
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser

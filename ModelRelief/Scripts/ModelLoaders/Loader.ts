@@ -148,7 +148,15 @@ export class Loader {
             resolve(loader.parse(modelFile));
         });
 
-        const modelGroup: THREE.Group = await objLoader();
+        let modelGroup = new THREE.Group();
+        try {
+            modelGroup = await objLoader();
+        }
+        catch (e) {
+            modelGroup = await this.loadParametricTestModelAsync(TestModel.Box);
+            const error = <Error> e;
+            this._logger.addErrorMessage(`${fileModel.name}: error loading = ${error.message}`);
+        }
         return modelGroup;
     }
 
