@@ -144,10 +144,6 @@ input[type=checkbox]:checked + label:before {
 /* ----------------------
     Model3d Create (Upload)
 ------------------------*/
-.form-control-file {
-    font-size: 14px;
-    background-color: slategray;
-}
 
 /* ----------------------
     Compose

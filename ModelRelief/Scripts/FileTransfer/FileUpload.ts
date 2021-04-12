@@ -20,6 +20,7 @@ export class FileUpload {
 
     private _logger: ILogger;
     private _uploadForm: HTMLFormElement;
+    private _fileButton: HTMLInputElement;
 
     /**
      * Creates an instance of FileUpload.
@@ -34,10 +35,11 @@ export class FileUpload {
     private initializeControls(): void {
 
         this._uploadForm = document.getElementById(ElementIds.UploadForm) as HTMLFormElement;
-        this._uploadForm.addEventListener("submit", () => {
-            this.onSubmit();
-        });
 
+        this._fileButton = document.getElementById(ElementIds.FileButton) as HTMLInputElement;
+        this._fileButton.addEventListener("change", () => {
+            this.onChange();
+        });
     }
 
     /**
@@ -45,14 +47,11 @@ export class FileUpload {
      */
     private clearValidationErrors(): void {
 
-        this._logger.clearLog();
-        const summaryErrors = document.querySelectorAll(".validation-summary-errors");
-        summaryErrors.forEach((summaryError) => {
-            summaryError.innerHTML = "";
-        });
-        const summaryFields = document.querySelectorAll(".field-validation-error");
-        summaryFields.forEach((summaryField) => {
-            summaryField.innerHTML = "";
+        // this._logger.clearLog();
+
+        const validationFields = document.getElementsByClassName("text-danger");
+        Array.from(validationFields).forEach((field) => {
+            field.innerHTML = "";
         });
     }
 
@@ -60,31 +59,14 @@ export class FileUpload {
      * @description Construct the FormData payload for the upload.
      * @return {*}  {FormData}
      */
-    private buildFormDataFromForm(): FormData {
+    private buildFormData(file: File): FormData {
+        const fileName = file.name.replace(/^.*[\\/]/, "");
 
         const formData = new FormData();
-        for (let index = 0; index < this._uploadForm.length; index++) {
-            const element = this._uploadForm.elements[index];
-            if (element instanceof HTMLInputElement) {
+        formData.append("Name", fileName);
+        formData.append("Description", fileName);
+        formData.append("FormFile", file);
 
-                const modelField = element.name;
-                switch (element.type) {
-
-                    case "file":
-                        formData.append(modelField, element.files[0]);
-                        break;
-
-                    case "text":
-                        formData.append(modelField, element.value);
-                        break;
-
-                    default:
-                    case null:
-                    case "submit":
-                        break;
-                }
-            }
-        }
         const antiForgeryToken: HTMLInputElement = document.querySelector(`#${ElementIds.UploadForm} input[name="__RequestVerificationToken"]`) as HTMLInputElement;
         formData.append("__RequestVerificationToken", antiForgeryToken.value);
 
@@ -123,22 +105,20 @@ export class FileUpload {
             contentType: false,
 
             success: (ajaxResponse) => {
-                progressBar.enable(false);
+                progressBar.remove();
 
                 const response = ajaxResponse as IPostFormResponse;
                 if (!response. success)
                     this.logUploadErrors(response);
                 else {
                     this.logUploadSuccess(response);
-                    window.location.href = response.redirectToUrl;
                 }
             },
             error: (ajaxError) => {
-                progressBar.enable(false);
+                progressBar.remove();
                 this._logger.addErrorMessage(ajaxError.toString());
             },
         });
-
     }
 
     /**
@@ -164,20 +144,17 @@ export class FileUpload {
     }
 
     /**
-     * @description Submit button handler.
+     * @description onChange button handler.
      * @return {*}  {void}
      */
-    public onSubmit(): void {
+    public onChange(): void {
 
-        // ensure valid form
-        const $form = $(`#${ElementIds.UploadForm}`);
-        const $validator = $form.validate();
-        if (!$form.valid())
-            return;
         this.clearValidationErrors();
 
-        const formData = this.buildFormDataFromForm();
-        this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate));
+        Array.from(this._fileButton.files).forEach((file) => {
+            const formData = this.buildFormData(file);
+            this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate, formData.get("Name") as string));
+        });
     }
 
     /**

@@ -33,6 +33,7 @@ export enum ElementIds {
 
     // File Transfer
     UploadForm                  = "uploadForm",
+    FileButton                  = "fileButton",
     ProgressBarTemplate         = "progressBarTemplate",
     FormProgressBarContainer    = "formProgressBarContainer",
     DropProgressBarContainer    = "dropProgressBarContainer",

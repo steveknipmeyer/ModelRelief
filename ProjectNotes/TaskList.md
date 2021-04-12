@@ -1,18 +1,29 @@
 #### Commit       
 ### General     
-
-    Today
-        
+    Today       
         Drag and Drop
             https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
+
+        Runtime error does not propagate back to UI.
+            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
+                The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
+                    Should the GeneratedFile be deleted if the Solver fails?
+                A subsequent Get can read the metadata file and report the results (successful or unsuccessful).
+            Generate result
+                Result
+                Processing time
+                Polygons
+
+        Convert Mesh to OBJ default to support download of generated Mesh.
+            https://github.com/mrdoob/three.js/blob/3510fdd91725f7681db845efd889c5e29e6e7446/examples/js/exporters/OBJExporter.js
                     
-        Model3d Create
+        Styling
+            SASS
+            Udemy Bootstrap course
             Style the View.
             Style the ProgressBar
                 Increase the default width of the Progress Bar.
                 Increase the height.
-
-
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
@@ -42,7 +53,6 @@
         How should a new project be created?
             Projects/Create is the baseline View.
     
-    Convert Mesh to OBJ default to support download of generated Mesh.
 
     Profile the startup code.
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
@@ -101,17 +111,6 @@
     Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 #### Solver
-    Runtime error does not propagate back to UI.
-        The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
-            The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
-                Should the GeneratedFile be deleted if the Solver fails?
-            A subsequent Get can read the metadata file and report the results (successful or unsuccessful).
-        Generate result
-            Result
-            Processing time
-            Polygons
-    Can the CancellationToken be used to handle aborted processing?    
-
     Silhouette
         Blend profile into mesh form.
 #### UI
