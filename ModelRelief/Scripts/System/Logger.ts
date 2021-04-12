@@ -187,7 +187,7 @@ export class HTMLLogger implements ILogger {
             return;
 
         const messageElement = document.createElement(this.messageTag);
-        messageElement.textContent = message;
+        messageElement.innerHTML = message;
 
         messageElement.className   = `${this.baseMessageClass} ${messageClass ? messageClass : ""}`;
 

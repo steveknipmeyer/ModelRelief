@@ -6,7 +6,7 @@
 "use strict";
 import {ProgressBar} from "Scripts/FileTransfer/ProgressBar";
 import {IPostFormResponse} from "Scripts/FileTransfer/IPostFormResponse";
-import {ElementIds} from "Scripts/System/Html";
+import {ElementClasses, ElementIds} from "Scripts/System/Html";
 import {Initializer} from "Scripts/System/Initializer";
 import {ILogger, HTMLLogger} from "Scripts/System/Logger";
 import {Services} from "Scripts/System/Services";
@@ -19,8 +19,8 @@ import {Services} from "Scripts/System/Services";
 export class FileUpload {
 
     private _logger: ILogger;
-    private _uploadForm: HTMLFormElement;
     private _fileButton: HTMLInputElement;
+    private _dropArea: HTMLElement;
 
     /**
      * Creates an instance of FileUpload.
@@ -34,12 +34,81 @@ export class FileUpload {
      */
     private initializeControls(): void {
 
-        this._uploadForm = document.getElementById(ElementIds.UploadForm) as HTMLFormElement;
-
         this._fileButton = document.getElementById(ElementIds.FileButton) as HTMLInputElement;
         this._fileButton.addEventListener("change", () => {
             this.onChange();
         });
+
+        this.initializeDropArea();
+    }
+
+    /**
+     * @description Initialize the file drop area.
+     * @private
+     */
+    private initializeDropArea() {
+
+        this._dropArea = document.getElementById(ElementIds.DropArea);
+
+        // border highlight control
+        ["dragenter", "dragover"].forEach(eventName => {
+            this._dropArea.addEventListener(eventName, this.highlight.bind(this), false);
+        });
+
+        ["dragleave", "drop"].forEach(eventName => {
+            this._dropArea.addEventListener(eventName, this.unhighlight.bind(this), false);
+        });
+
+        // drop
+        this._dropArea.addEventListener("drop", this.handleDrop.bind(this), false);
+    }
+
+    /**
+     * @description Prevent the default event behavior.
+     * @private
+     * @param {Event} event
+     */
+    private preventDefaults(event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    /**
+     * @description Add the "highlight" class attribute.
+     * @private
+     * @param {DragEvent} event
+     */
+    private highlight(event: DragEvent) {
+        this.preventDefaults(event);
+
+        const targetElement = event.target as HTMLElement;
+        targetElement.classList.add(ElementClasses.Highlight);
+    }
+
+    /**
+     * @description Remove the "highlight" class attribute.
+     * @private
+     * @param {DragEvent} event
+     */
+    private unhighlight(event: DragEvent) {
+        this.preventDefaults(event);
+        const targetElement = event.target as HTMLElement;
+        targetElement.classList.remove(ElementClasses.Highlight);
+    }
+
+    /**
+     * @description Handle the drop event of a file collection.
+     * @private
+     * @param {DragEvent} event
+     */
+    private handleDrop(event:DragEvent) {
+
+        this.preventDefaults(event);
+
+        const dataTransfer = event.dataTransfer;
+        const files = dataTransfer.files;
+
+        this.uploadFiles(files);
     }
 
     /**
@@ -136,10 +205,20 @@ export class FileUpload {
 
         this._logger.addErrorMessage(`${response.fileName}: errors during upload. `);
         response.errors.forEach((error) => {
-            this._logger.addErrorMessage(`    ${error.field}: ${error.message}`);
+            this._logger.addErrorMessage(`&nbsp;&nbsp;&nbsp;&nbsp;${error.message}`);
+        });
+    }
 
-            const inputField = document.querySelector(`[data-valmsg-for="${error.field}"]`);
-            inputField.innerHTML = error.message;
+    /**
+     * @description Upload a collection of files.
+     * @private
+     * @param {FileList} files Files from input button or drop event.
+     */
+    private uploadFiles(files: FileList) {
+
+        Array.from(files).forEach((file) => {
+            const formData = this.buildFormData(file);
+            this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate, formData.get("Name") as string));
         });
     }
 
@@ -150,11 +229,7 @@ export class FileUpload {
     public onChange(): void {
 
         this.clearValidationErrors();
-
-        Array.from(this._fileButton.files).forEach((file) => {
-            const formData = this.buildFormData(file);
-            this.upload(formData, new ProgressBar(ElementIds.FormProgressBarContainer, ElementIds.ProgressBarTemplate, formData.get("Name") as string));
-        });
+        this.uploadFiles(this._fileButton.files);
     }
 
     /**

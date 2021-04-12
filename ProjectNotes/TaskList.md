@@ -1,9 +1,6 @@
 #### Commit       
 ### General     
     Today       
-        Drag and Drop
-            https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
         Runtime error does not propagate back to UI.
             The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
                 The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.

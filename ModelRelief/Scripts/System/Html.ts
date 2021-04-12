@@ -34,6 +34,7 @@ export enum ElementIds {
     // File Transfer
     UploadForm                  = "uploadForm",
     FileButton                  = "fileButton",
+    DropArea                    = "dropArea",
     ProgressBarTemplate         = "progressBarTemplate",
     FormProgressBarContainer    = "formProgressBarContainer",
     DropProgressBarContainer    = "dropProgressBarContainer",
@@ -61,9 +62,10 @@ export enum ElementIds {
 
 export enum ElementClasses {
 
+    FitViewButton      = "fitViewButton",
+    Highlight          = "highlight",
     StandardViewButton = "standardViewButton",
     StandardViewMenu   = "standardViewMenu",
-    FitViewButton      = "fitViewButton",
 }
 
 export const ElementAttributes = {

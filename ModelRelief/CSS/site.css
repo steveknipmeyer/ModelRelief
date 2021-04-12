@@ -144,6 +144,18 @@ input[type=checkbox]:checked + label:before {
 /* ----------------------
     Model3d Create (Upload)
 ------------------------*/
+#dropArea {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  /* width: 480px; */
+
+  margin: 50px;
+  padding: 20px;
+}
+
+#dropArea.highlight {
+  border-color: rgb(9, 248, 248);
+}
 
 /* ----------------------
     Compose
