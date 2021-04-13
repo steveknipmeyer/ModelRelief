@@ -84,6 +84,16 @@ export class ComposerView {
     }
 
     /**
+     * @description Gets the NormalMapView.
+     * @readonly
+     * @type {string}
+     */
+    get normalMapView(): NormalMapView {
+
+        return this._normalMapView;
+    }
+
+    /**
      * @description Gets the Event Manager.
      * @readonly
      * @type {EventManager}

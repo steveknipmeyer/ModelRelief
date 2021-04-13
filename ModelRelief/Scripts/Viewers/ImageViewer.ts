@@ -19,12 +19,14 @@ import {Services} from "Scripts/System/Services";
 export class ImageViewer  {
 
     // Public
-    public name: string;
     public canvas: HTMLCanvasElement;
     public imageModel: IImageModel;
 
     // Protected
     protected _logger: ILogger;
+
+    // Private
+    public _name: string;
 
     /**
      * Creates an instance of ImageViewer.
@@ -34,7 +36,7 @@ export class ImageViewer  {
      */
     constructor(name: string, canvasId: string, image: IImageModel) {
 
-        this.name = name;
+        this._name = name;
         this.imageModel = image;
 
         this.canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
@@ -57,6 +59,16 @@ export class ImageViewer  {
         const parentElement: HTMLElement = this.canvas.parentElement;
         return parentElement.id;
     }
+
+    /**
+     * @description Returna base64-encoded string of the Canvas element.
+     * @readonly
+     * @type {string}
+     */
+    get base64Image(): string {
+        return Graphics.getBase64Image(this.canvas);
+    }
+
 //#endregion
 
 //#region Event Handlers
@@ -67,7 +79,7 @@ export class ImageViewer  {
     public displayImage(visible: boolean): void {
 
         this.canvas.style.display = visible ? "" : "none";
-        this._logger.addMessage(`${this.name} Image = ${visible}`);
+        this._logger.addMessage(`${this._name} Image = ${visible}`);
     }
 
     /**

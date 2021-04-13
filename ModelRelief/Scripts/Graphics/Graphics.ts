@@ -734,6 +734,18 @@ export class Graphics {
     constructor() {
         // NOP
     }
+
+    /**
+     * @description Returns a Base64 encoded string of a canvas.
+     * @param {HTMLCanvasElement} canvas Canvas element to convert
+     * @return {*}  {string} Base64 encoded string
+     */
+    public static getBase64Image(canvas: HTMLCanvasElement): string {
+
+        const dataURL = canvas.toDataURL("image/png");
+
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
 //#endregion
 
 //#region WebGL

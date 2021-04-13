@@ -176,6 +176,7 @@ export class ImageFactory {
             logarithmicDepthBuffer  : false,
             canvas                  : this._canvas,
             antialias               : true,
+            preserveDrawingBuffer   : true,
         });
         renderer.autoClear = true;
         renderer.setClearColor(0x000000);

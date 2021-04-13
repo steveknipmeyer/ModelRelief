@@ -48,6 +48,15 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
     }
 
     /**
+     * @description Returns the HTTP endpoint for a file preview request.
+     * @readonly
+     * @type {string}
+     */
+    get previewEndPoint(): string {
+        return `${this.endPoint}/${this.id}/preview`;
+    }
+
+    /**
      * @description Posts the model and a backing file to its API endpoint.
      * @returns {Promise<T>}
      */
@@ -60,6 +69,24 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         Services.timer.logElapsedTime(exportTag);
 
         return this.factory(newModel) as T;
+    }
+
+    /**
+     * @description Posts the file preview to its API endpoint.
+     * @returns {Promise<T>}
+     */
+    public async postPreviewAsync(base64PreviewImage: string): Promise<T> {
+
+        const encoder = new TextEncoder();
+        const fileData = encoder.encode(base64PreviewImage);
+
+        const exportTag = Services.timer.mark(`POST Preview: ${this.constructor.name}`);
+
+        const model = await HttpLibrary.postFileAsync(this.previewEndPoint, fileData);
+
+        Services.timer.logElapsedTime(exportTag);
+
+        return this.factory(model) as T;
     }
 
     /**

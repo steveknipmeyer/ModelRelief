@@ -6,6 +6,8 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {Graphics} from "Scripts/Graphics/Graphics";
+
 /**
  * @description ImageTest
  * @export
@@ -28,14 +30,13 @@ export class ImageTest {
     public getBase64Image(img: HTMLImageElement): string {
 
         const canvas = document.createElement("canvas");
-        canvas.width  = img.width;
-        canvas.height = img.height;
+        canvas.width  = img.naturalWidth;
+        canvas.height = img.naturalHeight;
 
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL("image/png");
 
-        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        return Graphics.getBase64Image(canvas);
     }
 
     /**

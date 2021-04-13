@@ -242,6 +242,14 @@ export class Viewer {
         return this._controls;
     }
 
+    /**
+     * @description Returna base64-encoded string of the Canvas element.
+     * @readonly
+     * @type {string}
+     */
+    get base64Image(): string {
+        return Graphics.getBase64Image(this._canvas);
+    }
 //#endregion
 
 //#region Initialization
@@ -276,6 +284,7 @@ export class Viewer {
             logarithmicDepthBuffer  : false,
             canvas                  : this._canvas,
             antialias               : true,
+            preserveDrawingBuffer   : true,
         });
         this._renderer.autoClear = true;
         this._renderer.setClearColor(0x000000);

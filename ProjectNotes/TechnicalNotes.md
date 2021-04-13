@@ -241,32 +241,6 @@ GeneratedFileDomainModel Dependencies
         MeshTransform                   X
 
 ```
-
-#### Models
-        Dragon
-        Horse
-        House
-        Lucy
-        Plunderbuss Pete
-        Scallop
-    
-        Not Used
-            Armadillo
-            Buddha
-            Bunny
-            Dolphin
-            LowResolution
-            Roadster
-            Statue
-            Test
-            Tyrannosaurus
-    
-        Thingiverse Sculpture
-        Archive 3D
-            Pegasys
-            David
-            https://archive3d.net/?category=31
-
 #### WebGL
     https://webglfundamentals.org/webgl/lessons/webgl-how-it-works.html
     

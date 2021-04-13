@@ -31,6 +31,8 @@ import {ModelViewer} from "Scripts/Viewers/ModelViewer";
 import {NormalMapViewer} from "Scripts/Viewers/NormalMapViewer";
 import {ComposerView} from "Scripts/Views/ComposerView";
 import {StandardView} from "Scripts/Api/V1/Interfaces/ICamera";
+import {DtoModel} from "Scripts/Api/V1/Base/DtoModel";
+import {DtoModel3d} from "Scripts/Api/V1/Models/DtoModel3d";
 
 /**
  * @description ComposerViewSettings
@@ -206,6 +208,10 @@ export class ComposerController {
      * @returns {Promise<void>}
      */
     public async generateReliefAsync(): Promise<void> {
+
+        // Model
+        const model: DtoModel3d = await this.updateModelAsync();
+
         // Camera
         const cameraModel: DtoCamera = await this.updateCameraAsync();
 
@@ -228,8 +234,27 @@ export class ComposerController {
         this.meshViewer.setModelGroup(meshGraphics);
         this.meshViewer.setCameraToStandardView(StandardView.Top);
 
+        // mesh preview
+        setTimeout(async() => {
+            const previewImage = this.meshViewer.base64Image;
+            await this.activeMesh.toDtoModel().postPreviewAsync(previewImage);
+        }, 1000);
+
         this.meshViewer.enableBusyBar(false);
         this._logger.addMessage("Mesh generated");
+    }
+
+    /**
+     * @description Updates the Model3d.
+     * @returns {Promise<DtoModel3d>}
+     */
+    public async updateModelAsync(): Promise<DtoModel3d> {
+
+        // preview
+        const previewImage = this.modelViewer.base64Image;
+        const model: DtoModel3d = await this.activeModel3d.toDtoModel().postPreviewAsync(previewImage);
+
+        return model;
     }
 
     /**
@@ -245,6 +270,7 @@ export class ComposerController {
 
         // update
         const reliefCameraModel: DtoCamera = await this.activeMeshReliefCamera.toDtoModel().putAsync();
+
         return reliefCameraModel;
     }
 
@@ -272,6 +298,10 @@ export class ComposerController {
         // file
         this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
         depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
+
+        // preview
+        const previewImage = this.depthBufferViewer.base64Image;
+        depthBufferModel = await depthBufferModel.postPreviewAsync(previewImage);
 
         // viewer
         this.depthBufferViewer.imageModel = this.activeDepthBuffer;
@@ -304,6 +334,10 @@ export class ComposerController {
         this.activeNormalMap.rgbaArray = factoryNormalMap.rgbaArray;
         normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray);
 
+        // preview
+        const previewImage = this.normalMapViewer.base64Image;
+        normalMapModel = await normalMapModel.postPreviewAsync(previewImage);
+
         // viewer
         this.normalMapViewer.imageModel = this.activeNormalMap;
 
@@ -331,7 +365,7 @@ export class ComposerController {
         // Force the Mesh to be re-generated now on the back end.
         this.activeMesh.fileIsSynchronized = true;
 
-        const updatedMeshModel = this.activeMesh.toDtoModel().putAsync();
+        const updatedMeshModel = await this.activeMesh.toDtoModel().putAsync();
 
         return updatedMeshModel;
     }

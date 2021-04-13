@@ -134,13 +134,13 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Action method to create a file that is associated with a model.
         /// </summary>
-        /// <returns>TGetModel of newly-created model.</returns>
+        /// <returns>TGetModel of updated model.</returns>
         [HttpPost("{id:int}/file")]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> PostFile()
         {
-            // POST file requies an existing model
+            // POST file requires an existing model
             var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
             var model = await FindModelById(modelId);
 
@@ -156,6 +156,36 @@ namespace ModelRelief.Api.V1.Shared
                 User = User,
                 Id = modelId,
                 NewFile = postFile,
+            });
+
+            return PostCreatedResult(result, postFile: true);
+        }
+
+        /// <summary>
+        /// Action method to create a preview that is associated with a model.
+        /// </summary>
+        /// <returns>TGetModel of updated model.</returns>
+        [HttpPost("{id:int}/preview")]
+        [Consumes("application/octet-stream")]
+        [DisableRequestSizeLimit]
+        public virtual async Task<IActionResult> PostPreview()
+        {
+            // POST preview requires an existing model
+            var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
+            var model = await FindModelById(modelId);
+
+            // construct from request body
+            var postPreview = new PostPreview
+            {
+                Name = model.Name,
+                Raw = await Files.ReadToEnd(Request.Body),
+            };
+
+            var result = await HandleRequestAsync(new PostPreviewRequest<TEntity, TGetModel>
+            {
+                User = User,
+                Id = modelId,
+                NewPreview = postPreview,
             });
 
             return PostCreatedResult(result, postFile: true);
@@ -244,12 +274,13 @@ namespace ModelRelief.Api.V1.Shared
         /// Gets the Uri of a newly-created resource.
         /// </summary>
         /// <param name="okResult">OKResult from successful post</param>
-        /// <param name="postFile">File resource posted; not metadata</param>
+        /// <param name="postFile">File/preview resource posted; not metadata</param>
         private Uri GetCreatedUri(OkObjectResult okResult, bool postFile)
         {
             // N.B. Files are posted to a 'file' subresource (e.g. resource/id/file while metadata is posted to the root resource.
             //   Type       Post Endpoint       Created Endpoint
             //   file       resource/id/file    resource/id/file
+            //   preview    resource/id/preview resource/id/preview
             //   JSON       resource            resource/id
             // Therefore, the created URL that is returned must be handled differently.
             // For JSON, the new id is appended while for a file the created endpoint is the same as the POST endpoint.
@@ -268,7 +299,7 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="result">IActionResult from processing.</param>
         /// <returns>Created(201) is successful; otherwise raw result (typically ApiError)</returns>
-        /// <param name="postFile">File resource posted; not metadata</param>
+        /// <param name="postFile">File/preview resource posted; not metadata</param>
         protected IActionResult PostCreatedResult(IActionResult result, bool postFile = false)
         {
             // return ApiError if not OK; all successful requests return OK

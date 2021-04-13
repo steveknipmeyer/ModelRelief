@@ -9,7 +9,7 @@ namespace ModelRelief.Dto
     using FluentValidation;
 
     /// <summary>
-    /// POST file model.
+    /// POST file.
     /// </summary>
     public class PostFile
     {

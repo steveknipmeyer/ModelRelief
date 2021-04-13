@@ -1,7 +1,13 @@
 #### Commit       
 ### General     
     Today       
+            Unit Tests                
+                Preview POST
+                Preview GET
+
         Runtime error does not propagate back to UI.
+            Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.
+                Polling is done based on a timer.
             The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
                 The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
                     Should the GeneratedFile be deleted if the Solver fails?
@@ -32,15 +38,9 @@
     Review the semantics of Mesh and Model editing (Compose).
         ComposerController uses a Mesh endpoint.
 
-    Thumbnails
-        Add support for creating mesh "thumbnails" from the mesh canvas.
-            Add a new endpoint mesh/preview for a preview image of the mesh. 
-                mesh/{id}/thumbnail
-            Create using the Canvas image of the last generated Mesh.  
-
-        Project Index
-            Use Index page as a template for the Project page.
-                Each user model is hosted in a tile.
+    Project Index
+        Use Index page as a template for the Project page.
+            Each user model is hosted in a tile.
 
     Create Model3d
         Why is the FormFile binding lost?
@@ -49,7 +49,7 @@
     Create Project
         How should a new project be created?
             Projects/Create is the baseline View.
-    
+   
 
     Profile the startup code.
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
