@@ -40,6 +40,7 @@ namespace ModelRelief.Test.TestModels.DepthBuffers
             EnumPropertyName = "Format";
 
             BackingFile = "depthbuffer.sdb";
+            PreviewFile = "depthbufferPreview.png";
         }
 
         /// <summary>

@@ -6,12 +6,10 @@
 
 namespace ModelRelief.Test.TestModels
 {
-    using System.IO;
+    using System;
     using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
-    using Microsoft.AspNetCore.Http;
-    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
     using ModelRelief.Test;
@@ -28,6 +26,7 @@ namespace ModelRelief.Test.TestModels
     {
         public string BackingFile { get; set; }
         public string InvalidBackingFile { get; set; }
+        public string PreviewFile { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestFileModelFactory{TEntity, TGetModel}"/> class.
@@ -78,6 +77,23 @@ namespace ModelRelief.Test.TestModels
 
             // Assert
             requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Posts a file preview.
+        /// </summary>
+        /// <param name="modelId">Id of the backing model.</param>
+        /// <param name="fileName">Name of the preview to POST.</param>
+        public virtual async Task<IModel> PostPreview(int modelId, string fileName)
+        {
+            // Act
+            var requestResponse = await PostFilePreview(modelId, fileName);
+
+            // Assert
+            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            return model;
         }
 
         /// <summary>
@@ -145,6 +161,22 @@ namespace ModelRelief.Test.TestModels
         {
             var byteArray = Utility.ByteArrayFromFile(fileName);
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/file", byteArray, HttpMimeType.OctetStream);
+
+            return requestResponse;
+        }
+
+        /// <summary>
+        /// Posts a preview.
+        /// </summary>
+        /// <param name="modelId">Id of the backing model.</param>
+        /// <param name="fileName">Name of the preview to POST.</param>
+        private async Task<RequestResponse> PostFilePreview(int modelId, string fileName)
+        {
+            var byteArray = Utility.ByteArrayFromFile(fileName);
+            var base64String = Convert.ToBase64String(byteArray);
+            var encodedByteArray = System.Text.Encoding.UTF8.GetBytes(base64String);
+
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/{modelId}/preview", encodedByteArray, HttpMimeType.OctetStream);
 
             return requestResponse;
         }

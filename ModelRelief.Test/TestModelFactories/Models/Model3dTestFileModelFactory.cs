@@ -40,6 +40,7 @@ namespace ModelRelief.Test.TestModels.Models
 
             BackingFile = "unitcube.obj";
             InvalidBackingFile = "invalid.obj";
+            PreviewFile = "modelPreview.png";
         }
 
         /// <summary>

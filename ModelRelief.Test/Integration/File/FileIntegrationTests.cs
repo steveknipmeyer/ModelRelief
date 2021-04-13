@@ -63,6 +63,16 @@ namespace ModelRelief.Test.Integration
         }
 
         /// <summary>
+        /// Posts a file preview.
+        /// </summary>
+        /// <param name="modelId">Id of the backing metadata model.</param>
+        /// <param name="fileName">Name of the preview to POST.</param>
+        public virtual async Task<IModel> PostPreview(int modelId, string fileName)
+        {
+            return await TestFileModelFactory.PostPreview(modelId, fileName);
+        }
+
+        /// <summary>
         /// Posts a new model and file together to the PostForm endpoint([multipart/form-data] PostForm).
         /// </summary>
         /// <param name="fileName">Name of the file to POST.</param>
@@ -228,6 +238,25 @@ namespace ModelRelief.Test.Integration
 
             // Rollback
             await DeleteModel(newModel);
+        }
+        #endregion
+
+        #region PostPreview
+        /// <summary>
+        /// Tests whether a preview can be posted to the resource.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api PostPreview")]
+        public virtual async Task PostPreview_PreviewCanBePosted()
+        {
+            // Arrange
+            var modelId = TestModelFactory.IdRange.Min();
+
+            // Act
+            var result = await PostPreview(modelId, TestFileModelFactory.PreviewFile);
+
+            // Assert
+            // performed in PostPreview
         }
         #endregion
 

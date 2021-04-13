@@ -40,6 +40,7 @@ namespace ModelRelief.Test.TestModels.NormalMaps
             EnumPropertyName = "Format";
 
             BackingFile = "normalmap.nmap";
+            PreviewFile = "normalmapPreview.png";
         }
 
         /// <summary>

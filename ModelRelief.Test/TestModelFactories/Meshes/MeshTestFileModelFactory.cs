@@ -39,6 +39,7 @@ namespace ModelRelief.Test.TestModels.Meshes
             EnumPropertyName = "Format";
 
             BackingFile = "mesh.sfp";
+            PreviewFile = "meshPreview.png";
         }
 
         /// <summary>
