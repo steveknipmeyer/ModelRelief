@@ -48,6 +48,26 @@ namespace ModelRelief.Features
         {
         }
 
+        #region Get
+        /// <summary>
+        /// Action handler for a Details page.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <returns>Preview image.</returns>
+        [DisableRequestSizeLimit]
+        public virtual async Task<IActionResult> Preview(int id)
+        {
+            var response = await HandleRequestAsync(new GetFileRequest<TEntity>
+            {
+                User = User,
+                Id = id,
+                FileType = GetFileType.Preview,
+            }) as FileContentResult;
+
+            return File(response.FileContents, "image/png");
+        }
+        #endregion
+
         #region Create
         /// <summary>
         /// Action handler for a Create request.

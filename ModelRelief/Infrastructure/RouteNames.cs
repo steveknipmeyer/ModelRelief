@@ -11,8 +11,9 @@ namespace ModelRelief.Infrastructure
     /// </summary>
     public class RouteNames
     {
-        public const string Default          = "Default";
+        public const string Default = "Default";
         public const string Details = "Details";
+        public const string Preview = "Preview";
         public const string DefaultApiV1     = "DefaultApiV1";
         public const string ApiDocumentation = "ApiDocumentation";
         public const string DepthBuffers = "DepthBuffers";

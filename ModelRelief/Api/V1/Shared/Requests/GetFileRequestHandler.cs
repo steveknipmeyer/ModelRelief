@@ -95,7 +95,6 @@ namespace ModelRelief.Api.V1.Shared.Rest
             //  The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
             var response = new FileContentResult(contents, "application/octet-stream");
 #endif
-
             return response;
         }
     }

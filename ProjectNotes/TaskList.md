@@ -1,11 +1,21 @@
 #### Commit       
 ### General     
     Today       
-        Export preview images.
         Create a mechnism to generate all models.
-        
-        Unit Tests                
-            Preview GET
+
+        /// <summary>
+        ///  Gets the Base64-encoded preview image.
+        /// </summary>
+        [JsonIgnore]
+        public string Preview
+        {
+            get
+            {
+                var bytes = File.ReadAllBytes(PreviewFileName);
+                var base64String = $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
+                return base64String;
+            }
+        }
 
         Runtime error does not propagate back to UI.
             Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.

@@ -22,26 +22,8 @@
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Format)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Format)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Camera)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Camera.Name)
-        </dd>
     </dl>
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

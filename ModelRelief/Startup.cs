@@ -163,6 +163,12 @@ namespace ModelRelief
                     pattern: "{controller}/{id}",
                     defaults: new { controller = "{controller}", action = "Details" });
 
+                // Preview
+                endpoints.MapControllerRoute(
+                    name: RouteNames.Preview,
+                    pattern: "{controller}/{id}/preview",
+                    defaults: new { controller = "{controller}", action = "Preview" });
+
                 // View compound names
                 endpoints.MapControllerRoute(
                     name: RouteNames.DepthBuffers,
