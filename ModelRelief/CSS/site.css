@@ -116,6 +116,14 @@ footer.page-footer .footer-copyright {
     cursor: not-allowed;
 }
 /* ----------------------
+    File Preview
+------------------------*/
+.filePreview {
+    height: 100px;
+    width: 100px;
+}
+
+/* ----------------------
     Contact Form
 ------------------------*/
 #contact-form {
