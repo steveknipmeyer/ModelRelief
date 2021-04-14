@@ -167,7 +167,6 @@ namespace ModelRelief.Test.Integration
         #endregion
 
         #region GetPreview
-#if false
         /// <summary>
         /// Tests whether an existing file can be returned.
         /// </summary>
@@ -184,7 +183,6 @@ namespace ModelRelief.Test.Integration
             // Assert
             Assert.True(requestResponse.Message.IsSuccessStatusCode);
         }
-#endif
         #endregion
 
         #region PostFile
