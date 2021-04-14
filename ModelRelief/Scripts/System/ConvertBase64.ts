@@ -1,8 +1,11 @@
-﻿// ------------------------------------------------------------------------//
-// ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
-// ------------------------------------------------------------------------//
+﻿// ----------------------------------------------------------------------------------------------------------------------//
+// ModelRelief                                                                                                           //
+//                                                                                                                       //
+//                                                                                                                       //
+// Base 64 conversion support.                                                                                           //
+// https://github.com/beatgammit/base64-js/blob/master/index.js                                                          //
+// Referenced by Mozilla: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding     //
+// ----------------------------------------------------------------------------------------------------------------------//
 "use strict";
 
 /**

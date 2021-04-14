@@ -53,12 +53,14 @@ export class RequestResponse {
 
     /**
      * Gets the decoded Uint8Array representation of the response.
+     * The string must have been encoded with windows.btoa.
      * // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
      */
-    get byteArrayDecoded(): Uint8Array {
+    get byteArrayFromabtoa(): Uint8Array {
 
         const base64String = this.fileContent;
 
+        // N.B. string must have been encoded with window.btoa
         const binaryString =  window.atob(base64String);
         const length = binaryString.length;
         const bytes = new Uint8Array(length);
@@ -70,12 +72,15 @@ export class RequestResponse {
 
     /**
      * Gets the decoded Uint8Array representation of the response.
+     * The string must have been encoded with windows.btoa.
+     * Expects a ';base64,' marker at the beginning of the encoded string.
      * https://gist.github.com/borismus/1032746
      */
-    get byteArrayDecodedPrime(): Uint8Array {
+    get byteArrayFrombtoaWithMarker(): Uint8Array {
 
         const base64String = this.fileContent;
 
+        // N.B. string must have been encoded with window.btoa
         const BASE64_MARKER = ";base64,";
         const base64Index = base64String.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
         const base64 = base64String.substring(base64Index);
@@ -92,7 +97,7 @@ export class RequestResponse {
     /**
      * Gets the decoded Uint8Array representation of the response.
      */
-    get byteArrayDecodedDoublePrime(): Uint8Array {
+    get byteArrayFromBase64(): Uint8Array {
 
         const base64String = this.fileContent;
 

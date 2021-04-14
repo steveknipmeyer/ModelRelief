@@ -1,8 +1,10 @@
 #### Commit       
 ### General     
     Today       
-            Unit Tests                
-                Preview GET
+        Export preview images.
+        
+        Unit Tests                
+            Preview GET
 
         Runtime error does not propagate back to UI.
             Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.
@@ -89,15 +91,6 @@
     [ApiCcontroller]
     ModelState
         Does ValidationActionFilter.OnActionExecuting need to do more processing for ModelState?
-
-    GetFile: Is "application/json" required or could "application/octet-stream" be better?
-            // WIP: When:
-            //  1) The FileContentResult encoding is set to "application/octet-stream".
-            //  2) The RestController GetFile action method has [Produces("application/octet-stream")].
-            //  3) The client request header specifies "Accept : 'application/octet-stream'".
-            //  The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
-            //  Is a CustomFormatter required?
-            var response = new FileContentResult(contents, "application/octet-stream");
 #### Models
     OBJ viewer has missing polygons.
         Plunderbuss

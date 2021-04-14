@@ -70,20 +70,44 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
-        /// Gets the associated disk file for a given model instance.
+        /// Gets the associated backing file for a given model instance.
         /// </summary>
-        /// <returns>Disk file name.</returns>
+        /// <returns>Backing file name.</returns>
         [JsonIgnore]
         public string FileName
         {
             get
             {
-                var path = System.IO.Path.Combine(Path ?? string.Empty, Name);
-
-                // now combime relative path with ContentRootPath to yield the complete absolute path
-                var fullPath = StorageManager.GetAbsolutePath(path);
-                return System.IO.Path.GetFullPath(fullPath);
+                return StorePath(Name);
             }
+        }
+
+        /// <summary>
+        /// Gets the associated preview file for a given model instance.
+        /// </summary>
+        /// <returns>Preview file name.</returns>
+        [JsonIgnore]
+        public string PreviewFileName
+        {
+            get
+            {
+                var previewName = $"{System.IO.Path.GetFileNameWithoutExtension(Name)}.png";
+                return StorePath(previewName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the absolute path of a file in the user store.
+        /// </summary>
+        /// <param name="baseFileName">Base file name with extension.</param>
+        /// <returns>Absolute path of file.</returns>
+        private string StorePath(string baseFileName)
+        {
+            var path = System.IO.Path.Combine(Path ?? string.Empty, baseFileName);
+
+            // now combime relative path with ContentRootPath to yield the complete absolute path
+            var fullPath = StorageManager.GetAbsolutePath(path);
+            return System.IO.Path.GetFullPath(fullPath);
         }
     }
 }

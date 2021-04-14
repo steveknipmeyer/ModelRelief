@@ -102,8 +102,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
             return this.fileArray;
 
         const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
-        this.fileArray = result.byteArrayDecodedDoublePrime;
-        //      this._fileArray = result.byteArrayDecoded;
+        this.fileArray = result.byteArrayFromabtoa;
 
         Services.timer.logElapsedTime(exportTag);
 

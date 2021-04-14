@@ -102,13 +102,27 @@ namespace ModelRelief.Api.V1.Shared
 
         [HttpGet("{id:int}/file")]
         [DisableRequestSizeLimit]
-      //[Produces("application/octet-stream")]
+        // [Produces("application/octet-stream")]
         public virtual async Task<IActionResult> GetFile(int id)
         {
             return await HandleRequestAsync(new GetFileRequest<TEntity>
             {
                 User = User,
                 Id = id,
+                FileType = GetFileType.Backing,
+            });
+        }
+
+        [HttpGet("{id:int}/preview")]
+        [DisableRequestSizeLimit]
+        // [Produces("application/octet-stream")]
+        public virtual async Task<IActionResult> GetPreview(int id)
+        {
+            return await HandleRequestAsync(new GetFileRequest<TEntity>
+            {
+                User = User,
+                Id = id,
+                FileType = GetFileType.Preview,
             });
         }
         #endregion

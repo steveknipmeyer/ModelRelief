@@ -70,7 +70,17 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var domainModel = await Query.FindDomainModelAsync<TEntity>(request.User, request.Id, throwIfNotFound: true);
             var fileDomainModel = domainModel as FileDomainModel;
 
-            var fileName = fileDomainModel.FileName;
+            var fileName = string.Empty;
+            switch (request.FileType)
+            {
+                case GetFileType.Backing:
+                    fileName = fileDomainModel.FileName;
+                    break;
+
+                case GetFileType.Preview:
+                    fileName = fileDomainModel.PreviewFileName;
+                    break;
+            }
             if (!File.Exists(fileName))
                 throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
 
@@ -78,12 +88,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
 #if true
             var response = new FileContentResult(contents, "application/json");
 #else
-            // WIP: When:
+            //  Net Core issue: https://github.com/aspnet/Mvc/issues/7926
             //  1) The FileContentResult encoding is set to "application/octet-stream".
             //  2) The RestController GetFile action method has [Produces("application/octet-stream")].
             //  3) The client request header specifies "Accept : 'application/octet-stream'".
             //  The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
-            //  Is a CustomFormatter required?
             var response = new FileContentResult(contents, "application/octet-stream");
 #endif
 

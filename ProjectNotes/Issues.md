@@ -1,4 +1,12 @@
 # Issues
+#### ContentType application/octetstream (FileRequestHandler
+    Net Core issue: https://github.com/aspnet/Mvc/issues/7926
+    
+    1) The FileContentResult encoding is set to "application/octet-stream".
+    2) The RestController GetFile action method has [Produces("application/octet-stream")].
+    3) The client request header specifies "Accept : 'application/octet-stream'".
+    The server returns HTTP status 406 "Not Acceptable" as though the requested format could not be matched to the client request.
+)
 #### Jupyter
     https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci
         error: invalid command 'bdist_wheel'

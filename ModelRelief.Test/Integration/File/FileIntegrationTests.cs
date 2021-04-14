@@ -166,6 +166,27 @@ namespace ModelRelief.Test.Integration
         }
         #endregion
 
+        #region GetPreview
+#if false
+        /// <summary>
+        /// Tests whether an existing file can be returned.
+        /// </summary>
+        [Fact]
+        [Trait("Category", "Api GetPreview")]
+        public virtual async Task GetPreview_ExistingPreviewReturnsSuccess()
+        {
+            // Arrange
+            var modelId = TestModelFactory.IdRange.Min();
+
+            // Act
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/preview");
+
+            // Assert
+            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+        }
+#endif
+        #endregion
+
         #region PostFile
         /// <summary>
         /// Tests whether a file can be posted to the resource.
