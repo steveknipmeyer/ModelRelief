@@ -205,9 +205,9 @@ export class ComposerController {
     //#region Event Handlers
     /**
      * @description Generates a relief from the current model camera.
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
-    public async generateReliefAsync(): Promise<void> {
+    public async generateReliefAsync(): Promise<boolean> {
 
         // Model
         const model: DtoModel3d = await this.updateModelAsync();
@@ -226,22 +226,20 @@ export class ComposerController {
 
         // Mesh
         const meshModel: DtoMesh = await this.updateMeshAsync();
+        if (!meshModel.fileIsSynchronized) {
+            this._logger.addErrorMessage("An error occurred while generating the new Mesh.");
+            return false;
+        }
 
         // Mesh graphics
-        const loader = new Loader();
-        const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
+        const meshLoaded = await this.updateMeshGraphicsAsync();
+        if (!meshLoaded) {
+            this._logger.addErrorMessage("An error occurred while constructing the Mesh graphics.");
+            return false;
+        }
 
-        this.meshViewer.setModelGroup(meshGraphics);
-        this.meshViewer.setCameraToStandardView(StandardView.Top);
-
-        // mesh preview
-        setTimeout(async() => {
-            const previewImage = this.meshViewer.base64Image;
-            await this.activeMesh.toDtoModel().postPreviewAsync(previewImage);
-        }, 1000);
-
-        this.meshViewer.enableBusyBar(false);
         this._logger.addMessage("Mesh generated");
+        return true;
     }
 
     /**
@@ -369,6 +367,33 @@ export class ComposerController {
 
         return updatedMeshModel;
     }
+
+    /**
+     * @description Construct the mesh graphics 3D model.
+     * @return {*}  {Promise<boolean>}
+     */
+    public async updateMeshGraphicsAsync(): Promise<boolean> {
+        const loader = new Loader();
+        try {
+            const meshGraphics = await loader.loadMeshAsync(this.activeMesh);
+            if (meshGraphics === null)
+                return false;
+
+            this.meshViewer.setModelGroup(meshGraphics);
+            this.meshViewer.setCameraToStandardView(StandardView.Top);
+
+            // mesh preview
+            setTimeout(async () => {
+                const previewImage = this.meshViewer.base64Image;
+                await this.activeMesh.toDtoModel().postPreviewAsync(previewImage);
+            }, 1000);
+        }
+        catch (exception) {
+            this._logger.addErrorMessage(`An exception occurred while constructing the Mesh graphics: ${exception.message}.`);
+            return false;
+        }
+        return true;
+    }
     //#endregion
 
     /**
@@ -413,10 +438,11 @@ export class ComposerController {
 
         // Generate Mesh
         const generateMeshControl = document.querySelector(`#${ElementIds.GenerateMesh}`);
-        generateMeshControl.addEventListener("click", (clickEvent) => {
+        generateMeshControl.addEventListener("click", async (clickEvent) => {
 
             this.meshViewer.enableBusyBar(true);
-            this.generateReliefAsync();
+            await this.generateReliefAsync();
+            this.meshViewer.enableBusyBar(false);
         });
     }
 

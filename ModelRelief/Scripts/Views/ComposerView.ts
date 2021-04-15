@@ -164,7 +164,6 @@ export class ComposerView {
 
                 // mesh available; start render loop
                 this._meshView.meshViewer.animate();
-                // this._meshView.meshViewer.enableProgressBar(false);
             });
 
             Promise.all([modelLoadedPromise, meshLoadedPromise]).then(() => {

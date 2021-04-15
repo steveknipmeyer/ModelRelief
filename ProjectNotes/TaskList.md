@@ -1,12 +1,14 @@
 #### Commit       
 ### General     
     Today       
+        Non-existent file preview image?
+            "Not Available Yet" proxy image.
         Create a mechnism to generate all models.
 
         Runtime error does not propagate back to UI.
             Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.
                 Polling is done based on a timer.
-            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not synchronous with the Put request.
+            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not directly visible to the Put request handler.
                 The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
                     Should the GeneratedFile be deleted if the Solver fails?
                 A subsequent Get can read the metadata file and report the results (successful or unsuccessful).
@@ -33,16 +35,9 @@
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
-    Review the semantics of Mesh and Model editing (Compose).
-        ComposerController uses a Mesh endpoint.
-
     Project Index
         Use Index page as a template for the Project page.
             Each user model is hosted in a tile.
-
-    Create Model3d
-        Why is the FormFile binding lost?
-            The focus has to leave the input field.
 
     Create Project
         How should a new project be created?
@@ -84,10 +79,6 @@
         
     Session    
         Wrap HttpContext.Session?
-
-    [ApiCcontroller]
-    ModelState
-        Does ValidationActionFilter.OnActionExecuting need to do more processing for ModelState?
 #### Models
     OBJ viewer has missing polygons.
         Plunderbuss
