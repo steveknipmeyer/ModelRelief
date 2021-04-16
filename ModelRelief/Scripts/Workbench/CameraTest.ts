@@ -118,7 +118,7 @@ class CameraTest {
      * @description Main
      */
     public run(): void {
-        this._logger = Services.htmlLogger;
+        this._logger = Services.defaultLogger;
         UnitTests.logger = this._logger;
 
         Initializer.initialize().then((status: boolean) => {

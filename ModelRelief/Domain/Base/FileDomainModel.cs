@@ -92,7 +92,12 @@ namespace ModelRelief.Domain
             get
             {
                 var previewName = $"{System.IO.Path.GetFileNameWithoutExtension(Name)}.png";
-                return StorePath(previewName);
+                var previewNameFullPath = StorePath(previewName);
+                if (File.Exists(previewNameFullPath))
+                    return previewNameFullPath;
+
+                // serve proxy (preview not available yet)
+                return $"{StorageManager.HostingEnvironment.WebRootPath}/images/NoPreview.png";
             }
         }
 

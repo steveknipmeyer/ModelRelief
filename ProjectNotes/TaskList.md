@@ -1,17 +1,12 @@
 #### Commit       
 ### General     
     Today       
-        Non-existent file preview image?
-            "Not Available Yet" proxy image.
         Create a mechnism to generate all models.
 
         Runtime error does not propagate back to UI.
             Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.
                 Polling is done based on a timer.
-            The runtime failure happens during the DependencyManager processing (FileGenerate) so it is not directly visible to the Put request handler.
-                The Solver could mark the output mesh as invalid and encode the status result in a metadata file written to the file folder.
-                    Should the GeneratedFile be deleted if the Solver fails?
-                A subsequent Get can read the metadata file and report the results (successful or unsuccessful).
+
             Generate result
                 Result
                 Processing time
