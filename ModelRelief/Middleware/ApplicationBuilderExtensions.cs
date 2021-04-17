@@ -7,6 +7,7 @@
 namespace Microsoft.AspNetCore.Builder
 {
     using System.IO;
+    using System.Net.Mime;
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.FileProviders;
 
@@ -63,12 +64,12 @@ namespace Microsoft.AspNetCore.Builder
         {
             // Set up custom content types, associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".obj"] = "text/plain";
-            provider.Mappings[".mtl"] = "text/plain";
+            provider.Mappings[".obj"] = MediaTypeNames.Text.Plain;
+            provider.Mappings[".mtl"] = MediaTypeNames.Text.Plain;
 
-            provider.Mappings[".sdb"]  = "application/octet-stream";
-            provider.Mappings[".sfp"]  = "application/octet-stream";
-            provider.Mappings[".nmap"] = "application/octet-stream";
+            provider.Mappings[".sdb"]  = MediaTypeNames.Application.Octet;
+            provider.Mappings[".sfp"]  = MediaTypeNames.Application.Octet;
+            provider.Mappings[".nmap"] = MediaTypeNames.Application.Octet;
 
             // site.webmanifest (favicons bundle)
             provider.Mappings[".webmanifest"] = "application/manifest+json";

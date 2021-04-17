@@ -9,6 +9,7 @@ namespace ModelRelief.Api.V1.Shared
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -105,37 +106,39 @@ namespace ModelRelief.Api.V1.Shared
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> GetFile(int id)
         {
-            var result =  await HandleRequestAsync(new GetFileRequest<TEntity>
-            {
-                User = User,
-                Id = id,
-                FileType = GetFileType.Backing,
-            });
-            var okObjectResult = result as OkObjectResult;
-            if (okObjectResult == null)
-                return result;
-
-            var fileContentResult = okObjectResult.Value as FileContentResult;
-            return File(fileContentResult.FileContents, "application/octet-stream");
+            return await GetFileByType(id, GetFileType.Backing, MediaTypeNames.Application.Octet);
         }
 
         [HttpGet("{id:int}/preview")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> GetPreview(int id)
         {
+            return await GetFileByType(id, GetFileType.Preview, "image/png");
+        }
+
+        /// <summary>
+        ///  Helper to get a specific file type.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <param name="fileType">Type of file.</param>
+        /// <param name="contentType">Media type.</param>
+        /// <returns></returns>
+        private async Task<IActionResult> GetFileByType(int id, GetFileType fileType, string contentType)
+        {
             var result = await HandleRequestAsync(new GetFileRequest<TEntity>
             {
                 User = User,
                 Id = id,
-                FileType = GetFileType.Preview,
+                FileType = fileType,
             });
             var okObjectResult = result as OkObjectResult;
             if (okObjectResult == null)
                 return result;
 
             var fileContentResult = okObjectResult.Value as FileContentResult;
-            return File(fileContentResult.FileContents, "image/png");
+            return File(fileContentResult.FileContents, contentType);
         }
+
         #endregion
 
         #region Create

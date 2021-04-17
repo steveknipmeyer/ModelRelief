@@ -8,6 +8,7 @@ namespace ModelRelief.Infrastructure
 {
     using System;
     using System.IO;
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.Net.Http.Headers;
@@ -23,8 +24,8 @@ namespace ModelRelief.Infrastructure
     {
         public RawRequestBodyFormatter()
         {
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/plain"));
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue(MediaTypeNames.Text.Plain));
+            SupportedMediaTypes.Add(new MediaTypeHeaderValue(MediaTypeNames.Application.Octet));
         }
 
         /// <summary>
@@ -38,8 +39,8 @@ namespace ModelRelief.Infrastructure
 
             var contentType = context.HttpContext.Request.ContentType;
             if (string.IsNullOrEmpty(contentType) ||
-                contentType == "text/plain" ||
-                contentType == "application/octet-stream")
+                contentType == MediaTypeNames.Text.Plain ||
+                contentType == MediaTypeNames.Application.Octet)
                 return true;
 
             return false;
@@ -55,7 +56,7 @@ namespace ModelRelief.Infrastructure
             var request     = context.HttpContext.Request;
             var contentType = context.HttpContext.Request.ContentType;
 
-            if (contentType == "text/plain" ||
+            if (contentType == MediaTypeNames.Text.Plain ||
                 string.IsNullOrEmpty(contentType))
             {
                 using (var reader = new StreamReader(request.Body))
@@ -65,7 +66,7 @@ namespace ModelRelief.Infrastructure
                 }
             }
 
-            if (contentType == "application/octet-stream")
+            if (contentType == MediaTypeNames.Application.Octet)
             {
                 using (var ms = new MemoryStream(2048))
                 {

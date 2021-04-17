@@ -7,6 +7,7 @@
 namespace ModelRelief.Api.V1.Shared.Rest
 {
     using System.IO;
+    using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -85,7 +86,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                 throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
 
             var contents = File.ReadAllBytes(fileName);
-            var response = new FileContentResult(contents, "application/octet-stream");
+            var response = new FileContentResult(contents, MediaTypeNames.Application.Octet);
 
             return response;
         }

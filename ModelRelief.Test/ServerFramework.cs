@@ -10,6 +10,7 @@ namespace ModelRelief.Test
     using System.IO;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Net.Mime;
     using System.Text;
     using System.Threading.Tasks;
     using Autofac.Extensions.DependencyInjection;
@@ -145,7 +146,7 @@ namespace ModelRelief.Test
 
                 case HttpMimeType.OctetStream:
                     content = new ByteArrayContent(contentObject as byte[]);
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
                     break;
 
                 case HttpMimeType.MultiPartFormData:

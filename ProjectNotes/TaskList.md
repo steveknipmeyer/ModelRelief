@@ -1,9 +1,8 @@
 #### Commit       
 ### General     
-    Today       
-        Refactor RestController.GetFile/GetPreview.
-        GetFile, GetPreview should be in a FileDomainModel subclass of RestController.
-        Replace all hard-coded MIME types.
+    Today      
+        RestFileDomainController
+            GetFile, GetPreview
         Add Mesh id/obj endpoint.
 
         Create a mechanism to generate all models.

@@ -29,25 +29,5 @@ namespace ModelRelief.Api.V1.Meshes
             : base(dbContext, loggerFactory, mediator)
         {
         }
-#if false
-        /// <summary>
-        /// Action method to create a file that is associated with a model.
-        /// </summary>
-        /// <returns>TGetModel of newly-created model.</returns>
-        [HttpPost("{id:int}/file")]
-        [Consumes("application/octet-stream")]
-        [DisableRequestSizeLimit]
-        public override async Task<IActionResult> PostFile()
-        {
-            var errorResult = new ApiErrorResult
-            (
-                this,
-                HttpStatusCode.BadRequest,
-                ApiErrorCode.FileCreation,
-                "Meshes cannot be created through POST.  Create a Mesh by synchronizing the object with its dependents."
-            );
-            return await Task.FromResult(errorResult.ObjectResult());
-        }
-#endif
     }
 }
