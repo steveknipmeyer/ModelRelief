@@ -27,7 +27,7 @@ export class SettingsManager  {
 
         const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsUser}`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
-        const settings = new DtoSettings(JSON.parse(result.contentString));
+        const settings = new DtoSettings(JSON.parse(await result.stringAsync()));
 
         this.userSettings = settings;
     }

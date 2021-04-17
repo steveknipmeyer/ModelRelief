@@ -11,6 +11,7 @@ namespace ModelRelief.Test.Integration
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
     using ModelRelief.Dto;
     using ModelRelief.Services.Relationships;
     using ModelRelief.Test.TestModels;
@@ -88,9 +89,7 @@ namespace ModelRelief.Test.Integration
                 if (Model is IFileModel)
                 {
                     var requestResponse = await Factory.ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{Factory.ApiUrl}/{model.Id}/file");
-                    var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-                    var encodedString = fileContentResult.GetValue("fileContents");
-                    Baseline.File = Convert.FromBase64String(encodedString.ToString());
+                    Baseline.File = await requestResponse.GetBytesAsync();
                 }
 
                 return model;

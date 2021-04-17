@@ -42,9 +42,9 @@ namespace ModelRelief.Test.Integration.Settings
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/default");
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            dynamic defaultSettings = JsonConvert.DeserializeObject(requestResponse.ContentString);
+            dynamic defaultSettings = await requestResponse.GetFromJsonAsync<object>();
 
             // Assert
             Assert.True(defaultSettings.Camera.NearClippingPlane > 0.0);
@@ -63,9 +63,9 @@ namespace ModelRelief.Test.Integration.Settings
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/user");
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var userSettings = JsonConvert.DeserializeObject<Dto.Settings>(requestResponse.ContentString);
+            var userSettings = await requestResponse.GetFromJsonAsync<Dto.Settings>();
 
             // Assert
             userSettings.Name.Should().Be(DbFactory.SettingsNames.Project);
@@ -82,9 +82,9 @@ namespace ModelRelief.Test.Integration.Settings
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/session");
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var sessionSettings = JsonConvert.DeserializeObject<Dto.Session>(requestResponse.ContentString);
+            var sessionSettings = await requestResponse.GetFromJsonAsync<Dto.Session>();
 
             // Assert
             sessionSettings.Name.Should().Be(DbFactory.SettingsNames.Session);

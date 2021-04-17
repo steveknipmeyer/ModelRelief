@@ -12,6 +12,7 @@ import {Graphics} from "Scripts/Graphics/Graphics";
 import {ObjectNames} from "Scripts/Graphics/Graphics";
 import {IFacePair, IMeshGenerateParameters, Mesh3d} from "Scripts/Graphics/Mesh3d";
 import {Services} from "Scripts/System/Services";
+import {ILogger} from "Scripts/System/Logger";
 
 /**
  * @description Represents the model loader used to create Mesh objects from single precision floating point files.
@@ -25,6 +26,8 @@ export class SinglePrecisionLoader {
     public transformer: (theNumber: number) => number;
     public bufferExtents: THREE.Vector2;
     public meshExtents: THREE.Vector2;
+
+    private _logger: ILogger;
 
     /**
      * Creates an instance of SinglePrecisionLoader.
@@ -42,6 +45,8 @@ export class SinglePrecisionLoader {
         this.transformer    = transformer;
         this.bufferExtents  = bufferExtents;
         this.meshExtents    = meshExtents;
+
+        this._logger = Services.defaultLogger;
     }
 
     /**
@@ -181,8 +186,15 @@ export class SinglePrecisionLoader {
 
         const meshLowerLeft: THREE.Vector2 = new THREE.Vector2(-(meshXYExtents.x / 2), -(meshXYExtents.y / 2));
 
-        for (let iRow = 0; iRow < (this.bufferExtents.y - 1); iRow++) {
-            for (let iColumn = 0; iColumn < (this.bufferExtents.x - 1); iColumn++) {
+        const numberRows = this.bufferExtents.y - 1;
+        const numberColumns = this.bufferExtents.x - 1;
+        for (let iRow = 0; iRow < numberRows; iRow++) {
+
+            // const percentComplete = 0.1;
+            // if ((iRow % Math.round((numberRows * percentComplete))) == 0)
+            //     this._logger.addInfoMessage(`Mesh generation: ${Math.round((iRow / numberRows) * 100)}%`);
+
+            for (let iColumn = 0; iColumn < numberColumns; iColumn++) {
 
                 const facePair = this.constructTriFacesAtOffset(iRow, iColumn, meshLowerLeft, faceSize, baseVertexIndex);
 

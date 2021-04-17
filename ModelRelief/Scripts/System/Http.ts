@@ -157,7 +157,7 @@ export class HttpLibrary {
         if (!result.response.ok)
             Exception.throwError(`postFileAsync file: Url = ${postUrl}, status = ${result.response.status}`);
 
-        return result.model;
+        return await result.modelAsync();
     }
 
     /**
@@ -190,9 +190,8 @@ export class HttpLibrary {
         // https://stackoverflow.com/questions/35711724/progress-indicators-for-fetch
         // See Benjamin Gruenbaum's answer at the bottom.
         const response = await fetch(endpoint, init);
-        const contentString = await response.text();
 
-        const result = new RequestResponse(response, contentString);
+        const result = new RequestResponse(response);
         if (!result.response.ok)
             Exception.throwError(`submitHttpRequestAsync: Url = ${endpoint}, status = ${result.response.status}`);
 

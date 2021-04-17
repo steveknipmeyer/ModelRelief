@@ -56,8 +56,8 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "MRDatabaseProvider": "SQLite",
                 "MRUpdateSeedData": "False",
-                "MRInitializeDatabase": "False",
-                "MRSeedDatabase": "False",
+                "MRInitializeDatabase": "True",
+                "MRSeedDatabase": "True",
                 "MRExitAfterInitialization": "False",
             },
             "sourceFileMap": {

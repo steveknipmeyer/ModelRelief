@@ -178,11 +178,10 @@ namespace ModelRelief.Test
             catch (Exception ex)
             {
                 Console.WriteLine($"HTTP request {endPoint} threw an exception: {ex.Message}");
-                return new RequestResponse { Message = response, ContentString = string.Empty };
+                return new RequestResponse { Response = response };
             }
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            return new RequestResponse { Message = response, ContentString = responseString };
+            return new RequestResponse { Response = response };
         }
 
         /// <summary>
@@ -208,9 +207,9 @@ namespace ModelRelief.Test
             var endpoint = "https://modelrelief.auth0.com/oauth/token";
             var client = new HttpClient();
             var requestResponse = await SubmitHttpRequestAsync(new HttpClient(), HttpRequestType.Post, endpoint, passwordGrantRequest);
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var passwordGrant = JsonConvert.DeserializeObject<PasswordGrant>(requestResponse.ContentString);
+            var passwordGrant = await requestResponse.GetFromJsonAsync<PasswordGrant>();
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", passwordGrant.Access_token);
 
             return true;

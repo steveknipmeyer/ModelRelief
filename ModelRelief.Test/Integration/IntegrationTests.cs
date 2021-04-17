@@ -66,14 +66,14 @@ namespace ModelRelief.Test.Integration
         /// Unpacks the ApiError from a response.
         /// </summary>
         /// <param name="requestResponse">Response.</param>
-        private ApiError UnpackApiError(RequestResponse requestResponse)
+        private async Task<ApiError> UnpackApiErrorAsync(RequestResponse requestResponse)
         {
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
 
             var apiError = new ApiError();
             try
             {
-                apiError = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
+                apiError = await requestResponse.GetFromJsonAsync<ApiError>();
             }
             catch (Exception ex)
             {
@@ -87,9 +87,9 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="requestResponse">Response.</param>
         /// <param name="statusCode">Expected status code.</param>
-        public void AssertApiErrorHttpStatusCode(RequestResponse requestResponse, HttpStatusCode statusCode)
+        public async Task AssertApiErrorHttpStatusCodeAsync(RequestResponse requestResponse, HttpStatusCode statusCode)
         {
-            var apiError = UnpackApiError(requestResponse);
+            var apiError = await UnpackApiErrorAsync(requestResponse);
             apiError.HttpStatusCode.Should().Be((int)statusCode);
         }
 
@@ -98,9 +98,9 @@ namespace ModelRelief.Test.Integration
         /// </summary>
         /// <param name="requestResponse">Response.</param>
         /// <param name="statusCode">Expected error code.</param>
-        public void AssertApiErrorCode(RequestResponse requestResponse, ApiErrorCode statusCode)
+        public async Task AssertApiErrorCodeAsync(RequestResponse requestResponse, ApiErrorCode statusCode)
         {
-            var apiError = UnpackApiError(requestResponse);
+            var apiError = await UnpackApiErrorAsync(requestResponse);
             apiError.ApiErrorCode.Should().Be((int)statusCode);
         }
 

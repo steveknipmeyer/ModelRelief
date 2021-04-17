@@ -1,10 +1,15 @@
 #### Commit       
 ### General     
     Today       
-        Create a mechnism to generate all models.
+        Refactor RestController.GetFile/GetPreview.
+        GetFile, GetPreview should be in a FileDomainModel subclass of RestController.
+        Replace all hard-coded MIME types.
+        Add Mesh id/obj endpoint.
 
-        Runtime error does not propagate back to UI.
-            Enhance the ProgressBar to show processing progress obtained by GET of GeneratedFileModel metadata.
+        Create a mechanism to generate all models.
+
+        Runtime error does not propagate back to UI.        
+            Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.
                 Polling is done based on a timer.
 
             Generate result
@@ -161,7 +166,6 @@
         3D Printing
         HackerNews
 ### SSL
-    https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
     https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
 
 ### License

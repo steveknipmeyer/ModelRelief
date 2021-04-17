@@ -71,14 +71,14 @@ namespace ModelRelief.Test.TestModels
 
             // first model
             var requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/1").GetAwaiter().GetResult();
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-            var firstModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
+            var firstModel = requestResponse.GetFromJsonAsync<TGetModel>().GetAwaiter().GetResult();
             FirstModelName = firstModel.Name;
 
             // range of model IDs
             requestResponse = ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?NumberofRecords=-1").GetAwaiter().GetResult();
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
-            var queryList = JsonConvert.DeserializeObject<PagedResults<TEntity>>(requestResponse.ContentString);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
+            var queryList = requestResponse.GetFromJsonAsync<PagedResults<TGetModel>>().GetAwaiter().GetResult();
             var totalNumberOfRecords = queryList.TotalNumberOfRecords;
             IdRange = Enumerable.Range(1, totalNumberOfRecords);
         }
@@ -110,9 +110,9 @@ namespace ModelRelief.Test.TestModels
         {
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/{modelId}");
 
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var model = await requestResponse.GetFromJsonAsync<TGetModel>();
             return model;
         }
 
@@ -123,11 +123,11 @@ namespace ModelRelief.Test.TestModels
         public async Task<IModel> FindModelByName(string name)
         {
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?name={name}");
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
+            var pagedResults = await requestResponse.GetFromJsonAsync<PagedResults<TGetModel>>();
             var model = pagedResults.Results.Single();
-            return model;
+            return model as IModel;
         }
         /// <summary>
         /// Returns the current number of models.
@@ -137,7 +137,7 @@ namespace ModelRelief.Test.TestModels
         {
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{ApiUrl}/?NumberofRecords=-1");
 
-            var pagedResults = JsonConvert.DeserializeObject<PagedResults<TGetModel>>(requestResponse.ContentString);
+            var pagedResults = await requestResponse.GetFromJsonAsync<PagedResults<TGetModel>>();
 
             return pagedResults.Results.Count();
         }
@@ -231,9 +231,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{ApiUrl}/{model.Id}", model);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.OK);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var updatedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             updatedModel.Name.Should().Be(model.Name);
 
             return updatedModel;
@@ -251,7 +251,7 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Delete, $"{ApiUrl}/{existingModel.Id}");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
         }
 
         /// <summary>
@@ -266,9 +266,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, model);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var newModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var newModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             newModel.Name.Should().Be(model.Name);
 
             return newModel;

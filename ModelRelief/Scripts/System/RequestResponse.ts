@@ -14,41 +14,39 @@ import {ConvertBase64} from "Scripts/System/ConvertBase64";
 export class RequestResponse {
 
     public response: Response;
-    public contentString: string;
 
     /**
      * Constructs an instance of a RequestResponse.
      * @param {Response} response Raw response from the request.
-     * @param {string} contentString Response body content;
      */
-    constructor(response: Response, contentString: string) {
+    constructor(response: Response) {
 
         this.response = response;
-        this.contentString = contentString;
     }
 
     /**
      * Gets the JSON representation of the response.
      */
-    get model(): IModel {
+    public async modelAsync(): Promise<IModel> {
 
-        return JSON.parse(this.contentString) as IModel;
+        return JSON.parse(await this.stringAsync()) as IModel;
     }
 
     /**
-     * Gets the raw Uint8Array representation of the response.
-     * https://jsperf.com/string-to-uint8array
+     * Gets the Uint8Array representation of the response.
      */
-    get byteArray(): Uint8Array {
+    public async arrayAsync(): Promise<Uint8Array> {
 
-        const base64String = this.fileContent;
+        const buffer =  await this.response.arrayBuffer();
+        return new Uint8Array(buffer);
+    }
 
-        const stringLength = base64String.length;
-        const array = new Uint8Array(stringLength);
-        for (let iByte = 0; iByte < stringLength; ++iByte) {
-            array[iByte] = base64String.charCodeAt(iByte);
-        }
-        return array;
+    /**
+     * Gets the string representation of the response.
+     */
+    public async stringAsync(): Promise<string> {
+
+        return await this.response.text();
     }
 
     /**
@@ -56,9 +54,9 @@ export class RequestResponse {
      * The string must have been encoded with windows.btoa.
      * // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
      */
-    get byteArrayFromabtoa(): Uint8Array {
+    public async byteArrayFromabtoaAsync(): Promise<Uint8Array> {
 
-        const base64String = this.fileContent;
+        const base64String = await this.stringAsync();
 
         // N.B. string must have been encoded with window.btoa
         const binaryString =  window.atob(base64String);
@@ -76,9 +74,9 @@ export class RequestResponse {
      * Expects a ';base64,' marker at the beginning of the encoded string.
      * https://gist.github.com/borismus/1032746
      */
-    get byteArrayFrombtoaWithMarker(): Uint8Array {
+    public async byteArrayFrombtoaWithMarkerAsync(): Promise<Uint8Array> {
 
-        const base64String = this.fileContent;
+        const base64String = await this.stringAsync();
 
         // N.B. string must have been encoded with window.btoa
         const BASE64_MARKER = ";base64,";
@@ -97,23 +95,12 @@ export class RequestResponse {
     /**
      * Gets the decoded Uint8Array representation of the response.
      */
-    get byteArrayFromBase64(): Uint8Array {
+    public async  byteArrayFromBase64Async(): Promise<Uint8Array> {
 
-        const base64String = this.fileContent;
+        const base64String = await this.stringAsync();
 
         const converter = new ConvertBase64();
         const byteArray = converter.toByteArray(base64String) as Uint8Array;
         return byteArray;
-    }
-
-    /**
-     * @description Returns the Base64-encoded contents of a FileContentResult IActionItem.
-     * @returns {string}
-     */
-    get fileContent(): string {
-
-        const resultJson = JSON.parse(this.contentString);
-        const contents = resultJson.fileContents;
-        return contents as string;
     }
 }

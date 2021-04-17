@@ -128,7 +128,7 @@ namespace ModelRelief.Test.Integration.Models
             int modelCount = await TestModelFactory.QueryModelCountAsync();
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace ModelRelief.Test.Integration.Models
             int modelCount = await TestModelFactory.QueryModelCountAsync();
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             Assert.True(modelCount == originalModelCount);
         }
 #endregion

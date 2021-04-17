@@ -72,7 +72,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}");
 
             // Assert
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, TestModelFactory.ApiUrl, newModel);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var addedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var addedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             addedModel.Name.Should().Be(newModel.Name);
 
             // Rollback
@@ -131,7 +131,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, TestModelFactory.ApiUrl, invalidModel);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -156,9 +156,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, TestModelFactory.ApiUrl, newModel);
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var addedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var addedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             TestModelFactory.GetReferenceProperty(addedModel).Should().Be(TestModelFactory.ValidReferenceProperty);
 
             // Rollback
@@ -187,8 +187,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, TestModelFactory.ApiUrl, invalidModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
         }
         #endregion
         #region Put
@@ -208,9 +208,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
 
             // Assert
-            requestResponse.Message.EnsureSuccessStatusCode();
+            requestResponse.Response.EnsureSuccessStatusCode();
 
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var updatedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             updatedModel.Description.Should().Be(updatedDescription);
 
             // Rollback
@@ -232,8 +232,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId + 1}", existingModel);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -258,9 +258,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var updatedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             TestModelFactory.GetReferenceProperty(updatedModel).Should().Be(TestModelFactory.ValidReferenceProperty);
 
             // Rollback
@@ -290,8 +290,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}", existingModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
         }
         #endregion
         #region Patch
@@ -318,9 +318,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}/patch", patchModel);
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var updatedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             updatedModel.Description.Should().Be(updatedDescription);
 
             // Rollback
@@ -346,8 +346,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}/patch", patchModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.NotFound);
         }
 
         /// <summary>
@@ -368,8 +368,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -397,8 +397,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -424,8 +424,8 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -452,9 +452,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{modelId}/patch", invalidPatchModel);
 
             // Assert
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.BadRequest);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.BadRequest);
 
-            var apiErrorResult = JsonConvert.DeserializeObject<ApiError>(requestResponse.ContentString);
+            var apiErrorResult = await requestResponse.GetFromJsonAsync<ApiError>();
             apiErrorResult.Errors.Count().Should().Be(TestModelFactory.ReferencePropertyNames.Count());
         }
 
@@ -484,9 +484,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}/patch", validPatchModel);
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var updatedModel = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var updatedModel = await requestResponse.GetFromJsonAsync<TGetModel>();
             TestModelFactory.GetReferenceProperty(updatedModel).Should().Be(TestModelFactory.ValidReferenceProperty);
 
             // Rollback
@@ -508,14 +508,14 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Delete, $"{TestModelFactory.ApiUrl}/{newModel.Id}");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
             // Now attempt to access the deleted model...
             requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}");
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.NotFound);
         }
         #endregion
     }

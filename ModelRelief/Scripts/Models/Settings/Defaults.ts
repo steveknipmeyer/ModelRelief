@@ -28,7 +28,7 @@ export class Defaults  {
         // Populate the shared settings from the JSON file.
         const endPoint = `${HttpLibrary.HostRoot}${ServerEndPoints.ApiSettingsDefault}`;
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
-        const defaultSettings = JSON.parse(result.contentString);
+        const defaultSettings = JSON.parse(await result.stringAsync());
 
         Defaults.camera = new DefaultCameraSettings();
         Defaults.camera.initialize(defaultSettings);

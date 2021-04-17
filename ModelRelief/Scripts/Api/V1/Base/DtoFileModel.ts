@@ -90,7 +90,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
     }
 
     /**
-     * @description Gets the backing file from a model.
+     * @description Gets the backing file as a binary array.
      * @returns {Promise<UInt8Array>}
      */
     public async getFileAsync(): Promise<Uint8Array> {
@@ -102,7 +102,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
             return this.fileArray;
 
         const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
-        this.fileArray = result.byteArrayFromabtoa;
+        this.fileArray = await result.arrayAsync();
 
         Services.timer.logElapsedTime(exportTag);
 
@@ -110,11 +110,32 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
     }
 
     /**
-     * @description Gets the backing file as a string from a model.
+     * @description Gets the backing file as a string.
      * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
      * @returns {Promise<string>}
      */
     public async getFileAsStringAsync(): Promise<string> {
+
+        const exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
+
+        // cache
+        if (this.fileString)
+            return this.fileString;
+
+        const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
+        this.fileString = await result.stringAsync();
+
+        Services.timer.logElapsedTime(exportTag);
+
+        return this.fileString;
+    }
+
+    /**
+     * @description Gets the backing file as a string.
+     * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
+     * @returns {Promise<string>}
+     */
+    public async getFileAsStringAsyncPrinme(): Promise<string> {
 
         const exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
@@ -140,4 +161,5 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
 
         return this.fileString;
     }
+
 }

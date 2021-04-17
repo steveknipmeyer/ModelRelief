@@ -60,7 +60,7 @@ export class DtoSession extends DtoModel<DtoSession> implements ISession {
 
         const updatedModelJSON = JSON.stringify(this);
         const result = await this.submitRequestAsync(DtoSession.endPoint, MethodType.Put, ContentType.Json, updatedModelJSON);
-        const updatedModel = result.model as DtoSession;
+        const updatedModel = await result.modelAsync() as DtoSession;
 
         if (!result.response.ok)
             return false;
@@ -79,7 +79,8 @@ export class DtoSession extends DtoModel<DtoSession> implements ISession {
     public static async initialize(): Promise<DtoSession> {
 
         const result = await HttpLibrary.submitHttpRequestAsync(this.endPoint, MethodType.Get, ContentType.Json, null);
-        const session = new DtoSession(JSON.parse(result.contentString));
+        const sessionObject = await result.stringAsync();
+        const session = new DtoSession(JSON.parse(sessionObject));
         return session;
     }
 }

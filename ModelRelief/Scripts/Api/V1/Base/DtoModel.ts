@@ -92,7 +92,7 @@ export class DtoModel<T extends IModel> implements IModel {
         if (result.response.status !== HttpStatusCode.CREATED)
             Exception.throwError(`postFileAsync model: Url = ${this.endPoint}, status = ${result.response.status}`);
 
-        return this.factory(result.model) as T;
+        return this.factory(await result.modelAsync()) as T;
     }
 
     /**
@@ -107,7 +107,7 @@ export class DtoModel<T extends IModel> implements IModel {
         const endPoint = `${this.endPoint}/${this.id}`;
         const result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.Json, null);
 
-        return this.factory(result.model) as T;
+        return this.factory(await result.modelAsync()) as T;
     }
 
     /**
@@ -120,6 +120,6 @@ export class DtoModel<T extends IModel> implements IModel {
         const endPoint = `${this.endPoint}/${this.id}`;
         const result = await this.submitRequestAsync(endPoint, MethodType.Put, ContentType.Json, updatedModel);
 
-        return this.factory(result.model) as T;
+        return this.factory(await result.modelAsync()) as T;
     }
 }

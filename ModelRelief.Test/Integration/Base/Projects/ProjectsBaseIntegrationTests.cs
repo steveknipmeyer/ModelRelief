@@ -46,9 +46,9 @@ namespace ModelRelief.Test.Integration.Projects
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}{queryParameter}");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
-            var project = JsonConvert.DeserializeObject<Dto.Project>(requestResponse.ContentString);
+            var project = await requestResponse.GetFromJsonAsync<Dto.Project>();
             project.Models.Count().Should().NotBe(0);
         }
 

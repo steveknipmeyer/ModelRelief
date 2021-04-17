@@ -66,10 +66,9 @@ namespace Microsoft.AspNetCore.Builder
             provider.Mappings[".obj"] = "text/plain";
             provider.Mappings[".mtl"] = "text/plain";
 
-            // Base64 Encoded
-            provider.Mappings[".sdb"]  = "text/plain";
-            provider.Mappings[".sfp"]  = "text/plain";
-            provider.Mappings[".nmap"] = "text/plain";
+            provider.Mappings[".sdb"]  = "application/octet-stream";
+            provider.Mappings[".sfp"]  = "application/octet-stream";
+            provider.Mappings[".nmap"] = "application/octet-stream";
 
             // site.webmanifest (favicons bundle)
             provider.Mappings[".webmanifest"] = "application/manifest+json";

@@ -11,6 +11,7 @@ namespace ModelRelief.Test.Integration
     using System.Net;
     using System.Threading.Tasks;
     using FluentAssertions;
+    using Microsoft.AspNetCore.Mvc;
     using ModelRelief.Api.V1.Shared.Errors;
     using ModelRelief.Domain;
     using ModelRelief.Dto;
@@ -116,7 +117,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
         }
 
         /// <summary>
@@ -133,9 +134,9 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/file");
 
             // Assert
-            Assert.False(requestResponse.Message.IsSuccessStatusCode);
-            AssertApiErrorHttpStatusCode(requestResponse, HttpStatusCode.NotFound);
-            AssertApiErrorCode(requestResponse, ApiErrorCode.NotFound);
+            Assert.False(requestResponse.Response.IsSuccessStatusCode);
+            await AssertApiErrorHttpStatusCodeAsync(requestResponse, HttpStatusCode.NotFound);
+            await AssertApiErrorCodeAsync(requestResponse, ApiErrorCode.NotFound);
         }
 
         /// <summary>
@@ -153,12 +154,10 @@ namespace ModelRelief.Test.Integration
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
-            var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-            var encodedString = fileContentResult.GetValue("fileContents");
-            var readByteArray = Convert.FromBase64String(encodedString.ToString());
+            var readByteArray = await requestResponse.GetBytesAsync();
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
             Assert.True(Utility.EqualByteArrays(writtenByteArray, readByteArray));
 
             // Rollback
@@ -181,7 +180,7 @@ namespace ModelRelief.Test.Integration
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{modelId}/preview");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
         }
         #endregion
 
@@ -320,12 +319,10 @@ namespace ModelRelief.Test.Integration
 
             // Act
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
-            var fileContentResult = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestResponse.ContentString);
-            var encodedString = fileContentResult.GetValue("fileContents");
-            var readByteArray = Convert.FromBase64String(encodedString.ToString());
+            var readByteArray = await requestResponse.GetBytesAsync();
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
             Assert.True(Utility.EqualByteArrays(writtenByteArray, readByteArray));
 
             // Rollback
@@ -348,13 +345,13 @@ namespace ModelRelief.Test.Integration
             // rename model (and file)
             newModel.Name = "New Name";
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{TestModelFactory.ApiUrl}/{newModel.Id}", newModel);
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
             // Act
             requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Get, $"{TestModelFactory.ApiUrl}/{newModel.Id}/file");
 
             // Assert
-            Assert.True(requestResponse.Message.IsSuccessStatusCode);
+            Assert.True(requestResponse.Response.IsSuccessStatusCode);
 
             // Rollback
             await DeleteModel(newModel);

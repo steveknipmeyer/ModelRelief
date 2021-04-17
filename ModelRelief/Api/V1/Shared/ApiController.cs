@@ -24,7 +24,6 @@ namespace ModelRelief.Api.V1.Shared
 
     [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme + "," + JwtBearerDefaults.AuthenticationScheme)]
     [Area("ApiV1")]
-    [Produces("application/json")]
     public abstract class ApiController<TEntity> : Controller, IUrlHelperContainer
             where TEntity : DomainModel
     {

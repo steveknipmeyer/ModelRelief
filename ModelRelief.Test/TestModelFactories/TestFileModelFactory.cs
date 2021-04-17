@@ -59,9 +59,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await Post(modelId, fileName);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var model = await requestResponse.GetFromJsonAsync<TGetModel>();
             return model;
         }
 
@@ -76,7 +76,7 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await Post(modelId, fileName);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await PostFilePreview(modelId, fileName);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var model = await requestResponse.GetFromJsonAsync<TGetModel>();
             return model;
         }
 
@@ -109,9 +109,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await PostForm(fileModel, fileName);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var model = await requestResponse.GetFromJsonAsync<TGetModel>();
             return model;
         }
 
@@ -146,9 +146,9 @@ namespace ModelRelief.Test.TestModels
             var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Put, $"{ApiUrl}/{modelId}/file", byteArray, HttpMimeType.OctetStream);
 
             // Assert
-            requestResponse.Message.StatusCode.Should().Be(HttpStatusCode.Created);
+            requestResponse.Response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            var model = JsonConvert.DeserializeObject<TGetModel>(requestResponse.ContentString);
+            var model = await requestResponse.GetFromJsonAsync<TGetModel>();
             return model;
         }
 
