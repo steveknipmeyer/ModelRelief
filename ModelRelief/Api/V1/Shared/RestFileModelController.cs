@@ -41,7 +41,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="fileQueryParameters">File query parameters.</param>
         [HttpGet("{id:int}/file")]
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> GetFile(int id, [FromQuery] GetFileQueryParameters fileQueryParameters)
+        public virtual async Task<IActionResult> File(int id, [FromQuery] GetFileQueryParameters fileQueryParameters)
         {
             return await GetFileByType(id, GetFileType.Backing, fileQueryParameters);
         }
@@ -52,7 +52,7 @@ namespace ModelRelief.Api.V1.Shared
         /// <param name="id">Model Id.</param>
         [HttpGet("{id:int}/preview")]
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> GetPreview(int id)
+        public virtual async Task<IActionResult> Preview(int id)
         {
             return await GetFileByType(id, GetFileType.Preview, new GetFileQueryParameters { Extension = "png" });
         }
