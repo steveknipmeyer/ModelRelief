@@ -56,9 +56,10 @@ namespace ModelRelief.Features
         /// <param name="fileQueryParameters">File query parameters.</param>
         /// <returns>Preview image.</returns>
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> File(int id, [FromQuery] GetFileQueryParameters fileQueryParameters)
+        public virtual async Task<FileContentResult> File(int id, [FromQuery] GetFileQueryParameters fileQueryParameters)
         {
-            return await GetFileByType(id, fileQueryParameters);
+            var response = await GetFileByType(id, fileQueryParameters);
+            return response;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace ModelRelief.Features
         /// <param name="id">Model Id.</param>
         /// <returns>Preview image.</returns>
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> Preview(int id)
+        public virtual async Task<FileContentResult> Preview(int id)
         {
             return await GetFileByType(id, new GetFileQueryParameters { Extension = "png" });
         }
@@ -78,7 +79,7 @@ namespace ModelRelief.Features
         /// <param name="id">Model Id.</param>
         /// <param name="fileQueryParameters">File query parameters.</param>
         /// <returns></returns>
-        private async Task<IActionResult> GetFileByType(int id, GetFileQueryParameters fileQueryParameters = null)
+        private async Task<FileContentResult> GetFileByType(int id, GetFileQueryParameters fileQueryParameters = null)
         {
             var response = await HandleRequestAsync(new GetFileRequest<TEntity>
             {

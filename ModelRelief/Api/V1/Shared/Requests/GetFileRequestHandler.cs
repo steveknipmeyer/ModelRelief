@@ -81,15 +81,22 @@ namespace ModelRelief.Api.V1.Shared.Rest
                     mediaType = "image/png";
                     break;
 
+                case "obj":
+                    fileName = fileDomainModel.ConstructFileName("obj");
+                    break;
+
                 default:
                     fileName = fileDomainModel.FileName;
                     break;
             }
+            var baseFileName = Path.GetFileName(fileName);
+
             if (!File.Exists(fileName))
-                throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
+                throw new ModelFileNotFoundException(typeof(TEntity), baseFileName);
 
             var contents = File.ReadAllBytes(fileName);
             var response = new FileContentResult(contents, mediaType);
+            response.FileDownloadName = baseFileName;
 
             return response;
         }

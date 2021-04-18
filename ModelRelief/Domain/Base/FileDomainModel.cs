@@ -91,14 +91,25 @@ namespace ModelRelief.Domain
         {
             get
             {
-                var previewName = $"{System.IO.Path.GetFileNameWithoutExtension(Name)}.png";
-                var previewNameFullPath = StorePath(previewName);
+                var previewNameFullPath = ConstructFileName("png");
                 if (File.Exists(previewNameFullPath))
                     return previewNameFullPath;
 
                 // serve proxy (preview not available yet)
                 return $"{StorageManager.HostingEnvironment.WebRootPath}/images/NoPreview.png";
             }
+        }
+
+        /// <summary>
+        /// Constructs an absolute path using the provided extension.
+        /// </summary>
+        /// <param name="extension">Extension to use.</param>
+        /// <returns>Absolute file path formed by root name and provided extension.</returns>
+        public string ConstructFileName(string extension)
+        {
+            var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(Name)}.{extension}";
+            var fileNameFullPath = StorePath(fileName);
+            return fileNameFullPath;
         }
 
         /// <summary>
