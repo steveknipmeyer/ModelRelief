@@ -101,43 +101,6 @@ namespace ModelRelief.Api.V1.Shared
                 QueryParameters = queryParameters,
             });
         }
-
-        [HttpGet("{id:int}/file")]
-        [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> GetBacking(int id)
-        {
-            return await GetFileByType(id, GetFileType.Backing);
-        }
-
-        [HttpGet("{id:int}/preview")]
-        [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> GetPreview(int id)
-        {
-            return await GetFileByType(id, GetFileType.Preview);
-        }
-
-        /// <summary>
-        ///  Helper to get a specific file type.
-        /// </summary>
-        /// <param name="id">Model Id.</param>
-        /// <param name="fileType">Type of file.</param>
-        /// <returns></returns>
-        private async Task<IActionResult> GetFileByType(int id, GetFileType fileType)
-        {
-            var result = await HandleRequestAsync(new GetFileRequest<TEntity>
-            {
-                User = User,
-                Id = id,
-                FileType = fileType,
-            });
-            var okObjectResult = result as OkObjectResult;
-            if (okObjectResult == null)
-                return result;
-
-            var fileContentResult = okObjectResult.Value as FileContentResult;
-            return fileContentResult;
-        }
-
         #endregion
 
         #region Create

@@ -16,7 +16,7 @@ namespace ModelRelief.Api.V1.DepthBuffers
     /// Represents a controller to handle DepthBuffer API requests.
     /// </summary>
     [Route("api/v1/depth-buffers")]
-    public class DepthBuffersController : RestController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>
+    public class DepthBuffersController : RestFileDomainController<Domain.DepthBuffer, Dto.DepthBuffer, Dto.DepthBuffer>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DepthBuffersController"/> class.
