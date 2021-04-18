@@ -50,18 +50,43 @@ namespace ModelRelief.Features
 
         #region Get
         /// <summary>
-        /// Action handler for a Details page.
+        /// Get a file associated with a model.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <param name="fileQueryParameters">File query parameters.</param>
+        /// <returns>Preview image.</returns>
+        [DisableRequestSizeLimit]
+        public virtual async Task<IActionResult> File(int id, [FromQuery] GetFileQueryParameters fileQueryParameters)
+        {
+            return await GetFileByType(id, fileQueryParameters);
+        }
+
+        /// <summary>
+        /// Get a preview file associated with a model.
         /// </summary>
         /// <param name="id">Model Id.</param>
         /// <returns>Preview image.</returns>
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> Preview(int id)
         {
+            return await GetFileByType(id, new GetFileQueryParameters { Extension = "png" });
+        }
+
+        /// <summary>
+        ///  Helper to get a specific file type.
+        /// </summary>
+        /// <param name="id">Model Id.</param>
+        /// <param name="fileQueryParameters">File query parameters.</param>
+        /// <returns></returns>
+        private async Task<IActionResult> GetFileByType(int id, GetFileQueryParameters fileQueryParameters = null)
+        {
             var response = await HandleRequestAsync(new GetFileRequest<TEntity>
             {
                 User = User,
                 Id = id,
-                FileType = GetFileType.Preview,
+
+                // (optional) query parameters
+                QueryParameters = fileQueryParameters,
             }) as FileContentResult;
 
             return response;

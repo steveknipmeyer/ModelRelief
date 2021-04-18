@@ -120,66 +120,6 @@ namespace ModelRelief.Api.V1.Shared
 
             return PostCreatedResult(result);
         }
-
-        /// <summary>
-        /// Action method to create a file that is associated with a model.
-        /// </summary>
-        /// <returns>TGetModel of updated model.</returns>
-        [HttpPost("{id:int}/file")]
-        [Consumes("application/octet-stream")]
-        [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> PostFile()
-        {
-            // POST file requires an existing model
-            var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
-            var model = await FindModelById(modelId);
-
-            // construct from request body
-            var postFile = new PostFile
-            {
-                Name = model.Name,
-                Raw = await Files.ReadToEnd(Request.Body),
-            };
-
-            var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
-            {
-                User = User,
-                Id = modelId,
-                NewFile = postFile,
-            });
-
-            return PostCreatedResult(result, postFile: true);
-        }
-
-        /// <summary>
-        /// Action method to create a preview that is associated with a model.
-        /// </summary>
-        /// <returns>TGetModel of updated model.</returns>
-        [HttpPost("{id:int}/preview")]
-        [Consumes("application/octet-stream")]
-        [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> PostPreview()
-        {
-            // POST preview requires an existing model
-            var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
-            var model = await FindModelById(modelId);
-
-            // construct from request body
-            var postPreview = new PostPreview
-            {
-                Name = model.Name,
-                Raw = await Files.ReadToEnd(Request.Body),
-            };
-
-            var result = await HandleRequestAsync(new PostPreviewRequest<TEntity, TGetModel>
-            {
-                User = User,
-                Id = modelId,
-                NewPreview = postPreview,
-            });
-
-            return PostCreatedResult(result, postFile: true);
-        }
         #endregion
 
         #region Update
@@ -198,18 +138,6 @@ namespace ModelRelief.Api.V1.Shared
                 Id = id,
                 UpdatedModel = putRequest,
             });
-        }
-
-        /// <summary>
-        /// Action method to update a file in its entirety that is associated with a model.
-        /// </summary>
-        /// <returns>TGetModel of updated model.</returns>
-        [HttpPut("{id:int}/file")]
-        [Consumes("application/octet-stream")]
-        [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> PutFile()
-        {
-            return await PostFile();
         }
 
         /// <summary>

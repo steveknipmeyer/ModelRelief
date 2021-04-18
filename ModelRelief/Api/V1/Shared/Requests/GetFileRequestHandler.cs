@@ -73,15 +73,16 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
             var fileName = string.Empty;
             var mediaType = MediaTypeNames.Application.Octet;
-            switch (request.FileType)
-            {
-                case GetFileType.Backing:
-                    fileName = fileDomainModel.FileName;
-                    break;
 
-                case GetFileType.Preview:
+            switch ((request.QueryParameters.Extension ?? string.Empty).ToLower())
+            {
+                case "png":
                     fileName = fileDomainModel.PreviewFileName;
                     mediaType = "image/png";
+                    break;
+
+                default:
+                    fileName = fileDomainModel.FileName;
                     break;
             }
             if (!File.Exists(fileName))

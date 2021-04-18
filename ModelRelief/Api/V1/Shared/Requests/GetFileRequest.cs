@@ -27,5 +27,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets the type of file requested.
         /// </summary>
         public GetFileType FileType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the query parameters.
+        /// </summary>
+        public GetFileQueryParameters QueryParameters { get; set; }
     }
 }

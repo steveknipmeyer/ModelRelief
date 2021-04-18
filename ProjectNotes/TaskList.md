@@ -1,6 +1,10 @@
-#### Commit       
+#### Commit     
+RestFileDomainController -> RestFileModelController  
 ### General     
     Today      
+        Why is a route pattern required for /file and /preview?
+        Support GET /preview.
+        
         Introduce query parameter for file type.
         RestFileDomainController
             GetBacking, GetPreview

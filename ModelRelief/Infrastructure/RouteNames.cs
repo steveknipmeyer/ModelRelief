@@ -13,6 +13,7 @@ namespace ModelRelief.Infrastructure
     {
         public const string Default = "Default";
         public const string Details = "Details";
+        public const string File = "File";
         public const string Preview = "Preview";
         public const string DefaultApiV1     = "DefaultApiV1";
         public const string ApiDocumentation = "ApiDocumentation";

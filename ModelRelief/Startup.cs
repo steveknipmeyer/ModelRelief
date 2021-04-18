@@ -163,6 +163,12 @@ namespace ModelRelief
                     pattern: "{controller}/{id}",
                     defaults: new { controller = "{controller}", action = "Details" });
 
+                // File
+                endpoints.MapControllerRoute(
+                    name: RouteNames.File,
+                    pattern: "{controller}/{id}/file",
+                    defaults: new { controller = "{controller}", action = "File" });
+
                 // Preview
                 endpoints.MapControllerRoute(
                     name: RouteNames.Preview,
