@@ -72,6 +72,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var fileDomainModel = domainModel as FileDomainModel;
 
             var fileName = string.Empty;
+            var mediaType = MediaTypeNames.Application.Octet;
             switch (request.FileType)
             {
                 case GetFileType.Backing:
@@ -80,13 +81,14 @@ namespace ModelRelief.Api.V1.Shared.Rest
 
                 case GetFileType.Preview:
                     fileName = fileDomainModel.PreviewFileName;
+                    mediaType = "image/png";
                     break;
             }
             if (!File.Exists(fileName))
                 throw new ModelFileNotFoundException(typeof(TEntity), domainModel.Name);
 
             var contents = File.ReadAllBytes(fileName);
-            var response = new FileContentResult(contents, MediaTypeNames.Application.Octet);
+            var response = new FileContentResult(contents, mediaType);
 
             return response;
         }

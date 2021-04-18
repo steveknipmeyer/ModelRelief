@@ -104,16 +104,16 @@ namespace ModelRelief.Api.V1.Shared
 
         [HttpGet("{id:int}/file")]
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> GetFile(int id)
+        public virtual async Task<IActionResult> GetBacking(int id)
         {
-            return await GetFileByType(id, GetFileType.Backing, MediaTypeNames.Application.Octet);
+            return await GetFileByType(id, GetFileType.Backing);
         }
 
         [HttpGet("{id:int}/preview")]
         [DisableRequestSizeLimit]
         public virtual async Task<IActionResult> GetPreview(int id)
         {
-            return await GetFileByType(id, GetFileType.Preview, "image/png");
+            return await GetFileByType(id, GetFileType.Preview);
         }
 
         /// <summary>
@@ -121,9 +121,8 @@ namespace ModelRelief.Api.V1.Shared
         /// </summary>
         /// <param name="id">Model Id.</param>
         /// <param name="fileType">Type of file.</param>
-        /// <param name="contentType">Media type.</param>
         /// <returns></returns>
-        private async Task<IActionResult> GetFileByType(int id, GetFileType fileType, string contentType)
+        private async Task<IActionResult> GetFileByType(int id, GetFileType fileType)
         {
             var result = await HandleRequestAsync(new GetFileRequest<TEntity>
             {
@@ -136,7 +135,7 @@ namespace ModelRelief.Api.V1.Shared
                 return result;
 
             var fileContentResult = okObjectResult.Value as FileContentResult;
-            return File(fileContentResult.FileContents, contentType);
+            return fileContentResult;
         }
 
         #endregion

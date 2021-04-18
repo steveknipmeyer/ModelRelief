@@ -1,9 +1,16 @@
 #### Commit       
 ### General     
     Today      
+        Introduce query parameter for file type.
         RestFileDomainController
-            GetFile, GetPreview
-        Add Mesh id/obj endpoint.
+            GetBacking, GetPreview
+            ModelController, MeshController
+                GetObj
+
+        ViewFileDomainController
+            GetPreview
+            ModelController, MeshController
+                GetObj
 
         Create a mechanism to generate all models.
 

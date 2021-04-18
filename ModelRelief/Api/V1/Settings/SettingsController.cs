@@ -50,7 +50,6 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("default")]
         [HttpGet]
-        [Produces("application/json")]
         public async Task<IActionResult> Default()
         {
             var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Default);
@@ -63,7 +62,6 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("user")]
         [HttpGet]
-        [Produces("application/json")]
         public async Task<IActionResult> UserSettings()
         {
             var settingsObject = await this.SettingsManager.GetSettingsAsync(SettingsType.User, User) as Dto.Settings;
@@ -76,7 +74,6 @@ namespace ModelRelief.Api.V1.Settings
         /// <returns>JSON settings.</returns>
         [Route("session")]
         [HttpGet]
-        [Produces("application/json")]
         public async Task<IActionResult> Session()
         {
             var sessionObject = await this.SettingsManager.GetSettingsAsync(SettingsType.Session, User) as Dto.Session;

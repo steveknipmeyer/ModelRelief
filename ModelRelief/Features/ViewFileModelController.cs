@@ -64,7 +64,7 @@ namespace ModelRelief.Features
                 FileType = GetFileType.Preview,
             }) as FileContentResult;
 
-            return File(response.FileContents, "image/png");
+            return response;
         }
         #endregion
 
