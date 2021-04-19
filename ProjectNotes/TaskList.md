@@ -1,9 +1,13 @@
 #### Commit     
 ### General     
     Today      
-        Why is a route pattern required for /file and /preview?
-
-        Create a mechanism to generate all models.
+        Should Solver write the Mesh directly to store?
+        How should the Explorer File Output be refactored?
+        
+        Python API Tool
+            Write a mechanism to generate all models.
+            How will authentication be handled?
+            Generate all models to add Mesh OBJ files to standard delivery.
 
         Runtime error does not propagate back to UI.        
             Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.

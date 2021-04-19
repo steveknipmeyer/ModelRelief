@@ -283,19 +283,25 @@ class Solver:
         """
         Write the final calculated mesh OBJ file.
         """
-        filename, _ = os.path.splitext(self.mesh.name)
-        file_path = os.path.join(self.working_folder, filename + ".obj")
+        mesh_folder = os.path.dirname(self.mesh.path)
+        obj_basename = os.path.splitext(self.mesh.name)[0] + ".obj"
 
-        filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, file_path)
+        store_obj_path = os.path.join(mesh_folder, obj_basename)
+        working_obj_path = os.path.join(self.working_folder, obj_basename)
+
+        filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, store_obj_path)
         filewriter.write()
+
+        # copy to working folder
+        Tools.copy_file(store_obj_path, working_obj_path)
 
         # copy to  file system for access by graphical applications (e.g. MeshLab)
         mr_temp = os.getenv(EnvironmentNames.MRTemp)
         if (mr_temp is None):
             return
 
-        file_temp_path = os.path.join(mr_temp, filename + ".obj")
-        Tools.copy_file(file_path, file_temp_path)
+        temp_obj_path = os.path.join(mr_temp, obj_basename)
+        Tools.copy_file(store_obj_path, temp_obj_path)
 
     def debug_results(self):
         """
@@ -335,6 +341,7 @@ class Solver:
         self.process_silhouette()
         self.process_scale()
         self.write_mesh()
+        self.write_obj()
 
         # experimental tools
         experiments = Experiments(self.results, self.services.logger, self.mesh_transform)

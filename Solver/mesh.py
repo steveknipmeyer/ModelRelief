@@ -31,5 +31,5 @@ class Mesh:
         self.services = services
 
         self.name = settings['Name']
-        self.path = os.path.join(self.services.content_folder,  os.path.abspath(settings['RelativeFileName']))
+        self.path = os.path.join(self.services.content_folder,  settings['RelativeFileName'])
 
