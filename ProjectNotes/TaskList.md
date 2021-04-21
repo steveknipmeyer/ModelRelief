@@ -1,8 +1,6 @@
 #### Commit     
 ### General     
-    Today      
-        Add download link for Mesh.
-        
+    Today              
         Python API Tool
             Write a mechanism to generate all models.
             How will authentication be handled?
@@ -17,9 +15,6 @@
                 Result
                 Processing time
                 Polygons
-
-        Convert Mesh to OBJ default to support download of generated Mesh.
-            https://github.com/mrdoob/three.js/blob/3510fdd91725f7681db845efd889c5e29e6e7446/examples/js/exporters/OBJExporter.js
                     
         Styling
             SASS
