@@ -2,7 +2,9 @@
 ### General     
     Today      
         Should Solver write the Mesh directly to store?
+            Should SynchronizeGeneratedFile copy OBJ file or no files?
         How should the Explorer File Output be refactored?
+        Add download link for Mesh.
         
         Python API Tool
             Write a mechanism to generate all models.
@@ -10,6 +12,7 @@
             Generate all models to add Mesh OBJ files to standard delivery.
 
         Runtime error does not propagate back to UI.        
+            Should Composer check IsFileSynchronized?
             Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.
                 Polling is done based on a timer.
 

@@ -38,11 +38,13 @@ namespace ModelRelief.Domain
         /// <returns>True if successful.</returns>
         public bool SynchronizeGeneratedFile(string generatedFile, string defaultStorageFolder)
         {
-            // no file may exist yet; initialize Path
-            if (string.IsNullOrEmpty(Path))
-                Path = StorageManager.GetRelativePath(defaultStorageFolder);
+            if (!File.Exists(generatedFile))
+                return false;
 
-            Files.EnsureDirectoryExists(StorageManager.GetAbsolutePath(Path));
+            // initialize Path; Path set only after backing file Post
+            Path = StorageManager.GetRelativePath(defaultStorageFolder);
+
+            Files.EnsureDirectoryExists(FileName);
             File.Copy(generatedFile, FileName, overwrite: true);
 
             FileIsSynchronized = true;

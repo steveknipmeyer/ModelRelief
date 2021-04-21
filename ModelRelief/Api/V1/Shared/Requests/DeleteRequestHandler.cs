@@ -73,23 +73,13 @@ namespace ModelRelief.Api.V1.Shared.Rest
             var fileDomainModel = domainModel as FileDomainModel;
             fileDomainModel.FileTimeStamp = null;
 
-            // The Path exists only if an associated file has been posted.
+            // The Path property exists only if an associated file has been posted.
             // There is no mechanism for deleting <only> the file once a model has been created.
-            if (string.IsNullOrEmpty(StorageManager.GetAbsolutePath(fileDomainModel.Path)))
+            if (string.IsNullOrEmpty(fileDomainModel.Path))
                 return;
-
-            var modelStorageFolder = fileDomainModel.StorageFolder;
-            var fileFolder = Path.GetFullPath(StorageManager.GetAbsolutePath(fileDomainModel.Path));
-
-            // confirm that parent folder of file matches the storage folder
-            if (!string.Equals(modelStorageFolder, fileFolder, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Logger.LogWarning($"DeleteRequest: The parent folder of the file to be deleted '{fileFolder}' does not match the user storage folder '{modelStorageFolder}'.");
-                return;
-            }
 
             // check for existence of model file
-            var fileName = Path.Combine(fileFolder, fileDomainModel.Name);
+            var fileName = fileDomainModel.FileName;
             if (!File.Exists(fileName))
             {
                 Logger.LogWarning($"DeleteRequest: The file to be deleted '{fileName}' does not exist.");
@@ -100,10 +90,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
             File.Delete(fileName);
 
             // remove parent folder (only if empty)
-            if (Files.IsFolderEmpty(modelStorageFolder))
+            if (Files.IsFolderEmpty(fileDomainModel.StorageFolder))
             {
                 // https://stackoverflow.com/questions/5617320/given-full-path-check-if-path-is-subdirectory-of-some-other-path-or-otherwise
-                Files.DeleteFolder(modelStorageFolder, false);
+                Files.DeleteFolder(fileDomainModel.StorageFolder, false);
             }
         }
 

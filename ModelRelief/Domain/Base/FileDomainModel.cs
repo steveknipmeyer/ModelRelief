@@ -20,7 +20,7 @@ namespace ModelRelief.Domain
         [DependentFileProperty]
         public DateTime? FileTimeStamp  { get; set; }           // time of last update; used to trigger updates in dependents
         [JsonIgnore]
-        public string Path { get; set; }                        // associated file absolute path
+        public string Path { get; set; }                        // relative storage folder
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileDomainModel"/> class.
@@ -57,19 +57,6 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
-        /// Gets the relative path of the model file.
-        /// The path is relative to ContentRootPath.
-        /// </summary>
-        /// <returns>Path of model file relative to ContentRootPath.</returns>
-        public string RelativeFileName
-        {
-            get
-            {
-                return StorageManager.GetRelativePath(FileName);
-            }
-        }
-
-        /// <summary>
         /// Gets the associated backing file for a given model instance.
         /// </summary>
         /// <returns>Backing file name.</returns>
@@ -83,20 +70,15 @@ namespace ModelRelief.Domain
         }
 
         /// <summary>
-        /// Gets the associated preview file for a given model instance.
+        /// Gets the relative path of the model file.
+        /// The path is relative to ContentRootPath.
         /// </summary>
-        /// <returns>Preview file name.</returns>
-        [JsonIgnore]
-        public string PreviewFileName
+        /// <returns>Path of model file relative to ContentRootPath.</returns>
+        public string RelativeFileName
         {
             get
             {
-                var previewNameFullPath = ConstructFileName("png");
-                if (File.Exists(previewNameFullPath))
-                    return previewNameFullPath;
-
-                // serve proxy (preview not available yet)
-                return $"{StorageManager.HostingEnvironment.WebRootPath}/images/NoPreview.png";
+                return StorageManager.GetRelativePath(FileName);
             }
         }
 
@@ -105,11 +87,29 @@ namespace ModelRelief.Domain
         /// </summary>
         /// <param name="extension">Extension to use.</param>
         /// <returns>Absolute file path formed by root name and provided extension.</returns>
-        public string ConstructFileName(string extension)
+        public string FileNameFromExtension(string extension)
         {
             var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(Name)}.{extension}";
             var fileNameFullPath = StorePath(fileName);
             return fileNameFullPath;
+        }
+
+        /// <summary>
+        /// Gets the associated preview file for a given model instance.
+        /// </summary>
+        /// <returns>Preview file name.</returns>
+        [JsonIgnore]
+        public string PreviewFileName
+        {
+            get
+            {
+                var previewNameFullPath = FileNameFromExtension("png");
+                if (File.Exists(previewNameFullPath))
+                    return previewNameFullPath;
+
+                // serve proxy (preview not available yet)
+                return $"{StorageManager.HostingEnvironment.WebRootPath}/images/NoPreview.png";
+            }
         }
 
         /// <summary>

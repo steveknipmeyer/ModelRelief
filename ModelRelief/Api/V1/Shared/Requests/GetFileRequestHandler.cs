@@ -82,7 +82,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
                     break;
 
                 case "obj":
-                    fileName = fileDomainModel.ConstructFileName("obj");
+                    fileName = fileDomainModel.FileNameFromExtension("obj");
                     break;
 
                 default:

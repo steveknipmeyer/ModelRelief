@@ -653,8 +653,7 @@ namespace ModelRelief.Database
             _dbContext.SaveChanges();
             SetFileProperties<DepthBuffer>(depthBuffer, fileIsSynchronized);
 
-            var path = $"{_hostingEnvironment.ContentRootPath}/{depthBuffer.Path}{depthBuffer.Name}";
-            Utility.Files.WriteRawFileFromByteArray(path, depthBuffer.CreateDefaultContent(depthBuffer.Width, depthBuffer.Height)).Wait();
+            Utility.Files.WriteRawFileFromByteArray(depthBuffer.FileName, depthBuffer.CreateDefaultContent(depthBuffer.Width, depthBuffer.Height)).Wait();
 
             return depthBuffer;
         }
@@ -685,8 +684,7 @@ namespace ModelRelief.Database
             _dbContext.SaveChanges();
             SetFileProperties<NormalMap>(normalMap, fileIsSynchronized);
 
-            var path = $"{_hostingEnvironment.ContentRootPath}/{normalMap.Path}{normalMap.Name}";
-            Utility.Files.WriteRawFileFromByteArray(path, normalMap.CreateDefaultContent(normalMap.Width, normalMap.Height)).Wait();
+            Utility.Files.WriteRawFileFromByteArray(normalMap.FileName, normalMap.CreateDefaultContent(normalMap.Width, normalMap.Height)).Wait();
 
             return normalMap;
         }
@@ -720,8 +718,7 @@ namespace ModelRelief.Database
             _dbContext.SaveChanges();
             SetFileProperties<Mesh>(mesh, fileIsSynchronized);
 
-            var path = $"{_hostingEnvironment.ContentRootPath}/{mesh.Path}{mesh.Name}";
-            Utility.Files.WriteRawFileFromByteArray(path, mesh.CreateDefaultContent(Defaults.Resolution.Image, Defaults.Resolution.Image)).Wait();
+            Utility.Files.WriteRawFileFromByteArray(mesh.FileName, mesh.CreateDefaultContent(Defaults.Resolution.Image, Defaults.Resolution.Image)).Wait();
 
             return mesh;
         }
