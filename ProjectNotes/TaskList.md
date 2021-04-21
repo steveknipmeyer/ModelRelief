@@ -1,9 +1,6 @@
 #### Commit     
 ### General     
     Today      
-        Should Solver write the Mesh directly to store?
-            Should SynchronizeGeneratedFile copy OBJ file or no files?
-        How should the Explorer File Output be refactored?
         Add download link for Mesh.
         
         Python API Tool

@@ -180,6 +180,11 @@ namespace ModelRelief.Services.Jobs
             if (fileSynchronized)
                 await DbContext.SaveChangesAsync();
 
+            // Wavefront OBJ
+            var objBaseFileName = $"{Path.GetFileNameWithoutExtension(mesh.Name)}.obj";
+            var workingObjFileName = $"{workingFolder}{objBaseFileName}";
+            File.Copy(workingObjFileName, mesh.FileNameFromExtension("obj"), overwrite: true);
+
             return fileSynchronized;
         }
 

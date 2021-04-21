@@ -448,11 +448,10 @@ class Explorer(QtWidgets.QMainWindow):
     # ------------------------------------------#
     def save_mesh(self) -> None:
         """
-        Writes the selected file types to the same output folder as the Mesh.
-        If the MRTemp environment variable is defined, the file is copied for easier access by desktop applications.
+        Saves the mesh in alternative formats....
         """
-        if self.ui.fileOBJCheckBox.isChecked():
-            self.solver.write_obj()
+        if self.ui.fileTBDCheckBox.isChecked():
+            pass
 
 def main():
     """

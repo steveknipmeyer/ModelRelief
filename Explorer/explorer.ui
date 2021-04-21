@@ -911,7 +911,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;Processing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="fileOBJCheckBox">
+      <widget class="QCheckBox" name="fileTBDCheckBox">
        <property name="geometry">
         <rect>
          <x>32</x>
@@ -928,7 +928,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&amp;Wavefront OBJ</string>
+        <string>&amp;TBD</string>
        </property>
       </widget>
       <widget class="QLabel" name="labelGaussianLow">
@@ -1390,7 +1390,7 @@
   <tabstop>silhouetteEdgeWidthLineEdit</tabstop>
   <tabstop>silhouetteSigmaLineEdit</tabstop>
   <tabstop>reliefScaleLineEdit</tabstop>
-  <tabstop>fileOBJCheckBox</tabstop>
+  <tabstop>fileTBDCheckBox</tabstop>
   <tabstop>p1CheckBox</tabstop>
   <tabstop>p1LineEdit</tabstop>
   <tabstop>p2CheckBox</tabstop>

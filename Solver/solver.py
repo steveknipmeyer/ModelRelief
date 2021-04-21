@@ -283,17 +283,11 @@ class Solver:
         """
         Write the final calculated mesh OBJ file.
         """
-        mesh_folder = os.path.dirname(self.mesh.path)
         obj_basename = os.path.splitext(self.mesh.name)[0] + ".obj"
-
-        store_obj_path = os.path.join(mesh_folder, obj_basename)
         working_obj_path = os.path.join(self.working_folder, obj_basename)
 
-        filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, store_obj_path)
+        filewriter = OBJWriter(self.services, self.results.mesh_transformed.image, working_obj_path)
         filewriter.write()
-
-        # copy to working folder
-        Tools.copy_file(store_obj_path, working_obj_path)
 
         # copy to  file system for access by graphical applications (e.g. MeshLab)
         mr_temp = os.getenv(EnvironmentNames.MRTemp)
@@ -301,7 +295,7 @@ class Solver:
             return
 
         temp_obj_path = os.path.join(mr_temp, obj_basename)
-        Tools.copy_file(store_obj_path, temp_obj_path)
+        Tools.copy_file(working_obj_path, temp_obj_path)
 
     def debug_results(self):
         """
