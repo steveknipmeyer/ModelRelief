@@ -28,6 +28,7 @@
 # pip3 install qdarkstyle
 # pip3 install cmake
 # pip3 install rope
+# pip3 install requests
 
 # VSCode Jupyter
 # pip3 install ipykernel
@@ -44,6 +45,8 @@ async-generator==1.10
 attrs==20.3.0
 backcall==0.2.0
 bleach==3.3.0
+certifi==2020.12.5
+chardet==4.0.0
 click==7.1.2
 cmake==3.18.4.post1
 configobj==5.0.6
@@ -53,6 +56,7 @@ defusedxml==0.6.0
 entrypoints==0.3
 envisage==5.0.0
 helpdev==0.7.1
+idna==2.10
 imageio==2.9.0
 importlib-metadata==3.4.0
 importlib-resources==5.1.0
@@ -110,6 +114,7 @@ qt5-applications==5.15.2.2.1
 qt5-tools==5.15.2.1.0.1
 QtPy==1.9.0
 relief==0.1
+requests==2.25.1
 rope==0.18.0
 scikit-image==0.18.1
 scipy==1.6.0
@@ -121,6 +126,7 @@ tornado==6.1
 traitlets==5.0.5
 traits==6.2.0
 traitsui==7.1.1
+urllib3==1.26.4
 vtk==9.0.1
 wcwidth==0.2.5
 webencodings==0.5.1

@@ -118,8 +118,8 @@
         // "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        "program": "${workspaceFolder}/Explorer/explorer.py",
-        "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
+        // "program": "${workspaceFolder}/Explorer/explorer.py",
+        // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceFolder}/Solver/solver.py",
@@ -137,6 +137,10 @@
         //  "program": "${workspaceFolder}/Solver/Experiments/pybind11test.py",
         //  "program": "${workspaceFolder}/Solver/Experiments/workbench.py",
         //  "program": "${workspaceFolder}/Solver/Experiments/mayavitest.py",
+
+        //  ----- Generator
+         "program": "${workspaceFolder}/Tools/generator.py",
+         "args":[]
 
         // "args":[]
         },

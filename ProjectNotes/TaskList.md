@@ -1,11 +1,6 @@
 #### Commit     
 ### General     
     Today              
-        Python API Tool
-            Write a mechanism to generate all models.
-            How will authentication be handled?
-            Generate all models to add Mesh OBJ files to standard delivery.
-
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
             Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.
