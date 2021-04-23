@@ -298,9 +298,6 @@ def main():
     """
     options_parser = argparse.ArgumentParser()
 
-    # Target
-    options_parser.add_argument('--target', '-t',
-                                help='Runtime target for the build.', type=Target, required=False, default=Target.local)
     # Build
     options_parser.add_argument('--initialize', '-i',
                                 help='Initialize the database and the user store.', type=ast.literal_eval, required=False, default=True)
@@ -312,6 +309,10 @@ def main():
     # Deploy
     options_parser.add_argument('--deploy', '-d',
                                 help='Deploy the web content to a local web server folder.', type=ast.literal_eval, required=False, default=False)
+
+    # Target
+    options_parser.add_argument('--target', '-t',
+                                help='Runtime target for the build.', type=Target, required=False, default=Target.local)
 
     arguments = options_parser.parse_args()
 

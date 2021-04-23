@@ -1,6 +1,74 @@
 # Procedures
 
-###  Linux Setup
+###  Linux Production Setup
+
+    .NET Core
+        Install .Net Core 3.1 SDK
+        dotnet tool install --global dotnet-ef
+    
+    C++
+        sudo apt-get install build-essential gdb
+    
+    CMake
+        sudo apt install cmake
+    
+    git
+        sudo apt install git
+        git config --global user.name "Steve Knipmeyer"
+        git config --global user.email "steve@knipmeyer.org"
+    
+        git clone https://github.com/steveknipmeyer/ModelRelief.git
+        Store credentials.
+            cd ModelRelief
+            git config credential.helper store
+    
+        Pull Pybind11 and Catch2 repos.
+            git submodule init
+            git submodule update
+    
+    Python (3.8.5)
+        See requirements.development.txt.For setup instructions.
+    
+    Node
+        sudo apt install nodejs
+    
+    NPM
+        sudo apt install npm
+        npm install
+        sudo npm install --global gulp-cli
+        sudo npm install --global madge
+    
+    .NET Core
+        https://docs.microsoft.com/en-us/dotnet/core/install/linux
+        dotnet restore
+        dotnet build ModelRelief
+    
+    SQLite
+        sudo apt-get install sqlite3 (if required)
+        sudo apt-get install sqlitebrowser
+    
+    Runtime
+        Add azurekeyvault.json to ModelRelief project folder.
+
+    Build
+        Build/BuildPythonEnvironment.sh Development
+        python Build/Builder.py --target local
+    
+    Test
+        python Tools/testrunner.py
+    
+    nginx
+        https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
+    
+        sudo cp nginx/default /etc/nginx/sites-available/default
+    
+        source Tools/StartModelRelief.sh
+    
+        Start browser using https://localhost:80
+            Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
+
+###  Linux Development Setup
 
     .NET Core
         Install .Net Core 3.1 SDK
@@ -69,11 +137,9 @@
             Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
 
 #### Explorer
-
     devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
 
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
-
 #### Documentation
 - [X] Update the class hierarchies in TechnicalNotes.md.
 #### Configuration
@@ -138,7 +204,6 @@
 The ordering in launchSettings.json controls whether the configuratIon is 'Production' or 'Development'.
 
 ### Schema Modifications
-
 #### Front End
 - [X] Add the new properties to the DTO interfaces, eg. IDepthBuffer.
 - [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
