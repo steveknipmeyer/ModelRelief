@@ -1,73 +1,32 @@
 # Procedures
 
 ###  Linux Production Setup
+    Copy Publish folder to remote
+        . /Tools/deploy user@X.X.X.X
 
-    .NET Core
-        Install .Net Core 3.1 SDK
-        dotnet tool install --global dotnet-ef
-    
-    C++
-        sudo apt-get install build-essential gdb
-    
-    CMake
-        sudo apt install cmake
-    
-    git
-        sudo apt install git
-        git config --global user.name "Steve Knipmeyer"
-        git config --global user.email "steve@knipmeyer.org"
-    
-        git clone https://github.com/steveknipmeyer/ModelRelief.git
-        Store credentials.
-            cd ModelRelief
-            git config credential.helper store
-    
-        Pull Pybind11 and Catch2 repos.
-            git submodule init
-            git submodule update
-    
-    Python (3.8.5)
-        See requirements.development.txt.For setup instructions.
-    
-    Node
-        sudo apt install nodejs
-    
-    NPM
-        sudo apt install npm
-        npm install
-        sudo npm install --global gulp-cli
-        sudo npm install --global madge
-    
-    .NET Core
-        https://docs.microsoft.com/en-us/dotnet/core/install/linux
-        dotnet restore
-        dotnet build ModelRelief
-    
+    Nginx
+        sudp apt install nginx
+        
+        sudo unlink /etc/nginx/sites-enabled/default
+        sudo cp ~/modelrelief/nginx/modelrelief.org /etc/nginx/sites-available
+        sudo ln -s /etc/nginx/sites-available/modelrelief.org /etc/nginx/sites-enabled
+
+    .NET SDK and Runtime 3.1
+        https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
+
     SQLite
         sudo apt-get install sqlite3 (if required)
-        sudo apt-get install sqlitebrowser
-    
-    Runtime
-        Add azurekeyvault.json to ModelRelief project folder.
 
-    Build
-        Build/BuildPythonEnvironment.sh Development
-        python Build/Builder.py --target local
-    
+    SSL
+        Generate a developer SSL certificate. 
+        N.B. The SDK is required to use the dev-certs tool.
+            dotnet dev-certs https
+
+    Start Server
+        source ~/modelrelief/Tools/StartModelRelief.sh
+
     Test
-        python Tools/testrunner.py
-    
-    nginx
-        https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
-        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
-    
-        sudo cp nginx/default /etc/nginx/sites-available/default
-    
-        source Tools/StartModelRelief.sh
-    
-        Start browser using https://localhost:80
-            Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
-
+        wget -p --no-check-certificate http://localhost:5000
 ###  Linux Development Setup
 
     .NET Core
@@ -94,9 +53,6 @@
             git submodule init
             git submodule update
     
-    Python (3.8.5)
-        See requirements.development.txt.For setup instructions.
-    
     Node
         sudo apt install nodejs
     
@@ -118,8 +74,10 @@
     Runtime
         Add azurekeyvault.json to ModelRelief project folder.
 
-    Build
+    Python
         Build/BuildPythonEnvironment.sh Development
+
+    Build
         python Build/Builder.py --target local
     
     Test
@@ -127,11 +85,11 @@
     
     nginx
         https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+        https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04/
         https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
     
-        sudo cp nginx/default /etc/nginx/sites-available/default
     
-        source Tools/StartModelRelief.sh
+        source ./Tools/StartModelRelief.sh
     
         Start browser using https://localhost:80
             Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)

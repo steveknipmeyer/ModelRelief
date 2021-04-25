@@ -19,7 +19,8 @@
 # Default server configuration
 #
 server {
-	listen [::]:80 default_server;
+    listen 80;
+    server_name  default_server;
     location / {
         proxy_pass         https://localhost:5001;
         proxy_http_version 1.1;
@@ -31,22 +32,3 @@ server {
         proxy_set_header   X-Forwarded-Proto $scheme;
     }
 }
-
-# Virtual Host configuration for example.com
-#
-# You can move that to a different file under sites-available/ and symlink that
-# to sites-enabled/ to enable it.
-#
-#server {
-#	listen 80;
-#	listen [::]:80;
-#
-#	server_name example.com;
-#
-#	root /var/www/example.com;
-#	index index.html;
-#
-#	location / {
-#		try_files $uri $uri/ =404;
-#	}
-#}

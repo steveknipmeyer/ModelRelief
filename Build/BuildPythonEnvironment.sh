@@ -2,7 +2,7 @@
 # Build the Python virtual environment.
 
 if [ $# -eq 0 ]; then
-    echo "usage: $0 [Development | Production] <path to virtual environment?"
+    echo "usage: $0 [Development | Production] <path to virtual environment>"
     exit
 fi
 

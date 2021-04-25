@@ -57,6 +57,7 @@ class Builder:
         self.store_folder = "store"
         self.test_folder = "Test"
         self.tools_folder = "Tools"
+        self.nginx_folder = "nginx"
 
         # folder paths
         self.nginx_deploy_path = "/var/www/html"
@@ -236,6 +237,16 @@ class Builder:
         os.chdir(self.solution_path)
         Tools.copy_folder_root(os.path.join(self.solution_path, self.solver_folder), os.path.join(self.publish_path, self.solver_folder))
         Tools.copy_folder_root(os.path.join(self.solution_path, self.tools_folder), os.path.join(self.publish_path, self.tools_folder))
+
+        # Tools
+        self.logger.logInformation("\nTools folder", Colors.BrightMagenta)
+        os.chdir(self.solution_path)
+        Tools.copy_folder_root(os.path.join(self.solution_path, self.tools_folder), os.path.join(self.publish_path, self.tools_folder))
+
+        # nginx
+        self.logger.logInformation("\nnginx folder", Colors.BrightMagenta)
+        os.chdir(self.solution_path)
+        Tools.copy_folder_root(os.path.join(self.solution_path, self.nginx_folder), os.path.join(self.publish_path, self.nginx_folder))
 
         # create logs folder
         self.logger.logInformation("\nCreating logs folder", Colors.BrightMagenta)

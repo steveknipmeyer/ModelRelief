@@ -1,6 +1,17 @@
 #### Commit     
 ### General     
     Today              
+        Domain Setup
+            https://www.linode.com/docs/guides/dns-manager/
+        SSL Configuration
+            https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
+
+        Corrleation Errors
+            https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
+
+            chrome://flags
+                SameSite by default cookies
+
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
             Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.
