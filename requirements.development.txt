@@ -113,11 +113,11 @@ QDarkStyle==2.8.1
 qt5-applications==5.15.2.2.1
 qt5-tools==5.15.2.1.0.1
 QtPy==1.9.0
-relief==0.1
 requests==2.25.1
 rope==0.18.0
 scikit-image==0.18.1
 scipy==1.6.0
+setuptools==44.0.0
 six==1.15.0
 testpath==0.4.4
 tifffile==2021.2.1
@@ -131,3 +131,4 @@ vtk==9.0.1
 wcwidth==0.2.5
 webencodings==0.5.1
 zipp==3.4.0
+wheel==0.36.2

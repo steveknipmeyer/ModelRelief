@@ -1,5 +1,6 @@
 #!/bin/bash
 # Build the Python virtual environment.
+#set -x
 
 if [ $# -eq 0 ]; then
     echo "usage: $0 [Development | Production] <path to virtual environment>"

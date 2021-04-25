@@ -4,6 +4,9 @@
     Copy Publish folder to remote
         . /Tools/deploy user@X.X.X.X
 
+    Bind Python Virtual Environment to Server
+        ./Tools/BindPythonEnvironement.sh mrenv
+    
     Nginx
         sudp apt install nginx
         
@@ -15,7 +18,7 @@
         https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
 
     SQLite
-        sudo apt-get install sqlite3 (if required)
+        sudo apt-get install sqlite3
 
     SSL
         Generate a developer SSL certificate. 
@@ -75,7 +78,7 @@
         Add azurekeyvault.json to ModelRelief project folder.
 
     Python
-        Build/BuildPythonEnvironment.sh Development
+        Build/BuildPythonEnvironment.sh Development devenv
 
     Build
         python Build/Builder.py --target local

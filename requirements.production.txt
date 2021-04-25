@@ -3,10 +3,9 @@
 # sudo apt-get install python3-venv
 # sudo apt install python3-pip
 #
-# source devenv/bin/activate
+# source mrenv/bin/activate
 #
 # ---------------------- Core ----------------------
-# pip3 install wheel
 # pip3 install numpy
 # pip3 install scipy
 # pip3 install pyamg
@@ -14,6 +13,7 @@
 # pip3 install pybind11
 # pip3 install imageio
 # pip3 install opencv-python-headless
+# pip3 install cmake
 #
 # ---------------------- Requirements ----------------------
 # This file may be used to populate an environment using:
@@ -21,6 +21,7 @@
 
 # platform: linux-64
 attrs==20.3.0
+cmake==3.18.4.post1
 cycler==0.10.0
 imageio==2.9.0
 iniconfig==1.1.1
@@ -38,7 +39,5 @@ pyparsing==2.4.7
 pytest==6.2.1
 python-dateutil==2.8.1
 scipy==1.5.4
-setuptools==44.0.0
 six==1.15.0
 toml==0.10.2
-wheel==0.36.2

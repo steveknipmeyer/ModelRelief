@@ -173,9 +173,6 @@ class Builder:
                 self.logger.logInformation("\nPython virtual environment", Colors.BrightMagenta)
                 os.makedirs(self.publish_path)
                 Tools.exec(f"BuildPythonEnvironment.sh Production {os.path.join(self.publish_path, 'mrenv')}")
-            else:
-                if not os.path.exists("devenv"):
-                    Tools.exec("BuildPythonEnvironment.sh Development devenv")
 
         # Python C++ extensions
         self.logger.logInformation("\nPython C++ extensions", Colors.BrightMagenta)

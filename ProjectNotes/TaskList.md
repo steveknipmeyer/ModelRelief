@@ -6,11 +6,19 @@
         SSL Configuration
             https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
 
-        Corrleation Errors
+        Correlation Errors
             https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
 
             chrome://flags
                 SameSite by default cookies
+
+            [04:47:50 ERR] Connection id "0HM87OQ93P3OQ", Request id "0HM87OQ93P3OQ:00000001": An unhandled exception was thrown by the application.
+            System.Exception: An error was encountered while handling the remote login.
+            ---> System.Exception: Correlation failed.
+            --- End of inner exception stack trace ---
+            at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
+            at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+            at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)
 
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
