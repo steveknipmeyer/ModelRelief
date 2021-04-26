@@ -1,10 +1,16 @@
 #### Commit     
 ### General     
-    Today              
+    Today                                 
+        SSL Configuration
+            https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
+            https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
+
+        Harden Site            
+
         Domain Setup
             https://www.linode.com/docs/guides/dns-manager/
-        SSL Configuration
-            https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
+        
+        Verify New User Registration
 
         Correlation Errors
             https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
@@ -19,6 +25,13 @@
             at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
             at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
             at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)
+
+        Compress Research
+            https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52
+            https://benfoster.io/blog/zlib-compression-net-core/
+
+            Switch to a compressed format such as PNG for file formats.
+            Clip the content region to the bounding box before transmission.
 
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?

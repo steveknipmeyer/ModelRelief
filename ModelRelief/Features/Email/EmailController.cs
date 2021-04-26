@@ -119,7 +119,7 @@ namespace ModelRelief.Features.Email
             var statusResult = EmailService.Send(message);
             if (!string.IsNullOrEmpty(statusResult))
             {
-                var sendErrorResult = new { mailSent = false, message = $"Your e-mail could not be sent.<br><a href=\"mailto:info@modelrelief.com\">Please click here to use your mail client.</a><br>{statusResult}" };
+                var sendErrorResult = new { mailSent = false, message = $"Your e-mail could not be sent.<br><a href=\"mailto:info@modelrelief.org\">Please click here to use your mail client.</a><br>{statusResult}" };
                 return Json(sendErrorResult);
             }
 

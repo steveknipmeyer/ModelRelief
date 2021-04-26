@@ -1,4 +1,10 @@
 # Procedures
+###  Linode
+    Namecheap
+        Add Linode DNS server names to the domain.
+    E-mail
+        Add MX, TXT DNS records as provided by Namecheap.
+        https://www.linode.com/community/questions/17732/how-to-configure-dns-for-namecheap-private-email
 
 ###  Linux Production Setup
     Copy Publish folder to remote

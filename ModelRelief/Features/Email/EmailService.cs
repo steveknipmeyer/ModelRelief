@@ -57,8 +57,10 @@ namespace ModelRelief.Features.Email
         public string Send(EmailMessage emailMessage)
         {
             var message = new MimeMessage();
+            // e-mail must originate from known domain account
+            message.From.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
             message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
-            message.From.AddRange(emailMessage.FromAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
+            message.ReplyTo.AddRange(emailMessage.FromAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
 
             message.Subject = emailMessage.Subject;
             message.Body = new TextPart(TextFormat.Plain)
@@ -71,7 +73,7 @@ namespace ModelRelief.Features.Email
                 try
                 {
                 // ModelRelief.com does not (yet) have an SSL certification; SSL = false
-                emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, false);
+                emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, useSsl: true);
 
                 // Remove any OAuth functionality as we won't be using it.
                 emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
