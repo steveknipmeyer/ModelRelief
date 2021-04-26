@@ -13,4 +13,4 @@ cd $scriptFolder/..
 
 # copy Publish
 echo "Copying Publish folder to remote"
-rsync -avz --del --exclude store/ ./Publish/ $1:~/modelrelief/
+rsync -avz --del --exclude store/ --exclude mrenv/ ./Publish/ $1:~/modelrelief/

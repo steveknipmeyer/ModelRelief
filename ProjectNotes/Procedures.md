@@ -2,9 +2,20 @@
 ###  Linode
     Namecheap
         Add Linode DNS server names to the domain.
+
+    Domain Setup
+        N.B. No changes were necessary. Adding only the Linode DNS servers to the Namecheap records was sufficient.
+        https://www.linode.com/docs/guides/dns-manager/
+
     E-mail
         Add MX, TXT DNS records as provided by Namecheap.
         https://www.linode.com/community/questions/17732/how-to-configure-dns-for-namecheap-private-email
+
+    SSL Configuration
+        Let's Encrypt SSL
+        https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
+        HTTPS Redirect
+        https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
 
 ###  Linux Production Setup
     Copy Publish folder to remote

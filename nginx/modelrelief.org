@@ -19,8 +19,18 @@
 # Default server configuration
 #
 server {
-    listen 80;
-    server_name  default_server;
+    listen         80;
+    server_name    modelrelief.org www.modelrelief.org;
+    return         301 https://modelrelief.org$request_uri;
+    }
+
+server {
+    listen 443 ssl;
+    server_name    modelrelief.org www.modelrelief.org;
+
+    ssl_certificate /root/.acme.sh/modelrelief.org/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/modelrelief.org/modelrelief.org.key;
+
     location / {
         proxy_pass         https://localhost:5001;
         proxy_http_version 1.1;

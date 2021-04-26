@@ -1,18 +1,12 @@
 #### Commit     
 ### General     
     Today                                 
-        SSL Configuration
-            https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
-            https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
-
         Harden Site            
-
-        Domain Setup
-            https://www.linode.com/docs/guides/dns-manager/
         
         Verify New User Registration
 
         Correlation Errors
+            https://community.auth0.com/t/asp-net-core-error-correlation-failed-unknown-location/39689
             https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
 
             chrome://flags
