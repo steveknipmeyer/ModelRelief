@@ -118,6 +118,20 @@ A Put (File) request returns Created instead of OK. The file is correctly replac
         api/v1/documentation/{controller}/{error}
 
 #### Database
+#### Correlation Errors
+    N.B. These seem to have been resolved by adding SSL support to the production server.
+    https://community.auth0.com/t/asp-net-core-error-correlation-failed-unknown-location/39689
+    https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
 
+    chrome://flags
+        SameSite by default cookies
+
+    [04:47:50 ERR] Connection id "0HM87OQ93P3OQ", Request id "0HM87OQ93P3OQ:00000001": An unhandled exception was thrown by the application.
+    System.Exception: An error was encountered while handling the remote login.
+    ---> System.Exception: Correlation failed.
+    --- End of inner exception stack trace ---
+    at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
+    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+    at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)
 
 

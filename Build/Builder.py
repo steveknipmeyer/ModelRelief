@@ -256,6 +256,11 @@ class Builder:
         os.chdir(self.modelrelief_path)
         Tools.copy_folder(os.path.join(self.modelrelief_path, self.store_folder), os.path.join(self.publish_path, self.store_folder))
 
+        # Test
+        self.logger.logInformation("\nCopying Test seed data", Colors.BrightMagenta)
+        os.chdir(self.modelrelief_path)
+        Tools.copy_folder(os.path.join(self.modelrelief_path, self.test_folder), os.path.join(self.publish_path, self.test_folder))
+
         # Seed Database
         self.publish_seed_database()
 

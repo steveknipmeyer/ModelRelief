@@ -1,0 +1,16 @@
+- store/
+- mrenv/
+- cs/
+- de/
+- es/
+- fr/
+- it/
+- ja/
+- ko/
+- pl/
+- pt-BR/
+- ru/
+- tr/
+- zh-Hans/
+- zh-Hant/
+

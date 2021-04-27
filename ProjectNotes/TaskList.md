@@ -1,24 +1,19 @@
 #### Commit     
 ### General     
-    Today                                 
-        Harden Site            
+    Today      
+        Test/Data/Users unitcube?
+        Review Development Python environment build.
         
-        Verify New User Registration
+        Scripts
+            Refresh Remote Database
+                scp /home/stephen/projects/ModelRelief/ModelRelief/store/development/database/SQLite/ModelReliefDevelopment.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
+            Fetch Remote Database
+                scp admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
+        Harden Site                   
 
-        Correlation Errors
-            https://community.auth0.com/t/asp-net-core-error-correlation-failed-unknown-location/39689
-            https://devblogs.microsoft.com/aspnet/upcoming-samesite-cookie-changes-in-asp-net-and-asp-net-core/
-
-            chrome://flags
-                SameSite by default cookies
-
-            [04:47:50 ERR] Connection id "0HM87OQ93P3OQ", Request id "0HM87OQ93P3OQ:00000001": An unhandled exception was thrown by the application.
-            System.Exception: An error was encountered while handling the remote login.
-            ---> System.Exception: Correlation failed.
-            --- End of inner exception stack trace ---
-            at Microsoft.AspNetCore.Authentication.RemoteAuthenticationHandler`1.HandleRequestAsync()
-            at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-            at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)
+        Change sample accounts to modelrelief.org.
+            Auth0
+            Azure
 
         Compress Research
             https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52

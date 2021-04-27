@@ -18,7 +18,8 @@
         https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
 
 ###  Linux Production Setup
-    Copy Publish folder to remote
+    Deploy
+        N.B. Check --exclude arguments for exclusions.
         . /Tools/deploy user@X.X.X.X
 
     Bind Python Virtual Environment to Server
