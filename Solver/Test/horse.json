@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:24.9089455",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/2/horse.sdb",
+    "FileTimeStamp": "2021-04-28T17:56:28.4851842",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/2/horse.sdb",
     "Id": 2,
     "Name": "horse.sdb",
     "Description": "Prancing Horse"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:24.951297",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/2/horse.nmap",
+    "FileTimeStamp": "2021-04-28T17:56:28.520106",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/2/horse.nmap",
     "Id": 2,
     "Name": "horse.nmap",
     "Description": "Prancing Horse"
@@ -119,8 +119,8 @@
     "Description": "Horse Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-22T09:29:25.0328165",
-  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/2/horse.sfp",
+  "FileTimeStamp": "2021-04-28T17:56:28.5777111",
+  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/2/horse.sfp",
   "Id": 2,
   "Name": "horse.sfp",
   "Description": "Prancing Horse"

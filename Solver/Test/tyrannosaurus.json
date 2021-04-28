@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:28.4247625",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/14/tyrannosaurus.sdb",
+    "FileTimeStamp": "2021-04-28T17:56:31.2491701",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/14/tyrannosaurus.sdb",
     "Id": 14,
     "Name": "tyrannosaurus.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:28.4699713",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/14/tyrannosaurus.nmap",
+    "FileTimeStamp": "2021-04-28T17:56:31.282147",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/14/tyrannosaurus.nmap",
     "Id": 14,
     "Name": "tyrannosaurus.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Tyrannosaurus Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-22T09:29:28.5479676",
-  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/14/tyrannosaurus.sfp",
+  "FileTimeStamp": "2021-04-28T17:56:31.3484016",
+  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/14/tyrannosaurus.sfp",
   "Id": 14,
   "Name": "tyrannosaurus.sfp",
   "Description": "Stanford Model Repository"

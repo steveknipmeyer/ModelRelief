@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:27.7114041",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/11/armadillo.sdb",
+    "FileTimeStamp": "2021-04-28T17:56:30.6799088",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/11/armadillo.sdb",
     "Id": 11,
     "Name": "armadillo.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:27.7535743",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/11/armadillo.nmap",
+    "FileTimeStamp": "2021-04-28T17:56:30.7184724",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/11/armadillo.nmap",
     "Id": 11,
     "Name": "armadillo.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Armadillo Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-22T09:29:27.8360536",
-  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/11/armadillo.sfp",
+  "FileTimeStamp": "2021-04-28T17:56:30.7791228",
+  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/11/armadillo.sfp",
   "Id": 11,
   "Name": "armadillo.sfp",
   "Description": "Stanford Model Repository"

@@ -55,7 +55,7 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Production",
                 "MRDatabaseProvider": "SQLite",
-                "MRUpdateSeedData": "False",
+                "MRUpdateSeedData": "True",
                 "MRInitializeDatabase": "True",
                 "MRSeedDatabase": "True",
                 "MRExitAfterInitialization": "False",
@@ -119,11 +119,11 @@
 
         //  ----- Explorer
         // "program": "${workspaceFolder}/Explorer/explorer.py",
-        // "args":["--s", "../Solver/Test/lucy.json", "--w", "../Solver/Test/Working"]
+        // "args":["--s", "../Solver/Test/discus.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceFolder}/Solver/solver.py",
-        //  "args":["--s", "Test/house.json", "--w", "Test/Working"],
+        //  "args":["--s", "Test/discus.json", "--w", "Test/Working"],
 
         //  ----- Relief C++ Extensions
         //  "program": "${workspaceFolder}/Relief/tests/python/benchmark.py",

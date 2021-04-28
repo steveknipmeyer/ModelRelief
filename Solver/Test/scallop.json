@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:25.6521765",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/5/scallop.sdb",
+    "FileTimeStamp": "2021-04-28T17:56:29.1011086",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/5/scallop.sdb",
     "Id": 5,
     "Name": "scallop.sdb",
     "Description": "Scallop Shell"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:25.7093564",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/5/scallop.nmap",
+    "FileTimeStamp": "2021-04-28T17:56:29.135386",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/5/scallop.nmap",
     "Id": 5,
     "Name": "scallop.nmap",
     "Description": "Scallop Shell"
@@ -119,8 +119,8 @@
     "Description": "Scallop Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-22T09:29:25.802397",
-  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/5/scallop.sfp",
+  "FileTimeStamp": "2021-04-28T17:56:29.1994962",
+  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/5/scallop.sfp",
   "Id": 5,
   "Name": "scallop.sfp",
   "Description": "Scallop Shell"

@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:28.1943259",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/depthbuffers/13/statue.sdb",
+    "FileTimeStamp": "2021-04-28T17:56:31.0693222",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/13/statue.sdb",
     "Id": 13,
     "Name": "statue.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-22T09:29:28.2348257",
-    "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/normalmaps/13/statue.nmap",
+    "FileTimeStamp": "2021-04-28T17:56:31.1066055",
+    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/13/statue.nmap",
     "Id": 13,
     "Name": "statue.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Statue Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-22T09:29:28.3156038",
-  "RelativeFileName": "store/development/users/auth05bedab58aa237e078600530b/meshes/13/statue.sfp",
+  "FileTimeStamp": "2021-04-28T17:56:31.1658363",
+  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/13/statue.sfp",
   "Id": 13,
   "Name": "statue.sfp",
   "Description": "Stanford Model Repository"
