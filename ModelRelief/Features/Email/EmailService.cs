@@ -10,6 +10,8 @@ namespace ModelRelief.Features.Email
     using System.Collections.Generic;
     using System.Linq;
     using MailKit.Net.Smtp;
+    using MailKit.Security;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using MimeKit;
     using MimeKit.Text;
@@ -21,15 +23,18 @@ namespace ModelRelief.Features.Email
     public class EmailService : IEmailService
     {
         private readonly IEmailSettings _emailSettings;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailService"/> class.
         /// Constructor
         /// </summary>
         /// <param name="emailSettings">Email settings from a configuration store (Azure key vault).</param>
-        public EmailService(IOptions<EmailSettings> emailSettings)
+        /// <param name="loggerFactory">ILoggerFactory.</param>
+        public EmailService(IOptions<EmailSettings> emailSettings, ILoggerFactory loggerFactory)
         {
             _emailSettings = emailSettings.Value;
+            _logger = loggerFactory.CreateLogger(typeof(EmailService).Name);
         }
 
         /// <summary>
@@ -57,8 +62,10 @@ namespace ModelRelief.Features.Email
         public string Send(EmailMessage emailMessage)
         {
             var message = new MimeMessage();
-            // e-mail must originate from known domain account
+
+            // e-mail must originate from a known domain account
             message.From.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
+
             message.To.AddRange(emailMessage.ToAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
             message.ReplyTo.AddRange(emailMessage.FromAddresses.Select(x => new MailboxAddress(x.Name, x.Address)));
 
@@ -72,20 +79,24 @@ namespace ModelRelief.Features.Email
             {
                 try
                 {
-                // ModelRelief.com does not (yet) have an SSL certification; SSL = false
-                emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, useSsl: true);
+                    //accept all SSL certificates
+                    emailClient.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+                    emailClient.Timeout = 15 * 1000;
 
-                // Remove any OAuth functionality as we won't be using it.
-                emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
+                    emailClient.Connect(_emailSettings.SmtpServer, _emailSettings.SmtpPort, SecureSocketOptions.SslOnConnect);
 
-                emailClient.Authenticate(_emailSettings.SmtpUsername, _emailSettings.SmtpPassword);
+                    // Remove any OAuth functionality as we won't be using it.
+                    emailClient.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                emailClient.Send(message);
+                    emailClient.Authenticate(_emailSettings.SmtpUsername, _emailSettings.SmtpPassword);
 
-                emailClient.Disconnect(true);
+                    emailClient.Send(message);
+
+                    emailClient.Disconnect(true);
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError($"EmailService: {ex.Message}");
                     return ex.Message;
                 }
             }

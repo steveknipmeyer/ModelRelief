@@ -1,4 +1,4 @@
-- store/
+#- store/
 - mrenv/
 - cs/
 - de/

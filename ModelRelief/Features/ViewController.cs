@@ -58,7 +58,7 @@ namespace ModelRelief.Features
         /// Constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
-        /// <param name="loggerFactory">ILoggerFactor.</param>
+        /// <param name="loggerFactory">ILoggerFactory.</param>
         /// <param name="mapper">IMapper</param>
         /// <param name="settingsManager">Settings manager.</param>
         /// <param name="mediator">IMediator</param>

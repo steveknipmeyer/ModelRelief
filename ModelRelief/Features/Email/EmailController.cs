@@ -10,6 +10,7 @@ namespace ModelRelief.Features.Email
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -55,17 +56,17 @@ namespace ModelRelief.Features.Email
         /// <param name="logger">Logger.</param>
         /// <returns>True if passed.</returns>
         /// https://retifrav.github.io/blog/2017/08/23/dotnet-core-mvc-recaptcha/
-        public static bool ReCaptchaPassed(string gRecaptchaResponse, string secret, ILogger logger)
+        public static async  Task<bool> ReCaptchaPassed(string gRecaptchaResponse, string secret, ILogger logger)
         {
             HttpClient httpClient = new HttpClient();
-            var result = httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}").Result;
+            var result = await httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}");
             if (result.StatusCode != HttpStatusCode.OK)
             {
                 logger.LogError("Error while sending request to ReCaptcha");
                 return false;
             }
 
-            string resultJSON = result.Content.ReadAsStringAsync().Result;
+            string resultJSON = await result.Content.ReadAsStringAsync();
             dynamic dataJSON = JObject.Parse(resultJSON);
             if (dataJSON.success != "true")
             {
@@ -89,13 +90,13 @@ namespace ModelRelief.Features.Email
         /// </summary>
         /// <param name="formData">Form contents from e-mail form.</param>
         [HttpPost]
-        public JsonResult Send([FromForm] EmailMessage formData)
+        public async Task<JsonResult> Send([FromForm] EmailMessage formData)
         {
             bool requestIsLocal = HttpHelpers.RequestIsLocal(this.Request);
             string secretKey = requestIsLocal ? ReCAPTCHASettings.localhostModelRelief.Secret : ReCAPTCHASettings.ModelRelief.Secret;
 
             var reCapthaResponse = formData.ReCAPTCHAResponse;
-            if (!ReCaptchaPassed(reCapthaResponse, secretKey, Logger))
+            if (!await ReCaptchaPassed(reCapthaResponse, secretKey, Logger))
             {
                 var errorResult = new { mailSent = false, message = "Please make sure you have checked 'I'm not a robot.'<br>The authorization validation failed. " };
                 return Json(errorResult);

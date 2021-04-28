@@ -13,7 +13,7 @@ cd $scriptFolder/..
 
 # copy Publish
 echo "Copying Publish folder to remote"
-rsync -avz --del --exclude-from='./Tools/deployExclude.txt' ./Publish/ $1:~/modelrelief/
+rsync -avz --exclude-from='./Tools/deployExclude.txt' ./Publish/ $1:~/modelrelief/
 
 rsync -avz .vscode/settings.json $1:~/modelrelief/.vscode/
 rsync -avz .gitignore $1:~/modelrelief/

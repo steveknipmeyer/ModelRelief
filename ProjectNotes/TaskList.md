@@ -1,19 +1,36 @@
 #### Commit     
+
 ### General     
-    Today      
-        Test/Data/Users unitcube?
-        Review Development Python environment build.
-        
-        Scripts
-            Refresh Remote Database
-                scp /home/stephen/projects/ModelRelief/ModelRelief/store/development/database/SQLite/ModelReliefDevelopment.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
-            Fetch Remote Database
-                scp admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
+    Today             
+        Linode blocks port 465 so MailKit Connect times out.
+            https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
+            https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
+
+        test@modelrelief.org
+            Add new ModelRelief account.
+            Add Namecheap mailbox.
+            Modify DbFactory.
+            Add to Azure.
+            Add to SLKNotebook and Note clients.
+
+        Remove .com accounts.
+            Auth0
+            Azure
+
+        [16:32:09 WRN] Error unprotecting the session cookie.
+            System.Security.Cryptography.CryptographicException: The payload was invalid.
+            at Microsoft.AspNetCore.DataProtection.Managed.ManagedAuthenticatedEncryptor.Decrypt(ArraySegment`1 protectedPayload, ArraySegment`1 additionalAuthenticatedData)
+            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.UnprotectCore(Byte[] protectedData, Boolean allowOperationsOnRevokedKeys, UnprotectStatus& status)
+            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.DangerousUnprotect(Byte[] protectedData, Boolean ignoreRevocationErrors, Boolean& requiresMigration, Boolean& wasRevoked)
+            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Unprotect(Byte[] protectedData)
+            at Microsoft.AspNetCore.Session.CookieProtection.Unprotect(IDataProtector protector, String protectedText, ILogger logger)   
+
         Harden Site                   
 
         Change sample accounts to modelrelief.org.
             Auth0
             Azure
+
 
         Compress Research
             https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52
@@ -21,6 +38,12 @@
 
             Switch to a compressed format such as PNG for file formats.
             Clip the content region to the bounding box before transmission.
+
+        Scripts
+            Refresh Remote Database
+                scp /home/stephen/projects/ModelRelief/ModelRelief/store/development/database/SQLite/ModelReliefDevelopment.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
+            Fetch Remote Database
+                scp admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
 
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
