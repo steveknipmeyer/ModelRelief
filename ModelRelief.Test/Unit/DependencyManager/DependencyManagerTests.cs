@@ -46,7 +46,7 @@ namespace ModelRelief.Test.Unit.DependencyManager
         private async Task<List<DomainModel>> FindDependentModels(Type rootType, int rootPrimaryKey)
         {
             var accounts = this.ClassFixture.ServerFramework.Server.Services.GetRequiredService<IOptions<AccountsSettings>>().Value as AccountsSettings;
-            var developmentAccount = new ApplicationUser(accounts.Development.NameIdentifier, accounts.Development.Name);
+            var developmentAccount = new ApplicationUser(accounts.Test.NameIdentifier, accounts.Test.Name);
 
             var dependentTypes  = DependencyManager.GetClassDependentFiles(rootType);
             var dependentModels = await Manager.FindDependentModels(developmentAccount.Id, rootType, rootPrimaryKey, dependentTypes);

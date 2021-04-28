@@ -205,9 +205,7 @@ namespace ModelRelief.Database
         {
             var userAccounts = new List<Account>
             {
-                _accounts.Development,
-                _accounts.Sales,
-                _accounts.Support,
+                _accounts.Test,
             };
 
             foreach (var account in userAccounts)

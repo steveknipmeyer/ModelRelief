@@ -197,8 +197,8 @@ namespace ModelRelief.Test
             var passwordGrantRequest = new
             {
                 grant_type      = "password",
-                username        = accounts.Development.Name,
-                password        = accounts.Development.Password,
+                username        = accounts.Test.Name,
+                password        = accounts.Test.Password,
                 audience        = auth0.ApiAudience,
                 client_id       = auth0.ApiClientId,
                 client_secret   = auth0.ApiClientSecret,

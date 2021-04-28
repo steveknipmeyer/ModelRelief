@@ -158,7 +158,7 @@ namespace ModelRelief.Database
         /// <returns>Development user.</returns>
         private ApplicationUser GetDevelopmentUser()
         {
-            ApplicationUser user = DbFactory.ConstructUserFromAccount(_accounts.Development);
+            ApplicationUser user = DbFactory.ConstructUserFromAccount(_accounts.Test);
 
             return user;
         }

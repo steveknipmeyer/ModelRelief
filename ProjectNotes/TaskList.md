@@ -2,20 +2,12 @@
 
 ### General     
     Today             
+        Update Seed data.
+        Why are the Preview images not found on the server for a new account?
+
         Linode blocks port 465 so MailKit Connect times out.
             https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
             https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
-
-        test@modelrelief.org
-            Add new ModelRelief account.
-            Add Namecheap mailbox.
-            Modify DbFactory.
-            Add to Azure.
-            Add to SLKNotebook and Note clients.
-
-        Remove .com accounts.
-            Auth0
-            Azure
 
         [16:32:09 WRN] Error unprotecting the session cookie.
             System.Security.Cryptography.CryptographicException: The payload was invalid.
@@ -27,11 +19,6 @@
 
         Harden Site                   
 
-        Change sample accounts to modelrelief.org.
-            Auth0
-            Azure
-
-
         Compress Research
             https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52
             https://benfoster.io/blog/zlib-compression-net-core/
@@ -41,7 +28,7 @@
 
         Scripts
             Refresh Remote Database
-                scp /home/stephen/projects/ModelRelief/ModelRelief/store/development/database/SQLite/ModelReliefDevelopment.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
+                scp /home/stephen/projects/ModelRelief/ModelRelief/store/production/database/SQLite/ModelReliefProduction.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
             Fetch Remote Database
                 scp admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
 
