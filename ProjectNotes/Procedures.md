@@ -20,7 +20,7 @@
 ###  Linux Production Setup
     Deploy
         N.B. Check --exclude arguments for exclusions.
-        . /Tools/deploy user@X.X.X.X
+        . /Tools/deploy user@modelrelief
 
     Bind Python Virtual Environment to Server
         ./Tools/BindPythonEnvironement.sh mrenv

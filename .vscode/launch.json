@@ -53,9 +53,9 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Production",
+                "ASPNETCORE_ENVIRONMENT": "Development",
                 "MRDatabaseProvider": "SQLite",
-                "MRUpdateSeedData": "True",
+                "MRUpdateSeedData": "False",
                 "MRInitializeDatabase": "True",
                 "MRSeedDatabase": "True",
                 "MRExitAfterInitialization": "False",

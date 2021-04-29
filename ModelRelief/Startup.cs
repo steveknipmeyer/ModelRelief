@@ -7,10 +7,12 @@
 namespace ModelRelief
 {
     using System;
+    using System.IO;
     using Autofac;
     using AutoMapper;
     using MediatR;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.HttpOverrides;
@@ -101,6 +103,10 @@ namespace ModelRelief
                 });
             });
             services.AddMediatR(typeof(Startup));
+
+            var keysFolder = Path.Combine(Env.ContentRootPath, "Keys");
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(keysFolder));
         }
 
         /// <summary>

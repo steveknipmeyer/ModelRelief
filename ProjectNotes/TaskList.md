@@ -1,21 +1,12 @@
 #### Commit     
 
 ### General     
-    Today             
-        Update Seed data.
-        Why are the Preview images not found on the server for a new account?
+    Today               
+        Autostart X server in Windows.
 
         Linode blocks port 465 so MailKit Connect times out.
             https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
             https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
-
-        [16:32:09 WRN] Error unprotecting the session cookie.
-            System.Security.Cryptography.CryptographicException: The payload was invalid.
-            at Microsoft.AspNetCore.DataProtection.Managed.ManagedAuthenticatedEncryptor.Decrypt(ArraySegment`1 protectedPayload, ArraySegment`1 additionalAuthenticatedData)
-            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.UnprotectCore(Byte[] protectedData, Boolean allowOperationsOnRevokedKeys, UnprotectStatus& status)
-            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.DangerousUnprotect(Byte[] protectedData, Boolean ignoreRevocationErrors, Boolean& requiresMigration, Boolean& wasRevoked)
-            at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Unprotect(Byte[] protectedData)
-            at Microsoft.AspNetCore.Session.CookieProtection.Unprotect(IDataProtector protector, String protectedText, ILogger logger)   
 
         Harden Site                   
 
@@ -28,9 +19,9 @@
 
         Scripts
             Refresh Remote Database
-                scp /home/stephen/projects/ModelRelief/ModelRelief/store/production/database/SQLite/ModelReliefProduction.db  admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
+                scp /home/stephen/projects/ModelRelief/ModelRelief/store/production/database/SQLite/ModelReliefProduction.db  XXX@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
             Fetch Remote Database
-                scp admin@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
+                scp XXX@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
 
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
