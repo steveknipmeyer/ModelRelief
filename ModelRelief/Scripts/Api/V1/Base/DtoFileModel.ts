@@ -5,8 +5,11 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import * as Pako from "pako";
+
 import {DtoModel} from "Scripts/Api/V1/Base/DtoModel";
 import {IFileModel} from "Scripts/Api/V1/Interfaces/IFileModel";
+import {Defaults} from "Scripts/Models/Settings/Defaults";
 import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";
 import {Services} from "Scripts/System/Services";
 
@@ -62,11 +65,13 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      */
     public async postFileAsync(fileData: ArrayBuffer): Promise<T> {
 
-        const exportTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
+        const gzip = Pako.gzip(fileData as Uint8Array, {level: 1});
+        Services.defaultLogger.addInfoMessage(`Compression: ${(gzip.length / fileData.byteLength).toFixed(4)}`);
         const newModel = await HttpLibrary.postFileAsync(this.fileEndPoint, fileData);
 
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return this.factory(newModel) as T;
     }
@@ -80,11 +85,11 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         const encoder = new TextEncoder();
         const fileData = encoder.encode(base64PreviewImage);
 
-        const exportTag = Services.timer.mark(`POST Preview: ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`POST Preview: ${this.constructor.name}`);
 
         const model = await HttpLibrary.postFileAsync(this.previewEndPoint, fileData);
 
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return this.factory(model) as T;
     }
@@ -95,7 +100,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      */
     public async getFileAsync(): Promise<Uint8Array> {
 
-        const exportTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
 
         // cache
         if (this.fileArray)
@@ -104,7 +109,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
         this.fileArray = await result.arrayAsync();
 
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return this.fileArray;
     }
@@ -116,7 +121,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      */
     public async getFileAsStringAsync(): Promise<string> {
 
-        const exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
         // cache
         if (this.fileString)
@@ -125,7 +130,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
         this.fileString = await result.stringAsync();
 
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return this.fileString;
     }
@@ -137,7 +142,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      */
     public async getFileAsStringAsyncPrinme(): Promise<string> {
 
-        const exportTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
         // cache
         if (this.fileString)
@@ -157,7 +162,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
             });
         }
         this.fileString = await byteToStringConverter();
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return this.fileString;
     }

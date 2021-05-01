@@ -6,13 +6,11 @@
         "files.exclude": {
             "**/.git": true,            // this is a default value
 
-            "**/node_modules": true,    // this excludes all folders named "node_modules" from the Explorer tree
-            "devenv": true,
+            // exclude folders from the workspace Explorer
+            "devenv": false,
             "mrenv": true,
             "Publish": true,
-
-            // alternative version
-            "node_modules": true    // this excludes the folder only from the root of your workspace
+            "node_modules": false
         },
 
         "files.watcherExclude": {

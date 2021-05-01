@@ -363,6 +363,12 @@ gulp.task("copyNPM", function () {
     sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + "chai.js"]).pipe(gulp.dest(destinationFolder ));
+
+    // pako compression library
+    subFolder = "pako/dist/";
+    sourceFolder = sourceConfig.nodeModulesRoot + subFolder;
+    destinationFolder = siteConfig.libRoot + subFolder;
+    gulp.src([sourceFolder + "pako.js"]).pipe(gulp.dest(destinationFolder));
 });
 
 /// <summary>

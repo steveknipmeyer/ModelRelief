@@ -166,7 +166,7 @@ export class Graphics {
      */
     public static getTransformedBoundingBox(object: THREE.Object3D, matrix: THREE.Matrix4): THREE.Box3 {
 
-        const methodTag: string = Services.timer.mark("getTransformedBoundingBox");
+        const timerTag: string = Services.timer.mark("getTransformedBoundingBox");
 
         object.updateMatrixWorld(true);
         object.applyMatrix4(matrix);
@@ -177,7 +177,7 @@ export class Graphics {
         matrixInverse.copy(matrix).invert();
         object.applyMatrix4(matrixInverse);
 
-        Services.timer.logElapsedTime(methodTag);
+        Services.timer.logElapsedTime(timerTag);
         return boundingBox;
     }
 

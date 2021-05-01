@@ -114,7 +114,7 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
         this._rgbaArray = value;
 
         // RGBA -> Float32
-        this.depths = new Float32Array(this.rgbaArray.buffer);
+        this._depths = new Float32Array(this.rgbaArray.buffer);
     }
 
     /**
@@ -124,14 +124,6 @@ export class DepthBuffer extends GeneratedFileModel implements IImageModel {
     get depths(): Float32Array {
 
         return this._depths;
-    }
-
-    /**
-     * @description Sets the raw floats of the depth buffer.
-     */
-    set depths(value: Float32Array) {
-
-        this._depths = value;
     }
 
     /**

@@ -65,7 +65,7 @@ export class HttpLibrary {
      */
     public static sendXMLHttpRequest(endpoint: string, methodType: MethodType, contentType: ContentType, requestData: Document | BodyInit, onComplete: (request: XMLHttpRequest) => any): void {
 
-        const requestTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
+        const timerTag = Services.timer.mark(`${methodType} Request: ${endpoint}`);
         const request = new XMLHttpRequest();
 
         // Abort
@@ -122,7 +122,7 @@ export class HttpLibrary {
         request.setRequestHeader("Content-type", contentType);
         request.send(requestData);
 
-        Services.timer.logElapsedTime(requestTag);
+        Services.timer.logElapsedTime(timerTag);
     }
 
     /**

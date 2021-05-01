@@ -294,8 +294,8 @@ export class ComposerController {
         let depthBufferModel: DtoDepthBuffer = await this.activeDepthBuffer.toDtoModel().putAsync();
 
         // file
-        this.activeDepthBuffer.depths = factoryDepthBuffer.depths;
-        depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.depths);
+        this.activeDepthBuffer.rgbaArray = factoryDepthBuffer.rgbaArray;
+        depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.rgbaArray);
 
         // preview
         const previewImage = this.depthBufferViewer.base64Image;

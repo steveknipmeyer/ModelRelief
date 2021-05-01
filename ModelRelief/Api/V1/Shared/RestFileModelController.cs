@@ -102,6 +102,7 @@ namespace ModelRelief.Api.V1.Shared
             var postFile = new PostFile
             {
                 Name = model.Name,
+                // Raw = Files.Decompress(await Files.ReadToEnd(Request.Body)),
                 Raw = await Files.ReadToEnd(Request.Body),
             };
 

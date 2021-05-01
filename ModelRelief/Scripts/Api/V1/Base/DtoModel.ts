@@ -64,11 +64,11 @@ export class DtoModel<T extends IModel> implements IModel {
      */
     public async submitRequestAsync(endPoint: string, requestType: MethodType, contentType: ContentType, requestData: string): Promise<RequestResponse> {
 
-        const exportTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
+        const timerTag = Services.timer.mark(`${requestType} ${this.constructor.name}`);
 
         const result = await HttpLibrary.submitHttpRequestAsync(endPoint, requestType, contentType, requestData);
 
-        Services.timer.logElapsedTime(exportTag);
+        Services.timer.logElapsedTime(timerTag);
 
         return result;
     }
