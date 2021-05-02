@@ -295,7 +295,7 @@ export class ComposerController {
 
         // file
         this.activeDepthBuffer.rgbaArray = factoryDepthBuffer.rgbaArray;
-        depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.rgbaArray);
+        depthBufferModel = await depthBufferModel.postFileAsync(this.activeDepthBuffer.rgbaArray, true);
 
         // preview
         const previewImage = this.depthBufferViewer.base64Image;
@@ -330,7 +330,7 @@ export class ComposerController {
 
         // file
         this.activeNormalMap.rgbaArray = factoryNormalMap.rgbaArray;
-        normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray);
+        normalMapModel = await normalMapModel.postFileAsync(this.activeNormalMap.rgbaArray, false);
 
         // preview
         const previewImage = this.normalMapViewer.base64Image;

@@ -89,7 +89,7 @@ export class Loader {
         let meshGroup: THREE.Group = new THREE.Group();
         meshGroup.name = ObjectNames.MeshGroup;
 
-        const byteArray: Uint8Array = await mesh.toDtoModel().getFileAsync();
+        const byteArray: Uint8Array = await mesh.toDtoModel().getFileAsync(true);
         const floatArray = new Float32Array(byteArray.buffer);
 
         const depthBuffer = mesh.depthBuffer;
@@ -138,7 +138,7 @@ export class Loader {
      */
     public async loadOBJModelAsync(fileModel: FileModel): Promise<THREE.Group> {
 
-        const modelFile = await fileModel.toDtoModel().getFileAsStringAsync();
+        const modelFile = await fileModel.toDtoModel().getFileAsStringAsync(true);
 
         const objLoader = () => new Promise<THREE.Group>((resolve, reject) => {
 

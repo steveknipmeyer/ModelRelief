@@ -94,7 +94,10 @@ namespace ModelRelief.Api.V1.Shared.Rest
             if (!File.Exists(fileName))
                 throw new ModelFileNotFoundException(typeof(TEntity), baseFileName);
 
-            var contents = File.ReadAllBytes(fileName);
+            var byteArray = File.ReadAllBytes(fileName);
+            var contents = request.QueryParameters.Compression ? Files.Compress(byteArray) : byteArray;
+            // Logger.LogWarning($"Compression: {(((float)contents.Length) / byteArray.Length).ToString("0.00")}");
+
             var response = new FileContentResult(contents, mediaType);
             response.FileDownloadName = baseFileName;
 

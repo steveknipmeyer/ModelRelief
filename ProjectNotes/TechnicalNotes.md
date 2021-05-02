@@ -1002,9 +1002,8 @@ public ContentResult Index()
         $"ASPNETCORE_URLS = {ConfigurationProvider.GetSetting(ConfigurationSettings.URLS)}<br>",
     };
 }
-'''
-
-#### Relation
+```
+#### Relations
         Potential collection navigation properties:
             Project -> Cameras
             Project -> DepthBuffers
@@ -1025,3 +1024,8 @@ public ContentResult Index()
 
 #### File Upload Security
 https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
+
+#### Compression
+    https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52
+    https://stackoverflow.com/questions/20762094/how-are-zlib-gzip-and-zip-related-what-do-they-have-in-common-and-how-are-they
+

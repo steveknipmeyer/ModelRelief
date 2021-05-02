@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------//
 "use strict";
 
+import {timers} from "jquery";
 import * as Pako from "pako";
 
 import {DtoModel} from "Scripts/Api/V1/Base/DtoModel";
@@ -63,14 +64,15 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      * @description Posts the model and a backing file to its API endpoint.
      * @returns {Promise<T>}
      */
-    public async postFileAsync(fileData: ArrayBuffer): Promise<T> {
+    public async postFileAsync(fileData: ArrayBuffer, compress: boolean = false): Promise<T> {
 
         const timerTag = Services.timer.mark(`POST File: ${this.constructor.name}`);
 
-        const gzip = Pako.gzip(fileData as Uint8Array, {level: 1});
-        Services.defaultLogger.addInfoMessage(`Compression: ${(gzip.length / fileData.byteLength).toFixed(4)}`);
-        const newModel = await HttpLibrary.postFileAsync(this.fileEndPoint, fileData);
+        const data = compress ? Pako.gzip(fileData as Uint8Array, {level: 1}) : fileData;
+        const endPoint = compress ? `${this.fileEndPoint}?compression=true` : this.fileEndPoint;
+        const newModel = await HttpLibrary.postFileAsync(endPoint, data);
 
+        // Services.defaultLogger.addInfoMessage(`Compression: ${((data as Uint8Array).length / fileData.byteLength).toFixed(4)}`);
         Services.timer.logElapsedTime(timerTag);
 
         return this.factory(newModel) as T;
@@ -98,7 +100,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      * @description Gets the backing file as a binary array.
      * @returns {Promise<UInt8Array>}
      */
-    public async getFileAsync(): Promise<Uint8Array> {
+    public async getFileAsync(compress: boolean = false): Promise<Uint8Array> {
 
         const timerTag = Services.timer.mark(`GET File: ${this.constructor.name}`);
 
@@ -106,8 +108,10 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         if (this.fileArray)
             return this.fileArray;
 
-        const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
-        this.fileArray = await result.arrayAsync();
+        const endPoint = compress ? `${this.fileEndPoint}?compression=true` : this.fileEndPoint;
+        const result = await this.submitRequestAsync(endPoint, MethodType.Get, ContentType.OctetStream, null);
+        const resultArray = await result.arrayAsync();
+        this.fileArray = compress ? Pako.ungzip(resultArray) : resultArray;
 
         Services.timer.logElapsedTime(timerTag);
 
@@ -119,16 +123,12 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
      * @returns {Promise<string>}
      */
-    public async getFileAsStringAsync(): Promise<string> {
+    public async getFileAsStringAsync(compress: boolean = false): Promise<string> {
 
         const timerTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
-        // cache
-        if (this.fileString)
-            return this.fileString;
-
-        const result = await this.submitRequestAsync(this.fileEndPoint, MethodType.Get, ContentType.OctetStream, null);
-        this.fileString = await result.stringAsync();
+        const fileByteArray = await this.getFileAsync(compress);
+        this.fileString = new TextDecoder().decode(fileByteArray);
 
         Services.timer.logElapsedTime(timerTag);
 
@@ -140,7 +140,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
      * // https://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript
      * @returns {Promise<string>}
      */
-    public async getFileAsStringAsyncPrinme(): Promise<string> {
+    public async getFileAsStringAsyncPrinme(compress: boolean = false): Promise<string> {
 
         const timerTag = Services.timer.mark(`GET File (string): ${this.constructor.name}`);
 
@@ -148,7 +148,7 @@ export class DtoFileModel<T extends IFileModel> extends DtoModel<T> implements I
         if (this.fileString)
             return this.fileString;
 
-        const fileByteArray = await this.getFileAsync();
+        const fileByteArray = await this.getFileAsync(compress);
         function byteToStringConverter(): Promise<string> {
             return new Promise<string>((resolve, reject) => {
                 const blobBuffer = new Blob([new Uint8Array(fileByteArray)]);

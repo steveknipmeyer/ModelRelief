@@ -240,5 +240,22 @@ namespace ModelRelief.Utility
                 }
             }
         }
+
+        /// <summary>
+        /// Compress a byte array using gzip compression.
+        /// https://stackoverflow.com/questions/40909052/using-gzip-to-compress-decompress-an-array-of-bytes
+        /// </summary>
+        /// <param name="byteArray">Uncompressed byte array.</param>
+        /// <returns>Compressed array.</returns>
+        public static byte[] Compress(byte[] byteArray)
+        {
+            using (var compressedStream = new MemoryStream())
+            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Compress))
+            {
+                zipStream.Write(byteArray, 0, byteArray.Length);
+                zipStream.Close();
+                return compressedStream.ToArray();
+            }
+        }
     }
 }

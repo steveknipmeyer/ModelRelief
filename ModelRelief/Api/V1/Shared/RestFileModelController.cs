@@ -88,24 +88,25 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Action method to create a file that is associated with a model.
         /// </summary>
+        /// <param name="fileQueryParameters">File query parameters.</param>
         /// <returns>TGetModel of updated model.</returns>
         [HttpPost("{id:int}/file")]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> PostFile()
+        public virtual async Task<IActionResult> PostFile([FromQuery] PostFileQueryParameters fileQueryParameters)
         {
             // POST file requires an existing model
             var modelId = System.Convert.ToInt32(this.RouteData.Values["id"]);
             var model = await FindModelById(modelId);
 
             // construct from request body
+            var raw = await Files.ReadToEnd(Request.Body);
+            raw = fileQueryParameters.Compression ? Files.Decompress(raw) : raw;
             var postFile = new PostFile
             {
                 Name = model.Name,
-                // Raw = Files.Decompress(await Files.ReadToEnd(Request.Body)),
-                Raw = await Files.ReadToEnd(Request.Body),
+                Raw = raw,
             };
-
             var result = await HandleRequestAsync(new PostFileRequest<TEntity, TGetModel>
             {
                 User = User,
@@ -119,13 +120,14 @@ namespace ModelRelief.Api.V1.Shared
         /// <summary>
         /// Action method to update a file in its entirety that is associated with a model.
         /// </summary>
+        /// <param name="fileQueryParameters">File query parameters.</param>
         /// <returns>TGetModel of updated model.</returns>
         [HttpPut("{id:int}/file")]
         [Consumes("application/octet-stream")]
         [DisableRequestSizeLimit]
-        public virtual async Task<IActionResult> PutFile()
+        public virtual async Task<IActionResult> PutFile([FromQuery] PostFileQueryParameters fileQueryParameters)
         {
-            return await PostFile();
+            return await PostFile(fileQueryParameters);
         }
 
         /// <summary>

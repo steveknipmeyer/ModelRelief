@@ -15,5 +15,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// Gets or sets the file extension parameter.
         /// </summary>
         public string Extension { get; set; }
+
+        // use gzip compression
+        public bool Compression { get; set; }
     }
 }

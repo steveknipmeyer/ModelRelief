@@ -1,19 +1,8 @@
 #### Commit     
 
 ### General     
-    Today               
+    Today       
         Auth0 login dialog does not diplay ModelRelief logo.
-
-        Compress Research
-            https://blog.daftcode.pl/how-to-make-uploading-10x-faster-f5b3f9cfcd52
-            https://benfoster.io/blog/zlib-compression-net-core/
-
-            https://stackoverflow.com/questions/60927038/deflate-with-pako-and-inflate-with-asp-net-core
-            https://stackoverflow.com/questions/55680317/javascript-gzip-and-btoa-and-decompress-with-c-sharp/66825721#66825721
-            https://stackoverflow.com/questions/20762094/how-are-zlib-gzip-and-zip-related-what-do-they-have-in-common-and-how-are-they
-
-            Switch to a compressed format such as PNG for file formats.
-            Clip the content region to the bounding box before transmission.
 
         Linode blocks port 465 so MailKit Connect times out.
             https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
