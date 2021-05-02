@@ -84,7 +84,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <returns>TGetModel for file</returns>
         public override async Task<TGetModel> OnHandle(PostFormRequest<TEntity, TRequestModel, TGetModel> request, CancellationToken cancellationToken)
         {
-            // N.B. Processing errors will throw an exception, handled by ApiController in the processing of PostFormRequest
+            // N.B. Processing errors will throw an exception, handled by base Controller in the processing of PostFormRequest
             var newModel = await CreateModelAsync(request.User, request.FileModel);
 
             newModel = await CreateFileAsync(request.User, request.FileModel, newModel.Id);

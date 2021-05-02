@@ -2,6 +2,16 @@
 
 ### General     
     Today       
+        Add a New Project item to the Project list?
+   
+        Styling
+            SASS
+            Udemy Bootstrap course
+            Style the View.
+            Style the ProgressBar
+                Increase the default width of the Progress Bar.
+                Increase the height.
+
         Auth0 login dialog does not diplay ModelRelief logo.
 
         Linode blocks port 465 so MailKit Connect times out.
@@ -24,13 +34,6 @@
                 Processing time
                 Polygons
                     
-        Styling
-            SASS
-            Udemy Bootstrap course
-            Style the View.
-            Style the ProgressBar
-                Increase the default width of the Progress Bar.
-                Increase the height.
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
@@ -39,14 +42,6 @@
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
-    Project Index
-        Use Index page as a template for the Project page.
-            Each user model is hosted in a tile.
-
-    Create Project
-        How should a new project be created?
-            Projects/Create is the baseline View.
-   
 
     Profile the startup code.
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
@@ -62,9 +57,6 @@
         Model3d
         Project
     
-    Test new user creation.
-        52oCTRbyDVifvQTiSdyn0mkrXwhMiTEe
-
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
 
@@ -127,8 +119,6 @@
         Mock azurekeysecrets.json.
             Move to a new settings file?
             How should the contact e-mail address be defined?
-    Auth0 contains references to www. modelrelief.com.
-        http://www.modelrelief.com/images/ModelReliefBlue.png
     Disable execute permissions on the file upload location.
 ### Refactoring
     Review all casing of files and directories.
@@ -159,7 +149,6 @@
         API
         ModelRelief.dgml (Linux?)
 ### Publishing
-    Host on Digital Ocean.
     KAK invitation
     Notices:
         3D CAD Jewelry
@@ -169,8 +158,5 @@
         Vectrix
         3D Printing
         HackerNews
-### SSL
-    https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
-
 ### License
     Replace copyright headers with MIT license notice.

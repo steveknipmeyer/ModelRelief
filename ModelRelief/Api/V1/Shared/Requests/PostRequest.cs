@@ -26,5 +26,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         ///  Gets or sets the incoming model to be used to create the new domain model.
         /// </summary>
         public TRequestModel NewModel { get; set; }
+
+        public PostQueryParameters QueryParameters { get; set; }
     }
 }

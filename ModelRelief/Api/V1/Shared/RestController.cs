@@ -108,14 +108,17 @@ namespace ModelRelief.Api.V1.Shared
         /// Action method for a PostRequest to create a new model.
         /// </summary>
         /// <param name="postRequest">TRequestModel of model to create. Does not contain a model Id.</param>
+        /// <param name="postQueryParameters">Query parameters.</param>
         /// <returns>TGetModel of the newly-created model.</returns>
         [HttpPost]
-        public virtual async Task<IActionResult> Post([FromBody] TRequestModel postRequest)
+        public virtual async Task<IActionResult> Post([FromBody] TRequestModel postRequest, [FromQuery] PostQueryParameters postQueryParameters)
         {
             var result = await HandleRequestAsync(new PostRequest<TEntity, TRequestModel, TGetModel>
             {
                 User = User,
                 NewModel = postRequest,
+
+                QueryParameters = postQueryParameters,
             });
 
             return PostCreatedResult(result);

@@ -99,11 +99,12 @@ namespace ModelRelief.Features
         /// Action handler for a Create request.
         /// </summary>
         /// <param name="postRequest">Model to create.</param>
+        /// <param name="postQueryParameters">Query parameters.</param>
         /// <returns>Create page.</returns>
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ValidateAntiForgeryToken]
-        public override async Task<IActionResult> Create(TRequestModel postRequest)
+        public override async Task<IActionResult> Create(TRequestModel postRequest, [FromQuery] PostQueryParameters postQueryParameters)
         {
             var newModel = await HandleRequestAsync(new PostFormRequest<TEntity, TRequestModel, TGetModel>
             {

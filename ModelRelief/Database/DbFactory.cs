@@ -275,6 +275,20 @@ namespace ModelRelief.Database
         }
 
         /// <summary>
+        /// Add supporting models for a new Project.
+        /// </summary>
+        /// <param name="user">Application user.</param>
+        /// <param name="project">Project to add supporting models.</param>
+        public Project AddProjectRelated(ApplicationUser user, Project project)
+        {
+            // add related Project models
+            project.SettingsId = AddEntity<Settings>(user, null, SettingsNames.Project, "User interface and project settings");
+            _dbContext.SaveChanges();
+
+            return project;
+        }
+
+        /// <summary>
         /// Returns the JSON definition file for the given entity type.
         /// </summary>
         /// <typeparam name="TEntity">Domain model</typeparam>
@@ -485,14 +499,15 @@ namespace ModelRelief.Database
         /// <param name="name">Name.</param>
         /// <param name="description">Description.</param>
         private int AddEntity<TEntity>(ApplicationUser user, int? projectId, string name = "", string description = "")
-            where TEntity : DomainModel, IProjectModel, new()
+            where TEntity : DomainModel, new()
         {
             var entity = new TEntity();
 
             entity.Name = name;
             entity.Description = description;
             entity.UserId = user.Id;
-            entity.ProjectId = projectId;
+            if (typeof(IProjectModel).IsAssignableFrom(typeof(TEntity)))
+                (entity as IProjectModel).ProjectId = projectId;
 
             _dbContext.Add(entity);
             _dbContext.SaveChanges();

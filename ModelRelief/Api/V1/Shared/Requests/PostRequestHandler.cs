@@ -31,6 +31,8 @@ namespace ModelRelief.Api.V1.Shared.Rest
         where TEntity    : DomainModel
         where TGetModel  : IModel
     {
+        protected IDbFactory DbFactory { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PostRequestHandler{TEntity, TRequestModel, TGetModel}"/> class.
         /// Constructor
@@ -45,6 +47,7 @@ namespace ModelRelief.Api.V1.Shared.Rest
         /// <param name="settingsManager">ISettingsManager</param>
         /// <param name="query">IQuery</param>
         /// <param name="modelReferenceValidator">IModelReferenceValidator</param>
+        /// <param name="dbFactory">IDbFactory</param>
         public PostRequestHandler(
             ModelReliefDbContext dbContext,
             ILoggerFactory loggerFactory,
@@ -55,9 +58,11 @@ namespace ModelRelief.Api.V1.Shared.Rest
             IEnumerable<IValidator<PostRequest<TEntity, TRequestModel, TGetModel>>> validators,
             ISettingsManager settingsManager,
             IQuery query,
-            IModelReferenceValidator modelReferenceValidator)
+            IModelReferenceValidator modelReferenceValidator,
+            IDbFactory dbFactory)
             : base(dbContext, loggerFactory, mapper, hostingEnvironment, configurationProvider, dependencyManager, validators, settingsManager, query, modelReferenceValidator)
         {
+            DbFactory = dbFactory ?? throw new System.ArgumentNullException(nameof(DbFactory));
         }
 
         /// <summary>
@@ -80,8 +85,22 @@ namespace ModelRelief.Api.V1.Shared.Rest
             DbContext.Set<TEntity>().Add(newModel);
             await DependencyManager.PersistChangesAsync(newModel, cancellationToken);
 
+            if (request?.QueryParameters?.AddRelated ?? false)
+                    newModel = await PostProcessAsync(await request.ApplicationUserAsync(), newModel);
+
             var projectedModel = await Query.FindDtoModelAsync<TEntity, TGetModel>(request.User, newModel.Id);
             return projectedModel;
+        }
+
+        /// <summary>
+        /// Post process a PostRequest.
+        /// </summary>
+        /// <param name="user">Active user</param>
+        /// <param name="newModel">New model to post-processs.</param>
+        protected virtual async Task<TEntity> PostProcessAsync(ApplicationUser user, TEntity newModel)
+        {
+            await Task.CompletedTask;
+            return newModel;
         }
     }
 }
