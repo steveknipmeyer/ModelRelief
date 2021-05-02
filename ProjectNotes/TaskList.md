@@ -2,8 +2,6 @@
 
 ### General     
     Today       
-        Add a New Project item to the Project list?
-   
         Styling
             SASS
             Udemy Bootstrap course

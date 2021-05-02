@@ -39,6 +39,11 @@ export class Layout {
 
             const projectMenuItem = projectMenuItems[index];
             const projectId = parseInt(projectMenuItem.dataset.projectid);
+
+            // New Project
+            if (!projectId)
+                continue;
+
             // update menu label if active Project
             if (projectId == this.session.projectId) {
                 projectMenuLabel.innerText = projectMenuItem.innerText;
