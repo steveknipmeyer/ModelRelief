@@ -30,16 +30,11 @@
             Generate result
                 Result
                 Processing time
-                Polygons
-                    
+                Polygons                   
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
  
-    SMK
-        https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
-        https://www.smk.dk/en/article/digitale-casts/
-
 
     Profile the startup code.
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
@@ -57,8 +52,6 @@
     
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
-
-    Support query by wildcard and exact mode.
 
     Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
