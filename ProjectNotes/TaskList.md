@@ -2,6 +2,10 @@
 
 ### General     
     Today       
+        HDR
+            https://docs.opencv.org/3.4/d3/db7/tutorial_hdr_imaging.html
+            https://docs.opencv.org/3.4/d2/df0/tutorial_py_hdr.html
+            
         Styling
             SASS
             Udemy Bootstrap course

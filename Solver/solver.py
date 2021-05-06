@@ -12,6 +12,7 @@
 """
 
 import argparse
+import cv2
 import json
 import os
 import numpy as np
@@ -220,6 +221,26 @@ class Solver:
 
         poisson = Poisson(self.services)
         self.results.mesh_transformed.image = poisson.solve(self.results.divG.image)
+
+    def tonemap(self):
+        """
+        Peform tomnemapping on the depth buffer to compress the heightfield into a lower dynamic range.
+        """
+        # convert to triplet
+        depth_buffer = self.results.depth_buffer_model.image.astype('float32')
+        hdr = np.zeros((depth_buffer.shape[0], depth_buffer.shape[1], 3), 'float32')
+        hdr[:,:,0] = depth_buffer
+        hdr[:,:,1] = depth_buffer
+        hdr[:,:,2] = depth_buffer
+
+        tonemap = cv2.createTonemap(gamma=1.0)
+        self.results.mesh_transformed.image = tonemap.process(hdr)[:,:,0]
+
+        # unsharp masking
+        if self.mesh_transform.unsharpmask_parameters.enabled:
+            parameters = self.mesh_transform.unsharpmask_parameters
+            unsharpmask = UnsharpMask(self.services)
+            self.results.mesh_transformed.image = unsharpmask.apply(self.results.mesh_transformed.image, self.results.combined_mask.image, parameters, self.mesh_transform.p4.enabled)
 
     def process_geometry(self):
         """

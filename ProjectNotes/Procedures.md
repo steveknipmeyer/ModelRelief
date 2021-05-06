@@ -243,4 +243,32 @@ OR
     Set UpdateSeedData and restart ModelRelief.
         The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
         N.B. The entity Ids are now correct in the exported Cameras.json and MeshTransforms.json files.
+#### VSCode Jupyter Notebook
+    Jupyter Notebooks in VSCode do not recognize the active virtual environment (devenv).
+    Running a Notebook reports that ipykernel is not installed.
+
+    To resolve use (from devenv):     
+        python3 -m ipykernel install --user --name=devenv
+            Installed kernelspec devenv in ~/.local/share/jupyter/kernels/devenv
+
+        ls ~/.local/share/jupyter/kernels
+            devenv
+
+        ls ~/.local//share/jupyter/kernels/devenv/
+            kernel.json     logo-32x32.png  logo-64x64.png
+
+        cat ~/.local//share/jupyter/kernels/devenv/kernel.json
+            {
+            "argv": [
+            "/home/stephen/projects/ModelRelief/devenv/bin/python3",
+            "-m",
+            "ipykernel_launcher",
+            "-f",
+            "{connection_file}"
+            ],
+            "display_name": "devenv",
+            "language": "python"
+            }
+
+
 

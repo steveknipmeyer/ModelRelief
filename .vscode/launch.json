@@ -118,8 +118,8 @@
         // "args":["--target", "Nginx", "--publish", "True"]
 
         //  ----- Explorer
-        // "program": "${workspaceFolder}/Explorer/explorer.py",
-        // "args":["--s", "../Solver/Test/discus.json", "--w", "../Solver/Test/Working"]
+        "program": "${workspaceFolder}/Explorer/explorer.py",
+        "args":["--s", "../Solver/Test/discus.json", "--w", "../Solver/Test/Working"]
 
         //  ----- Solver
         //  "program": "${workspaceFolder}/Solver/solver.py",
@@ -139,8 +139,8 @@
         //  "program": "${workspaceFolder}/Solver/Experiments/mayavitest.py",
 
         //  ----- Generator
-         "program": "${workspaceFolder}/Tools/generator.py",
-         "args":[]
+        //  "program": "${workspaceFolder}/Tools/generator.py",
+        //  "args":[]
 
         // "args":[]
         },
