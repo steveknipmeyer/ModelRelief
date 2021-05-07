@@ -55,6 +55,15 @@ namespace ModelRelief.Features.Home
         }
 
         /// <summary>
+        /// Action method for Cookie Policy page.
+        /// </summary>
+        [HttpGet]
+        public IActionResult CookiePolicy()
+        {
+            return View();
+        }
+
+        /// <summary>
         /// Action method for Credits page.
         /// </summary>
         [HttpGet]

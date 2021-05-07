@@ -61,9 +61,14 @@
         <!-- @await Component.InvokeAsync("Footer") -->
 
         <div class="footer-copyright text-center mt-3 py-3">
-            <img class="mt-0 mr-1" src="~/images/IconWhite.png" alt="ModelRelief Shell" height="24" width="24">
-            © 2020 Copyright:
-            <a class="font-weight-normal" href="http://modelrelief.org/"> ModelRelief.org</a>
+            <div>
+                <img class="mt-0 mr-1" src="~/images/IconWhite.png" alt="ModelRelief Shell" height="24" width="24">
+                © 2020 Copyright:
+                <a class="font-weight-normal" href="http://modelrelief.org/"> ModelRelief.org</a>
+            </div>
+            <div>
+                <a asp-controller="Home" asp-action="Privacy">Our Privacy Policy</a>
+            </div>
         </div>
     </footer>
 

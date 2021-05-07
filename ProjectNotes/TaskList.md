@@ -1,11 +1,12 @@
 #### Commit     
 
 ### General     
-    Today       
-        HDR
-            https://docs.opencv.org/3.4/d3/db7/tutorial_hdr_imaging.html
-            https://docs.opencv.org/3.4/d2/df0/tutorial_py_hdr.html
-            
+    Today   
+
+        Linode blocks port 465 so MailKit Connect times out.
+            https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
+            https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
+           
         Styling
             SASS
             Udemy Bootstrap course
@@ -14,21 +15,9 @@
                 Increase the default width of the Progress Bar.
                 Increase the height.
 
-        Auth0 login dialog does not diplay ModelRelief logo.
-
-        Linode blocks port 465 so MailKit Connect times out.
-            https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
-            https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
-
-        Scripts
-            Refresh Remote Database
-                scp /home/stephen/projects/ModelRelief/ModelRelief/store/production/database/SQLite/ModelReliefProduction.db  XXX@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db
-            Fetch Remote Database
-                scp XXX@45.79.166.83:modelrelief/store/production/database/SQLite/ModelReliefProduction.db /home/stephen/test/Remote.db
-
         Runtime error does not propagate back to UI.        
             Should Composer check IsFileSynchronized?
-            Add a status widget toshow processing progress obtained by GET of GeneratedFileModel metadata.
+            Add a status widget to show processing progress obtained by GET of GeneratedFileModel metadata.
                 Polling is done based on a timer.
 
             Generate result
@@ -38,7 +27,6 @@
 
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
- 
 
     Profile the startup code.
         Optimize SettingsManager.Initialize[UserSession|Settings]Async
@@ -98,22 +86,14 @@
             Model3d
             Project
 #### Build
-    Review target=nginx handling in Builder.py.
-        python Build/builder.py --target nginx --deploy True
-        Elevated permissions are required in Builder to deploy to delete /var/www.
-        Can the Nginx configuration be accomplished only through /etc/nginx/sites-available/default?
-
     Prove with clean Ubuntu installation!
         Add a test account.
-
-    Convert Alpha to a Linux server.
 ### Security
     Remove steve@knipmeyer.org.
     Azure Key Secrets
         Review settings in AzureKeyVault.
         Mock azurekeysecrets.json.
-            Move to a new settings file?
-            How should the contact e-mail address be defined?
+            Move to a new settings file?           
     Disable execute permissions on the file upload location.
 ### Refactoring
     Review all casing of files and directories.

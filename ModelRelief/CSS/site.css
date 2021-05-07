@@ -96,6 +96,13 @@ sup {
     color: white;
 }
 /* ----------------------
+    Cookie Banner
+------------------------*/
+#cookiePolicy{
+    color: navy;
+}
+
+/* ----------------------
     Footer
 ------------------------*/
 footer.page-footer .footer-copyright {

@@ -1034,3 +1034,7 @@ https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
         https://www.turbosquid.com/Search/3D-Models/free?exclude_branded=1&exclude_editoriallicense=1&include_artist=SMK-National-Gallery-of-Denmark
         https://www.smk.dk/en/article/digitale-casts/
 
+#### HDR
+      
+    https://docs.opencv.org/3.4/d3/db7/tutorial_hdr_imaging.html
+    https://docs.opencv.org/3.4/d2/df0/tutorial_py_hdr.html
