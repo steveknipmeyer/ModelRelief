@@ -2,7 +2,6 @@
 
 ### General     
     Today   
-
         Linode blocks port 465 so MailKit Connect times out.
             https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
             https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out

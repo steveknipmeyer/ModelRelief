@@ -45,9 +45,6 @@ namespace ModelRelief.Features.Email
             EmailService = emailService;
         }
 
-        // A function that checks reCAPTCHA results
-        // You might want to move it to some common class
-
         /// <summary>
         /// Checks the the reCAPTCHA results.
         /// </summary>
@@ -102,19 +99,25 @@ namespace ModelRelief.Features.Email
                 return Json(errorResult);
             }
 
+            var name = formData.Name;
+            var email = formData.Email;
+            var newsletter = $"Newsletter: {formData.Newsletter}";
+
             var applicationList = (formData.Applications == null) ? string.Empty : string.Join(", ", formData.Applications);
-            var applications = $"\n\nApplications: {applicationList}";
-            applications += string.IsNullOrEmpty(formData.ApplicationOther) ? string.Empty : $", {formData.ApplicationOther}";
+            var applications = $"Applications: {applicationList}";
+            if (!string.IsNullOrEmpty(formData.ApplicationOther))
+            {
+                var punctuation = applicationList.Length > 0 ? ", " : string.Empty;
+                applications += $"{punctuation}{formData.ApplicationOther}";
+            }
 
             var message = new EmailMessage
             {
-                Name = formData.Name,
-                Email = formData.Email,
-                Subject = formData.Subject,
-                Message = formData.Message + applications,
-
                 ToAddresses = new List<EmailAddress>() { new EmailAddress { Name = EmailService.Username, Address = EmailService.Username } },
                 FromAddresses = new List<EmailAddress>() { new EmailAddress { Name = formData.Name, Address = formData.Email } },
+                Subject = formData.Subject,
+
+                Message = $"{name}\n{email}\n{newsletter}\n\n{formData.Message}\n\n{applications}",
             };
 
             var statusResult = EmailService.Send(message);

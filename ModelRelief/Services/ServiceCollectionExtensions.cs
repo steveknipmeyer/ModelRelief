@@ -224,23 +224,6 @@ namespace ModelRelief.Services
             services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
             services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
             services.Configure<ReCAPTCHASettings>(configuration.GetSection("ReCAPTCHA"));
-
-            /*
-            // N.B. These strongly-typed configuration settings can be acquired in two ways in a controller.
-            // https://arghya.xyz/articles/practical-configuration-and-di-in-aspnet-core/
-
-            // A) Services (Indirect)
-            public EmailController(IServiceProvider services)
-            {
-                var emailSettings = services.GetRequiredService<IOptions<EmailSettings>>().Value as EmailSettings;;
-            }
-
-            // B) Parameter (Direct)
-            public EmailController(IOptions<EmailSettings> emailSettings)
-            {
-                var emailSettings = emailSettings.Value;
-            }
-            */
         }
     }
 }

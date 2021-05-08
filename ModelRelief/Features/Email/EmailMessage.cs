@@ -26,6 +26,7 @@ namespace ModelRelief.Features.Email
         public string Email { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
+        public bool Newsletter { get; set; }
 
         public string[] Applications { get; set; }
         public string ApplicationOther { get; set; }
