@@ -1,6 +1,9 @@
 #### Commit     
 ### General     
     Today   
+        Verify Resolution.Image setting.
+            1024 leads to Chrome render issues.
+
         Styling
             SASS
             Udemy Bootstrap course
@@ -9,7 +12,6 @@
                 Increase the default width of the Progress Bar.
                 Increase the height.
 
-    Verify Resolution.Image setting.
    
     Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB

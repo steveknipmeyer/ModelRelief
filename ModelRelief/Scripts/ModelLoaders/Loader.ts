@@ -96,7 +96,14 @@ export class Loader {
         const meshParameters: IMeshGenerateParameters = {
             name : mesh.name,
         };
-        const bufferExtents = new THREE.Vector2(depthBuffer.width, depthBuffer.height);
+
+        // Verify extents of mesh file match current default resolution.
+        // They will be inequal when the default resolution (Defaults.json[Resolution.Image]) has been changed and
+        // does not match the last generated mesh file.
+        const meshResolution = Math.round(Math.sqrt(floatArray.length));
+        const resolution = (meshResolution === depthBuffer.width) ? depthBuffer.width : meshResolution;
+
+        const bufferExtents = new THREE.Vector2(resolution, resolution);
         const meshExtents: THREE.Vector2 = depthBuffer.camera.getNearPlaneExtents();
 
         // NOOP default transform
