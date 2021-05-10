@@ -1,5 +1,19 @@
 # Enhancements
-Electron platform?
+#### Related Models
+    Model3d supports the addition of supporting models. Other resources?
+        PostQueryParameters.AddRelatedModels
+    Should Delete requests also remove related resources?
+        Model3d
+        Project
+#### Optimization
+    Profile the startup code.
+        Optimize SettingsManager.Initialize[UserSession|Settings]Async
+            Every property validation causes a database read.
+#### OBJ Models
+    Strengthen the OBJ validation.
+        https://github.com/stefangordon/ObjParser
+#### Electron
+    Electron platform?
 #### Python
     How can Python binary extensions be resolved (e.g. sys, time)?
 #### .NET Core  
@@ -15,18 +29,9 @@ Electron platform?
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
-
-#### Privacy Page
-    Add a Privacy page.
-        The page exists populate it.
-        https://auth0.com/docs/compliance/gdpr
-
 #### Database
     Update database diagram.
-
-#### NormalMaps
-    What NormalMap integration tests are appropriate?
-##### TypeScript Image Class
+#### TypeScript Image Class
     PNG Creation
         Integrate with Files utility class.
         File methods should share common setup steps for deleting existing files, etc.
@@ -38,7 +43,7 @@ Electron platform?
         RGB, RGBA values
         Vector3
 
-##### WebGL Debugging
+#### WebGL Debugging
         Investigate webgl-debug library.
     
         Explore Nsight for shader debugging.
@@ -58,14 +63,20 @@ Electron platform?
     
     3D Surface Visualization
         https://jakevdp.github.io/PythonDataScienceHandbook/04.12-three-dimensional-plotting.html
-
-#### Performance
-    The transfer of models is inefficent because they are Base64 encoded.
-
-#### Builder
-    Add a model list to control which models are added.
-
 #### Solver
+    Runtime error does not propagate back to UI.        
+        Should Composer check IsFileSynchronized?
+        Add a status widget to show processing progress obtained by GET of GeneratedFileModel metadata.
+            Polling is done based on a timer.
+
+        Generate result
+            Result
+            Processing time
+            Polygons                   
+
+    Silhouette
+        Blend profile into mesh form.
+
     Should the Python image masks be integers or booleans (instead of doubles)?
     
     Gradients
@@ -90,10 +101,6 @@ Electron platform?
                 What is the difference between ModelRelief and Blender depth buffers (linear vs. proportional)?
                 Generate a test Blender depth buffer.
                 How was the compositing processing defined to create the depth buffer?
-
-#### Python
-    Explore Python unit tests.
-
 #### Other Tools
     Explore
         Awesome Bump
@@ -101,38 +108,34 @@ Electron platform?
         xNormal
         ShaderMap
         Gimp Normal Plugin
-
-#### Testing
+#### Tests
     Develop test models to test the gaussian filter mask processing.
         The model should contain details near the edges (adjacent to the background) and near thresholded regions.
             Spheres (Positive, Negative)
             Cubes
             Architectural
 
-##### Camera
-Add snapping to model vertices to set center of rotation. The center of rotation is the camera lookAt point.
+    Improve rollback handling in integration tests.
+        try/catch/finally?
 
-##### Razor Views
-Some Views are identical. Should they use a shared ViewComponent?
-    Create, Edit
-    Details, Delete
-
-##### Composer
-###### Improve rollback handling in integration tests.
-    try/catch/finally?
-###### FileOperationGenerate
+    What NormalMap integration tests are appropriate?
+#### Camera
+    Add snapping to model vertices to set center of rotation. The center of rotation is the camera lookAt point.
+#### Razor Views
+    Some Views are identical. Should they use a shared ViewComponent?
+        Create, Edit
+        Details, Delete
+#### FileOperationGenerate
     Validate the required properties are present.
         Implement a FluentValidation validator.
         Throw a validation exception if the required properties are not set.
-
-###### Replace Console output with Logger operations.
+#### Replace Console output with Logger operations.
     Add color support for logging.
-
-###### Should FileTimeStamp be exposed?
+#### FileTimeStamp
+    Should this property be exposed?
     Should the assignment of FileSynchronized be deferred until the request has completed?
     FileStamp could potentially serve as the "complete" flag for a long-running request.
-
-###### Queues
+#### Queues
     FileRequest places a message in a work queue.
         FileIsSynchronized is reset to false.
         A status code of 202 is returned to the client who can poll the value of FileIsSynchronized.
@@ -143,24 +146,20 @@ Some Views are identical. Should they use a shared ViewComponent?
         When the external job completes, the worker process sets FileIsSynchronized = true.
         Question: How does a worker process access the database?
 
-https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c
-https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5
+    https://stackoverflow.com/questions/11779143/how-do-i-run-a-python-script-from-c
+    https://medium.com/@dpursanov/running-python-script-from-c-and-working-with-the-results-843e68d230e5
 
-https://stackoverflow.com/questions/10788982/is-there-any-async-equivalent-of-process-start
-https://github.com/jamesmanning/RunProcessAsTask
+    https://stackoverflow.com/questions/10788982/is-there-any-async-equivalent-of-process-start
+    https://github.com/jamesmanning/RunProcessAsTask
 
-Long-running Requests:
-https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
+    Long-running Requests:
+    https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
 
-##### DepthBuffers should have an optional dependency on a Model3d.
+#### DepthBuffers:Model3d Dependency
+    DepthBuffers should have an optional dependency on a Model3d.
     If the Model3d relationship is present, the dependency exists.
     Otherwise, the DepthBuffer exists independently, probably due to an explicit upload of a file created in another application.
     The DependencyManager invalidates DependentFiles only if a dependency changed. So, an existing DepthBuffer with (FileSynchronized = true) would not be impacted.
-
-#### Architecture
-    How should byte-ordering (BigEndian, LittleEndian) be handled?
-        Are some devices (e.g. phones) BigEndian?
-
 #### Database
     Use UUID not sequential integer keys in database. This will scale better.
     
@@ -168,7 +167,6 @@ https://stackoverflow.com/questions/33009721/long-running-rest-api-with-queues
         Multi-user Access
             Cookies are used so tests must be done from an external computer.
         64 bit support
-
 #### Logging
     N.B. Solver stdout is sent to the console only if the Serilog MinimumLevel is Information. (MinimumLevel = Error will suppress it.)
     How can ModelRelief messages be associated with a category (e.g. 'Microsoft')?
@@ -200,7 +198,6 @@ namespace Microsoft.Extensions.Logging
 #### Shaders
     Gradients are calculated from the DepthBuffer which directly reflects the faceting of the model.
         Could the DepthBuffer use the fragment shader which has interpolated vertex coordinates?
-
 #### Optimization
     Why is MeshValidator called several time during a Put request?
     
@@ -217,7 +214,7 @@ namespace Microsoft.Extensions.Logging
 
 #### StorageManager
 An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
-##### Relationships
+#### Relationships
     Provide "reference expansion" to allow references to be expanded into the principal object.
         Extended 'related' query parameter.
 #### Viewer
@@ -237,19 +234,9 @@ An ApplicationUser could have a storage folder property that is used by the Stor
     Add MaterialLoader.
     
     Create a set of sample materials such as wood, glass, plaster, etc.
-#### Sample Projects
-    Develop the Jewelry project with more examples.
-        {
-            "Name": "Jewelry",
-            "Description": "Jewelry watch faces, bracelets and pendants",
-            "Models": [
-                {
-                    "Name": "dolphin",
-                    "Description": "Ocean Dolphin"
-                },
-                {
-                    "Name": "roadster",
-                    "Description": "Duesen Bayern Mystar 190 SL"
-                }
-            ]
-        },
+
+#### Update Model3d
+    Should there be a mechanism to update an <existing> Model3d file?
+        Model3d.Edit View
+#### Session    
+    Wrap HttpContext.Session?

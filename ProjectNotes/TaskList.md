@@ -9,60 +9,16 @@
                 Increase the default width of the Progress Bar.
                 Increase the height.
 
-        Runtime error does not propagate back to UI.        
-            Should Composer check IsFileSynchronized?
-            Add a status widget to show processing progress obtained by GET of GeneratedFileModel metadata.
-                Polling is done based on a timer.
-
-            Generate result
-                Result
-                Processing time
-                Polygons                   
-
-    Strengthen the OBJ validation.
-        https://github.com/stefangordon/ObjParser
-
-    Profile the startup code.
-        Optimize SettingsManager.Initialize[UserSession|Settings]Async
-            Every property validation causes a database read.
-
     Verify Resolution.Image setting.
-
-    How is a Mesh dependent on the Camera?
-        The camera clipping planes are used to scale from normalized DB units to Model3d units.
-
-    Should Post requests also add related resources?
-    Should Delete requests also remove related resources?
-        Model3d
-        Project
-    
-    Should there be a mechanism to update an <existing> Model3d file?
-        Model3d.Edit View
-
+   
     Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
         remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-
-    Why is it (intermittently) necessary to run ModelRelief before testrunner?
-        testrunner does initialize the database....
-        Restore logic?
-
-    Investigate Chrome page warnings.
-        Compose has multiple progressBar ids.
-        
-    Session    
-        Wrap HttpContext.Session?
+       
 #### Models
-    OBJ viewer has missing polygons.
-        Plunderbuss
-        House
-
     Review all mesh generation settings for delivered models.
     Attenuation Decay.
         It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
-#### Solver
-    Silhouette
-        Blend profile into mesh form.
 #### UI
     Create a video or an animation?
     Workflow page

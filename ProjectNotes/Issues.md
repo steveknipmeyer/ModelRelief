@@ -1,4 +1,7 @@
 # Issues
+#### Browser Warnings
+    Investigate Chrome page warnings.
+        Compose has multiple progressBar ids.
 #### Explorer
     Explorer throws segmentation fault.
         Execution from command line.
@@ -88,7 +91,14 @@
             https://www.thereformedprogrammer.net/asp-net-core-fast-and-automatic-dependency-injection-setup/       
 #### Integration Testing
     Why does the AutoRollback xUnit attribute not perform a database rollback?              
+
+    Why is it (intermittently) necessary to run ModelRelief before testrunner?
+        testrunner does initialize the database....
+        Restore logic?
 #### Documentation
-     routeBuilder.MapRoute(name: RouteNames.ApiDocumentation, template: "api/v1/documentation/{controller}/{id?}"
      Create the documentation content for the endpoints.
         api/v1/documentation/{controller}/{error}
+#### OBJ Viewer
+    Some models have missing polygons.
+        Plunderbuss
+        House
