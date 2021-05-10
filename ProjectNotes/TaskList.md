@@ -84,14 +84,12 @@
         Add a test account.
 ### Security
     Remove steve@knipmeyer.org.
-    Azure Key Secrets
-        Review settings in AzureKeyVault.
-        Mock azurekeysecrets.json.
-            Move to a new settings file?           
 ### Refactoring
     Review all casing of files and directories.
     Tools -> tools
 ### Project
+    Consolidate contributor names?
+        https://stackoverflow.com/questions/4981126/how-to-amend-several-commits-in-git-to-change-author/25815116#25815116
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Add PostMan ModelRelief collection.

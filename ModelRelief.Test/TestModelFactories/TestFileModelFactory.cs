@@ -128,7 +128,7 @@ namespace ModelRelief.Test.TestModels
 
             var content = ClassFixture.ServerFramework.CreateMultipartFormDataContent(model, fileNamePath);
 
-            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, ApiUrl, content, HttpMimeType.MultiPartFormData);
+            var requestResponse = await ClassFixture.ServerFramework.SubmitHttpRequestAsync(HttpRequestType.Post, $"{ApiUrl}/form", content, HttpMimeType.MultiPartFormData);
             return requestResponse;
         }
 

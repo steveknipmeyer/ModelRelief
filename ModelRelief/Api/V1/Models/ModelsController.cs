@@ -38,9 +38,9 @@ namespace ModelRelief.Api.V1.Models
         /// </summary>
         /// <param name="postRequest">TRequestModel of model to create. Does not contain a model Id.</param>
         /// <returns>TGetModel of the newly-created model.</returns>
-        [HttpPost]
+        [HttpPost("form")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> PostForm([FromForm] Dto.Model3d postRequest)
+        public async Task<IActionResult> Form([FromForm] Dto.Model3d postRequest)
         {
             var result = await HandleRequestAsync(new PostFormRequest<Domain.Model3d, Dto.Model3d, Dto.Model3d>
             {
