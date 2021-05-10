@@ -1038,3 +1038,31 @@ https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
       
     https://docs.opencv.org/3.4/d3/db7/tutorial_hdr_imaging.html
     https://docs.opencv.org/3.4/d2/df0/tutorial_py_hdr.html
+
+### Azure Key Store
+N.B. Azure key store secrets cannot use a ':''. So a '--' are used to delimit the configuration settings.
+
+|Issuer|Description|Azure Key|Note|
+|--|--|--|--|
+|dev|Test user account e-mail name|Accounts--Test--Name|The build seeds the database with the Test user account and sample models.|
+|dev|Test user account e-mail password|Accounts--Test--Password||
+|Auth0 (Identity Provider)|Test user account Auth0 User Id|Accounts--Test--NameIdentifier||
+|||||
+|Auth0 (Identity Provider)|ModelRelief domain|Auth0--Domain|Auth0 is used to provide identity management.|
+|Auth0 (Identity Provider)|ModelRelief site client Id|Auth0--ClientId||
+|Auth0 (Identity Provider)|ModelRelief site client secret|Auth0--ClientSecret||
+|Auth0 (Identity Provider)|API resource|Auth0--ApiAudience|The API credentials are used to obtain a JWT Bearer token for a user to obtain access to the API. See SetAuthorizationHeaderAsync() for how the integration tests obtain a JWT token.|
+|Auth0 (Identity Provider)|API client Id|Auth0--ApiClientId||
+|Auth0 (Identity Provider)|Api client password|Auth0--ApiClientSecret||
+|||||
+|Mail Server|Mail server port|EmailConfiguration--SmtpPort|The e-mail configuration supports the Contact Form on the landing page.|
+|Mail Server|Mail server name|EmailConfiguration--SmtpServer||
+|dev|Mail server user name|EmailConfiguration--SmtpUsername||
+|dev|Mail server password|EmailConfiguration--SmtpPassword||
+|||||
+|Google Analytics|Property Id|Analytics--PropertyId|Web site analytics|
+|||||
+|Google (reCAPTCHA)|Dev site (localhost)|reCAPTCHA--localhostModelRelief--Site|Basic bot security|
+|Google (reCAPTCHA)|Dev secret (localhost)|reCAPTCHA--localhostModelRelief--Secret||
+|Google (reCAPTCHA)|ModelRelief site|reCAPTCHA--ModelRelief--Site||
+|Google (reCAPTCHA)|ModelRelief secret|reCAPTCHA--ModelRelief--Secret||

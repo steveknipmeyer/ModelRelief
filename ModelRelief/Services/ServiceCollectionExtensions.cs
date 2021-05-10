@@ -224,6 +224,7 @@ namespace ModelRelief.Services
             services.Configure<Auth0Settings>(configuration.GetSection("Auth0"));
             services.Configure<EmailSettings>(configuration.GetSection("EmailConfiguration"));
             services.Configure<ReCAPTCHASettings>(configuration.GetSection("ReCAPTCHA"));
+            services.Configure<AnalyticsSettings>(configuration.GetSection("Analytics"));
         }
     }
 }

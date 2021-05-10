@@ -1,11 +1,6 @@
 #### Commit     
-
 ### General     
     Today   
-        Linode blocks port 465 so MailKit Connect times out.
-            https://www.linode.com/community/questions/19082/i-just-created-my-first-linode-and-i-cant-send-emails-why
-            https://stackoverflow.com/questions/24485049/smtpclient-the-operation-has-timed-out
-           
         Styling
             SASS
             Udemy Bootstrap course
@@ -93,11 +88,9 @@
         Review settings in AzureKeyVault.
         Mock azurekeysecrets.json.
             Move to a new settings file?           
-    Disable execute permissions on the file upload location.
 ### Refactoring
     Review all casing of files and directories.
-    Tools -> bin
-
+    Tools -> tools
 ### Project
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
@@ -105,7 +98,6 @@
     Documentation
         Document DepthBufferView and analyze tools (e.g. HtmlLogger).
         Document VcXsrv
-        AzureKeyVault
         Solver
         Explorer
         pyamg warning
@@ -116,7 +108,7 @@
         Document Solver defaults as active settings (no Web UI).
         SystemSettings.json
             logging
-            developmentgui
+            developmentui
         Ux Features not published
             clipping planes
             perspective cameras
