@@ -12,7 +12,7 @@ namespace ModelRelief.Features.Errors
 
     /// <summary>
     /// Represents the controller endpoint for error handling.
-    /// Startup routes erorrs :
+    /// Startup routes errors :
     ///     app.UseStatusCodePagesWithReExecute("/Errors/Error/{0}");
     /// </summary>
     public class Errors : Controller
@@ -27,6 +27,8 @@ namespace ModelRelief.Features.Errors
         {
             statusCode = statusCode ?? 0;
             var feature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            var originalPath = feature?.OriginalPath;
+            var originalQueryString = feature?.OriginalQueryString;
 
             string page = "Error";
             switch (statusCode)
@@ -48,8 +50,8 @@ namespace ModelRelief.Features.Errors
                     break;
             }
             ViewData["statusCode"] = statusCode;
-            ViewData["originalPath"] = feature?.OriginalPath;
-            ViewData["originalQueryString"] = feature?.OriginalQueryString;
+            ViewData["originalPath"] = originalPath;
+            ViewData["originalQueryString"] = originalQueryString;
 
             return View(page);
         }

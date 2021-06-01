@@ -629,6 +629,7 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
                 HttpStatusCode.BadRequest       BadRequest.cshtml
                 HttpStatusCode.NotFound:        NotFound.cshtml
+                HttpStatusCode.Unauthorized:    NotAuthorized.cshtml
                 default                         Error.cshtml
 
 #### ASPNET Core Environment Variables

@@ -11,16 +11,10 @@
             Style the ProgressBar
                 Increase the default width of the Progress Bar.
                 Increase the height.
-
    
     Reduce model sizes in MeshLab!
         remote: warning: File ModelRelief/Test/Data/User/models/roadster/roadster.obj is 62.69 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
         remote: warning: File ModelRelief/Test/Data/User/models/statue/statue.obj is 53.92 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-       
-#### Models
-    Review all mesh generation settings for delivered models.
-    Attenuation Decay.
-        It is 0.9 in the thesis but there are values of 0.6 in the sample data set.
 #### UI
     Create a video or an animation?
     Workflow page

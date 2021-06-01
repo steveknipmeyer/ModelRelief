@@ -95,7 +95,7 @@ namespace ModelRelief.Services
                     NameClaimType = "name",
                 };
 
-                // Set the callback path, so Auth0 will call back to http://localhost:5000/signin-auth0
+                // Set the callback path, so Auth0 will call back to signin-auth0
                 // Also ensure that you have added the URL as an Allowed Callback URL in your Auth0 dashboard
                 options.CallbackPath = new PathString("/signin-auth0");
 
