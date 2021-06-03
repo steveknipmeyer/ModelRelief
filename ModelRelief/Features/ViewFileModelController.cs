@@ -104,6 +104,7 @@ namespace ModelRelief.Features
         [HttpPost]
         [Consumes("multipart/form-data")]
         [ValidateAntiForgeryToken]
+        [DisableRequestSizeLimit]
         public override async Task<IActionResult> Create(TRequestModel postRequest, [FromQuery] PostQueryParameters postQueryParameters)
         {
             var newModel = await HandleRequestAsync(new PostFormRequest<TEntity, TRequestModel, TGetModel>
