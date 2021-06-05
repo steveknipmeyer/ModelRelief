@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:30.49833",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/10/bunny.sdb",
+    "FileTimeStamp": "2021-06-05T06:33:53.8080322",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/10/bunny.sdb",
     "Id": 10,
     "Name": "bunny.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:30.5306769",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/10/bunny.nmap",
+    "FileTimeStamp": "2021-06-05T06:33:53.8444637",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/10/bunny.nmap",
     "Id": 10,
     "Name": "bunny.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Bunny Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-28T17:56:30.596339",
-  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/10/bunny.sfp",
+  "FileTimeStamp": "2021-06-05T06:33:53.9060136",
+  "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/10/bunny.sfp",
   "Id": 10,
   "Name": "bunny.sfp",
   "Description": "Stanford Model Repository"

@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:28.8852199",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/4/house.sdb",
+    "FileTimeStamp": "2021-06-05T06:33:52.1354582",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/4/house.sdb",
     "Id": 4,
     "Name": "house.sdb",
     "Description": "San Francisco House"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:28.9197214",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/4/house.nmap",
+    "FileTimeStamp": "2021-06-05T06:33:52.1721697",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/4/house.nmap",
     "Id": 4,
     "Name": "house.nmap",
     "Description": "San Francisco House"
@@ -119,8 +119,8 @@
     "Description": "House Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-28T17:56:29.0062717",
-  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/4/house.sfp",
+  "FileTimeStamp": "2021-06-05T06:33:52.2423184",
+  "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/4/house.sfp",
   "Id": 4,
   "Name": "house.sfp",
   "Description": "San Francisco House"

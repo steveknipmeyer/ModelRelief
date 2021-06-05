@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:28.2286316",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/1/lucy.sdb",
+    "FileTimeStamp": "2021-06-05T06:33:51.4879428",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/1/lucy.sdb",
     "Id": 1,
     "Name": "lucy.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:28.2931665",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/1/lucy.nmap",
+    "FileTimeStamp": "2021-06-05T06:33:51.5581529",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/1/lucy.nmap",
     "Id": 1,
     "Name": "lucy.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Lucy Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-28T17:56:28.4050742",
-  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/1/lucy.sfp",
+  "FileTimeStamp": "2021-06-05T06:33:51.6687003",
+  "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/1/lucy.sfp",
   "Id": 1,
   "Name": "lucy.sfp",
   "Description": "Stanford Model Repository"

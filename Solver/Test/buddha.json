@@ -49,8 +49,8 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:30.8679429",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/depthbuffers/12/buddha.sdb",
+    "FileTimeStamp": "2021-06-05T06:33:54.1894405",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/12/buddha.sdb",
     "Id": 12,
     "Name": "buddha.sdb",
     "Description": "Stanford Model Repository"
@@ -69,8 +69,8 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-04-28T17:56:30.9044138",
-    "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/normalmaps/12/buddha.nmap",
+    "FileTimeStamp": "2021-06-05T06:33:54.2267286",
+    "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/12/buddha.nmap",
     "Id": 12,
     "Name": "buddha.nmap",
     "Description": "Stanford Model Repository"
@@ -119,8 +119,8 @@
     "Description": "Buddha Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-04-28T17:56:30.9865716",
-  "RelativeFileName": "store/production/users/auth06089cffe260f9e00693c8ab3/meshes/12/buddha.sfp",
+  "FileTimeStamp": "2021-06-05T06:33:54.3067067",
+  "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/12/buddha.sfp",
   "Id": 12,
   "Name": "buddha.sfp",
   "Description": "Stanford Model Repository"
