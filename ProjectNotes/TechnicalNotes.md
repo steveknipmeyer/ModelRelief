@@ -802,7 +802,7 @@ Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwine
         sudo /etc/init.d/nginx start | stop | restart
 
 #### Browser-Sync
-https://west-wind.com/wconnect/weblog/ShowEntry.blog?id=943
+https://weblog.west-wind.com/posts/2019/May/18/Live-Reloading-Server-Side-ASPNET-Core-Apps
 
 #### Material Frameworks
     Materialize : http://materializecss.com

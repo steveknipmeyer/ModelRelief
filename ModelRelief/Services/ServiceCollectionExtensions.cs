@@ -149,6 +149,7 @@ namespace ModelRelief.Services
                     options.Filters.Add(typeof(GlobalExceptionFilter));
                     // options.Filters.Add(typeof(ValidatorActionFilter));
                 })
+                .AddRazorRuntimeCompilation()
                 .AddRazorOptions(o =>
                 {
                     o.ViewLocationFormats.Clear();

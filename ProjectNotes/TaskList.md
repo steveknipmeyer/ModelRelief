@@ -1,13 +1,15 @@
 #### Commit     
 ### General     
+
+
+    Styling
+        SASS
+        Udemy Bootstrap course
+        Style the Composer View.
+
     Today   
         Verify Resolution.Image setting.
             1024 leads to Chrome render issues.
-
-        Styling
-            SASS
-            Udemy Bootstrap course
-            Style the View.
 ### UI
     Create a video or an animation?
     Workflow page
@@ -20,6 +22,7 @@
             MeshTransform
         Settings
             Session
+
         Valid
             Mesh
             Model3d
@@ -49,7 +52,7 @@
         (Hidden) DepthBufferView and NormalMapView
         Desmos attenuation graph
         Document Solver defaults as active settings (no Web UI).
-        SystemSettings.json
+        Defaults.json
             logging
             developmentui
         Ux Features not published

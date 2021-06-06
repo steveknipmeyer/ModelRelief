@@ -30,39 +30,20 @@
             "cwd": "${workspaceFolder}/ModelRelief",
             "stopAtEntry": false,
             "enableStepFiltering": false,
-            // The external console will not launch the browser. It is necessary to manually start the browser.
-            // The internal console does not support Console.ReadLine so user verification steps are not possible.
+            // 'externalTerminal' will not launch the browser. It is necessary to manually start the browser.
+            // 'internalConsole' does not support Console.ReadLine so user verification steps are not possible.
             "console": "integratedTerminal",
+
+            // Debug Console
             "internalConsoleOptions": "openOnSessionStart",
-            "launchBrowser": {
-                // <---------------------------------------------------------------->
-                // N.B. Set to true when using independently of the compound profiles.
-                "enabled": true,
-                // <---------------------------------------------------------------->
-                "args": "${auto-detect-url}",
-                "windows": {
-                    "command": "cmd.exe",
-                    // "args": "/C start ${auto-detect-url}",
-                    "args": "/C start https://localhost:5001/"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
-            },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation",
                 "MRDatabaseProvider": "SQLite",
-                "MRUpdateSeedData": "True",
-                "MRInitializeDatabase": "True",
-                "MRSeedDatabase": "True",
+                "MRUpdateSeedData": "False",
+                "MRInitializeDatabase": "False",
+                "MRSeedDatabase": "False",
                 "MRExitAfterInitialization": "False",
-            },
-            "sourceFileMap": {
-                // ToDo
-                "/Views": "${workspaceFolder}/Views"
             },
             "requireExactSource": true
         },

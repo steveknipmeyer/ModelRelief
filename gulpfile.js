@@ -34,6 +34,7 @@ var sourceConfig = new function() {
     this.sourceRoot     = "./ModelRelief/";
 
     this.cssRoot        = this.sourceRoot + "CSS/";
+    this.featuresRoot   = this.sourceRoot + "Features/";
     this.faviconRoot    = this.sourceRoot + "Delivery/Favicon/";
     this.imagesRoot     = this.sourceRoot + "Delivery/images/";
     this.htmlRoot       = this.sourceRoot + "Delivery/Html/";
@@ -437,17 +438,17 @@ gulp.task("serve", function () {
 
         notify: true,
 
-        // proxy: {
-        //     target: "localhost:5000/"
-        // },
+        proxy: {
+            target: "localhost:5000/"
+        },
 
         // ----------------------------------------------
         // Use these settings for prototyping static pages.
-        server: {
-            baseDir: "ModelRelief/wwwroot",
-            directory: true
-        },
-        startPath: "workbench.html"
+        // server: {
+        //     baseDir: "ModelRelief/wwwroot",
+        //     directory: true
+        // },
+        // startPath: "workbench.html"
     // ----------------------------------------------
     });
 
@@ -456,5 +457,6 @@ gulp.task("serve", function () {
 
     gulp.watch([sourceConfig.cssRoot + "**/*.css"],                 () => runSequence("buildCSS", "reload"));
     gulp.watch([sourceConfig.htmlRoot + "**/*.html"],               () => runSequence("buildStaticContent", "reload"));
-});
 
+    gulp.watch([sourceConfig.featuresRoot + "**/*.cshtml"],         () => runSequence("reload"));
+});
