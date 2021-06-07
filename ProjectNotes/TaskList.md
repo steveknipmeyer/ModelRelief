@@ -1,10 +1,13 @@
 #### Commit     
 ### General     
+    Bootstrap
+        Theme colors. What is the proper way to create a color palette?
+        Replace pixel references with rem.
+        Tooltips
+        Credits
+            Change color of links so they are visually obvious.
 
-
-    Styling
         SASS
-        Udemy Bootstrap course
         Style the Composer View.
 
     Today   

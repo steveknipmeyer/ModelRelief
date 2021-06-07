@@ -457,6 +457,5 @@ gulp.task("serve", function () {
 
     gulp.watch([sourceConfig.cssRoot + "**/*.css"],                 () => runSequence("buildCSS", "reload"));
     gulp.watch([sourceConfig.htmlRoot + "**/*.html"],               () => runSequence("buildStaticContent", "reload"));
-
     gulp.watch([sourceConfig.featuresRoot + "**/*.cshtml"],         () => runSequence("reload"));
 });
