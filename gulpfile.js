@@ -225,7 +225,7 @@ function generateShaders() {
         shaderLines.push(shaderLine);
         shaderLines.push("\n");
 
-        //      console.log(allShaderLines);
+        // console.log(allShaderLines);
     }
 }
 

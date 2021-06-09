@@ -67,5 +67,7 @@
     // ---------------------------------
     // ThunderClient
     // ---------------------------------
-        "thunder-client.customLocation": "Test/"
+        "thunder-client.customLocation": "Test/",
+
+        "liveServer.settings.port": 5501
     }
