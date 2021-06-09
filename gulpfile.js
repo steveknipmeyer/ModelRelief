@@ -14,19 +14,20 @@ Documents\bin\DebugGulp.bat
 "use strict";
 // Gulp
 var gulp         = require("gulp");
-var flog         = require("fancy-log");
 var rename       = require("gulp-rename");
+var sass         = require("gulp-sass");
 var sourcemaps   = require("gulp-sourcemaps");
 var ts           = require("gulp-typescript");
 var uglify       = require("gulp-uglify-es").default;
-var pump         = require("pump");
 
 // Node.js
 var beep         = require("beepbeep");
 var browserSync  = require("browser-sync");
 var colors       = require("ansi-colors");
+var flog         = require("fancy-log");
 var fs           = require("fs");
 var path         = require("path");
+var pump         = require("pump");
 var runSequence  = require("run-sequence");
 
 var sourceConfig = new function() {
@@ -240,16 +241,27 @@ gulp.task("createWWWRoot", function () {
 });
 
 /// <summary>
-/// Populate wwwroot with CSS content
+/// Compile SCSS into CSS.
 /// </summary>
-gulp.task("buildCSS", function () {
+gulp.task("compileSCSS", function () {
 
     // FOLDERS
-
-    // CSS
-    let sourceFolder      = sourceConfig.cssRoot;
+    let sourceFolder = sourceConfig.cssRoot;
     let destinationFolder = siteConfig.cssRoot;
-    gulp.src([sourceFolder + "**/*"]).pipe(gulp.dest(destinationFolder ));
+    gulp.src([sourceFolder + "**/*.scss"]).pipe(sass()).pipe(gulp.dest(destinationFolder));
+
+    // FILES
+});
+
+/// <summary>
+/// Populate wwwroot with CSS content.
+/// </summary>
+gulp.task("copyCSS", function () {
+
+    // FOLDERS
+    let sourceFolder = sourceConfig.cssRoot;
+    let destinationFolder = siteConfig.cssRoot;
+    gulp.src([sourceFolder + "**/*.css"]).pipe(gulp.dest(destinationFolder));
 
     // FILES
 });
@@ -415,7 +427,7 @@ gulp.task("beep", function () {
 /// Default build task
 /// </summary>
 gulp.task("default", function () {
-    runSequence("createWWWRoot", "copyNPM", "compressJS", "buildCSS", "buildShaders", "buildStaticContent");
+    runSequence("createWWWRoot", "copyNPM", "compressJS", "compileSCSS", "copyCSS", "buildShaders", "buildStaticContent");
 });
 
 //-----------------------------------------------------------------------------
@@ -455,7 +467,8 @@ gulp.task("serve", function () {
     gulp.watch([sourceConfig.shaders + "*.glsl"],                   () => runSequence("buildShaders", "reload"));
     gulp.watch([sourceConfig.scriptsRoot + "**/*.ts"],              () => runSequence("compileTypeScript", "reload"));
 
-    gulp.watch([sourceConfig.cssRoot + "**/*.css"],                 () => runSequence("buildCSS", "reload"));
+    gulp.watch([sourceConfig.cssRoot + "**/*.scss"],                () => runSequence("compileSCSS", "reload"));
+    gulp.watch([sourceConfig.cssRoot + "**/*.css"],                 () => runSequence("copyCSS", "reload"));
     gulp.watch([sourceConfig.htmlRoot + "**/*.html"],               () => runSequence("buildStaticContent", "reload"));
     gulp.watch([sourceConfig.featuresRoot + "**/*.cshtml"],         () => runSequence("reload"));
 });

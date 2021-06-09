@@ -3,8 +3,6 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-
-        // ------------------------------------------------ Build -----------------------------------------------------//
         {
             "label": "gulp",
             "type": "shell",
@@ -36,7 +34,7 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": "build",
+            "group": "build"
         },
         {
             "label": "Compile TypeScript",
@@ -107,7 +105,7 @@
         {
             "label": "Builder Nginx",
             "type": "shell",
-            "command": "python Build/Builder.py --target Nginx --deploy True",
+            "command": "python Build/Builder.py --target Nginx",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -118,7 +116,15 @@
             },
             "problemMatcher": []
         },
-        // ------------------------------------------------ Run  -----------------------------------------------------//
+        {
+            "label": "Sass Compile",
+            "type": "shell",
+            "command": "node-sass styles.scss styles.css",
+            "group": "build",
+            "problemMatcher": [
+                "$node-sass"
+            ]
+        },
         {
             "label": "dotnet run",
             "type": "shell",
@@ -136,10 +142,7 @@
                 "$msCompile"
             ]
         },
-        // ------------------------------------------------ Test  -----------------------------------------------------//
         {
-            // Output panel (XUnit Test Explorer UI)
-            // https://github.com/microsoft/vscode-go/issues/2003
             "label": "testrunner",
             "type": "shell",
             "command": "python Tools/testrunner.py",
@@ -153,7 +156,6 @@
             },
             "problemMatcher": []
         },
-        // ------------------------------------------------ Utility -----------------------------------------------------//
         {
             "label": "gulp serve",
             "type": "shell",

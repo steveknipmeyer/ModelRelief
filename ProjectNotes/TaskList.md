@@ -1,12 +1,5 @@
 #### Commit     
 ### General     
-    /usr/local/lib
-    ├── generator-code@1.3.9
-    ├── gulp-cli@2.3.0
-    ├── madge@3.12.0
-    ├── vsce@1.84.0
-    └── yo@3.1.1
-
     PyLance
         https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 

@@ -82,6 +82,7 @@
         npm install
         sudo npm install --global gulp-cli
         sudo npm install --global madge
+        sudo npm install --unsafe-perm -g node-sass
     
     .NET Core
         https://docs.microsoft.com/en-us/dotnet/core/install/linux
