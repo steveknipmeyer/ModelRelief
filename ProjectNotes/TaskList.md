@@ -1,5 +1,18 @@
 #### Commit     
 ### General     
+    require.js timeout for Pages/Home?
+                            Export          Handles Existing window.onload      Scripts
+            Home            Y               Y                                   Y
+            CameraTest      Y               Y                                   Y
+            ImageTest       Y               Y                                   Y
+            FileUpload      Y               Y                                   Y
+            Layout          Y               N                                   Y
+
+    ImageTest.main -> ImageTest.run
+    Layout.main -> Layout.run
+
+    Investigate contact form Submit enabled/disabled status.
+
     PyLance
         https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 

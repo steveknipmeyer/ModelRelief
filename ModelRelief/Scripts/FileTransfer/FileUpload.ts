@@ -235,7 +235,7 @@ export class FileUpload {
     /**
      * @description Main
      */
-    public run(): void {
+    public main(): void {
 
         Initializer.initialize().then((status: boolean) => {
 
@@ -245,5 +245,5 @@ export class FileUpload {
     }
 }
 const fileUpload = new FileUpload();
-fileUpload.run();
+fileUpload.main();
 

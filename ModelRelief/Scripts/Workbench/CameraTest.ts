@@ -24,7 +24,7 @@ import {Viewer} from "Scripts/Viewers/Viewer";
  * @description ViewerControls
  * @class ViewerControls
  */
-class ViewerControls {
+export class ViewerControls {
     private _viewer: Viewer;
 
     /**
@@ -63,7 +63,7 @@ class ViewerControls {
  * @export
  * @class CameraTest
  */
-class CameraTest {
+export class CameraTest {
 
     public _logger: ILogger;
     public _loader: Loader;
@@ -117,7 +117,7 @@ class CameraTest {
     /**
      * @description Main
      */
-    public run(): void {
+    public main(): void {
         this._logger = Services.defaultLogger;
         UnitTests.logger = this._logger;
 
@@ -143,4 +143,4 @@ class CameraTest {
 }
 
 const cameraTest = new CameraTest();
-cameraTest.run();
+cameraTest.main();

@@ -328,8 +328,8 @@ ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3
 
                             <hr />
                             <div class="text-center text-md-left">
-                                <input id="sendButton" type="button" class="actionButton button-rounded btn mt-1" onclick="validateForm()" value="Send" />
-                            <div class="g-recaptcha mt-4 mb-0" data-sitekey='@ViewData["ReCaptchaKey"]' data-callback="recaptchaCallBack"></div>
+                                <input id="sendButton" type="button" class="actionButton button-rounded btn mt-1" onclick="home.validateForm()" value="Send" />
+                            <div class="g-recaptcha mt-4 mb-0" data-sitekey='@ViewData["ReCaptchaKey"]' data-callback="home.recaptchaCallBack"></div>
                             </div>
                             <div id="contact-form-status"></div>
 
@@ -354,95 +354,13 @@ ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3
 </main>
 <!--Main layout-->
 
-@section scripts {
-<!--******************************************************************************************-->
-<!--                                    ModelRelief                                           -->
-<!--******************************************************************************************-->
-<script>
-
-    function recaptchaCallBack() {
-
-        const sendButton = document.querySelector("#sendButton");
-        sendButton.style.cursor = "pointer";
-    }
-
-    function validateForm() {
-
-        const name = document.getElementById('contact-name').value;
-        if (name == "") {
-            document.getElementById('contact-form-status').innerHTML = "Please enter a Name";
-            return false;
-        }
-
-        const email = document.getElementById('contact-email').value;
-        if (email == "") {
-            document.getElementById('contact-form-status').innerHTML = "Please enter your e-mail address";
-            return false;
-        } else {
-            var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!re.test(email)) {
-                document.getElementById('contact-form-status').innerHTML = "Your e-mail address is invalid";
-                return false;
+    @section scripts {
+    <script>
+        window.onload = (function (existingOnLoad) {
+            return function () {
+                existingOnLoad && existingOnLoad();
+                requirejs(['Pages/Home']);
             }
-        }
-
-        const subject = document.getElementById('contact-subject').value;
-        if (subject == "") {
-            document.getElementById('contact-form-status').innerHTML = "Please enter a subject";
-            return false;
-        }
-
-        const message = document.getElementById('contact-message').value;
-        if (message == "") {
-            document.getElementById('contact-form-status').innerHTML = "Please enter a message";
-            return false;
-        }
-
-        const reCAPTCHAResponse = grecaptcha.getResponse();
-        if (reCAPTCHAResponse.length == 0) {
-            document.getElementById('contact-form-status').innerHTML = "Please check 'I\'m not a robot.' before sending your message.";
-            return false;
-        }
-
-        document.getElementById('contact-form-status').html = "Sending...";
-
-        var applications = [];
-        $('#applicationDomain input:checked').each(function () {
-            applications.push(this.value);
-        });
-
-        formData = {
-            'Name': $('input[name=Name]').val(),
-            'Email': $('input[name=Email]').val(),
-            'Subject': $('input[name=Subject]').val(),
-            'Message': $('textarea[name=Message]').val(),
-            'Newsletter': $('#checkboxNewsletter').is(':checked'),
-
-            'Applications': applications,
-            'ApplicationOther': $('input[name=applicationOther]').val(),
-
-            'ReCAPTCHAResponse': reCAPTCHAResponse
-        };
-
-        $.ajax({
-            url: "Email/Send",
-            type: "POST",
-            data: formData,
-
-            success: function (responseResult, textStatus, jqXHR) {
-
-                $('#contact-form-status').html(responseResult.message);
-                if (responseResult.mailSent) {
-                    // reset the form if mail was sent successfully
-                    $('#contact-form').closest('form').find("input[type=text], textarea").val("");
-                    $('#contact-form').closest('form').find("input[type=checkbox]").prop('checked', false);
-                    grecaptcha.reset();
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $('#contact-form-status').html(jqXHR.statusText);
-            },
-        });
+        })(window.onload)
+    </script>
     }
-</script>
-}
