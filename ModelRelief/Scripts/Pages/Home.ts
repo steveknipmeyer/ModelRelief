@@ -4,6 +4,7 @@
 // Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
+import {ElementClasses, ElementIds} from "Scripts/System/Html";
 
 /**
  * @description Home Utilities
@@ -11,13 +12,13 @@
  */
 export class Home {
 
-    public recaptchaCallBack(): void {
+    private _submitButton: HTMLInputElement;
 
-        const sendButton: HTMLButtonElement = document.querySelector("#sendButton");
-        sendButton.style.cursor = "pointer";
-    }
-
-    public validateForm(): boolean {
+    /**
+     * @description Contact form submission
+     * @return {*}  {boolean}
+     */
+    public submitContactForm(): boolean {
 
         const name: HTMLInputElement = document.getElementById("contact-name") as HTMLInputElement;
         if (name.value === "") {
@@ -91,14 +92,36 @@ export class Home {
                     $("#contact-form").closest("form").find("input[type=text], textarea").val("");
                     $("#contact-form").closest("form").find("input[type=checkbox]").prop("checked", false);
                     grecaptcha.reset();
+                    return true;
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 $("#contact-form-status").html(jqXHR.statusText);
+                return false;
             },
         });
+    }
+
+    /**
+     * @description Initialize the UI controls..
+    */
+    private initializeControls(): void {
+
+        // Contact Form
+        this._submitButton = document.getElementById(ElementIds.SubmitContactForm) as HTMLInputElement;
+        this._submitButton.addEventListener("click", () => {
+            this.submitContactForm();
+        });
+    }
+
+    /**
+     * @description Main
+     */
+    public main(): void {
+        // UI Controls
+        this.initializeControls();
     }
 }
 
 const home = new Home();
-
+home.main();

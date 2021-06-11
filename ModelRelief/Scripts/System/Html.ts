@@ -6,6 +6,10 @@
 "use strict";
 
 export enum ElementIds {
+    // Home
+    SubmitContactForm   = "submitContactForm",
+    ReCAPTCHA           = "recaptcha",
+
     // NavBar
     ProjectMenuLabel    = "projectMenuLabel",
     ProjectMenu         = "projectMenu",
