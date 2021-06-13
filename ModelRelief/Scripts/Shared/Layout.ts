@@ -99,5 +99,7 @@ export class Layout {
     }
 }
 
-const layout = new Layout();
-layout.main();
+document.addEventListener("DOMContentLoaded", () => {
+    const layout = new Layout();
+    layout.main();
+});

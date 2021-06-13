@@ -244,6 +244,9 @@ export class FileUpload {
         });
     }
 }
-const fileUpload = new FileUpload();
-fileUpload.main();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const fileUpload = new FileUpload();
+    fileUpload.main();
+});
 

@@ -102,41 +102,7 @@
     <!--******************************************************************************************-->
     <!--                             ModelRelief Configuration                                    -->
     <!--******************************************************************************************-->
-    <script src="~/lib/requirejs/require.js"></script>
-
-    <environment names="Development, Test">
-        <script>
-            let minifiedExtension = "";
-        </script>
-    </environment>
-    <environment names="Staging, Production">
-        <script>
-            let minifiedExtension = ".min";
-        </script>
-    </environment>
-        <script>
-            const modelRelief = `/js/modelrelief${minifiedExtension}`;
-            requirejs.config({
-                baseUrl: '.',
-                paths: {
-                    "ModelRelief": modelRelief,
-                    "FileTransfer/FileUpload": modelRelief,
-                    "Pages/Home": modelRelief,
-                    "Shared/Layout": modelRelief,
-
-                    'Workbench/CameraTest': modelRelief,
-                    'Workbench/ImageTest': modelRelief,
-
-                    chai: '/lib/chai/chai',
-                    three: '/lib/threejs/three',
-                    pako: '/lib/pako/dist/pako',
-                    "dat.gui": '/lib/threejs/dat.gui.min',
-                }
-            });
-            window.onload = function () {
-                requirejs(['Shared/Layout']);
-            }
-        </script>
+    <script type="module" src="~/js/layout.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>

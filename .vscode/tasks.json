@@ -18,26 +18,7 @@
             "problemMatcher": []
         },
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++ build active file",
-            "detail": "compiler: /usr/bin/g++",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": "build"
-        },
-        {
-            "label": "Compile TypeScript",
+            "label": "typeScript -> build/out",
             "type": "shell",
             "linux": {
                 "command": "npx tsc --pretty -p ./ModelRelief "
@@ -52,10 +33,25 @@
             ]
         },
         {
+            "label": "webpack",
+            "type": "shell",
+            "linux": {
+                "command": "npx webpack --config ModelRelief/webpack.config.js"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
             "label": "Build ModelRelief",
+            "dependsOn": "webpack",
             "type": "shell",
             "command": "dotnet build --no-restore ModelRelief",
-            "dependsOn": "Compile TypeScript",
             "group": "build",
             "presentation": {
                 "reveal": "always",
@@ -73,6 +69,25 @@
                 "panel": "dedicated"
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build active file",
+            "detail": "compiler: /usr/bin/g++",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
         },
         {
             "label": "Python Extensions",

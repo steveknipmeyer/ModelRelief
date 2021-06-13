@@ -943,10 +943,6 @@ np_fill, relief_fill
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     
     What is the asp-fallback-test for jquery-validation-unobtrusive?
-    
-    Why does jQuery need to be loaded before require.js (module mismatch error)?
-        https://stackoverflow.com/questions/4535926/how-do-i-use-requirejs-and-jquery-together
-
 #### Database Design
     Issues
         Analyze the correct behavior of OnDelete.

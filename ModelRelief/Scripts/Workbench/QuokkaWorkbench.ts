@@ -1,4 +1,4 @@
-import fetch = require("node-fetch");
+import {fetch} from "node-fetch";
 
  /**
   * Server Endpoints

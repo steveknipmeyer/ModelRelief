@@ -20,9 +20,6 @@ import {MeshView} from "Scripts/Views/MeshView";
 import {ModelView} from "Scripts/Views/ModelView";
 import {NormalMapView} from "Scripts/Views/NormalMapView";
 
-// defined in Edit HTML page
-declare let composerMeshModel: DtoMesh;
-
 /**
  * @description Represents the UI view used to compose a relief.
  * @export
@@ -196,6 +193,7 @@ export class ComposerView {
             Model3d
                 Camera.obj
         */
+        const composerMeshModel = JSON.parse(document.getElementById("dtoMesh").innerHTML);
         return Mesh.fromDtoModelAsync(composerMeshModel);
     }
 

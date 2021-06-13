@@ -31,12 +31,5 @@ ViewData["Title"] = "Create";
 </div>
 
 @section scripts {
-<script>
-    window.onload = (function (existingOnLoad) {
-        return function () {
-            existingOnLoad && existingOnLoad();
-            requirejs(['FileTransfer/FileUpload']);
-        }
-    })(window.onload)
-</script>
+<script type="module" src="~/js/fileupload.js"></script>
 }

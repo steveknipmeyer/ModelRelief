@@ -1,20 +1,7 @@
 #### Commit     
 ### General     
-    require.js timeout for Pages/Home?
-                            Export          Handles Existing window.onload      Scripts
-            Home            Y               Y                                   Y
-            CameraTest      Y               Y                                   Y
-            ImageTest       Y               Y                                   Y
-            FileUpload      Y               Y                                   Y
-            Layout          Y               N                                   Y
-
-    ImageTest.main -> ImageTest.run
-    Layout.main -> Layout.run
-
-    Investigate contact form Submit enabled/disabled status.
-
     PyLance
-        https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
+    https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 
     Bootstrap
         Validate CSS.
@@ -31,7 +18,12 @@
     Today   
         Verify Resolution.Image setting.
             1024 leads to Chrome render issues.
-### UI
+### webpack
+    Goal: Move gulp functionality to webpack where possible.
+    
+    gulp
+        Optimize webpack in 'gulp serve' task.
+ ## UI
     Create a video or an animation?
     Workflow page
         Illustrate with images from Explorer!

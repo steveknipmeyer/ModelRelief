@@ -61,5 +61,7 @@ export class ImageTest {
     }
 }
 
-const imageTest = new ImageTest();
-imageTest.main();
+document.addEventListener("DOMContentLoaded", () => {
+    const imageTest = new ImageTest();
+    imageTest.main();
+});

@@ -16,6 +16,7 @@ Documents\bin\DebugGulp.bat
 var gulp         = require("gulp");
 var rename       = require("gulp-rename");
 var sass         = require("gulp-sass");
+var spawn        = require("child_process").spawnSync;
 var sourcemaps   = require("gulp-sourcemaps");
 var ts           = require("gulp-typescript");
 var uglify       = require("gulp-uglify-es").default;
@@ -273,9 +274,7 @@ gulp.task("copyCSS", function () {
 gulp.task("compressJS", function (callBack) {
     pump([
         gulp.src([
-            `${siteConfig.jsRoot}modelrelief.js`,
             `${siteConfig.jsRoot}shaders.js`,
-            `${siteConfig.libRoot}chai/chai.js`
         ],
         {base: siteConfig.wwwRoot}),
         uglify({
@@ -346,42 +345,6 @@ gulp.task("copyNPM", function () {
     sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
     destinationFolder = siteConfig.libRoot + subFolder;
     gulp.src([sourceFolder + "jquery.validate.unobtrusive.js"]).pipe(gulp.dest(destinationFolder ));
-
-    // threejs
-    subFolder         = "threejs/";
-    sourceFolder      = sourceConfig.nodeModulesRoot + "three/build/";
-    destinationFolder = siteConfig.libRoot + subFolder;
-    fileList = ["three.js", "three.min.js"];
-    fileList.forEach(function (file) {
-        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
-    });
-
-    // three/examples/js
-    subFolder         = "threejs/";
-    sourceFolder      = sourceConfig.nodeModulesRoot + "three/examples/js/";
-    destinationFolder = siteConfig.libRoot + subFolder;
-    fileList = ["libs/" + "dat.gui.min.js"];
-    fileList.forEach(function (file) {
-        gulp.src([sourceFolder + file]).pipe(gulp.dest(destinationFolder ));
-    });
-
-    // requirejs
-    subFolder         = "requirejs/";
-    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
-    destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + "require.js"]).pipe(gulp.dest(destinationFolder ));
-
-    // chai assertion library
-    subFolder         = "chai/";
-    sourceFolder      = sourceConfig.nodeModulesRoot + subFolder;
-    destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + "chai.js"]).pipe(gulp.dest(destinationFolder ));
-
-    // pako compression library
-    subFolder = "pako/dist/";
-    sourceFolder = sourceConfig.nodeModulesRoot + subFolder;
-    destinationFolder = siteConfig.libRoot + subFolder;
-    gulp.src([sourceFolder + "pako.js"]).pipe(gulp.dest(destinationFolder));
 });
 
 /// <summary>
@@ -390,6 +353,22 @@ gulp.task("copyNPM", function () {
 gulp.task("buildShaders", function() {
     generateShaders();
 });
+
+/// <summary>
+/// Execute webpack bundler.
+/// </summary>
+gulp.task("webpack", function () {
+    spawn("npx", ["webpack", "--config", "ModelRelief/webpack.config.js"], {
+        stdio: "inherit"  // <== IMPORTANT: use this option to inherit the parent's environment
+    });
+});
+// gulp.task("webpack", function (callback) {
+//     exec("npx webpack --config ModelRelief/webpack.config.js", function (err, stdout, stderr) {
+//         console.log(stdout);
+//         console.log(stderr);
+//         callback(err);
+//     });
+// });
 
 /// <summary>
 /// Compile TypeScript
@@ -465,7 +444,7 @@ gulp.task("serve", function () {
     });
 
     gulp.watch([sourceConfig.shaders + "*.glsl"],                   () => runSequence("buildShaders", "reload"));
-    gulp.watch([sourceConfig.scriptsRoot + "**/*.ts"],              () => runSequence("compileTypeScript", "reload"));
+    gulp.watch([sourceConfig.scriptsRoot + "**/*.ts"],              () => runSequence("webpack", "reload"));
 
     gulp.watch([sourceConfig.cssRoot + "**/*.scss"],                () => runSequence("compileSCSS", "reload"));
     gulp.watch([sourceConfig.cssRoot + "**/*.css"],                 () => runSequence("copyCSS", "reload"));

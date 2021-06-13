@@ -355,21 +355,15 @@
 <!--Main layout-->
 
 @section scripts {
+<script type="module" src="~/js/home.js"></script>
 
-    <script  type="text/javascript">
-        //# sourceURL=Index.js
-        window.onload = (function (existingOnLoad) {
-            return function () {
-                existingOnLoad && existingOnLoad();
-                requirejs(['Pages/Home']);
-            }
-        })(window.onload)
+<script types="text/javascript">
+    //# sourceURL=Index.js
+    function recaptchaCallBack() {
 
-        function recaptchaCallBack() {
-
-            const submitButton = document.querySelector("#submitContactForm");
-            submitButton.disabled = false;
-            submitButton.style.cursor = "pointer";
-        }
-    </script>
+        const submitButton = document.querySelector("#submitContactForm");
+        submitButton.disabled = false;
+        submitButton.style.cursor = "pointer";
+    }
+</script>
 }

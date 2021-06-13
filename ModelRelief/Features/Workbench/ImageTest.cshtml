@@ -17,13 +17,6 @@
         </form>
     </div>
     @section scripts {
-        <script>
-            window.onload = (function (existingOnLoad) {
-                return function () {
-                    existingOnLoad && existingOnLoad();
-                    requirejs(['Workbench/ImageTest']);
-                }
-            })(window.onload)
-        </script>
+    <script type="module" src="~/js/imagetest.js"></script>
     }
 </body>

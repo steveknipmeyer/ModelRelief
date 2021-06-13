@@ -360,13 +360,5 @@
         <script src="~/js/shaders.min.js"></script>
     </environment>
 
-    <script type="text/javascript">
-        const composerMeshModel = JSON.parse(document.getElementById("dtoMesh").innerHTML);
-        window.onload = (function (existingOnLoad) {
-            return function () {
-                existingOnLoad && existingOnLoad();
-                requirejs(["ModelRelief"]);
-            }
-        })(window.onload)
-    </script>
+    <script type="module" src="~/js/main.js"></script>
 }

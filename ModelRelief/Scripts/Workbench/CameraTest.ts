@@ -141,6 +141,7 @@ export class CameraTest {
         });
     }
 }
-
-const cameraTest = new CameraTest();
-cameraTest.main();
+document.addEventListener("DOMContentLoaded", () => {
+    const cameraTest = new CameraTest();
+    cameraTest.main();
+});

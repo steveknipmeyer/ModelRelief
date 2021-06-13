@@ -123,5 +123,7 @@ export class Home {
     }
 }
 
-const home = new Home();
-home.main();
+document.addEventListener("DOMContentLoaded", () => {
+    const home = new Home();
+    home.main();
+});

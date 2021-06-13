@@ -52,13 +52,6 @@
      <partial name="_StatusPanelPartial" />
 
     @section scripts {
-        <script>
-            window.onload = (function (existingOnLoad) {
-                    return function () {
-                        existingOnLoad && existingOnLoad();
-                        requirejs(['Workbench/CameraTest']);
-                    }
-                })(window.onload)
-        </script>
+    <script type="module" src="~/js/cameratest.js"></script>
     }
 </body>

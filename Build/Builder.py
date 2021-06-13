@@ -142,10 +142,11 @@ class Builder:
         os.chdir(self.solution_path)
         Tools.exec("gulp")
 
-        # TypeScript
-        self.logger.logInformation("\nTypeScript compilation", Colors.BrightMagenta)
+        # webpack
+        self.logger.logInformation("\nWebpack Bundle", Colors.BrightMagenta)
         os.chdir(self.solution_path)
-        Tools.exec("npx tsc -p {}".format(self.modelrelief_path))
+        webpack_args = "--mode=production" if self.publish else ""
+        Tools.exec(f"npx webpack {webpack_args} --config ModelRelief/webpack.config.js")
 
         self.logger.logInformation("\nTypeScript Circular Dependencies", Colors.BrightMagenta)
         os.chdir(self.solution_path)

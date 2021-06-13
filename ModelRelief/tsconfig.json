@@ -1,28 +1,34 @@
 {
   "compilerOptions": {
 
-    // Compiler
+    // Language
     "target": "es6",
-    "lib": [ "es6", "es2015", "dom" ], // assume availability of these libraries
+    "lib": [ "es6", "es2015", "dom" ],  // assume availability of these libraries
+
+    // Modules
+    "module": "ES6",
+    "baseUrl": ".",
+    "moduleResolution": "node",         // include node_modules in search paths
+    "traceResolution": false,           // debug; show search paths when resolving modules
+
+    // Compiler Switches
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
-    "sourceMap": true,
-    "outFile": "wwwroot/js/modelrelief.js",
     "experimentalDecorators": true,
     "allowJs": true,
 
-    // Modules
-    "module": "amd",                  // generate AMD (Asynchronous Module Definition code for modules
-                                      // N.B. Only AMD and System are supported alongside outfile.
-    "moduleResolution": "node",       // include node_modules in search paths
-    "traceResolution": false,         // debug; show search paths when resolving modules
-    "baseUrl": ".",
+    // Out N.B. These settings are used only when explicitly using the TypeScript compiler (e.g. tsc)
+    // These settings are ignored by webpack. webpack does <not> persiste the compiled .js files.
+    // All webpack TypeScript processing (ts-loader) is done in memory.
+    "outDir": "Scripts/build/out",
+    "rootDir": ".",
+    "sourceMap": true
   },
 
   "exclude": [ // folders <not> included in compilation
     "node_modules",
     "wwwroot",                  // Scott Allen : NDC Opinionated View of ASPNET Core
-    "**/*.js",                  // JavaScript
+    "**/*.js"                   // JavaScript
   ]
 }

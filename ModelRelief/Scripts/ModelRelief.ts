@@ -11,13 +11,17 @@ import {ElementIds} from "Scripts/System/Html";
 import {Initializer} from "Scripts/System/Initializer";
 import {ComposerView} from "Scripts/Views/ComposerView";
 
-Initializer.initialize().then((initializationSuccess: boolean) => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    if (!initializationSuccess)
-        return;
+    Initializer.initialize().then((initializationSuccess: boolean) => {
 
-    const composerView = new ComposerView(ElementIds.ComposerView);
-    composerView.eventManager.addEventListener(EventType.ComposerViewInitialized, () => {
-        const composerController = new ComposerController(composerView);
+        if (!initializationSuccess)
+            return;
+
+        const composerView = new ComposerView(ElementIds.ComposerView);
+        composerView.eventManager.addEventListener(EventType.ComposerViewInitialized, () => {
+            const composerController = new ComposerController(composerView);
+        });
     });
 });
+
