@@ -375,30 +375,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
             ComposerController
             (ModelController)
             (MeshController)
-
-#### Modules
-    http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/
-    
-    What is the recommended way to split a module over multiple files?
-        Using a d.ts file and 'export as namespace' works but it led to issues loading MR in require.js.
-            modelrelief.d.ts
-                export as namespace MR
-    
-                export * from "fileA"
-                export * from "fileB"
-    
-            MR is composed of multiple disk files. How is that handled with AMD modules in require.js?
-                When TypeScript creates the AMD output, the module name is the disk file. There is no definition of MR as an aggregate.
-                Is there a require.config that maps a module name to multiple separate modules?
-                    MR -> fileA,fileB
-    
-            Can a module name have a period such as MR.Graphics?
-                import * as MR.Graphics from "Graphics" led to an error.
-    
-            Can multiple modules be imported into the same alias? This construct is not valid.
-                import * as MR from"Graphics"
-                import * as MR from"Views"
-
 #### THREE.js Notes
     Object clone <only> copies Object3d properties.
     

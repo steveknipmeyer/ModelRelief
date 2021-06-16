@@ -44,7 +44,7 @@
         // The patterns to exclude when doing a full text search in the workspace.
         "search.exclude": {
             "**/*.d.ts": true,
-            "**/*.js": true,
+            // "**/*.js": true,
 
             "**/obj": true,
             "**/devenv": true,

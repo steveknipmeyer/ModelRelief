@@ -10,6 +10,8 @@ var config = {
         layout:         "./ModelRelief/Scripts/Shared/Layout.ts",
         cameratest:     "./ModelRelief/Scripts/Workbench/CameraTest.ts",
         imagetest:      "./ModelRelief/Scripts/Workbench/ImageTest.ts",
+
+        // main: "./ModelRelief/Scripts/Experiments/Modules/main.ts",
     },
     target: ["web", "es6"],
     output: {
