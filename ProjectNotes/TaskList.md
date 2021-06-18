@@ -4,15 +4,11 @@
     https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 
     Bootstrap
-        Validate CSS.
-            Unused styles
         Theme colors. What is the proper way to create a color palette?
-        Replace pixel references with rem.
         Tooltips
         Credits
             Change color of links so they are visually obvious.
 
-        SASS
         Style the Composer View.
 
     Today   

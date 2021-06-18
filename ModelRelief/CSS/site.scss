@@ -3,8 +3,6 @@
 ----------------------------------------------------------------------------------------------------------------*/
 $theme_background: #3b6176;
 
-
-
 /* --------------------------------------------------------------------------------------------------------------
     General
 ----------------------------------------------------------------------------------------------------------------*/
@@ -23,13 +21,15 @@ hr {
     border-color: gray;
 }
 
-.btn-default {
-    color: white;
-}
-
 .button-rounded {
     color: white;
     border-radius: 32px;
+}
+
+.actionButton {
+    font-size: 1rem;
+    padding: 10px 25px 10px 25px;
+    background-color: slategray;
 }
 
 .table {
@@ -38,10 +38,6 @@ hr {
 
 input, textarea {
     color: white;
-}
-
-.form-group input[type="checkbox"] {
-    height: 24px;
 }
 
 select.form-control {
@@ -59,15 +55,42 @@ a:hover {
 .card {
     border: none;
 }
-
-.view-controls {
-    background-color: rgb(34, 39, 39);
-    height: 72px;
-}
 .card-body {
     background-color: rgb(16, 41, 53);
 }
 
+/* --------------------------------------------------------------------------------------------------------------
+    Navigation Bar
+----------------------------------------------------------------------------------------------------------------*/
+
+sup {
+    font-size: .8rem;
+}
+
+.dropdown-item {
+    background-color: #1d272e;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------------------------------------------
+    Cookie Banner
+----------------------------------------------------------------------------------------------------------------*/
+
+#cookiePolicy{
+    color: navy;
+}
+
+/* --------------------------------------------------------------------------------------------------------------
+    Footer
+----------------------------------------------------------------------------------------------------------------*/
+footer.page-footer .footer-copyright {
+    font-size: .8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* --------------------------------------------------------------------------------------------------------------
+    Landing
+----------------------------------------------------------------------------------------------------------------*/
 /* Ripple effect */
 /* https://codepen.io/finnhvman/post/pure-css-ripple-with-minimal-effort */
 .rippleContainer {
@@ -96,47 +119,6 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------------------------------------------
-    Navigation Bar
-----------------------------------------------------------------------------------------------------------------*/
-
-sup {
-    font-size: 14px;
-}
-
-.dropdown-item {
-    background-color: #1d272e;
-    color: white;
-}
-/* --------------------------------------------------------------------------------------------------------------
-    Cookie Banner
-----------------------------------------------------------------------------------------------------------------*/
-
-#cookiePolicy{
-    color: navy;
-}
-
-/* --------------------------------------------------------------------------------------------------------------
-    Footer
-------------------------*/
-footer.page-footer .footer-copyright {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-/* --------------------------------------------------------------------------------------------------------------
-    Landing
-----------------------------------------------------------------------------------------------------------------*/
-
-.actionButton {
-    font-size: 12px;
-    padding: 10px 25px 10px 25px;
-    background-color: slategray;
-}
-
-#submitContactForm {
-    cursor: not-allowed;
-}
-/* --------------------------------------------------------------------------------------------------------------
     File Preview
 ----------------------------------------------------------------------------------------------------------------*/
 .filePreview {
@@ -164,20 +146,18 @@ input:focus, textarea:focus {
   background-color: transparent !important;
 }
 
-input[type=checkbox]:checked + label:before {
-  background-color: MediumSeaGreen;
-  border-color: MediumSeaGreen;
-  color: #fff;
+#submitContactForm {
+    cursor: not-allowed;
 }
 
 /* --------------------------------------------------------------------------------------------------------------
     reCAPTCHA
 ----------------------------------------------------------------------------------------------------------------*/
 .g-recaptcha{
-transform:scale(0.77);
--webkit-transform:scale(0.77);
-transform-origin:0 0;
--webkit-transform-origin:0 0;
+    transform:scale(0.77);
+    -webkit-transform:scale(0.77);
+    transform-origin:0 0;
+    -webkit-transform-origin:0 0;
 }
 
 /* --------------------------------------------------------------------------------------------------------------
@@ -186,7 +166,6 @@ transform-origin:0 0;
 #dropArea {
   border: 2px dashed #ccc;
   border-radius: 20px;
-  /* width: 480px; */
 
   margin: 50px;
   padding: 20px;
@@ -230,7 +209,7 @@ transform-origin:0 0;
 }
 
 .controlHeading {
-    font-size: 12pt;
+    font-size: 1rem;
 }
 
 .controlHeadingDivider {
@@ -248,11 +227,11 @@ transform-origin:0 0;
 }
 
 .controlDescription {
-    font-size: 10pt;
+    font-size: .8rem;
 }
 
 .controlText {
-    font-size: 10pt;
+    font-size: .8rem;
 }
 
 #modelViewCardBody,
@@ -262,6 +241,11 @@ transform-origin:0 0;
 
 .card-cascade {
     background-color: black;
+}
+
+.view-controls {
+    background-color: rgb(34, 39, 39);
+    height: 3.5rem;
 }
 
 /* (Camera Icon) Standard View */
@@ -287,7 +271,6 @@ transform-origin:0 0;
     background-color: darkslategray !important;
 }
 
-/* Fit View */
 .fitViewButton {
     border-color: cyan;
     border-radius: 24px;
@@ -311,6 +294,8 @@ input[type=range] {
   background-color: transparent;
 }
 
+/* Range: browser-specific */
+/*#region*/
 /* https://www.cssportal.com/style-input-range/ */
 input[type=range] {
   height: 19px;
@@ -398,6 +383,7 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #B8A9A9;
 }
+/*#endregion*/
 
 /* --------------------------------------------------------------------------------------------------------------
     BusyBar
@@ -413,6 +399,8 @@ input[type=range]:focus::-ms-fill-upper {
     -moz-animation: BusyBarAnimation 1s ease infinite;
     animation: BusyBarAnimation 1s ease infinite;
 }
+/* BusyBar: browser-specific */
+/*#region*/
 @-webkit-keyframes BusyBarAnimation {
     0%{background-position:0% 54%}
     50%{background-position:100% 47%}
@@ -428,6 +416,8 @@ input[type=range]:focus::-ms-fill-upper {
     50%{background-position:100% 47%}
     100%{background-position:0% 54%}
 }
+/*#endregion*/
+
 /* --------------------------------------------------------------------------------------------------------------
     Generate (Floating Action Button)
 ----------------------------------------------------------------------------------------------------------------*/
@@ -461,20 +451,20 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .creditHeading {
-    font-size: 16pt;
+    font-size: 1.3rem;
     color: lightgray;
 }
 
 .creditTechnology {
-    font-size: 10pt;
+    font-size: .8rem;
 }
 
 .creditDescription {
-    font-size: 10pt;
+    font-size: .8rem;
 }
 
 .creditLicense {
-    font-size: 10pt;
+    font-size: .8rempt;
 }
 
 .creditTable a:link {
@@ -502,7 +492,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .settingsHeading {
-    font-size: 16pt;
+    font-size: 1.4rem;
     color: lightgray;
 }
 
@@ -526,7 +516,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .logMessage {
-    margin-left: 10PX;
+    margin-left: 10px;
 }
 
 .logError {
