@@ -1,5 +1,7 @@
 #### Commit     
-### General     
+### General   
+    Gulp exception handler ('gulp serve')
+        beep
     PyLance
     https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 

@@ -534,12 +534,12 @@ input[type=range]:focus::-ms-fill-upper {
 /* --------------------------------------------------------------------------------------------------------------
     Bootstrap Grid Debugging
 ----------------------------------------------------------------------------------------------------------------*/
-// .row {
-//     background-color: darkgrey;
-//     outline: 1px solid black;
-// }
+.row {
+    background-color: darkgrey;
+    outline: 1px solid red;
+}
 
-// [class^=col] {
-//     background-color: darkslateblue;
-//     outline: 1px solid black
-// }
+[class^=col] {
+    background-color: darkslateblue;
+    border-right: 1px solid white;
+}
