@@ -72,6 +72,13 @@ sup {
     color: white;
 }
 
+.vertical-line {
+    display: inline-block;
+    border-left: 1px solid darkgrey;
+    margin: 0 10px;
+    height: 2.5rem;
+}
+
 /* --------------------------------------------------------------------------------------------------------------
     Cookie Banner
 ----------------------------------------------------------------------------------------------------------------*/
@@ -464,7 +471,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .creditLicense {
-    font-size: .8rempt;
+    font-size: .8rem;
 }
 
 .creditTable a:link {
@@ -530,10 +537,10 @@ input[type=range]:focus::-ms-fill-upper {
 .logInfo {
     color: rgb(255, 255, 255);
 }
-
 /* --------------------------------------------------------------------------------------------------------------
     Bootstrap Grid Debugging
 ----------------------------------------------------------------------------------------------------------------*/
+/*
 .row {
     background-color: darkgrey;
     outline: 1px solid red;
@@ -543,3 +550,4 @@ input[type=range]:focus::-ms-fill-upper {
     background-color: darkslateblue;
     border-right: 1px solid white;
 }
+*/

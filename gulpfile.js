@@ -70,7 +70,7 @@ var tsProject = ts.createProject(sourceConfig.sourceRoot + "tsconfig.json");
 /// </summary>
 var onError = function (err) {
     beep([0]);
-    flog.log(colors.red(err));
+    flog.error(colors.red(err));
 };
 
 /// <summary>
@@ -249,7 +249,9 @@ gulp.task("compileSCSS", function () {
     // FOLDERS
     let sourceFolder = sourceConfig.cssRoot;
     let destinationFolder = siteConfig.cssRoot;
-    gulp.src([sourceFolder + "**/*.scss"]).pipe(sass()).pipe(gulp.dest(destinationFolder));
+    gulp.src([sourceFolder + "**/*.scss"]).pipe(sass()
+        .on("error", sass.logError))
+        .pipe(gulp.dest(destinationFolder))
 
     // FILES
 });

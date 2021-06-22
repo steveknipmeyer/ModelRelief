@@ -1,15 +1,11 @@
 #### Commit     
 ### General   
-    Gulp exception handler ('gulp serve')
-        beep
     PyLance
     https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips
-        Credits
-            Change color of links so they are visually obvious.
 
         Style the Composer View.
 
