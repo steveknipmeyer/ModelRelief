@@ -7,8 +7,6 @@
         Theme colors. What is the proper way to create a color palette?
         Tooltips
 
-        Style the Composer View.
-
     Today   
         Verify Resolution.Image setting.
             1024 leads to Chrome render issues.
