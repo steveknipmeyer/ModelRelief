@@ -40,10 +40,6 @@ input, textarea {
     color: white;
 }
 
-select.form-control {
-    background-color: $theme_background  !important;
-}
-
 a {
     color: white;
     font-weight: lighter;
@@ -141,16 +137,17 @@ footer.page-footer .footer-copyright {
 }
 
 .form-control {
-    color: white !important;
+    color: white;
     caret-color: white;
 
-    background-color: transparent;
+    background-color: $theme_background;
     border-width: 0px 0px 1px 0px;
     border-radius: 0px;
 }
 
-input:focus, textarea:focus {
-  background-color: transparent !important;
+.form-control:focus {
+  color: white;
+  background-color: $theme_background;
 }
 
 #submitContactForm {
@@ -195,7 +192,7 @@ input:focus, textarea:focus {
 }
 
 .fa-camera, .fa-expand-arrows-alt {
-  color: cyan !important;
+  color: cyan;
 }
 
 .composeStep {
@@ -275,7 +272,7 @@ input:focus, textarea:focus {
 }
 
 .dropdown-menu a:hover {
-    background-color: darkslategray !important;
+    background-color: lightgrey;
 }
 
 .fitViewButton {

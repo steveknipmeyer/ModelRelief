@@ -31,14 +31,12 @@
             }
             @if (User.Identity.IsAuthenticated && userSettings.DevelopmentUI)
             {
-                <span class="vertical-line"></span>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Depth-buffers" asp-action="Index">DepthBuffers</a>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Mesh-transforms" asp-action="Index">MeshTransforms</a>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Normal-maps" asp-action="Index">NormalMaps</a>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
-                <span class="vertical-line"></span>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Cameras" asp-action="Index">Cameras</a>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Depth-buffers" asp-action="Index">DepthBuffers</a>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Meshes" asp-action="Index">Meshes</a>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Mesh-transforms" asp-action="Index">MeshTransforms</a>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Normal-maps" asp-action="Index">NormalMaps</a>
+                <a class="nav-item nav-link font-italic" asp-area="" asp-controller="Workbench" asp-action="Index">Workbench</a>
             }
             <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
             <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Credits">Credits</a>
