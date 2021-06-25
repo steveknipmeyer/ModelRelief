@@ -104,9 +104,10 @@ namespace ModelRelief.Features
             });
 
             // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
-            var modelCollection = (results is PagedResults<TGetModel>) ? ((PagedResults<TGetModel>)results).Results : results;
+            // var modelCollection = (results is PagedResults<TGetModel>) ? ((PagedResults<TGetModel>)results).Results : results;
+            var modelCollection = results as IEnumerable<TGetModel>;
 
-            modelCollection = await FilterModelCollectionByActiveProject(modelCollection as IEnumerable<TGetModel>);
+            modelCollection = await FilterModelCollectionByActiveProject(modelCollection);
 
             return View(modelCollection);
         }
@@ -362,11 +363,13 @@ namespace ModelRelief.Features
             return modelSelectList;
         }
 
-         /// <summary>
+        /// <summary>
         /// Filters a model collection by the active Project.
         /// </summary>
+        /// <typeparam name="T">Type of collection.</typeparam>
         /// <param name="models">Model collection (unfiltered)</param>
-        protected async Task<IEnumerable<TGetModel>> FilterModelCollectionByActiveProject(IEnumerable<TGetModel> models)
+        protected async Task<IEnumerable<T>> FilterModelCollectionByActiveProject<T>(IEnumerable<T> models)
+            where T : IModel
         {
             await SettingsManager.InitializeUserSessionAsync(User);
             var activeProjectModels = models.Where(m => (

@@ -3,9 +3,19 @@
     PyLance
     https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 
+    Models Page
+        Construct a ViewModel that binds together the associated resources.
+            Model
+            Mesh
+            MeshTransform
+            DepthBuffer
+            NormalMap
+
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips
+
+    Denmark models do not have P4 (Composite Mask) enabled for Unsharp Masking.
 
     Today   
         Verify Resolution.Image setting.

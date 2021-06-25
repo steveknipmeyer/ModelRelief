@@ -6,14 +6,18 @@
 
 namespace ModelRelief.Features.Models
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using AutoMapper;
     using MediatR;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using ModelRelief.Api.V1.Models;
+    using ModelRelief.Api.V1.Shared.Rest;
     using ModelRelief.Database;
     using ModelRelief.Domain;
+    using ModelRelief.Dto;
     using ModelRelief.Features;
     using ModelRelief.Features.Settings;
     using ModelRelief.Utility;
@@ -47,6 +51,36 @@ namespace ModelRelief.Features.Models
         }
 
         #region Get
+        /// <summary>
+        /// Action handler for Models Index page.
+        /// Returns a collection of models.
+        /// </summary>
+        /// <param name="pagedQueryParameters">Parameters for returning a collection of models including page number, size.</param>
+        /// <param name="queryParameters">Query parameters.</param>
+        /// <returns>Index page.</returns>
+        public override async Task<IActionResult> Index([FromQuery] GetPagedQueryParameters pagedQueryParameters, [FromQuery] GetQueryParameters queryParameters)
+        {
+            pagedQueryParameters = pagedQueryParameters ?? new GetPagedQueryParameters();
+            var results = await HandleRequestAsync(new GetMultipleRequest<Domain.Mesh, Dto.Mesh>
+            {
+                User = User,
+                UrlHelperContainer = this,
+
+                // not implemented in UI
+                UsePaging = false,
+
+                // (optional) query parameters
+                QueryParameters = queryParameters,
+            });
+
+            // N.B. Return value may be PagedResults or a simple Array depending on if UsePaging was active in the request.
+            // var modelCollection = (results is PagedResults<Dto.Mesh>) ? ((PagedResults<Dto.Mesh>)results).Results : results as IEnumerable<Dto.Mesh>;
+            var modelCollection = results as IEnumerable<Dto.Mesh>;
+
+            modelCollection = await FilterModelCollectionByActiveProject(modelCollection);
+
+            return View(modelCollection);
+        }
         #endregion
 
         /// <summary>
@@ -59,7 +93,7 @@ namespace ModelRelief.Features.Models
 
             ViewBag.ModelFormat  = PopulateEnumDropDownList<Model3dFormat>("Select model format");
 
-            ViewBag.CameraId     = await PopulateModelDropDownList<Camera, Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
+            ViewBag.CameraId     = await PopulateModelDropDownList<Domain.Camera, Dto.Camera>(DbContext, UserId, SettingsManager.UserSession.ProjectId, "Select a camera", model?.CameraId);
         }
     }
 }
