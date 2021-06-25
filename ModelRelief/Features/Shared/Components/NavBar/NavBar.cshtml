@@ -16,7 +16,7 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <div class="nav-item dropdown mr-3">
-                    <a id="projectMenuLabel" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Projects</a>
+                    <a id="projectMenuLabel" class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Projects</a>
                     <div id="projectMenu" class="dropdown-menu">
                         @foreach (var project in Model)
                         {
@@ -26,7 +26,6 @@
                         <a class="dropdown-item" href="/projects/create">Create New Project</a>
                     </div>
                 </div>
-                <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
                 <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
             }
             @if (User.Identity.IsAuthenticated && userSettings.DevelopmentUI)

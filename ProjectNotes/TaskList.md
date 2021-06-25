@@ -1,21 +1,19 @@
 #### Commit     
 ### General   
-    PyLance
-    https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
+    Export WSL.
+        https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
 
-    Models Page
-        Construct a ViewModel that binds together the associated resources.
-            Model
-            Mesh
-            MeshTransform
-            DepthBuffer
-            NormalMap
+    Project menu click handler should navigate to models page when label is clicked.
+    Project menu should show active selection when dropped down.
+
+    Denmark models do not have P4 (Composite Mask) enabled for Unsharp Masking.
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips
 
-    Denmark models do not have P4 (Composite Mask) enabled for Unsharp Masking.
+    PyLance
+        https://devblogs.microsoft.com/python/python-in-visual-studio-code-may-2021-release/
 
     Today   
         Verify Resolution.Image setting.

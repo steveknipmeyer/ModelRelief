@@ -9,34 +9,31 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                <img class="filePreview" src="/models/@item.Id/preview">
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+
+<div class="container-fluid">
+@foreach (var mesh in Model)
+{
+    <div class="row">
+        <div class="col-2">
+            <span>@mesh.Name</span>
+        </div>
+        <div class="col-2">
+            <span>@mesh.Description</span>
+        </div>
+
+        <div class="col">
+            <img class="filePreview" src="/models/@mesh.DepthBuffer.Model3dId/preview">
+        </div>
+        <div class="col">
+            <img class="filePreview" src="/meshes/@mesh.Id/preview">
+        </div>
+        <div class="col">
+            <img class="filePreview" src="/depthbuffers/@mesh.DepthBufferId/preview">
+        </div>
+        <div class="col">
+            <img class="filePreview" src="/normalmaps/@mesh.NormalMapId/preview">
+        </div>
+    </div>
+    }
+
+</div>
