@@ -32,7 +32,7 @@
     // Python
     // ---------------------------------
         // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
-        "python.pythonPath": "./devenv/bin/python",
+        "python.defaultInterpreterPath": "./devenv/bin/python",
         "python.envFile": "${workspaceFolder}/.env",
         "python.analysis.extraPaths": [
             "${workspaceFolder}/Solver/Experiments/PyQt5"

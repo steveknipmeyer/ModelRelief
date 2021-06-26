@@ -85,6 +85,9 @@
             "env": {
                 "name": "value"
             },
+            "autoReload": {
+                "enable": true
+            },
 
         //  ----- Tools
         //  "program": "${workspaceFolder}/Tools/testrunner.py",
