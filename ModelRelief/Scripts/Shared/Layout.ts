@@ -44,8 +44,11 @@ export class Layout {
             if (!projectId)
                 continue;
 
-            // update menu label if active Project
+            // active project?
             if (projectId == this.session.projectId) {
+                // mark active
+                projectMenuItem.classList.add("active");
+                // update menu label
                 projectMenuLabel.innerText = projectMenuItem.innerText;
             }
 

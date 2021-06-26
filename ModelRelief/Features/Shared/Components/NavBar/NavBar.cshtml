@@ -26,6 +26,7 @@
                         <a class="dropdown-item" href="/projects/create">Create New Project</a>
                     </div>
                 </div>
+                <a class="nav-item nav-link" asp-area="" asp-controller="Models" asp-action="Index">Models</a>
                 <a class="nav-item nav-link" asp-area="" asp-controller="Settings" asp-action="Edit" asp-route-Id="@userSettings.Id">Settings</a>
             }
             @if (User.Identity.IsAuthenticated && userSettings.DevelopmentUI)

@@ -4,7 +4,7 @@
         https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
 
     Project menu click handler should navigate to models page when label is clicked.
-    Project menu should show active selection when dropped down.
+    
 
     Denmark models do not have P4 (Composite Mask) enabled for Unsharp Masking.
 

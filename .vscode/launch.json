@@ -41,8 +41,8 @@
                 "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation",
                 "MRDatabaseProvider": "SQLite",
                 "MRUpdateSeedData": "False",
-                "MRInitializeDatabase": "False",
-                "MRSeedDatabase": "False",
+                "MRInitializeDatabase": "True",
+                "MRSeedDatabase": "True",
                 "MRExitAfterInitialization": "False",
             },
             "requireExactSource": true
