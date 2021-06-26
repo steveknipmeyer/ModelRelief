@@ -7,7 +7,7 @@
 .. module:: explorer
    :synopsis: Experiments in relief processing.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import argparse
 import json

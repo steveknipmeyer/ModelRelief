@@ -8,7 +8,7 @@
 .. module:: Attenutation
    :synopsis: Support for attenuation of image components.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 

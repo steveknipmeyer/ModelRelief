@@ -8,7 +8,7 @@
 .. module:: UnsharpMask
    :synopsis: Support for unsharp masking of images.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 from scipy.ndimage import gaussian_filter

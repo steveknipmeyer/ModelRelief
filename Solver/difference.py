@@ -8,7 +8,7 @@
 .. module:: Difference
    :synopsis: Support for calculating array finite differences.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 from enum import Enum

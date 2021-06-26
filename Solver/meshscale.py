@@ -8,15 +8,15 @@
 .. module:: MeshScale
    :synopsis: Support for scaling meshes.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 
 from depthbuffer import DepthBuffer
-from services import Services 
+from services import Services
 from stopwatch import benchmark
 
-class MeshScale: 
+class MeshScale:
     """
     A class for scaling meshes.
     """

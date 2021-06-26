@@ -8,7 +8,7 @@
 .. module:: generate
    :synopsis: Tool for automatically generating all example Meshes.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import argparse

@@ -8,7 +8,7 @@
 .. module:: Poisson
    :synopsis: Support for solving Poisson's equation for images.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import pyamg
 import numpy as np
@@ -36,10 +36,10 @@ class Poisson:
     @benchmark()
     def solve(self, divG: np.ndarray) -> np.ndarray:
         """
-        Solves the Poisson equation: 
+        Solves the Poisson equation:
             Laplacian (I) = div (G)
             Ax = b
-        where 
+        where
             I = image in the spatial domain
             G = vector gradient of the image after pre-processing (attenuation, unsharp masking)
         Parameters
@@ -50,7 +50,7 @@ class Poisson:
         dimensions = np.shape(divG)
         n = dimensions[0]
         grid = (n,n)
-        
+
         A = pyamg.gallery.poisson(grid, format='csr')                                   # 2D Poisson problem on 4x4 grid
         ml = pyamg.ruge_stuben_solver(A)                                                # construct the multigrid hierarchy
 

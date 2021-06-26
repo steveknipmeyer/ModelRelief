@@ -7,7 +7,7 @@
 .. module:: benchmark
    :synopsis: Benchmark tests for relief Pyhon C++ extensions.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import math
 import numpy as np

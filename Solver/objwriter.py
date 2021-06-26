@@ -8,7 +8,7 @@
 .. module:: OBJWriter
    :synopsis: Support for writing a WaveFront OBJ file.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 from typing import TextIO
@@ -31,7 +31,7 @@ class OBJWriter:
         array
             The floating point 2D array to convert to an OBJ file.
         path
-            The path of the final OBJ file.            
+            The path of the final OBJ file.
         """
         self.debug = True
         self.services = services

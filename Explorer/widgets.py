@@ -7,7 +7,7 @@
 .. module:: widgets
    :synopsis: QT UI controls for Explorer.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 
 import os

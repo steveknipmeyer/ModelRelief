@@ -7,7 +7,7 @@
 .. module:: Results
    :synopsis: The collection of solver results (images, meshes, workbench).
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 

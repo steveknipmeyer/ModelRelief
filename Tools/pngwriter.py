@@ -8,7 +8,7 @@
 .. module:: pngfloat
    :synopsis: Support for writing PNG image files.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import argparse

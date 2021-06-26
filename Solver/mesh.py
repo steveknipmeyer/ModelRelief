@@ -7,7 +7,7 @@
 .. module:: Mesh
    :synopsis: A low relief mesh created by applying a MeshTransform to a DepthBuffer.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import os
 from services import Services

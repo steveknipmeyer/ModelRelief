@@ -8,7 +8,7 @@
 .. module:: Services
    :synopsis: A performance timer.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import time
 from decimal import Decimal

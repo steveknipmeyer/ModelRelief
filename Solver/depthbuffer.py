@@ -8,7 +8,7 @@
 .. module:: DepthBuffer
    :synopsis: A rendering DepthBuffer created from a Model3d and a Camera.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import math
 import os

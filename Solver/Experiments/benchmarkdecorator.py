@@ -8,7 +8,7 @@
 .. module:: test
    :synopsis: Experiments in Python.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 from stopwatch import benchmark

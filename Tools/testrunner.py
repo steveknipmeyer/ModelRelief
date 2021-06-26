@@ -9,7 +9,7 @@
 .. module:: TestRunner
    :synopsis: Runs the unit test suite.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import os

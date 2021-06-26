@@ -8,7 +8,7 @@
 .. module:: NormalMap
    :synopsis: A rendering NormalMap created from a Model3d and a Camera.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import math
 import os

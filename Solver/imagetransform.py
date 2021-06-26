@@ -8,7 +8,7 @@
 .. module:: ImageTransform
    :synopsis: Toolbox of image processing transforms.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 from numpy.core.defchararray import array

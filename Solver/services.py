@@ -8,7 +8,7 @@
 .. module:: Services
    :synopsis: Support for runtime services.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 from logger import Logger
 from results import Results

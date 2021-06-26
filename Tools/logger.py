@@ -8,7 +8,7 @@
 .. module:: Logger
    :synopsis: Support for runtime logging.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 from enum import Enum
 

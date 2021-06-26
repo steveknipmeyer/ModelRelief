@@ -9,7 +9,7 @@
 .. module:: Baseline
    :synopsis: Creates the baseline database for integration testing.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import os

@@ -110,7 +110,7 @@ setup(
     name='relief',
     version='0.1',
     author='Steve Knipmeyer',
-    author_email='steve@knipmeyer.org',
+    author_email='steve@modelrelief.org',
     description='ModelRelief image processing Python extensions',
     long_description='',
 

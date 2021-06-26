@@ -8,7 +8,7 @@
 .. module:: Gradient
    :synopsis: Support for calculating image gradients.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 from typing import Dict, List, Tuple

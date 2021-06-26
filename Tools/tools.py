@@ -8,7 +8,7 @@
 .. module:: Tools
    :synopsis: Utilities and tools for scripting support.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 

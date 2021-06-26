@@ -9,7 +9,7 @@
 .. module:: LineCount
    :synopsis: Counts lines of source by language type.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import os

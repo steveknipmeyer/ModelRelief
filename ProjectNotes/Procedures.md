@@ -63,7 +63,7 @@
     git
         sudo apt install git
         git config --global user.name "Steve Knipmeyer"
-        git config --global user.email "steve@knipmeyer.org"
+        git config --global user.email "steve@modelrelief.org"
     
         git clone https://github.com/steveknipmeyer/ModelRelief.git
         Store credentials.

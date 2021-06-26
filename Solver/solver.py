@@ -8,7 +8,7 @@
 .. module:: Solver
    :synopsis: Generates a mesh from a DepthBuffer and a MeshTransform.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 
 import argparse

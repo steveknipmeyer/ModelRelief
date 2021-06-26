@@ -9,7 +9,7 @@
    :synopsis: A collection of settings that control how a DepthBuffer is transformed
               to create a relief DepthBuffer.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 from gradient import GradientThresholdParameters

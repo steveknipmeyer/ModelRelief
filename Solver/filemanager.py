@@ -8,7 +8,7 @@
 .. module:: FileManager
    :synopsis: General support for file conversion and input/output.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import math
 import struct

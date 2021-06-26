@@ -12,7 +12,7 @@ from typing import List
 .. module:: Camera
    :synopsis: A camera.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 

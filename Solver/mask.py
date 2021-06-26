@@ -8,7 +8,7 @@
 .. module:: Mask
    :synopsis: Support for masking of image arrays.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 

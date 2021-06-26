@@ -8,7 +8,7 @@
 .. module:: MathTools
    :synopsis: General utilities and helpers.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
 

@@ -8,7 +8,7 @@
 .. module:: Silhouette
    :synopsis: Support for processing relief silhouettes.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import cv2
 import numpy as np

@@ -14,7 +14,7 @@ from orthographiccamera import OrthographicCamera
 .. module:: CameraFactory
    :synopsis: A camera factory returning specialized instances (PerspectiveCamera, OrthographicCamera) of Camera.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 

@@ -9,7 +9,7 @@
 .. module:: Environment
    :synopsis: Manages the ModelRelief environment settings.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import json

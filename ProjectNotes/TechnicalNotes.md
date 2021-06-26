@@ -803,7 +803,7 @@ https://weblog.west-wind.com/posts/2019/May/18/Live-Reloading-Server-Side-ASPNET
         diag[s] = 0
 
 #### Auth0
-    My Auth0 login uses my Microsoft (steve@knipmeyer.org) credentials.
+    Auth0 login uses my Microsoft account credentials.
     
     IDaaS Benefits
         Overall security is vastly improved.

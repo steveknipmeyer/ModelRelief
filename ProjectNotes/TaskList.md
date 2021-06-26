@@ -1,7 +1,5 @@
 #### Commit     
 ### General   
-    Export WSL.
-        https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
@@ -35,18 +33,20 @@
             Project
 #### Build
     Prove with clean Ubuntu installation!
+        Export WSL.
+            https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
+
         Add a test account.
-### Security
-    Remove steve@knipmeyer.org.
 ### Refactoring
     Review all casing of files and directories.
     Tools -> tools
 ### Project
     Consolidate contributor names?
         https://stackoverflow.com/questions/4981126/how-to-amend-several-commits-in-git-to-change-author/25815116#25815116
+    Remove personal email from commit history.
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
-    Add PostMan ModelRelief collection.
+    Add Postman ModelRelief collection.
     Documentation
         Document DepthBufferView and analyze tools (e.g. HtmlLogger).
         Document VcXsrv

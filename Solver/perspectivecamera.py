@@ -12,7 +12,7 @@ from camera import Camera
 .. module:: PerspectiveCamera
    :synopsis: A perspective camera.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 

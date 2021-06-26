@@ -9,7 +9,7 @@
 .. module:: Builder
    :synopsis: Builds ModelRelief.
 
-.. moduleauthor:: Steve Knipmeyer <steve@knipmeyer.org>
+.. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
 import argparse
