@@ -1,39 +1,34 @@
 ﻿@model IEnumerable<ModelRelief.Dto.Mesh>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Models";
 }
 
-<h2>Index</h2>
-
+<h2>Models</h2>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
 <div class="container-fluid">
-@foreach (var mesh in Model)
-{
-    <div class="row mb-4">
-        <div class="col-2">
-            <span>@mesh.Name</span>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+@{
+    foreach (var mesh in Model)
+    {
+        <div class="col mb-4">
+            <div class="card" >
+                <a href="/meshes/compose/@mesh.Id">
+                    <div class="rippleContainer">
+                        <img class="card-img-top" src="/meshes/@mesh.Id/preview" alt="">
+                        <div class="ripple"></div>
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@mesh.Name</h5>
+                    <a class="actionButton btn button-rounded btn-sm" href="/meshes/compose/@mesh.Id">Compose</a>
+                </div>
+            </div>
         </div>
-        <div class="col-2">
-            <span>@mesh.Description</span>
-        </div>
-
-        <div class="col">
-            <img class="filePreview" src="/models/@mesh.DepthBuffer.Model3dId/preview">
-        </div>
-        <div class="col">
-            <img class="filePreview" src="/meshes/@mesh.Id/preview">
-        </div>
-        <div class="col">
-            <img class="filePreview" src="/depthbuffers/@mesh.DepthBufferId/preview">
-        </div>
-        <div class="col">
-            <img class="filePreview" src="/normalmaps/@mesh.NormalMapId/preview">
-        </div>
-    </div>
     }
-
+}
+    </div>
 </div>

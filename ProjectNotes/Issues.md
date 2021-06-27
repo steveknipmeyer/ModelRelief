@@ -14,8 +14,6 @@
 #### NormalMaps
     It appears that NormalMap gradients lose some high frequency detail.
 #### Solver
-    A default relief size of 1024 leads to a Chrome exception.
-
     Orthogonal planes (e.g. House) do not generate constant Z depths.
     
     Zoomed Orthogonal views of House yield malformed meshes.
@@ -102,3 +100,18 @@
     Some models have missing polygons.
         Plunderbuss
         House
+#### UI
+    What Create/Edit pages are valid in terms of expected workflows ?
+        Invalid (These resources would not normally be created directly by an end user.)
+            Camera
+            NormalMap
+            DepthBuffer
+            MeshTransform
+
+        Valid
+            Mesh
+            Model3d
+            Project
+#### Three.js / WebGL
+    Verify Resolution.Image setting.
+        1024 leads to Chrome render issues.

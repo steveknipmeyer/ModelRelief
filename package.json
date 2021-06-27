@@ -78,5 +78,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "sloc": "^0.2.1"
+  }
 }

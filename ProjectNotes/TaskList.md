@@ -1,49 +1,25 @@
 #### Commit     
 ### General   
-
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips
-
-
-    Today   
-        Verify Resolution.Image setting.
-            1024 leads to Chrome render issues.
-### webpack
-    Goal: Move gulp functionality to webpack where possible.
-    
-    gulp
-        Optimize webpack in 'gulp serve' task.
  ## UI
     Create a video or an animation?
     Workflow page
         Illustrate with images from Explorer!
-    What Create/Edit pages are valid semantically?
-        Invalid
-            Camera
-            NormalMap
-            DepthBuffer
-            MeshTransform
-        Settings
-            Session
-
-        Valid
-            Mesh
-            Model3d
-            Project
 #### Build
     Prove with clean Ubuntu installation!
         Export WSL.
             https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
-
-        Add a test account.
-### Refactoring
+### Conventions
     Review all casing of files and directories.
     Tools -> tools
 ### Project
-    Consolidate contributor names?
-        https://stackoverflow.com/questions/4981126/how-to-amend-several-commits-in-git-to-change-author/25815116#25815116
-    Remove personal email from commit history.
+    Git
+        Consolidate contributor names?
+            https://stackoverflow.com/questions/4981126/how-to-amend-several-commits-in-git-to-change-author/25815116#25815116
+        Remove personal email from commit history.
+
     Structure GitHub repo using recommended best practices.
     Add OneNote ModelRelief notebook.
     Add Postman ModelRelief collection.
@@ -57,7 +33,7 @@
             diags[s] = 0
         (Hidden) DepthBufferView and NormalMapView
         Desmos attenuation graph
-        Document Solver defaults as active settings (no Web UI).
+        Document Solver settings with no Web UI.
         Defaults.json
             logging
             developmentui
@@ -75,10 +51,19 @@
         ArtCAM
         Vectrix
         3D Printing
-        HackerNews
+        Hacker News
+### Metrics
+    sloc
+    sloccount
 ### License and Copyright
     Modify C# format rules to use new header.
     Replace source code copyright headers with MIT license notice.
-    
+        C#
+        C++ 
+        Python
+        TypeScript
+        JavaScript
+        shell
+
     https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
     https://opensource.google/docs/releasing/preparing/
