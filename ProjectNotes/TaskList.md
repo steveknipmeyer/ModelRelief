@@ -1,5 +1,9 @@
 #### Commit     
 ### General   
+    Refactor Home/Index to use a template.
+        Pass and array of example models.
+    Enhance the Models page to add more information (images?).
+    
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips

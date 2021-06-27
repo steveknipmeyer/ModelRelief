@@ -3,14 +3,11 @@
     ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3D models. Using any perspective view of a 3D model, the online tool ModelRelief will quickly generate a bas-reliefs from your 3D model.";
 }
 
-<!--Main layout-->
 <main class="mt-5">
-    <!--Main container-->
     <div class="container">
 
-        <!--Grid row-->
-        <div class="row">
 
+        <div class="row">
             <div class="col-md-10 mb-4">
                 <h2>3D Models to Bas-Reliefs. Simple.</h2>
                 <hr>
@@ -47,38 +44,28 @@
         <p>You will need to create a free account so we can store your test projects. </p>
         <p>Please let us know below what you would like to see next!</p>
 
-        <!--Grid row-->
-        <div class="row">
 
-            <div class="col-md-6 col-lg-4 mb-4">
+        @* <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-2"> *@
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
 
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <a href="/meshes/compose/?name=lucy">
                         <div class="rippleContainer">
                             <img src="~/images/Lucy.png" class="card-img-top" alt="">
                             <div class="ripple"></div>
                         </div>
                     </a>
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">Lucy</h5>
                         <a href="/meshes/compose/?name=lucy" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
                 </div>
-                <!--/Card-->
-
             </div>
 
-            <div class="col-md-6 col-lg-4 mb-4">
-
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <div class="">
                         <a href="/meshes/compose/?name=scallop">
                             <div class="rippleContainer">
@@ -87,24 +74,16 @@
                             </div>
                         </a>
                     </div>
-
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">Scallop Shell</h5>
                         <a href="/meshes/compose/?name=scallop" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
                 </div>
-                <!--/Card-->
-
             </div>
 
-            <div class="col-md-6 col-lg-4 mb-4">
-
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <div class="">
                         <a href="/meshes/compose/?name=horse">
                             <div class="rippleContainer">
@@ -113,29 +92,16 @@
                             </div>
                         </a>
                     </div>
-
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">Prancing Horse</h5>
                         <a href="/meshes/compose/?name=horse" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
-
                 </div>
-                <!--/Card-->
-
             </div>
-        </div>
 
-        <!--Grid row-->
-        <div class="row">
-
-            <div class="col-md-6 col-lg-4 mb-4">
-
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <div class="">
                         <a href="/meshes/compose/?name=dragon">
                             <div class="rippleContainer">
@@ -144,25 +110,16 @@
                             </div>
                         </a>
                     </div>
-
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">Chinese Dragon</h5>
                         <a href="/meshes/compose/?name=dragon" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
-
                 </div>
-                <!--/Card-->
-
             </div>
 
-            <div class="col-md-6 col-lg-4 mb-4">
-
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <div class="">
                         <a href="/meshes/compose/?name=plunderbusspete">
                             <div class="rippleContainer">
@@ -171,25 +128,16 @@
                             </div>
                         </a>
                     </div>
-
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">Plunderbuss Pete</h5>
                         <a href="/meshes/compose/?name=plunderbusspete" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
-
                 </div>
-                <!--/Card-->
-
             </div>
 
-            <div class="col-md-6 col-lg-4 mb-4">
-
-                <!--Card-->
+            <div class="col mb-4">
                 <div class="card">
-
-                    <!--Card image-->
                     <div class="">
                         <a href="/meshes/compose/?name=house">
                             <div class="rippleContainer">
@@ -198,19 +146,14 @@
                             </div>
                         </a>
                     </div>
-
-                    <!--Card content-->
                     <div class="card-body">
                         <!--Title-->
                         <h5 class="card-title">San Francisco House</h5>
                         <!--Text-->
                         <a href="/meshes/compose/?name=house" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
-
                 </div>
-                <!--/.Card-->
             </div>
-
         </div>
     </div>
 
@@ -218,72 +161,47 @@
     <section id="contact" class="py-5">
         <div class="container">
 
-            <!-- Section heading -->
             <h2 class="mb-2">Contact us</h2>
-            <!-- Section description -->
             <p class="tmx-auto mb-5">Please let us know what you think! <br />We would love to hear your comment and suggestions about where to go next with ModelRelief.</p>
 
             <form id="contact-form" name="contact-form">
 
-                <!-- Grid row -->
                 <div class="row">
-
-                    <!-- Grid column -->
                     <div class="col-md-9 mb-5">
-
-                        <!-- Grid row -->
                         <div class="row">
-
-                            <!-- Grid column -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="text" id="contact-name" name="Name" class="form-control">
                                     <label for="contact-name">Your name</label>
                                 </div>
                             </div>
-                            <!-- Grid column -->
-                            <!-- Grid column -->
                             <div class="col-md-6">
                                 <div>
                                     <input type="text" id="contact-email" name="Email" class="form-control">
                                     <label for="contact-email">Your email</label>
                                 </div>
                             </div>
-                            <!-- Grid column -->
-
                         </div>
-                        <!-- Grid row -->
-                        <!-- Grid row -->
                         <div class="row">
-
-                            <!-- Grid column -->
                             <div class="col-md-12">
                                 <div>
                                     <input type="text" id="contact-subject" name="Subject" class="form-control">
                                     <label for="contact-Subject" class="">Subject</label>
                                 </div>
                             </div>
-                            <!-- Grid column -->
-
                         </div>
-                        <!-- Grid row -->
-                        <!-- Grid row -->
                         <div class="row">
-
-                            <!-- Grid column -->
                             <div class="col-md-12">
                                 <div>
                                     <textarea type="text" id="contact-message" name="Message" class="form-control" rows="3"></textarea>
                                     <label for="contact-message">Your message</label>
                                 </div>
                             </div>
-                            <!-- Grid column -->
                         </div>
-                        <!-- Grid row -->
+
                         <div id="applicationDomain" class="mt-3">
                             <h5 class=>How do you plan to use ModelRelief?</h6>
                                 <div class="row">
-                                    <!-- Grid column -->
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input type="checkbox" class="form-check-input" name="application[]" id="checkboxJewelry" value="Jewelry">
@@ -298,8 +216,6 @@
                                             <label for="checkboxPackaging" class="form-check-label">Packaging</label>
                                         </div>
                                     </div>
-                                    <!-- Grid column -->
-                                    <!-- Grid column -->
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input type="checkbox" class="form-check-input" name="application[]" id="checkboxWoodworking" value="Woodworking">
@@ -314,45 +230,35 @@
                                             <label for="checkbox3DPrinting" class="form-check-label">3D Printing</label>
                                         </div>
                                     </div>
-                                    <!-- Grid column -->
-                                    <!-- Grid column -->
                                     <div class="col-md-3">
                                         <div class="">
                                             <input type="text" id="applicationOther" name="applicationOther" class="form-control">
                                             <label for="applicationOther" class="">Other</label>
                                         </div>
                                     </div>
-                                    <!-- Grid column -->
                                 </div>
                         </div>
 
                         <hr />
                         <div>
-                            <input id="submitContactForm" type="button" class="actionButton btn button-rounded btn-sm" value="Send" disabled> </input>
+                            <input id="submitContactForm" type="button" class="actionButton btn button-rounded btn" value="Send" disabled> </input>
                             <div id="recaptcha" class="g-recaptcha mt-4 mb-0" data-sitekey='@ViewData["ReCaptchaKey"]' data-callback="recaptchaCallBack"></div>
                         </div>
                         <div id="contact-form-status"></div>
-
                     </div>
 
-                    <!-- Grid column -->
                     <div class="col-md-3 text-center">
-                        <i class='far fa-newspaper' style='font-size:3rem'></i>
+                        <i class='fas fa-newspaper' style='font-size:2rem'></i>
                         <br>
                         <input type="checkbox" class="form-check-input" name="Newsletter" id="checkboxNewsletter">
                         <label for="checkboxNewsletter" class="form-check-label">Sign Up For Our Newsletter</label>
                     </div>
-                    <!-- Grid column -->
                 </div>
-                <!-- Grid row -->
             </form>
         </div>
-
     </section>
-    <!--Section: contact-->
-    <!--Main container-->
+
 </main>
-<!--Main layout-->
 
 @section scripts {
 <script type="module" src="~/js/home.js"></script>
