@@ -76,5 +76,9 @@
         Vectrix
         3D Printing
         HackerNews
-### License
-    Replace copyright headers with MIT license notice.
+### License and Copyright
+    Modify C# format rules to use new header.
+    Replace source code copyright headers with MIT license notice.
+    
+    https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
+    https://opensource.google/docs/releasing/preparing/
