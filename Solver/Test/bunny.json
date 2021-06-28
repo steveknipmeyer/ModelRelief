@@ -49,11 +49,11 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:08.8331173",
+    "FileTimeStamp": "2021-06-28T05:43:34.5214647",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/10/bunny.sdb",
     "Id": 10,
     "Name": "bunny.sdb",
-    "Description": "Stanford Model Repository"
+    "Description": "Stanford Bunny"
   },
   "NormalMapId": 10,
   "NormalMap": {
@@ -69,11 +69,11 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:08.8706442",
+    "FileTimeStamp": "2021-06-28T05:43:34.5634348",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/10/bunny.nmap",
     "Id": 10,
     "Name": "bunny.nmap",
-    "Description": "Stanford Model Repository"
+    "Description": "Stanford Bunny"
   },
   "MeshTransformId": 10,
   "MeshTransform": {
@@ -119,9 +119,9 @@
     "Description": "Bunny Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-06-26T05:26:08.9384396",
+  "FileTimeStamp": "2021-06-28T05:43:34.6377863",
   "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/10/bunny.sfp",
   "Id": 10,
   "Name": "bunny.sfp",
-  "Description": "Stanford Model Repository"
+  "Description": "Stanford Bunny"
 }

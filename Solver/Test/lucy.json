@@ -49,11 +49,11 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:06.3457042",
+    "FileTimeStamp": "2021-06-28T05:43:31.7104233",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/1/lucy.sdb",
     "Id": 1,
     "Name": "lucy.sdb",
-    "Description": "Stanford Model Repository"
+    "Description": "Lucy (Stanford)"
   },
   "NormalMapId": 1,
   "NormalMap": {
@@ -69,11 +69,11 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:06.4155261",
+    "FileTimeStamp": "2021-06-28T05:43:31.7858396",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/1/lucy.nmap",
     "Id": 1,
     "Name": "lucy.nmap",
-    "Description": "Stanford Model Repository"
+    "Description": "Lucy (Stanford)"
   },
   "MeshTransformId": 1,
   "MeshTransform": {
@@ -119,9 +119,9 @@
     "Description": "Lucy Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-06-26T05:26:06.5380909",
+  "FileTimeStamp": "2021-06-28T05:43:31.915181",
   "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/1/lucy.sfp",
   "Id": 1,
   "Name": "lucy.sfp",
-  "Description": "Stanford Model Repository"
+  "Description": "Lucy (Stanford)"
 }

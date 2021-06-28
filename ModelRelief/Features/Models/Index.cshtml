@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ModelRelief.Dto.Mesh>
+﻿@using System.IO
+@model IEnumerable<ModelRelief.Dto.Mesh>
 
 @{
     ViewData["Title"] = "Models";
@@ -14,6 +15,7 @@
 @{
     foreach (var mesh in Model)
     {
+        var meshName = System.IO.Path.GetFileNameWithoutExtension(mesh.Name);
         <div class="col mb-4">
             <div class="card" >
                 <a href="/meshes/compose/@mesh.Id">
@@ -23,7 +25,8 @@
                     </div>
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title">@mesh.Name</h5>
+                    <h6 class="mb-0 ">@meshName</h6>
+                    <p class="text-muted">@mesh.Description</p>
                     <a class="actionButton btn button-rounded btn-sm" href="/meshes/compose/@mesh.Id">Compose</a>
                 </div>
             </div>

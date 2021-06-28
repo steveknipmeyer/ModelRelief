@@ -49,11 +49,11 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:09.2531432",
+    "FileTimeStamp": "2021-06-28T05:43:34.9719923",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/12/buddha.sdb",
     "Id": 12,
     "Name": "buddha.sdb",
-    "Description": "Stanford Model Repository"
+    "Description": "Happy Buddha"
   },
   "NormalMapId": 12,
   "NormalMap": {
@@ -69,11 +69,11 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:09.291506",
+    "FileTimeStamp": "2021-06-28T05:43:35.0130054",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/12/buddha.nmap",
     "Id": 12,
     "Name": "buddha.nmap",
-    "Description": "Stanford Model Repository"
+    "Description": "Happy Buddha"
   },
   "MeshTransformId": 12,
   "MeshTransform": {
@@ -119,9 +119,9 @@
     "Description": "Buddha Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-06-26T05:26:09.3606608",
+  "FileTimeStamp": "2021-06-28T05:43:35.0889573",
   "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/12/buddha.sfp",
   "Id": 12,
   "Name": "buddha.sfp",
-  "Description": "Stanford Model Repository"
+  "Description": "Happy Buddha"
 }

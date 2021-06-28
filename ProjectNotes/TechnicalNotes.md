@@ -457,7 +457,6 @@ https://schneids.net/never-resting-restful-api-best-practices-using-asp-net-web-
     Scallop                                     ModelRelief
     Statue                                      Stanford
     Test                                        ModelRelief
-    Tyrannosaurus                               Stanford
     
     Art
     Scallop Image                               Dreamstime  Royalty Free        https://www.dreamstime.com/scallop-logo-isolated-scallop-white-background-scallop-logo-isolated-scallop-white-background-eps-vector-illustration-image131838280

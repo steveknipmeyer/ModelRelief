@@ -6,7 +6,7 @@
             "Models": [
                 {
                     "Name": "lucy",
-                    "Description": "Stanford Model Repository"
+                    "Description": "Lucy (Stanford)"
                 },
                 {
                     "Name": "horse",
@@ -14,7 +14,7 @@
                 },
                 {
                     "Name": "plunderbusspete",
-                    "Description": "Plunderbuss Pete Pirate"
+                    "Description": "Plunderbuss Pete"
                 },
                 {
                     "Name": "house",
@@ -26,7 +26,7 @@
                 },
                 {
                     "Name": "dragon",
-                    "Description": "Chinese Dragon"
+                    "Description": "Chinese Dragon (Stanford)"
                 }
             ]
         },
@@ -54,19 +54,15 @@
             "Models": [
                 {
                     "Name": "bunny",
-                    "Description": "Stanford Model Repository"
+                    "Description": "Stanford Bunny"
                 },
                 {
                     "Name": "armadillo",
-                    "Description": "Stanford Model Repository"
+                    "Description": "Armadillo"
                 },
                 {
                     "Name": "buddha",
-                    "Description": "Stanford Model Repository"
-                },
-                {
-                    "Name": "tyrannosaurus",
-                    "Description": "Stanford Model Repository"
+                    "Description": "Happy Buddha"
                 }
             ]
         },
@@ -76,7 +72,7 @@
             "Models": [
                 {
                     "Name": "lowresolution",
-                    "Description": "Low resolution test model"
+                    "Description": "Low Resolution Test Model"
                 },
                 {
                     "Name": "test",

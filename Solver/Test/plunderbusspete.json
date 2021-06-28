@@ -49,11 +49,11 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:06.8448826",
+    "FileTimeStamp": "2021-06-28T05:43:32.2792337",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/3/plunderbusspete.sdb",
     "Id": 3,
     "Name": "plunderbusspete.sdb",
-    "Description": "Plunderbuss Pete Pirate"
+    "Description": "Plunderbuss Pete"
   },
   "NormalMapId": 3,
   "NormalMap": {
@@ -69,11 +69,11 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:06.8989705",
+    "FileTimeStamp": "2021-06-28T05:43:32.3215463",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/3/plunderbusspete.nmap",
     "Id": 3,
     "Name": "plunderbusspete.nmap",
-    "Description": "Plunderbuss Pete Pirate"
+    "Description": "Plunderbuss Pete"
   },
   "MeshTransformId": 3,
   "MeshTransform": {
@@ -119,9 +119,9 @@
     "Description": "Plunderbuss Pete Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-06-26T05:26:06.9708735",
+  "FileTimeStamp": "2021-06-28T05:43:32.3968736",
   "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/3/plunderbusspete.sfp",
   "Id": 3,
   "Name": "plunderbusspete.sfp",
-  "Description": "Plunderbuss Pete Pirate"
+  "Description": "Plunderbuss Pete"
 }

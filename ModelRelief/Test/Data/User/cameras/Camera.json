@@ -42,7 +42,7 @@
     "NormalMaps": null,
     "Id": 1,
     "Name": "lucy.obj",
-    "Description": "Stanford Model Repository"
+    "Description": "Lucy (Stanford)"
   },
   {
     "IsPerspective": true,
@@ -132,7 +132,7 @@
     "NormalMaps": null,
     "Id": 3,
     "Name": "lucy.sfp",
-    "Description": "Stanford Model Repository"
+    "Description": "Lucy (Stanford)"
   },
   {
     "IsPerspective": true,
@@ -312,7 +312,7 @@
     "NormalMaps": null,
     "Id": 7,
     "Name": "plunderbusspete.obj",
-    "Description": "Plunderbuss Pete Pirate"
+    "Description": "Plunderbuss Pete"
   },
   {
     "IsPerspective": true,
@@ -402,7 +402,7 @@
     "NormalMaps": null,
     "Id": 9,
     "Name": "plunderbusspete.sfp",
-    "Description": "Plunderbuss Pete Pirate"
+    "Description": "Plunderbuss Pete"
   },
   {
     "IsPerspective": true,
@@ -717,7 +717,7 @@
     "NormalMaps": null,
     "Id": 16,
     "Name": "dragon.obj",
-    "Description": "Chinese Dragon"
+    "Description": "Chinese Dragon (Stanford)"
   },
   {
     "IsPerspective": true,
@@ -807,7 +807,7 @@
     "NormalMaps": null,
     "Id": 18,
     "Name": "dragon.sfp",
-    "Description": "Chinese Dragon"
+    "Description": "Chinese Dragon (Stanford)"
   },
   {
     "IsPerspective": true,
@@ -1257,7 +1257,7 @@
     "NormalMaps": null,
     "Id": 28,
     "Name": "bunny.obj",
-    "Description": "Stanford Model Repository"
+    "Description": "Stanford Bunny"
   },
   {
     "IsPerspective": false,
@@ -1347,7 +1347,7 @@
     "NormalMaps": null,
     "Id": 30,
     "Name": "bunny.sfp",
-    "Description": "Stanford Model Repository"
+    "Description": "Stanford Bunny"
   },
   {
     "IsPerspective": true,
@@ -1392,7 +1392,7 @@
     "NormalMaps": null,
     "Id": 31,
     "Name": "armadillo.obj",
-    "Description": "Stanford Model Repository"
+    "Description": "Armadillo"
   },
   {
     "IsPerspective": true,
@@ -1482,7 +1482,7 @@
     "NormalMaps": null,
     "Id": 33,
     "Name": "armadillo.sfp",
-    "Description": "Stanford Model Repository"
+    "Description": "Armadillo"
   },
   {
     "IsPerspective": true,
@@ -1527,7 +1527,7 @@
     "NormalMaps": null,
     "Id": 34,
     "Name": "buddha.obj",
-    "Description": "Stanford Model Repository"
+    "Description": "Happy Buddha"
   },
   {
     "IsPerspective": true,
@@ -1617,142 +1617,7 @@
     "NormalMaps": null,
     "Id": 36,
     "Name": "buddha.sfp",
-    "Description": "Stanford Model Repository"
-  },
-  {
-    "IsPerspective": true,
-    "Near": 0.1,
-    "Far": 10000.0,
-    "PositionX": 0.0,
-    "PositionY": 0.0,
-    "PositionZ": 100.0,
-    "EulerX": 0.0,
-    "EulerY": 0.0,
-    "EulerZ": 0.0,
-    "Theta": 0.0,
-    "ScaleX": 1.0,
-    "ScaleY": 1.0,
-    "ScaleZ": 1.0,
-    "UpX": 0.0,
-    "UpY": 1.0,
-    "UpZ": 0.0,
-    "FieldOfView": 37.0,
-    "AspectRatio": 1.0,
-    "Left": -100.0,
-    "Right": 100.0,
-    "Top": 100.0,
-    "Bottom": -100.0,
-    "ProjectId": 3,
-    "Project": {
-      "SettingsId": 1,
-      "Settings": null,
-      "Cameras": [],
-      "DepthBuffers": null,
-      "Meshes": null,
-      "MeshTransforms": null,
-      "Models": null,
-      "NormalMaps": null,
-      "Id": 3,
-      "Name": "Stanford",
-      "Description": "Stanford model repository"
-    },
-    "DepthBuffers": null,
-    "Meshes": null,
-    "Models": null,
-    "NormalMaps": null,
-    "Id": 37,
-    "Name": "tyrannosaurus.obj",
-    "Description": "Stanford Model Repository"
-  },
-  {
-    "IsPerspective": true,
-    "Near": 194.47189708656106,
-    "Far": 467.03170046967136,
-    "PositionX": 123.13116655153722,
-    "PositionY": 53.73216425336561,
-    "PositionZ": 285.51480699955863,
-    "EulerX": 0.03960968262274383,
-    "EulerY": 0.20600581496747772,
-    "EulerZ": -0.032276912207553805,
-    "Theta": 0.9772158810521127,
-    "ScaleX": 1.0,
-    "ScaleY": 0.9999999999999999,
-    "ScaleZ": 1.0,
-    "UpX": 0.07940267229969536,
-    "UpY": 0.9947785479617437,
-    "UpZ": 0.06411595859685564,
-    "FieldOfView": 37.0,
-    "AspectRatio": 1.0,
-    "Left": -100.0,
-    "Right": 100.0,
-    "Top": 100.0,
-    "Bottom": -100.0,
-    "ProjectId": 3,
-    "Project": {
-      "SettingsId": 1,
-      "Settings": null,
-      "Cameras": [],
-      "DepthBuffers": null,
-      "Meshes": null,
-      "MeshTransforms": null,
-      "Models": null,
-      "NormalMaps": null,
-      "Id": 3,
-      "Name": "Stanford",
-      "Description": "Stanford model repository"
-    },
-    "DepthBuffers": null,
-    "Meshes": null,
-    "Models": null,
-    "NormalMaps": null,
-    "Id": 38,
-    "Name": "tyrannosaurus.MeshTransform",
-    "Description": "Tyrannosarus MeshTransform"
-  },
-  {
-    "IsPerspective": true,
-    "Near": 0.1,
-    "Far": 10000.0,
-    "PositionX": 0.0,
-    "PositionY": 0.0,
-    "PositionZ": 100.0,
-    "EulerX": 0.0,
-    "EulerY": 0.0,
-    "EulerZ": 0.0,
-    "Theta": 0.0,
-    "ScaleX": 1.0,
-    "ScaleY": 1.0,
-    "ScaleZ": 1.0,
-    "UpX": 0.0,
-    "UpY": 1.0,
-    "UpZ": 0.0,
-    "FieldOfView": 37.0,
-    "AspectRatio": 1.0,
-    "Left": -100.0,
-    "Right": 100.0,
-    "Top": 100.0,
-    "Bottom": -100.0,
-    "ProjectId": 3,
-    "Project": {
-      "SettingsId": 1,
-      "Settings": null,
-      "Cameras": [],
-      "DepthBuffers": null,
-      "Meshes": null,
-      "MeshTransforms": null,
-      "Models": null,
-      "NormalMaps": null,
-      "Id": 3,
-      "Name": "Stanford",
-      "Description": "Stanford model repository"
-    },
-    "DepthBuffers": null,
-    "Meshes": null,
-    "Models": null,
-    "NormalMaps": null,
-    "Id": 39,
-    "Name": "tyrannosaurus.sfp",
-    "Description": "Stanford Model Repository"
+    "Description": "Happy Buddha"
   },
   {
     "IsPerspective": true,
@@ -1795,9 +1660,9 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 40,
+    "Id": 37,
     "Name": "lowresolution.obj",
-    "Description": "Low resolution test model"
+    "Description": "Low Resolution Test Model"
   },
   {
     "IsPerspective": false,
@@ -1840,7 +1705,7 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 41,
+    "Id": 38,
     "Name": "lowresolution.MeshTransform",
     "Description": "Low Resolution MeshTransform"
   },
@@ -1885,9 +1750,9 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 42,
+    "Id": 39,
     "Name": "lowresolution.sfp",
-    "Description": "Low resolution test model"
+    "Description": "Low Resolution Test Model"
   },
   {
     "IsPerspective": true,
@@ -1930,7 +1795,7 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 43,
+    "Id": 40,
     "Name": "test.obj",
     "Description": "Reference Test Model"
   },
@@ -1975,7 +1840,7 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 44,
+    "Id": 41,
     "Name": "test.MeshTransform",
     "Description": "Test MeshTransform"
   },
@@ -2020,7 +1885,7 @@
     "Meshes": null,
     "Models": null,
     "NormalMaps": null,
-    "Id": 45,
+    "Id": 42,
     "Name": "test.sfp",
     "Description": "Reference Test Model"
   }

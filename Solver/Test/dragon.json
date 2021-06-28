@@ -49,11 +49,11 @@
     },
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:07.4965291",
+    "FileTimeStamp": "2021-06-28T05:43:32.9863763",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/depthbuffers/6/dragon.sdb",
     "Id": 6,
     "Name": "dragon.sdb",
-    "Description": "Chinese Dragon"
+    "Description": "Chinese Dragon (Stanford)"
   },
   "NormalMapId": 6,
   "NormalMap": {
@@ -69,11 +69,11 @@
     "Camera": null,
     "Meshes": [],
     "FileIsSynchronized": true,
-    "FileTimeStamp": "2021-06-26T05:26:07.5357622",
+    "FileTimeStamp": "2021-06-28T05:43:33.0298938",
     "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/normalmaps/6/dragon.nmap",
     "Id": 6,
     "Name": "dragon.nmap",
-    "Description": "Chinese Dragon"
+    "Description": "Chinese Dragon (Stanford)"
   },
   "MeshTransformId": 6,
   "MeshTransform": {
@@ -119,9 +119,9 @@
     "Description": "Dragon Transform"
   },
   "FileIsSynchronized": true,
-  "FileTimeStamp": "2021-06-26T05:26:07.6042587",
+  "FileTimeStamp": "2021-06-28T05:43:33.1138407",
   "RelativeFileName": "store/development/users/auth06089cffe260f9e00693c8ab3/meshes/6/dragon.sfp",
   "Id": 6,
   "Name": "dragon.sfp",
-  "Description": "Chinese Dragon"
+  "Description": "Chinese Dragon (Stanford)"
 }
