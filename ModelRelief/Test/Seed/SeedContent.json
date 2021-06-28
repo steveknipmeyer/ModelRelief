@@ -13,20 +13,20 @@
                     "Description": "Prancing Horse"
                 },
                 {
-                    "Name": "plunderbusspete",
-                    "Description": "Plunderbuss Pete"
-                },
-                {
-                    "Name": "house",
-                    "Description": "San Francisco House"
+                    "Name": "dragon",
+                    "Description": "Chinese Dragon (Stanford)"
                 },
                 {
                     "Name": "scallop",
                     "Description": "Scallop Shell"
                 },
                 {
-                    "Name": "dragon",
-                    "Description": "Chinese Dragon (Stanford)"
+                    "Name": "plunderbusspete",
+                    "Description": "Plunderbuss Pete"
+                },
+                {
+                    "Name": "house",
+                    "Description": "San Francisco House"
                 }
             ]
         },

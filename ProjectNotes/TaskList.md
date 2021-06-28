@@ -1,13 +1,7 @@
 #### Commit     
 ### General   
-    Refactor Home/Index to use a template.
-        Pass an array of example models.
-        Or use a particular project?
-    Remove static images of landing page models.
-
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
-        Tooltips
  ## UI
     Create a video or an animation?
     Workflow page
