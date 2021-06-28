@@ -23,7 +23,7 @@
         . /Tools/deploy user@modelrelief
 
     Bind Python Virtual Environment to Server
-        ./Tools/BindPythonEnvironement.sh mrenv
+        ./Tools/BindPythonEnvironment.sh mrenv
     
     Nginx
         sudp apt install nginx

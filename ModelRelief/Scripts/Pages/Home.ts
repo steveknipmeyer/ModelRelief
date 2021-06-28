@@ -1,7 +1,5 @@
 // ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 import {ElementClasses, ElementIds} from "Scripts/System/Html";

@@ -1,7 +1,5 @@
 ﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 
@@ -96,7 +94,7 @@ export class ModelViewer extends Viewer {
 
         const gridGeometry: THREE.Object3D = this.scene.getObjectByName(ObjectNames.Grid);
         gridGeometry.visible = visible;
-        this._logger.addInfoMessage(`Display grid = ${visible}`);
+        // this._logger.addInfoMessage(`Display grid = ${visible}`);
     }
 //#endregion
 }

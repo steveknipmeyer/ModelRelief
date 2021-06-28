@@ -1,5 +1,10 @@
 #### Commit     
+    TypeScript
+    Bootstrap.bundle.min.js for production
+    Bootstrap 4.6.0
 ### General   
+    MeshGrid requires user to be logged in.
+
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
  ### Build
@@ -48,14 +53,16 @@
         3D Printing
         Hacker News
 ### Metrics
-    sloc
-    sloccount
-### License and Copyright
+.cs = 19164
+.ts = 15484
+.py = 7212
+.cpp = 1258
+Total lines = 43118
+## License and Copyright
     Modify C# format rules to use new header.
     Replace source code copyright headers with MIT license notice.
         C#
-        TypeScript
-
+ 
     https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
     https://opensource.google/docs/releasing/preparing/
 ## UI

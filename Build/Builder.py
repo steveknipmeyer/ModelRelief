@@ -67,7 +67,7 @@ class Builder:
         self.build_explorer = "BuildExplorerUI.sh"
         self.settings_production = "appsettings.Production.json"
         self.file_exclusions = [
-            "wwwroot/js/modelrelief.js", "wwwroot/js/modelrelief.js.map", "wwwroot/js/shaders.js",
+            "wwwroot/js/shaders.js",
             "appsettings.Development.json",
             "tsconfig.json","js.config", "stylecop.json"
         ]
@@ -219,7 +219,7 @@ class Builder:
         Tools.exec("dotnet publish -c Release -o {}".format(self.publish_path))
 
         # file exclusions
-        self.logger.logInformation("\nRemoving source files that have been minified", Colors.BrightMagenta)
+        self.logger.logInformation("\nRemoving source files that are not delivered", Colors.BrightMagenta)
         for file in self.file_exclusions:
             file_path = os.path.join(self.publish_path, file)
             self.logger.logInformation(f"Deleting {file_path}", Colors.BrightWhite)

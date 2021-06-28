@@ -38,6 +38,7 @@ class LineCount:
             ".git",
             ".vscode",
             "bin",
+            "build",
             "lib",
             "devenv",
             "mrenv",

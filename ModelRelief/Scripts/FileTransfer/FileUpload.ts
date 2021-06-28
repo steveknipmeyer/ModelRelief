@@ -1,7 +1,5 @@
 // ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 import {ProgressBar} from "Scripts/FileTransfer/ProgressBar";

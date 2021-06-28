@@ -1,7 +1,5 @@
 ﻿// ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 import * as THREE from "three";

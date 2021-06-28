@@ -1,8 +1,6 @@
 ﻿
 // ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 // MRHome; cd ModelRelief
 // npx tsc -t ES2020 -m commonjs Scripts/Workbench/InheritanceTest.ts

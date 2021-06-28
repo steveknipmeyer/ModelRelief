@@ -1,8 +1,6 @@
 
 // ------------------------------------------------------------------------//
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) Steve Knipmeyer. All rights reserved.                     //
 // ------------------------------------------------------------------------//
 "use strict";
 import {ContentType, HttpLibrary, MethodType, ServerEndPoints} from "Scripts/System/Http";

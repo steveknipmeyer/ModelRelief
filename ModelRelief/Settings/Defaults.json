@@ -61,7 +61,7 @@
         "LoggingEnabled": true,
         "DevelopmentUI": false,
 
-        "ModelViewerExtendedControls": true,
+        "ModelViewerExtendedControls": false,
         "MeshViewerExtendedControls": false,
         "ExtendedCameraControls": false,
 
