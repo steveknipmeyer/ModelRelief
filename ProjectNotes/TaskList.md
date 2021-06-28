@@ -3,8 +3,6 @@
     Refactor Home/Index to use a template.
         Pass an array of example models.
         Or use a particular project?
-    Enhance the Models page to add more information (images?).
-    Use Description in Models page.
     Remove static images of landing page models.
 
     Bootstrap
