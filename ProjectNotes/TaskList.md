@@ -60,11 +60,6 @@
     .cpp = 1258
     Total lines = 43118
 ### License and Copyright
-    Modify C# format rules to use new header.
-    Replace source code copyright headers with MIT license notice.
-        C#
- 
-    https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
     https://opensource.google/docs/releasing/preparing/
 ### UI
     Create a video or an animation?

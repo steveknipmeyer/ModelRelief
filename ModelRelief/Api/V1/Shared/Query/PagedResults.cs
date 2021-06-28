@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="PagedResults.cs" company="ModelRelief">
-// Copyright (c) ModelRelief. All rights reserved.
+// MIT License (https://github.com/steveknipmeyer/ModelRelief/blob/main/MIT-LICENSE.txt)
 // </copyright>
 // -----------------------------------------------------------------------
 

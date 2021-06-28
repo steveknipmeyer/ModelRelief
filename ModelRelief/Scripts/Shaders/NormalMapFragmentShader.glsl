@@ -1,8 +1,6 @@
 ﻿// ------------------------------------------------------------------------//
 // NormalMapFragmentShader                                                 //
 // ModelRelief                                                             //
-//                                                                         //
-// Copyright (c) <2017-2019> Steve Knipmeyer                               //
 // ------------------------------------------------------------------------//
 // This extension is not supported.
 // #extension GL_EXT_frag_depth : enable

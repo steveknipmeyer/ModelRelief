@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="Program.cs" company="ModelRelief">
-// Copyright (c) ModelRelief. All rights reserved.
+// MIT License (https://github.com/steveknipmeyer/ModelRelief/blob/main/MIT-LICENSE.txt)
 // </copyright>
 // -----------------------------------------------------------------------
 
@@ -9,7 +9,6 @@ namespace ModelRelief.Infrastructure
     using System;
     using System.IO;
     using Autofac.Extensions.DependencyInjection;
-    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

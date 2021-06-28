@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 // <copyright file="DefaultModel3dSettings.cs" company="ModelRelief">
-// Copyright (c) ModelRelief. All rights reserved.
+// MIT License (https://github.com/steveknipmeyer/ModelRelief/blob/main/MIT-LICENSE.txt)
 // </copyright>
 // -----------------------------------------------------------------------
 namespace ModelRelief.Domain
