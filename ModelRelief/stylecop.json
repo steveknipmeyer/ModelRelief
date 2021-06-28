@@ -10,10 +10,10 @@
   "settings": {
     "documentationRules": {
       "companyName": "ModelRelief",
-      "copyrightText": "Copyright (c) {companyName}. All rights reserved.",
+      "copyrightText": "MIT License (https://github.com/steveknipmeyer/ModelRelief/blob/main/MIT-LICENSE.txt)",
       "headerDecoration": "-----------------------------------------------------------------------",
       "variables": {
       }
     }
   }
-} 
+}

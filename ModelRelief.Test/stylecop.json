@@ -2,7 +2,7 @@
   // ACTION REQUIRED: This file was automatically added to your project, but it will not take effect until additional steps are taken to enable it.
   // See the following page for additional information:
   // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/EnableConfiguration.md
-  
+
   // Configuration
   // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md
 
@@ -10,7 +10,7 @@
   "settings": {
     "documentationRules": {
       "companyName": "ModelRelief",
-      "copyrightText": "Copyright (c) {companyName}. All rights reserved.",
+      "copyrightText": "MIT License (https://github.com/steveknipmeyer/ModelRelief/blob/main/MIT-LICENSE.txt)",
       "headerDecoration": "-----------------------------------------------------------------------",
       "variables": {
       }

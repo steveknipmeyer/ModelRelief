@@ -1,9 +1,6 @@
 #### Commit     
-    TypeScript
-    Bootstrap.bundle.min.js for production
-    Bootstrap 4.6.0
 ### General   
-    MeshGrid requires user to be logged in.
+    Improve the error message when a user composes an example model without being logged in.
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
@@ -14,6 +11,10 @@
 ### Conventions
     Review all casing of files and directories.
     Tools -> tools
+
+### Security
+    Auth0
+    Review Azure Key Vault dependency.
 ### Project
     Git
         Consolidate contributor names?
@@ -53,20 +54,19 @@
         3D Printing
         Hacker News
 ### Metrics
-.cs = 19164
-.ts = 15484
-.py = 7212
-.cpp = 1258
-Total lines = 43118
-## License and Copyright
+    .cs = 19164
+    .ts = 15484
+    .py = 7212
+    .cpp = 1258
+    Total lines = 43118
+### License and Copyright
     Modify C# format rules to use new header.
     Replace source code copyright headers with MIT license notice.
         C#
  
     https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
     https://opensource.google/docs/releasing/preparing/
-## UI
+### UI
     Create a video or an animation?
     Workflow page
         Illustrate with images from Explorer!
-#
