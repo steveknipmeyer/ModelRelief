@@ -6,7 +6,6 @@
 <main class="mt-5">
     <div class="container">
 
-
         <div class="row">
             <div class="col-md-10 mb-4">
                 <h2>3D Models to Bas-Reliefs. Simple.</h2>
@@ -45,7 +44,7 @@
         <p>Please let us know below what you would like to see next!</p>
 
          @* MeshGrid *@
-        @await Component.InvokeAsync("MeshGrid", "Examples");
+        @await Component.InvokeAsync("MeshGrid", "Examples")
     </div>
 
     <!--Section: contact-->
@@ -132,7 +131,7 @@
 
                         <hr />
                         <div>
-                            <input id="submitContactForm" type="button" class="actionButton btn button-rounded btn" value="Send" disabled> </input>
+                            <input id="submitContactForm" type="button" class="actionButton btn button-rounded" value="Send" disabled> </input>
                             <div id="recaptcha" class="g-recaptcha mt-4 mb-0" data-sitekey='@ViewData["ReCaptchaKey"]' data-callback="recaptchaCallBack"></div>
                         </div>
                         <div id="contact-form-status"></div>
