@@ -1,9 +1,12 @@
 #### Commit     
 ### General   
     Refactor Home/Index to use a template.
-        Pass and array of example models.
+        Pass an array of example models.
+        Or use a particular project?
     Enhance the Models page to add more information (images?).
-    
+    Use Description in Models page.
+    Remove static images of landing page models.
+
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
         Tooltips
