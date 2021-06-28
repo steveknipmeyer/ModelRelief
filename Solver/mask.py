@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Mask
    :synopsis: Support for masking of image arrays.

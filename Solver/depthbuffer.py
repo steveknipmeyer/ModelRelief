@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: DepthBuffer
    :synopsis: A rendering DepthBuffer created from a Model3d and a Camera.

@@ -1,13 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-import math
-
-from abc import ABC, abstractmethod
-from typing import List
-
 """
 .. module:: Camera
    :synopsis: A camera.
@@ -15,7 +6,10 @@ from typing import List
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
+import math
 
+from abc import ABC, abstractmethod
+from typing import List
 class Camera(ABC):
     """
     A base camera.

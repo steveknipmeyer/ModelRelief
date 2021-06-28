@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Integrator
    :synopsis: Support for integrating array finite differences.

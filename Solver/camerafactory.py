@@ -1,15 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-import math
-from typing import List
-
-from camera import Camera
-from perspectivecamera import PerspectiveCamera
-from orthographiccamera import OrthographicCamera
-
 """
 .. module:: CameraFactory
    :synopsis: A camera factory returning specialized instances (PerspectiveCamera, OrthographicCamera) of Camera.
@@ -17,7 +6,12 @@ from orthographiccamera import OrthographicCamera
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
+import math
+from typing import List
 
+from camera import Camera
+from perspectivecamera import PerspectiveCamera
+from orthographiccamera import OrthographicCamera
 class CameraFactory():
     """
     A camera factory returning specialized instances (PerspectiveCamera, OrthographicCamera) of Camera.

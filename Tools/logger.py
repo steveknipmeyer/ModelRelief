@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Logger
    :synopsis: Support for runtime logging.
@@ -11,9 +6,7 @@
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 from enum import Enum
-
 from tools import Colors
-
 class MessageClass(Enum):
     """
     A class representing the various levels of log messages.

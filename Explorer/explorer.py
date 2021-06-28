@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
 """
 .. module:: explorer
    :synopsis: Experiments in relief processing.

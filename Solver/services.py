@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Services
    :synopsis: Support for runtime services.
@@ -12,7 +7,6 @@
 """
 from logger import Logger
 from results import Results
-
 class Services:
     """
     A class for supporting runtime services such as loggers and timers.

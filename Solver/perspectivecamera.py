@@ -1,13 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-import math
-from typing import List
-
-from camera import Camera
-
 """
 .. module:: PerspectiveCamera
    :synopsis: A perspective camera.
@@ -15,6 +6,10 @@ from camera import Camera
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
+import math
+from typing import List
+
+from camera import Camera
 
 class PerspectiveCamera(Camera):
     """

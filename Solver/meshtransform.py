@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: MeshTransform
    :synopsis: A collection of settings that control how a DepthBuffer is transformed

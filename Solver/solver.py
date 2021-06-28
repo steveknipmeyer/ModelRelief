@@ -1,16 +1,10 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Solver
    :synopsis: Generates a mesh from a DepthBuffer and a MeshTransform.
 
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
-
 import argparse
 import cv2
 import json

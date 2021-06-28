@@ -2,7 +2,7 @@
  * @brief Support for Gaussian filters in relief processing.
  *
  * @file GaussianFilter.cpp
- * @afstoputhor Steve Knipmeyer
+ * @author Steve Knipmeyer
  * @date 2018-09-03
  */
 #define _USE_MATH_DEFINES

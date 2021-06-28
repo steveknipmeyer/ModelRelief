@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2021
-#   All Rights Reserved.
-#
-
 """
 .. module:: generate
    :synopsis: Tool for automatically generating all example Meshes.

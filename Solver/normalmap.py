@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: NormalMap
    :synopsis: A rendering NormalMap created from a Model3d and a Camera.

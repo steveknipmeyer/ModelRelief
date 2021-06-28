@@ -2,11 +2,7 @@
 ### General   
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
- ## UI
-    Create a video or an animation?
-    Workflow page
-        Illustrate with images from Explorer!
-#### Build
+ ### Build
     Prove with clean Ubuntu installation!
         Export WSL.
             https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
@@ -58,11 +54,12 @@
     Modify C# format rules to use new header.
     Replace source code copyright headers with MIT license notice.
         C#
-        C++ 
-        Python
         TypeScript
-        JavaScript
-        shell
 
     https://softwareengineering.stackexchange.com/questions/117572/mit-and-copyright
     https://opensource.google/docs/releasing/preparing/
+## UI
+    Create a video or an animation?
+    Workflow page
+        Illustrate with images from Explorer!
+#

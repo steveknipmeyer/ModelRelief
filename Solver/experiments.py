@@ -1,8 +1,4 @@
-    #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
+#!/usr/bin/env python
 """
 .. module:: experiments
    :synopsis: Experimental techniques.

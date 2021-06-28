@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: OBJWriter
    :synopsis: Support for writing a WaveFront OBJ file.

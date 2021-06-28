@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
 """
 .. module:: Mesh
    :synopsis: A low relief mesh created by applying a MeshTransform to a DepthBuffer.

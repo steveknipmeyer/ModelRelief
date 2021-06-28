@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2017-2018
-#   All Rights Reserved.
-#
-
 """
 .. module:: Tools
    :synopsis: Utilities and tools for scripting support.
@@ -11,7 +6,6 @@
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 
 """
-
 import os
 import subprocess
 import sys

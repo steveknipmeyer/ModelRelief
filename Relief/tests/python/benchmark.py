@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
 """
 .. module:: benchmark
    :synopsis: Benchmark tests for relief Pyhon C++ extensions.

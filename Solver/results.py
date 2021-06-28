@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-#
-#   Copyright (c) 2018
-#   All Rights Reserved.
-#
 """
 .. module:: Results
    :synopsis: The collection of solver results (images, meshes, workbench).
@@ -10,7 +6,6 @@
 .. moduleauthor:: Steve Knipmeyer <steve@modelrelief.org>
 """
 import numpy as np
-
 class Results:
     """
     Holds the results of the Solver solution including the intermediate values.
