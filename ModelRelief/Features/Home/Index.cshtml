@@ -1,4 +1,6 @@
-﻿@{
+﻿@using ModelRelief.Dto
+@model List<ExampleCard>
+@{
     ViewBag.Title = "Create Bas-Reliefs (Sculptural Low Reliefs) From 3D Models | ModelRelief";
     ViewBag.Description = "Easily create bas-reliefs (sculptural low reliefs) from 3D models. Using any perspective view of a 3D model, the online tool ModelRelief will quickly generate a bas-reliefs from your 3D model.";
 }
@@ -43,115 +45,30 @@
         <p>You will need to create a free account so we can store your test projects. </p>
         <p>Please let us know below what you would like to see next!</p>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
-
-            <div class="col mb-4">
-                <div class="card">
-                    <a href="/meshes/compose/?name=lucy">
-                        <div class="rippleContainer">
-                            <img src="~/images/Lucy.png" class="card-img-top" alt="">
-                            <div class="ripple"></div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+        @{
+            foreach (var card in Model)
+            {
+                <div class="col mb-4">
+                    <div class="card" >
+                        <a href="/meshes/compose/?name=@card.Name">
+                            <div class="rippleContainer">
+                                <img class="card-img-top" src="~/images/@card.PreviewImage" alt="">
+                                <div class="ripple"></div>
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <h6 class="">@card.Title</h6>
+                            <a class="actionButton btn button-rounded btn-sm" href="/meshes/compose/?name=@card.Name">Compose</a>
                         </div>
-                    </a>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">Lucy</h5>
-                        <a href="/meshes/compose/?name=lucy" class="actionButton btn button-rounded btn-sm">Compose</a>
                     </div>
                 </div>
-            </div>
-
-            <div class="col mb-4">
-                <div class="card">
-                    <div class="">
-                        <a href="/meshes/compose/?name=scallop">
-                            <div class="rippleContainer">
-                                <img src="~/images/Scallop.png" class="card-img-top" alt="">
-                                <div class="ripple"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">Scallop Shell</h5>
-                        <a href="/meshes/compose/?name=scallop" class="actionButton btn button-rounded btn-sm">Compose</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-4">
-                <div class="card">
-                    <div class="">
-                        <a href="/meshes/compose/?name=horse">
-                            <div class="rippleContainer">
-                                <img src="~/images/Horse.png" class="card-img-top" alt="">
-                                <div class="ripple"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">Prancing Horse</h5>
-                        <a href="/meshes/compose/?name=horse" class="actionButton btn button-rounded btn-sm">Compose</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-4">
-                <div class="card">
-                    <div class="">
-                        <a href="/meshes/compose/?name=dragon">
-                            <div class="rippleContainer">
-                                <img src="~/images/Dragon.png" class="card-img-top" alt="">
-                                <div class="ripple"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">Chinese Dragon</h5>
-                        <a href="/meshes/compose/?name=dragon" class="actionButton btn button-rounded btn-sm">Compose</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-4">
-                <div class="card">
-                    <div class="">
-                        <a href="/meshes/compose/?name=plunderbusspete">
-                            <div class="rippleContainer">
-                                <img src="~/images/PlunderbussPete.png" class="card-img-top" alt="">
-                                <div class="ripple"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">Plunderbuss Pete</h5>
-                        <a href="/meshes/compose/?name=plunderbusspete" class="actionButton btn button-rounded btn-sm">Compose</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mb-4">
-                <div class="card">
-                    <div class="">
-                        <a href="/meshes/compose/?name=house">
-                            <div class="rippleContainer">
-                                <img src="~/images/House.png" class="card-img-top" alt="">
-                                <div class="ripple"></div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <!--Title-->
-                        <h5 class="card-title">San Francisco House</h5>
-                        <!--Text-->
-                        <a href="/meshes/compose/?name=house" class="actionButton btn button-rounded btn-sm">Compose</a>
-                    </div>
-                </div>
+            }
+        }
             </div>
         </div>
+
     </div>
 
     </div>
