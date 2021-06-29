@@ -13,6 +13,7 @@ function create_environment() {
     echo "Building $2 environment into $1"
     python3 -m venv --clear $1
     source $1/bin/activate
+    pip3 install wheel
     pip3 install -r requirements.$2.txt
 }
 

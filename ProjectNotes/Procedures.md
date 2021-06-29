@@ -50,6 +50,7 @@
     Test
         wget -p --no-check-certificate http://localhost:5000
 ###  WSL
+    https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
     wsl --export Ubuntu-20.04 MR.tar
     wsl --unregister Ubuntu-20.04
 
@@ -67,6 +68,21 @@
     Ubuntu Update
         sudo apt update
         sudo apt upgrade
+
+    .bashrc
+        Add to end of .bashrc.
+            # https://techcommunity.microsoft.com/t5/windows-dev-appconsult/running-wsl-gui-apps-on-windows-10/ba-p/1493242
+            export WSLAddress=`grep nameserver /etc/resolv.conf | sed 's/nameserver //'`
+            export DISPLAY=$WSLAddress:0
+            echo WSL IPv4 address = $WSLAddress
+            export XDG_RUNTIME_DIR=/tmp/runtime-stephen
+
+            # Solver OBJ output
+            export MRTemp=/mnt/c/Users/steve/Documents/Temp/
+
+            # ModelRelief development shell
+            . ~/projects/ModelRelief/Tools/ModelReliefShell.sh
+
 ###  Linux Development Setup
 
     git
@@ -83,9 +99,8 @@
             git submodule init
             git submodule update
     
-
-    .NET Core
-        Install .Net Core 3.1 SDK
+    .NET Core 3.1 SDK
+        https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
         dotnet tool install --global dotnet-ef
     
     C++
@@ -96,7 +111,7 @@
     
     Node
         sudo apt install nodejs
-    
+   
     NPM
         sudo apt install npm
         npm install
@@ -106,7 +121,7 @@
     
     .NET Core
         https://docs.microsoft.com/en-us/dotnet/core/install/linux
-        dotnet restore
+        dotnet restore ModelRelief
         dotnet build ModelRelief
     
     SQLite
@@ -117,7 +132,10 @@
         Add azurekeyvault.json to ModelRelief project folder.
 
     Python
+        sudo apt-get install python3-venv
+        sudo apt install python3-dev
         Build/BuildPythonEnvironment.sh Development devenv
+        N.B. Restart shell to activate devenv virtual environment.
 
     Build
         python Build/Builder.py --target local
@@ -132,9 +150,7 @@
     
     
         source ./Tools/StartModelRelief.sh
-    
-        Start browser using https://localhost:80
-            Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
+        Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
 
 #### Explorer
     devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
@@ -264,6 +280,7 @@ OR
     Set UpdateSeedData and restart ModelRelief.
         The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
         N.B. The entity Ids are now correct in the exported Cameras.json and MeshTransforms.json files.
+
 #### VSCode Jupyter Notebook
     Jupyter Notebooks in VSCode do not recognize the active virtual environment (devenv).
     Running a Notebook reports that ipykernel is not installed.
@@ -290,6 +307,3 @@ OR
             "display_name": "devenv",
             "language": "python"
             }
-
-
-
