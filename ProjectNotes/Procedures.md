@@ -17,6 +17,7 @@
         HTTPS Redirect
         https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
 
+           
 ###  Linux Production Setup
     Deploy
         N.B. Check --exclude arguments for exclusions.
@@ -48,18 +49,26 @@
 
     Test
         wget -p --no-check-certificate http://localhost:5000
+###  WSL
+    wsl --export Ubuntu-20.04 MR.tar
+    wsl --unregister Ubuntu-20.04
+
+    Install Ubuntu 20.04 from Microsoft Store.
+    
+    /etc/hosts
+        Add modelrelief Linode entry.
+        45.79.166.83    modelrelief
+
+    ~/,ssh
+        Copy private keys to SSH folder.
+            id_rsa
+            id_rsa.pub
+    
+    Ubuntu Update
+        sudo apt update
+        sudo apt upgrade
 ###  Linux Development Setup
 
-    .NET Core
-        Install .Net Core 3.1 SDK
-        dotnet tool install --global dotnet-ef
-    
-    C++
-        sudo apt-get install build-essential gdb
-    
-    CMake
-        sudo apt install cmake
-    
     git
         sudo apt install git
         git config --global user.name "Steve Knipmeyer"
@@ -73,6 +82,17 @@
         Pull Pybind11 and Catch2 repos.
             git submodule init
             git submodule update
+    
+
+    .NET Core
+        Install .Net Core 3.1 SDK
+        dotnet tool install --global dotnet-ef
+    
+    C++
+        sudo apt-get install build-essential gdb
+    
+    CMake
+        sudo apt install cmake
     
     Node
         sudo apt install nodejs

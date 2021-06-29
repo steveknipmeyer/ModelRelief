@@ -1,7 +1,6 @@
 #### Commit     
-Improve the error message when a user composes an example model without being logged in.
 ### General   
-    Redirect after successful login?        
+    Backup Windows Terminal.
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
