@@ -1,6 +1,7 @@
 #### Commit     
+Improve the error message when a user composes an example model without being logged in.
 ### General   
-    Improve the error message when a user composes an example model without being logged in.
+    Redirect after successful login?        
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?

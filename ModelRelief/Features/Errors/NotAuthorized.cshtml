@@ -1,10 +1,26 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>ModelRelief NotAuthorized</title>
 </head>
+
 <body>
-    <h3>Please create a free account to use ModelRelief. You can experiment with the test models or upload your own OBJ models..</h3>
-    <br>
-    <partial name="_ErrorPartial" />
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col text-center">
+                <div class="">
+                    <img src="~/images/ModelReliefWhite.png" style="width: 25%;">
+                </div>
+
+                <h3>Please login or create a free account to use ModelRelief.</h3>
+                <h5>You can experiment with the test models or upload your own OBJ models.</h5>
+
+                <a class="btn btn-outline-secondary button-rounded my-2" asp-area="" asp-controller="Account" asp-action="Login">
+                    <span class="fas fa-user"></span>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
