@@ -73,8 +73,6 @@ jupyterlab-pygments==0.1.2
 kiwisolver==1.3.1
 MarkupSafe==1.1.1
 matplotlib==3.3.4
-# N.B. NumPy must precede mayavi.
-numpy==1.20.0
 mayavi==4.7.2
 mistune==0.8.4
 nbclient==0.5.1
@@ -82,6 +80,7 @@ nbconvert==6.0.7
 nbformat==5.1.2
 nest-asyncio==1.5.1
 networkx==2.5
+numpy==1.20.0
 opencv-python-headless==4.5.1.48
 packaging==20.9
 pandas==1.2.1
