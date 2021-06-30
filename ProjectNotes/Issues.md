@@ -11,6 +11,10 @@
         The test program Solver/Experiments/mayavi/mayavitest.py has the same issue.
    
     Meshes are not oriented correctly in Mayavi Isometric views.
+
+    Installation
+        mayavi wheel fails but setup.py succeeds.
+        https://github.com/enthought/mayavi/issues/782
 #### NormalMaps
     It appears that NormalMap gradients lose some high frequency detail.
 #### Solver
@@ -70,7 +74,6 @@
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception
 #### Python
     Why does venv not add the Python 3.8 include files?
-    Why does the 1st mayavi install fail with a vtk module error?
 #### Dependency Injection
     Can DI inject a Logger instance (suitably typed) instead of using ILoggerFactory to manufacture the instance?
 

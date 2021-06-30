@@ -155,7 +155,7 @@
             "name": "node workbench",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/NodeWorkbench/workbench.js"
+            "program": "${workspaceFolder}/ModelRelief/Workbench/Node/workbench.js"
         },
         {
             "name": "node (active file)",

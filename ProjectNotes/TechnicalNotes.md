@@ -702,10 +702,6 @@ ServerFramework (WebHost.CreateDefaultBuilder) sets the environment to "Developm
 |Scale Floats|0.02|4.5|2,250|
 |Finite Difference|.002|0.2315|100|Attenuation|
 
-#### Mayavi
-        pip install mayavi
-        pip install --upgrade --force-reinstall mayavi
-
 #### NPM Package Manager
 https://semver.npmjs.com/
 

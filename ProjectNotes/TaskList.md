@@ -1,15 +1,14 @@
 #### Commit     
-### General      
-    Document VSCode extensions used.
 
-    mayavi wheel fails but setup.py succeeds.
-        https://github.com/enthought/mayavi/issues/782
+### General      
+    Benchnark and Optimization
+    Node Workbench
+    Markdown
+        Table of Contents
+        Assemble
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
-### Conventions
-    Review all casing of files and directories.
-    Tools -> tools
 ### Security
     Auth0
     Review Azure Key Vault dependency.
@@ -20,28 +19,51 @@
         Remove personal email from commit history.
 
     Structure GitHub repo using recommended best practices.
-    Add OneNote ModelRelief notebook.
-    Add Postman ModelRelief collection.
+        GitHub Avatar
+        Node Experiments
+        README
+        CONTRIBUTING
+
     Documentation
-        gulp tasks (e.g. serve)
-        Document DepthBufferView and analyze tools (e.g. HtmlLogger).
-        Document VcXsrv
-        Solver
-        Explorer
-        pyamg warning
-            pyamg/gallery/stencil.py:110: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
-            diags[s] = 0
-        (Hidden) DepthBufferView and NormalMapView
-        Desmos attenuation graph
-        Document Solver settings with no Web UI.
-        Defaults.json
-            logging
-            developmentui
-        Ux Features not published
-            clipping planes
-            perspective cameras
-        API
-        ModelRelief.dgml (Linux?)
+        Theory
+            Dr. Jens Kerber
+
+        Architecture
+            Solver
+                Settings with no Web UI.
+                pyamg warning
+                    pyamg/gallery/stencil.py:110: FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+                    diags[s] = 0
+
+        User
+            Explorer
+            Ux Features
+                View short cuts
+                Development UI
+                    DepthBufferView and analyze tools (e.g. HtmlLogger).
+
+        Development
+            WSL
+                Ubuntu 20.04
+                VcXsrv
+                Linode
+            Database
+            Build
+            testrunner
+            gulp tasks (e.g. serve)
+            VSCode tasks
+            Command line utilities
+            Other Resources
+                Desmos attenuation graph
+                OneNote ModelRelief notebook.
+                Postman ModelRelief collection.
+                ModelRelief.dgml (Linux?)
+            Defaults.json
+            SeedContent.json 
+
+            API
+                JWT Tokens
+                Swagger
 ### Publishing
     KAK invitation
     Notices:
@@ -58,8 +80,6 @@
     .py = 7212
     .cpp = 1258
     Total lines = 43118
-### License and Copyright
-    https://opensource.google/docs/releasing/preparing/
 ### UI
     Create a video or an animation?
     Workflow page
