@@ -264,7 +264,8 @@ class Builder:
 
     def deploy_site (self):
         """
-        Deploy web site.
+        Deploy web site (locally).
+        N.B. Use deploy.sh to push to production.
         """
         self.logger.logInformation("\n<Deploy>", Colors.BrightCyan)
         os.chdir(self.solution_path)

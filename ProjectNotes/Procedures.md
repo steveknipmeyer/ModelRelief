@@ -1,54 +1,4 @@
 # Procedures
-###  Linode
-    Namecheap
-        Add Linode DNS server names to the domain.
-
-    Domain Setup
-        N.B. No changes were necessary. Adding only the Linode DNS servers to the Namecheap records was sufficient.
-        https://www.linode.com/docs/guides/dns-manager/
-
-    E-mail
-        Add MX, TXT DNS records as provided by Namecheap.
-        https://www.linode.com/community/questions/17732/how-to-configure-dns-for-namecheap-private-email
-
-    SSL Configuration
-        Let's Encrypt SSL
-        https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
-        HTTPS Redirect
-        https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/
-
-           
-###  Linux Production Setup
-    Deploy
-        N.B. Check --exclude arguments for exclusions.
-        . /Tools/deploy user@modelrelief
-
-    Bind Python Virtual Environment to Server
-        ./Tools/BindPythonEnvironment.sh mrenv
-    
-    Nginx
-        sudp apt install nginx
-        
-        sudo unlink /etc/nginx/sites-enabled/default
-        sudo cp ~/modelrelief/nginx/modelrelief.org /etc/nginx/sites-available
-        sudo ln -s /etc/nginx/sites-available/modelrelief.org /etc/nginx/sites-enabled
-
-    .NET SDK and Runtime 3.1
-        https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
-
-    SQLite
-        sudo apt-get install sqlite3
-
-    SSL
-        Generate a developer SSL certificate. 
-        N.B. The SDK is required to use the dev-certs tool.
-            dotnet dev-certs https
-
-    Start Server
-        source ~/modelrelief/Tools/StartModelRelief.sh
-
-    Test
-        wget -p --no-check-certificate http://localhost:5000
 ###  WSL
     https://www.howtogeek.com/426562/how-to-export-and-import-your-linux-systems-on-windows-10/
     wsl --export Ubuntu-20.04 MR.tar
@@ -82,9 +32,7 @@
 
             # ModelRelief development shell
             . ~/projects/ModelRelief/Tools/ModelReliefShell.sh
-
 ###  Linux Development Setup
-
     git
         sudo apt install git
         git config --global user.name "Steve Knipmeyer"
@@ -147,123 +95,139 @@
         https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
         https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04/
         https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
-    
-    
+       
         source ./Tools/StartModelRelief.sh
         Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
+###  Linode
+    Namecheap
+        Add Linode DNS server names to the domain.
 
-#### Explorer
-    devenv/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer Explorer/explorer.ui
+    Domain Setup
+        N.B. No changes were necessary. Adding only the Linode DNS servers to the Namecheap records was sufficient.
+        https://www.linode.com/docs/guides/dns-manager/
 
+    E-mail
+        Add MX, TXT DNS records as provided by Namecheap.
+        https://www.linode.com/community/questions/17732/how-to-configure-dns-for-namecheap-private-email
+
+    SSL Configuration
+        Let's Encrypt SSL
+        https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
+        HTTPS Redirect
+        https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/        
+###  Linux Production Setup
+    Deploy
+        N.B. Check --exclude arguments for exclusions.
+        . /Tools/deploy user@modelrelief
+
+    Bind Python Virtual Environment to Server
+        ./Tools/BindPythonEnvironment.sh mrenv
+    
+    Nginx
+        sudp apt install nginx
+        
+        sudo unlink /etc/nginx/sites-enabled/default
+        sudo cp ~/modelrelief/nginx/modelrelief.org /etc/nginx/sites-available
+        sudo ln -s /etc/nginx/sites-available/modelrelief.org /etc/nginx/sites-enabled
+
+    .NET SDK and Runtime 3.1
+        https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
+
+    SQLite
+        sudo apt-get install sqlite3
+
+    SSL
+        Generate a developer SSL certificate. 
+        N.B. The SDK is required to use the dev-certs tool.
+            dotnet dev-certs https
+
+    Start Server
+        source ~/modelrelief/Tools/StartModelRelief.sh
+
+    Test
+        wget -p --no-check-certificate http://localhost:5000
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
-- [X] Update the class hierarchies in TechnicalNotes.md.
+- [ ] Update the class hierarchies in TechnicalNotes.md.
 #### Configuration
-- [X] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
+- [ ] Add the paths to the new model folders in appsettings.json (e.g. Paths:ResourceFolders:NormalMaps).
 #### Dispatcher
-- [x] Extend IDispatcher to include a generation method for the new entity (e.g. GenerateNormalMapAsync).
-- [x] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
+- [ ] Extend IDispatcher to include a generation method for the new entity (e.g. GenerateNormalMapAsync).
+- [ ] Add support for generating the file after dependencies have changed. (e.g. GenerateNormalMapAsync).
 #### Domain
-- [X] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
+- [ ] Add the database ModelRelief.Domain schema class (e.g. NormalMap.cs).
 #### Database
-- [X] Delete the existing databases
-- [X] Add the new entity type to ModelReliefDbContext.cs.
-- [X] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
+- [ ] Delete the existing databases
+- [ ] Add the new entity type to ModelReliefDbContext.cs.
+- [ ] Add the new model types to DbInitializer including support for updating the seed files (UpdateSeedData)
 #### Test Files
-- [X] Add the new model folder type to Test/Data/Users including at least one placeholder file to ensure the output folder will be created.
+- [ ] Add the new model folder type to Test/Data/Users including at least one placeholder file to ensure the output folder will be created.
 #### Api
-- [X] Add request handlers to the V1 folder (e.g. Api/V1/NormalMaps)
-- [X] Add API definitions for the new model to ApiErrors.cs.
+- [ ] Add request handlers to the V1 folder (e.g. Api/V1/NormalMaps)
+- [ ] Add API definitions for the new model to ApiErrors.cs.
 #### Features
-- [X] Add the new controller. (e.g. Features/NormalMaps/NormalMapsController.cs)
-- [X] Add the new DTO model (e.g. NormalMap.cs)
-- [X] Add the supporting Razor pages (e.g. Create.cshtml)
-- [X] Add the new entity type to the main navigation bar (_Layout.cshtml).
+- [ ] Add the new controller. (e.g. Features/NormalMaps/NormalMapsController.cs)
+- [ ] Add the new DTO model (e.g. NormalMap.cs)
+- [ ] Add the supporting Razor pages (e.g. Create.cshtml)
+- [ ] Add the new entity type to the main navigation bar (_Layout.cshtml).
 #### Scripts
-- [X] Add the interface to Api/V1/Interfaces (e.g. INormalMap.ts).
-- [X] Add the new concrete class implementing the interface to DtoModels.ts.
-- [X] Add the necessary application graphics model to Models (e.g. Models/NormalMap/NormalMap.ts).
+- [ ] Add the interface to Api/V1/Interfaces (e.g. INormalMap.ts).
+- [ ] Add the new concrete class implementing the interface to DtoModels.ts.
+- [ ] Add the necessary application graphics model to Models (e.g. Models/NormalMap/NormalMap.ts).
 <br>*If the entity is graphical:*
-- [X] Add a new viewer to Viewers (e.g. Viewers/NormalMapViewer.ts)
-- [X] Add an MVC View to Views (e.g. Views/NormalMapView.ts)
-- [X] Add the HTML View to Composer/Edit.cshtml.
+- [ ] Add a new viewer to Viewers (e.g. Viewers/NormalMapViewer.ts)
+- [ ] Add an MVC View to Views (e.g. Views/NormalMapView.ts)
+- [ ] Add the HTML View to Composer/Edit.cshtml.
 - [ ] Create the factory (e.g. NormalMapFactory) to construct the entity.
 - [ ] Extend ComposerController to add support for generating the new entity.
 
 #### XUnit Integration Tests
-- [X] Add the model Base support to Integration/Base (e.g. NormalMapsBaseIntegration.cs)
-- [X] Add the model File support to Integration/File (e.g. NormalMapsFileIntegration.cs)
-- [X] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
+- [ ] Add the model Base support to Integration/Base (e.g. NormalMapsBaseIntegration.cs)
+- [ ] Add the model File support to Integration/File (e.g. NormalMapsFileIntegration.cs)
+- [ ] Add the test model factory support to TestModelFactores (e.g. NormalMapTestModelFactory.cs)
 #### TypeScript Unit Tests
 - [ ] Add tests supporting the new entity to UnitTests.ts.
 #### Postman
-- [X] Add test requests to support the new entity,
+- [ ] Add test requests to support the new entity,
 #### Solver
 - [ ] Add a new Python class (e.g. normalmap.py).
 #### Tools
 - [ ] Add utilities as needed (e.g. normalmapwriter.py)
 #### Explorer
 - [ ] Add support as required.
-
-### Test Checklist
-    Test Checklist
-        testrunner (XUnit)          python Tools/testrunner.py
-        Builder
-            Development             python Build/Builder.py --target local
-             Nginx                  python Build/builder.py --target nginx --deploy True
-        Postman
-        Explorer                    python Explorer/explorer.py --s ../Solver/Test/Lucy.json --w ../Solver/Test/Working
-        Solver                      python Solver/solver.py --s "Test/House.json" --w "Test/Working"
-
-### dotnet run
-**The 'dotnet run' workflow runs using the first 'Project' configuration in Properties/launchSettings.json.  **
-The ordering in launchSettings.json controls whether the configuratIon is 'Production' or 'Development'.
-
 ### Schema Modifications
 #### Front End
-- [X] Add the new properties to the DTO interfaces, eg. IDepthBuffer.
-- [X] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
-- [X] Add the new properties to the Graphic classes, eg. DepthBuffer.
-- [X] Modify the graphics class methods fromDto and toDto.
+- [ ] Add the new properties to the DTO interfaces, eg. IDepthBuffer.
+- [ ] Add the new properties to the DTO classes, eg. Dto.DepthBuffer.
+- [ ] Add the new properties to the Graphic classes, eg. DepthBuffer.
+- [ ] Modify the graphics class methods fromDto and toDto.
 - [ ] Razor Pages
 - [ ] Include the new (required) properties in any POST requests.
 - [ ] Extend the Composer UI to include the new properties.
 
 #### Back End
 ##### Domain Models
-- [x] Add new properties to the class in the Domain folder.
+- [ ] Add new properties to the class in the Domain folder.
 ##### DTO Models (Features/<Models>)
-- [x] Add new properties to the class.
-- [x] Extend the AbstractValidator/<Model> to add new validation rules for the properties.
+- [ ] Add new properties to the class.
+- [ ] Extend the AbstractValidator/<Model> to add new validation rules for the properties.
 ##### DbInitializer
 - [ ] Add the properties to the instance initializers of the Add/<Model> methods.
 OR
-- [X] Add the properties to the JSON initialize files in Test/Data/Users/<model>
+- [ ] Add the properties to the JSON initialize files in Test/Data/Users/<model>
 ##### Explorer (MeshTransform only)
-- [X] Add the new MeshTransform properties to the UI.
-- [X] Extend Explorer to process the new property in initialization, settings update, etc.
+- [ ] Add the new MeshTransform properties to the UI.
+- [ ] Extend Explorer to process the new property in initialization, settings update, etc.
 ##### Solver (MeshTransform only)
-- [X] Extend the relevant Python class (e.g. DepthBuffer) to include the new properties
+- [ ] Extend the relevant Python class (e.g. DepthBuffer) to include the new properties
 ##### Testing
-- [X] Add the new properties to the ConstructValidModel method of the /<Model>TestModelFactory class.
+- [ ] Add the new properties to the ConstructValidModel method of the /<Model>TestModelFactory class.
 - [ ] Run the unit tests.
 - [ ] Update the Solver/Test JSON files using MRUpdateSeedData.
 ##### Schema
 - [ ] Update ModelRelief.dgml schema diagram.
 
-#### Git
-    Git Configuration: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
-    git config --list
-
-|Configuration File|Linux|Note
-|----|----|----|
-|system|/etc/gitconfig||
-|system|||
-|user|~/.gitconfig||
-|user|~/.config/git/config|
-|project|.git/config||
-
-#### Adding a New Test Model
+### Adding a New Test Model
     For a new Project, add an empty Project entry in SeedContent.json.
 
     ModelRelief
@@ -280,4 +244,12 @@ OR
     Set UpdateSeedData and restart ModelRelief.
         The seed JSON files will be exported to ModelRelief/Test/Data/Users and Solver/Test.
         N.B. The entity Ids are now correct in the exported Cameras.json and MeshTransforms.json files.
-
+### Test Checklist
+    Test Checklist
+        testrunner (XUnit)          python Tools/testrunner.py
+        Builder
+            Development             python Build/Builder.py --target local
+            Publish                 python Build/builder.py --publish True
+        Postman
+        Explorer                    python Explorer/explorer.py --s ../Solver/Test/discus.json --w ../Solver/Test/Working
+        Solver                      python Solver/solver.py --s "Test/discus.json" --w "Test/Working"

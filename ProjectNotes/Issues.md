@@ -31,7 +31,7 @@
 #### StandardView
     The StandardView does not show the currently selected view.
     When the view camera is interactively changed, it should invalidate the StandardView in the UI.
-##### Camera
+#### Camera
     Perspective <-> Orthographic
         The new view does not match the previous view.
         Fit View is used after the conversion.
@@ -39,8 +39,7 @@
     Why does the Mesh view shift slightly after a new Mesh has been generated?  
         The camera is not changed.
         this.meshViewer.setCameraToStandardView(StandardView.Top) is used to ensure the resulting view is visible.
-
-##### Clipping Planes
+#### Clipping Planes
     Investigate why the clipping plane CameraControls are not editable.
         Could the events be intercepted by the TrackBall?
         Is this a dat.gui issue?
@@ -64,11 +63,9 @@
     The ApiValidationResult exposes too much about internals in the developer message (RequestType).
     
     How should database exceptions, such as those violating Domain DataAnnotation rules, be handled?
+
     Cancellation
         https://andrewlock.net/using-cancellationtokens-in-asp-net-core-mvc-controllers/
-    
-    SqliteException: SQLite Error 5: 'database is locked'.
-        PostFileRequestHandler : DbContext.SaveChanges();
     
     Throwing policy.
         https://stackoverflow.com/questions/2999298/difference-between-throw-and-throw-new-exception

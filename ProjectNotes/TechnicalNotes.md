@@ -971,25 +971,6 @@ public ContentResult Index()
     };
 }
 ```
-#### Relations
-        Potential collection navigation properties:
-            Project -> Cameras
-            Project -> DepthBuffers
-            Project -> Meshs
-            Project -> MeshTransforms
-            Project -> Model3ds
-            Project -> NormalMaps
-            Model3d -> DepthBuffers
-            Model3d -> NormalMaps
-            Camera -> DepthBuffers
-            Camera -> Meshes
-            Camera -> Model3ds
-            Camera -> NormalMaps
-            DepthBuffer -> Meshes
-            NormalMap -> Meshes
-            MeshTransform -> Meshes
-            Setttings -> Projects
-
 #### File Upload Security
 https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
 
@@ -1034,3 +1015,20 @@ N.B. Azure key store secrets cannot use a ':''. So a '--' are used to delimit th
 |Google (reCAPTCHA)|Dev secret (localhost)|reCAPTCHA--localhostModelRelief--Secret||
 |Google (reCAPTCHA)|ModelRelief site|reCAPTCHA--ModelRelief--Site||
 |Google (reCAPTCHA)|ModelRelief secret|reCAPTCHA--ModelRelief--Secret||
+
+#### dotnet run
+**The 'dotnet run' workflow runs using the first 'Project' configuration in Properties/launchSettings.json.  **
+The ordering in launchSettings.json controls whether the configuratIon is 'Production' or 'Development'.
+
+#### Git
+    Git Configuration: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+    git config --list
+
+|Configuration File|Linux|Note
+|----|----|----|
+|system|/etc/gitconfig||
+|system|||
+|user|~/.gitconfig||
+|user|~/.config/git/config|
+|project|.git/config||
+

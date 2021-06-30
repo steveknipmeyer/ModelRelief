@@ -12,11 +12,9 @@
 #### OBJ Models
     Strengthen the OBJ validation.
         https://github.com/stefangordon/ObjParser
-#### Electron
-    Electron platform?
 #### Python
     How can Python binary extensions be resolved (e.g. sys, time)?
-#### .NET Core  
+#### Depemdency Manager
     Complete implementation of DependencyManager.GetAllDependencyTypes.
         This removes the necessity to construct a DependencyGraph in increasing order of dependencies.
         How can a DbContext be obtained? GetAllDependencyTypes will be used in the context of the integration tests.
@@ -29,8 +27,18 @@
         shaders
             GLSL 300 es
             https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
+##### WebGL Debugging
+        Investigate webgl-debug library.
+    
+        Explore Nsight for shader debugging.
+    
+        SpectorJS
+            http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
+    
+        RenderDoc
+            chrome --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 #### Database
-    Update database diagram.
+    Update database DGML diagram.
 #### TypeScript Image Class
     PNG Creation
         Integrate with Files utility class.
@@ -42,20 +50,8 @@
         Indexer
         RGB, RGBA values
         Vector3
-
-#### WebGL Debugging
-        Investigate webgl-debug library.
-    
-        Explore Nsight for shader debugging.
-    
-        SpectorJS
-            http://www.realtimerendering.com/blog/debugging-webgl-with-spectorjs/
-    
-        RenderDoc
-            chrome --disable-gpu-watchdog --gpu-startup-dialog --allow-no-sandbox-job --allow-sandbox-debugging --no-sandbox --disable-gpu-sandbox
 #### Three.js
     Update OBJLoader.ts.
-
 #### Explorer
     Build a Python installer package for Explorer.
     
@@ -214,7 +210,7 @@ namespace Microsoft.Extensions.Logging
 
 #### StorageManager
 An ApplicationUser could have a storage folder property that is used by the StorageManager to define the default location.
-#### Relationships
+#### Query Relationships
     Provide "reference expansion" to allow references to be expanded into the principal object.
         Extended 'related' query parameter.
 #### Viewer
@@ -234,7 +230,6 @@ An ApplicationUser could have a storage folder property that is used by the Stor
     Add MaterialLoader.
     
     Create a set of sample materials such as wood, glass, plaster, etc.
-
 #### Update Model3d
     Should there be a mechanism to update an <existing> Model3d file?
         Model3d.Edit View
