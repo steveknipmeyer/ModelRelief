@@ -1,6 +1,6 @@
 # Technical Notes
 
-<div style="font-size:9pt">
+
 
 ## Front End (TypeScript)
 
@@ -104,7 +104,7 @@ export class DtoSettings extends DtoModel<DtoSettings> implements ISettings
 ```
 
 ___
-## Back End (NET Core)
+## Back End (.NET Core)
 
 ### Interfaces
 ---
@@ -128,7 +128,7 @@ public interface IGeneratedFileModel : IFileModel
 ---
 Domain models are in an inheritance chain so they can share common functionality such as file operations.  
 <span style="color:red">
-Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes sucn as Display(Name).
+Implementing a hierarchy of DTO models creates potential issues with DataAnnotation attributes such as Display(Name).
 </span>
 
 |DTO (HTTP)||Abstract Domain (DB)|
@@ -140,11 +140,13 @@ Implementing a hierarchy of DTO models creates potential issues with DataAnnotat
 
 **Domain**  
 ModelRelief/Domain/Abstract
+
 ```csharp
 public abstract class DomainModel
 public abstract class FileDomainModel : DomainModel
 public abstract class GeneratedFileDomainModel : FileDomainModel
 ```
+
 ### Concrete Classes
 ---
 |DTO (HTTP)<br>ModelRelief/Features|Implements|Notes||Domain Models (DB)<br>ModelRelief/Domain |Implements|
@@ -188,7 +190,6 @@ public class Session : DomainModel
 public class Settings : DomainModel
 ```
 ___
-</div>
 
 ###### Files
 File Formats
@@ -203,7 +204,7 @@ File Formats
         API  and Ux validation is needed to ensure that the extension is always present.
             Can it be inferred from the Format?
     How will the Format property be used for Models, DepthBuffers and Meshes?
-        Is it necessary if the file type can be found through reflection?
+        Is it necessary if the file type can be found through inspection?
     How should the model name be held in the ModelViewer?
         The model.Name property is now 'Root' (THREE).
 
@@ -220,15 +221,15 @@ File Formats
 ##### Dependency Handling
 
 **Modified**
-- [x] For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.
-- [x] For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.
-- [x] For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+- For GeneratedFileDomainModel root models, if FileIsSynchronized <changed> to true, schedule a FileOperation.Generation.
+-For FileDomainModel root models, if Name <changed>, schedule a FileOperation.Rename.
+-For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
 
 **Deleted**
-- [x] For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
+- For all GeneratedFileDomainModel dependents, set FileIsSynchronized = false.
 
 **Added**
-- [x] For all GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation if the dependents are resolved.
+- For all GeneratedFileDomainModel root models, if FileIsSynchronized = true, schedule a file generation if the dependents are resolved.
 
 ```
 GeneratedFileDomainModel Dependencies
@@ -285,12 +286,13 @@ https://msdn.microsoft.com/en-us/magazine/mt767693.aspx
     JSON            delete                                  DELETE         /api/v1/resource/id                      Delete                  OK
     
     binary          read (single)                           GET            /api/v1/resource/id/file                 GetFile                 OK; octet-stream
-    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                Created; new id returned and default metadata
+    binary          read (single)                           GET            /api/v1/resource/id/preview              GetFile                 OK; octet-stream
+    binary          create                  Mesh disallowed POST           /api/v1/resource/id/file                 PostFile                Created; endpoint of new resource
+    binary          create                  Model3d, form   POST           resource/id/create                       PostForm                OK
+    binary          create                                  POST           /api/v1/resource/id/preview              PostPreview             Created; endpoint of new resource
     binary          update (full)                           PUT            /api/v1/resource/id/file                 PutFile                 OK
     binary          update (partial)        no endpoint
     binary          delete                                  DELETE         /api/v1/resource/id/File                 DeleteFile              OK
-
-The Project is populating the object graph too deeply.
 
 A Put (File) request returns Created instead of OK. The file is correctly replaced but the status should be OK.
 
@@ -722,7 +724,7 @@ https://semver.npmjs.com/
         https://stackoverflow.com/questions/44931613/how-to-correctly-store-connection-strings-in-environment-variables-for-retrieval
     
     Server Structure
-        IIS Production
+        Production (deployed)
             modelrelief (ContentRootPath)
                 <application files>
                 logs
@@ -733,7 +735,7 @@ https://semver.npmjs.com/
                 Tools
                 wwwroot
     
-        Development, local Production
+        Development
             ModelRelief (ContentRootPath)
                 <application files>
                 logs
@@ -784,9 +786,9 @@ https://weblog.west-wind.com/posts/2019/May/18/Live-Reloading-Server-Side-ASPNET
     Lumx : http://ui.lumapps.com
 
 #### Favicon
-        https://realfavicongenerator.net/
-        https://www.flaticon.com/free-icon/scallop_166047
-        https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
+    https://realfavicongenerator.net/
+    https://www.flaticon.com/free-icon/scallop_166047
+    https://realfavicongenerator.net/favicon/aspnet_core#.W_6RlGhKjmE
 
 #### Swagger
     API authentication must include  the type "Bearer":   
@@ -798,8 +800,6 @@ https://weblog.west-wind.com/posts/2019/May/18/Live-Reloading-Server-Side-ASPNET
         diag[s] = 0
 
 #### Auth0
-    Auth0 login uses my Microsoft account credentials.
-    
     IDaaS Benefits
         Overall security is vastly improved.
         Far fewer code will need to be written and maintained.
@@ -918,43 +918,6 @@ np_fill, relief_fill
     Issues
         Analyze the correct behavior of OnDelete.
             Some dependent entities (e.g. Mesh) may potentially be deleted if the parent (e.g. DepthBuffer) is deleted.
-        Referential Integrity!
-        Should <all> entities have a direct relationship to Project or only "principal" entities.
-            For example a Mesh is directly related to a Project but that relationship is also inditectly captured by Mesh->DepthBuffer->Model->Project.
-        Should principal entities have a collection property that holds all children? These <can> be found with a query.
-            For example:
-                Project
-                    Cameras
-                    DepthBuffers
-                    Meshes
-                    Models
-                    MeshTransforms
-    
-    https://stackoverflow.com/questions/33197402/link-asp-net-identity-users-to-user-detail-table
-    
-    Why are navigation properties virtual?
-        https://stackoverflow.com/questions/25715474/why-navigation-properties-are-virtual-by-default-in-ef
-    
-    How can the database be backed up?
-        Can it be relocated to another location?
-    
-    Phase II
-         Materials
-            DomainModel
-    
-        Model3d
-            Material
-            LightingSetup
-    
-        LightingSetup
-            DomainModel
-    
-        LightingSetupLights (join table)
-            DomainModel
-            Lighting ID
-            Light ID
-            A supporting join table is needed to connect a lighting configuration with the individual lights.
-
 #### HTML ContentResult
 ```csharp
 /// <summary>
