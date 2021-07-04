@@ -33,56 +33,78 @@
             # ModelRelief development shell
             . ~/projects/ModelRelief/Tools/ModelReliefShell.sh
 ###  Linux Development Setup
-    git
-        sudo apt install git
-        git config --global user.name "Steve Knipmeyer"
-        git config --global user.email "steve@modelrelief.org"
-    
-        git clone https://github.com/steveknipmeyer/ModelRelief.git
-        Store credentials.
-            cd ModelRelief
-            git config credential.helper store
-    
-        Pull Pybind11 and Catch2 repos.
-            git submodule init
-            git submodule update
-    
-    .NET Core 3.1 SDK
-        https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
-        dotnet tool install --global dotnet-ef
-    
-    C++
-        sudo apt-get install build-essential gdb
-    
-    CMake
-        sudo apt install cmake
-    
-    Node
-        sudo apt install nodejs
-   
-    NPM
-        sudo apt install npm
-        npm install
-        sudo npm install --global gulp-cli
-        sudo npm install --global madge
-        sudo npm install --unsafe-perm -g node-sass
-    
-    .NET Core
-        https://docs.microsoft.com/en-us/dotnet/core/install/linux
-        dotnet restore ModelRelief
-        dotnet build ModelRelief
-    
-    SQLite
-        sudo apt-get install sqlite3 (if required)
-        sudo apt-get install sqlitebrowser
-    
-    Runtime
-        Add azurekeyvault.json to ModelRelief project folder.
+#### git
+```
+sudo apt install git
+git clone https://github.com/steveknipmeyer/ModelRelief.git
 
-    Python
-        sudo apt-get install python3-venv
-        sudo apt install python3-dev
-         
+# Pull and initialize Pybind11 and Catch2 repos used for Python C++ relief extension.
+git submodule init
+git submodule update
+```    
+#### .NET Core 3.1 SDK  
+Follow the instructions to install the .NET 3.1 SDK here:   
+https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
+
+Also install the CLI extensions for Entity Framework.
+```
+dotnet tool install --global dotnet-ef
+```
+
+#### C++
+Install standard tools for building C++, used for Python relief extension.
+```
+sudo apt-get install build-essential gdb
+``` 
+#### CMake
+Install the make tools used for bulding the Python relief extension.
+```
+sudo apt install cmake
+``` 
+
+#### Node.js
+````
+sudo apt install nodejs
+````
+#### NPM 
+````
+sudo apt install npm
+npm install
+# gulp tasks
+sudo npm install --global gulp-cli
+# TypeScript circular depedency tool
+sudo npm install --global madge
+# SASS compiler
+sudo npm install --unsafe-perm -g node-sass
+````
+#### SQLite Database
+```
+sudo apt-get install sqlite3 (if required)
+sudo apt-get install sqlitebrowser
+```
+#### Python
+```
+# Python virtual enviroment
+sudo apt-get install python3-venv
+# development tools
+sudo apt install python3-dev
+
+```
+    
+#### Runtime
+Create azurekeyvault.json in the ModelRelief folder. See the table in Technical Notes for the expected key-value pairs.
+```json
+{
+  "AzureKeyVault": {
+    "Vault": "Your Vault Id",
+    "ApplicationId": "Your Application Id",
+    "ModelReliefKVKey": "Your Key Vault Key"
+  }
+}
+```
+
+###  Build Steps
+        Build/BuildPythonEnvironment.sh Development devenv
         N.B. Restart shell to activate devenv virtual environment.
 
     Build
@@ -91,13 +113,6 @@
     Test
         python Tools/testrunner.py
     
-    nginx
-        https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
-        https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04/
-        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
-       
-        source ./Tools/StartModelRelief.sh
-        Nginx proxy forwards to https://localhost:5001 (/etc/nginx/sites-available/default)
 ###  Linode
     Namecheap
         Add Linode DNS server names to the domain.
@@ -115,15 +130,12 @@
         https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
         HTTPS Redirect
         https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/        
-###  Linux Production Setup
-    Deploy
-        N.B. Check --exclude arguments for exclusions.
-        . /Tools/deploy user@modelrelief
-
-    Bind Python Virtual Environment to Server
-        ./Tools/BindPythonEnvironment.sh mrenv
-    
+###  Linode Production Server Setup   
     Nginx
+        https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04
+        https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04/
+        https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-3.1
+       
         sudp apt install nginx
         
         sudo unlink /etc/nginx/sites-enabled/default
@@ -141,11 +153,21 @@
         N.B. The SDK is required to use the dev-certs tool.
             dotnet dev-certs https
 
-    Start Server
+    Nginx Server
+        # Nginx proxy forwards to Kestrel at https://localhost:5001 (/etc/nginx/sites-available/default)
         source ~/modelrelief/Tools/StartModelRelief.sh
 
     Test
         wget -p --no-check-certificate http://localhost:5000
+###  Linode Deployment
+    python Build/Builder.py --publish True
+
+    Deploy
+        N.B. Check --exclude arguments for exclusions.
+        . /Tools/deploy user@modelrelief
+
+    Bind Python virtual environment to server PATHS
+        ./Tools/BindPythonEnvironment.sh mrenv
 ### Adding a New GeneratedFileDomainModel (e.g. NormalMap)
 #### Documentation
 - [ ] Update the class hierarchies in TechnicalNotes.md.

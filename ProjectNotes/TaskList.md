@@ -1,9 +1,9 @@
 #### Commit     
 
 ### General      
-        Obj
-            Model3d
-
+    https://opensource.guide/starting-a-project/
+    https://www.makeareadme.com/
+    
     Benchnark and Optimization
 
     Bootstrap
@@ -19,7 +19,6 @@
 
     Structure GitHub repo using recommended best practices.
         GitHub Avatar
-        Node Experiments
         README
         CONTRIBUTING
 
