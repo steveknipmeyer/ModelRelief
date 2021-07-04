@@ -10,7 +10,7 @@
         Add modelrelief Linode entry.
         45.79.166.83    modelrelief
 
-    ~/,ssh
+    ~/.ssh
         Copy private keys to SSH folder.
             id_rsa
             id_rsa.pub
@@ -32,87 +32,6 @@
 
             # ModelRelief development shell
             . ~/projects/ModelRelief/Tools/ModelReliefShell.sh
-###  Linux Development Setup
-#### git
-```
-sudo apt install git
-git clone https://github.com/steveknipmeyer/ModelRelief.git
-
-# Pull and initialize Pybind11 and Catch2 repos used for Python C++ relief extension.
-git submodule init
-git submodule update
-```    
-#### .NET Core 3.1 SDK  
-Follow the instructions to install the .NET 3.1 SDK here:   
-https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
-
-Also install the CLI extensions for Entity Framework.
-```
-dotnet tool install --global dotnet-ef
-```
-
-#### C++
-Install standard tools for building C++, used for Python relief extension.
-```
-sudo apt-get install build-essential gdb
-``` 
-#### CMake
-Install the make tools used for bulding the Python relief extension.
-```
-sudo apt install cmake
-``` 
-
-#### Node.js
-````
-sudo apt install nodejs
-````
-#### NPM 
-````
-sudo apt install npm
-npm install
-# gulp tasks
-sudo npm install --global gulp-cli
-# TypeScript circular depedency tool
-sudo npm install --global madge
-# SASS compiler
-sudo npm install --unsafe-perm -g node-sass
-````
-#### SQLite Database
-```
-sudo apt-get install sqlite3 (if required)
-sudo apt-get install sqlitebrowser
-```
-#### Python
-```
-# Python virtual enviroment
-sudo apt-get install python3-venv
-# development tools
-sudo apt install python3-dev
-
-```
-    
-#### Runtime
-Create azurekeyvault.json in the ModelRelief folder. See the table in Technical Notes for the expected key-value pairs.
-```json
-{
-  "AzureKeyVault": {
-    "Vault": "Your Vault Id",
-    "ApplicationId": "Your Application Id",
-    "ModelReliefKVKey": "Your Key Vault Key"
-  }
-}
-```
-
-###  Build Steps
-        Build/BuildPythonEnvironment.sh Development devenv
-        N.B. Restart shell to activate devenv virtual environment.
-
-    Build
-        python Build/Builder.py --target local
-    
-    Test
-        python Tools/testrunner.py
-    
 ###  Linode
     Namecheap
         Add Linode DNS server names to the domain.
