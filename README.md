@@ -6,8 +6,9 @@ ModelRelief uses image processing to selectively compress the height variations 
 ## About
 ModelRelief is a tool for scultural designers who create low-reliefs from 3D models.  
 
-A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces an unsatisfying result.
 ### Linear Scaling Loses Detail
+A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces an unsatisfying result.
+
 |3D Model|Linear Scaling|
 |-|-|
 |![3D Model](./ModelRelief/Delivery/images/ExplorerModel3D.png)|![3D Model](./ModelRelief/Delivery/images/ExplorerMeshRaw.png)|
@@ -160,5 +161,5 @@ For additional credits, please see the [Technical Credits](https://www.modelreli
 ## License
 ModelRelief is open source with an MIT license.
 
-[MIT](./MIT-License.md)
+[MIT](./MIT-License.txt)
 
