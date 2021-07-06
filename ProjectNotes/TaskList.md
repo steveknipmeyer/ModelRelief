@@ -1,30 +1,19 @@
 #### Commit     
 
 ### General      
+    Exapnd the About page to include information about the project and the GitHub repository.
+
     https://opensource.guide/starting-a-project/
     https://www.makeareadme.com/
-
-    Markdown Links
-        https://stackoverflow.com/questions/51187658/markdown-reference-to-section-from-another-file
-        Azure Key Store
 
     Benchnark and Optimization
 
     Bootstrap
         Theme colors. What is the proper way to create a color palette?
-### Security
-    Auth0
-    Review Azure Key Vault dependency.
 ### Project
-    Git
-        Consolidate contributor names?
-            https://stackoverflow.com/questions/4981126/how-to-amend-several-commits-in-git-to-change-author/25815116#25815116
-        Remove personal email from commit history.
 
     Structure GitHub repo using recommended best practices.
         GitHub Avatar
-        README
-        CONTRIBUTING
 
     Documentation
         Theory

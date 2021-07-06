@@ -1,13 +1,55 @@
 # ModelRelief
 
-Conversion of 3D models to low relief meshes using image processing.
+ModelRelief is a tool to create a bas-relief (sculptural low relief) from a 3D model.   
 
-Description: A description of your project follows. A good description is clear, short, and to the point. Describe the importance of your project, and what it does.
-Features
- - 1
- - 2
-## Table of Contents: 
-Optionally, include a table of contents in order to allow other people to quickly navigate especially long or detailed READMEs.
+ModelRelief uses image processing to selectively compress the height variations (gradients) in a 3D model.
+## About
+ModelRelief is a tool for scultural designers who create low-reliefs from 3D models.  
+
+A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces an unsatisfying result.
+### Linear Scaling Loses Detail
+|3D Model|Linear Scaling|
+|-|-|
+|![3D Model](./ModelRelief/Delivery/images/ExplorerModel3D.png)|![3D Model](./ModelRelief/Delivery/images/ExplorerMeshRaw.png)|
+
+### Image Domain Processing Preserves Detail
+Instead, better definition of detail can be realized by manipulating the model in the image domain. A depth buffer (height map) is transformed as an image to selectively reduce slopes (gradients) in the image and amplify other features. 
+
+|Depth Buffer|Gradient Processing|Depth Buffer (Transformed)|
+|-|-|-|
+|![Depth Buffer](./ModelRelief/Delivery/images/ExplorerDepthBufferRaw.png)|![Gradients](./ModelRelief/Delivery/images/ExplorerGradientX.png)|![Depth Buffer Transformed](./ModelRelief/Delivery/images/ExplorerDepthBufferProcessed.png)|
+
+The result is much better representation of the original model.
+![Gradients](./ModelRelief/Delivery/images/ExplorerMeshRelief.png)
+
+## Technology
+
+ModelRelief was developed under Ubuntu 20.04 using [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about).
+
+The web site front end uses [TypeScript](https://www.typescriptlang.org/) and [Three.js](https://threejs.org/) to compose depth buffers from OBJ models.  
+
+The web site back end is written in [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) and [ASP.NET Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1).  
+
+Solver is written in [Python](https://www.python.org/) with several C++ extensions.  
+
+The Explorer desktop tool uses [Mayavi](https://docs.enthought.com/mayavi/mayavi/).
+### Solver
+Solver is a Python-based tool to transform depth buffers. It uses PyAMG (Algebraic Multigrid) to solve Poisson's equation to construct the best approximate surface for the transformed grdients. Solver is the back-end to Explorer, a desktop workbench for experimentation.
+
+![Explorer](./ModelRelief/Delivery/images/Explorer.png)
+
+### ModelRelief Web Site
+The ModelRelief web site [www.modelrelief.org](www.modelrelief.org) is a simple web front-end to Solver. You can create a free account and experiment with the sample models or upload your own OBJ 3D models.
+
+![Composer](./ModelRelief/Delivery/images/Composer.png)
+## Additional Information
+
+|Description|Document|
+|--|--|
+|Implementation and technical notes|[TechnicalNotes.md](./ProjectNotes/TechnicalNotes.md)|
+|Planned enhancements and new features|[Enhancements.md](./ProjectNotes/Enhancements.md)|
+|Checklists and guides for development tasks|[Procedures.md](./ProjectNotes/Procedures.md)|
+|Known problems and open issues|[Issues.md](./ProjectNotes/Issues.md)|
 
 ## Development
 ###  Linux Setup
@@ -16,7 +58,7 @@ Optionally, include a table of contents in order to allow other people to quickl
 sudo apt install git
 git clone https://github.com/steveknipmeyer/ModelRelief.git
 
-# Pull and initialize Pybind11 and Catch2 repos used for Python C++ relief extension.
+# Pull and initialize Pybind11 and Catch2 repos used for the Python C++ relief extension.
 git submodule init
 git submodule update
 ```    
@@ -30,7 +72,7 @@ dotnet tool install --global dotnet-ef
 ```
 
 #### C++
-Install standard tools for building C++, used for Python relief extension.
+Install standard tools for building C++, used for the Python relief extension.
 ```
 sudo apt-get install build-essential gdb
 ``` 
@@ -103,20 +145,19 @@ python Build/Builder.py --target local
 ```
 python Tools/testrunner.py
 ``` 
-
 ## Usage
-Usage: The next section is usage, in which you instruct other people on how to use your project after they’ve installed it. This would also be a good place to include screenshots of your project in action.
+The [ModelRelief](www.modelrelief.org) web site allows OBJ 3D models to be converted into low reliefs. 
+
+First, a view of the 3D model is composed to define the viewing angle. Then a set of processing parameters are adjusted to control the generation of the low relief. The result is an OBJ mesh that may be downloaded for additional processing.
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
+ModelRelief is freely shared through an MIT open source license. However, contributions are not being  accepted now due to limited resources.
 ## Credits
 
-Credits: Include a section for credits in order to highlight and link to the authors of your project.
+ModelRelief is based on the work of [Dr. Jens Kerber](https://www.linkedin.com/in/jens-kerber-30ba4b94/?originalSubdomain=de).   
+The algorithms are taken from Dr. Kerber's paper [Digital Art of Bas-Relief Sculpting](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.230.1722&rep=rep1&type=pdf)
+
+For additional credits, please see the [Technical Credits](https://www.modelrelief.org/home/credits) page on the ModelRelief site.
 ## License
+ModelRelief is open source with an MIT license.
 [MIT](MIT-License.md)
-
-
-![Landing](ModelRelief/Documentation/README/Images/Landing.jpg)
 
