@@ -7,7 +7,7 @@ ModelRelief uses image processing to selectively compress the height variations 
 ModelRelief is a tool for scultural designers who create low-reliefs from 3D models.  
 
 ### Linear Scaling Loses Detail
-A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces an unsatisfying result.
+A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces this unsatisfying result.
 
 |3D Model|Linear Scaling|
 |-|-|
