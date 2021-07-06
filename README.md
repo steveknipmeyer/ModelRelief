@@ -39,7 +39,7 @@ Solver is a Python-based tool to transform depth buffers. It uses PyAMG (Algebra
 ![Explorer](./ModelRelief/Delivery/images/Explorer.png)
 
 ### ModelRelief Web Site
-The ModelRelief web site [www.modelrelief.org](www.modelrelief.org) is a simple web front-end to Solver. You can create a free account and experiment with the sample models or upload your own OBJ 3D models.
+The ModelRelief web site [www.modelrelief.org](https://www.modelrelief.org/) is a simple web front-end to Solver. You can create a free account and experiment with the sample models or upload your own OBJ 3D models.
 
 ![Composer](./ModelRelief/Delivery/images/Composer.png)
 ## Additional Information
@@ -146,7 +146,7 @@ python Build/Builder.py --target local
 python Tools/testrunner.py
 ``` 
 ## Usage
-The [ModelRelief](www.modelrelief.org) web site allows OBJ 3D models to be converted into low reliefs. 
+The [ModelRelief](https://www.modelrelief.org/) web site allows OBJ 3D models to be converted into low reliefs. 
 
 First, a view of the 3D model is composed to define the viewing angle. Then a set of processing parameters are adjusted to control the generation of the low relief. The result is an OBJ mesh that may be downloaded for additional processing.
 ## Contributing
@@ -159,5 +159,6 @@ The algorithms are taken from Dr. Kerber's paper [Digital Art of Bas-Relief Scul
 For additional credits, please see the [Technical Credits](https://www.modelrelief.org/home/credits) page on the ModelRelief site.
 ## License
 ModelRelief is open source with an MIT license.
-[MIT](MIT-License.md)
+
+[MIT](./MIT-License.md)
 
