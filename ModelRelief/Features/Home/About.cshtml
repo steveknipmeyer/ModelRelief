@@ -1,53 +1,72 @@
 <main>
     <div class="container-fluid">
 
-        <div class="container-fluid">
-            <h2 class="mt-5 mb-2">About</h2>
-            <span>ModelRelief is a powerful tool to create a bas-relief (sculptural low relief) from a 3D model.</span>
+        <h2 class="mt-5">About</h2>
+        <hr>
+        <span>ModelRelief is a powerful tool to create a bas-relief (sculptural low relief) from a 3D model.</span>
 
-            <div>
-                <h5 class="mt-4">Linear Scaling</h5>
-                <span>A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces this unsatisfying result.</span>
-                <div class="row mt-3">
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerModel3D.png" alt="3D Model">
-                        <span>3D Model</span>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerMeshRaw.png" alt="Linear Scale">
-                        <span>Mesh (Scaled)</span>
-                    </div>
+        <div>
+            <h5 class="mt-4">Linear Scaling</h5>
+            <span>A 3D model cannot be linearly scaled to the desired depth because it removes detail. For example, simply scaling a 3D model produces this unsatisfying result.</span>
+            <div class="row mt-3">
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerModel3D.png" alt="3D Model">
+                    <span>3D Model</span>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerMeshRaw.png" alt="Linear Scale">
+                    <span>Mesh (Scaled)</span>
                 </div>
             </div>
+        </div>
 
-            <div>
-                <h5 class="mt-4">Image Domain Processing</h5>
-                <span>Instead, better definition of detail can be realized by manipulating the model in the image domain. A depth buffer (height map) is transformed as an image to selectively reduce slopes (gradients) in the image and amplify other features.</span>
-                <div class="row mt-3">
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerDepthBufferRaw.png" alt="Depth Buffer">
-                        <span>Depth Buffer (Raw)</span>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerGradientX.png" alt="Image Gradients">
-                        <span>Gradient Processing</span>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerDepthBufferProcessed.png" alt="Depth Buffer (Transformed)">
-                        <span>Depth Buffer (Transformed)</span>
-                    </div>
-                    <div class="col-md-3 mb-4">
-                        <img class="img-fluid" src="~/images/ExplorerMeshRelief.png" alt="Final Relief">
-                         <span>Mesh (Transformed)</span>
-                    </div>
+        <div>
+            <h5 class="mt-4">Image Domain Processing</h5>
+            <span>Instead, better definition of detail can be realized by manipulating the model in the image domain. A depth buffer (height map) is transformed as an image to selectively reduce slopes (gradients) in the image and amplify other features.</span>
+            <div class="row mt-3">
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerDepthBufferRaw.png" alt="Depth Buffer">
+                    <span>Depth Buffer (Raw)</span>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerGradientX.png" alt="Image Gradients">
+                    <span>Gradient Processing</span>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerDepthBufferProcessed.png" alt="Depth Buffer (Transformed)">
+                    <span>Depth Buffer (Transformed)</span>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <img class="img-fluid" src="~/images/ExplorerMeshRelief.png" alt="Final Relief">
+                    <span>Mesh (Transformed)</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div>
-        <h2 class="mt-5 mb-2">Privacy</h2>
+    <div class="container-fluid">
+        <h2 class="mt-5">REST API</h2>
+        <hr>
+        <span>
+         The REST API is summarized here:</span><a class="ml-2" href="https://www.modelrelief.org/api/v1/documentation/">ModelRelief</a>
+        </span>
+    </div>
+
+    <div class="container-fluid">
+        <h2 class="mt-5">Licensing</h2>
+        <hr>
+        <p>
+         ModelRelief is an open source project with an MIT license.
+        </p>
+        <span>
+         The source repository is hosted on GitHub here:</span><a class="ml-2" href="https://github.com/steveknipmeyer/ModelRelief">ModelRelief</a>
+        </span>
+    </div>
+
+    <div class="container-fluid">
+        <h2 class="mt-5">Privacy</h2>
+        <hr>
         <a asp-action="Privacy">Our Privacy Policy</a>
     </div>
-    </div>
+
 </main>

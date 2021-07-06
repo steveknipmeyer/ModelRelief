@@ -20,7 +20,7 @@ Instead, better definition of detail can be realized by manipulating the model i
 |-|-|-|
 |![Depth Buffer](./ModelRelief/Delivery/images/ExplorerDepthBufferRaw.png)|![Gradients](./ModelRelief/Delivery/images/ExplorerGradientX.png)|![Depth Buffer Transformed](./ModelRelief/Delivery/images/ExplorerDepthBufferProcessed.png)|
 
-The result is much better representation of the original model.
+The result is a much better representation of the original model.
 ![Gradients](./ModelRelief/Delivery/images/ExplorerMeshRelief.png)
 
 ## Technology
@@ -150,6 +150,9 @@ python Tools/testrunner.py
 The [ModelRelief](https://www.modelrelief.org/) web site allows OBJ 3D models to be converted into low reliefs. 
 
 First, a view of the 3D model is composed to define the viewing angle. Then a set of processing parameters are adjusted to control the generation of the low relief. The result is an OBJ mesh that may be downloaded for additional processing.
+
+## REST API
+The REST API is summarized here: [ModelRelief API](https://www.modelrelief.org/api/v1/documentation/index.html)
 ## Contributing
 ModelRelief is freely shared through an MIT open source license. However, contributions are not being  accepted now due to limited resources.
 ## Credits
