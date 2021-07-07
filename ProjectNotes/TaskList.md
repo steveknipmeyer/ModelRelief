@@ -1,4 +1,10 @@
 ### General      
+    Verify
+        deployExclude.txt
+        launch.jon
+    
+    Recast PyAMG NumPy error as warning.
+
     Benchnark and Optimization
 
     Bootstrap

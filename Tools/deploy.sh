@@ -17,3 +17,5 @@ rsync -avz --exclude-from='./Tools/deployExclude.txt' ./Publish/ $1:~/modelrelie
 
 rsync -avz .vscode/settings.json $1:~/modelrelief/.vscode/
 rsync -avz .gitignore $1:~/modelrelief/
+echo "Copy complete"
+echo "N.B. Run 'Tools/BindPythonEnvironment.sh mrenv' on remote if mrenv was pushed."

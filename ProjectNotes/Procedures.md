@@ -61,6 +61,12 @@
         sudo cp ~/modelrelief/nginx/modelrelief.org /etc/nginx/sites-available
         sudo ln -s /etc/nginx/sites-available/modelrelief.org /etc/nginx/sites-enabled
 
+        Configure the maximum file upload size to avoid 413 Request Entity Too Large error during upload. Add the following line to the end of the 'http' configuration block in /etc/nginx/nginx.conf.
+        https://blog.hubspot.com/website/413-request-entity-too-large?toc-variant-b=
+
+                # ModelRelief: maximum file upload
+                client_max_body_size 24M;
+
     .NET SDK and Runtime 3.1
         https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu
 

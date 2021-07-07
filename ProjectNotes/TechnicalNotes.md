@@ -773,6 +773,9 @@ Chrome DevTools snippet to report on unused CSS: https://gist.github.com/kdzwine
     
     What is the correct way to stop and restart Nginx?
         sudo /etc/init.d/nginx start | stop | restart
+                OR
+        sudo service nginx restart
+        sudo service nginx reload
 
 #### Browser-Sync
 https://weblog.west-wind.com/posts/2019/May/18/Live-Reloading-Server-Side-ASPNET-Core-Apps
