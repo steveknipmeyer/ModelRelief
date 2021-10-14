@@ -81,6 +81,7 @@
     Nginx Server
         # Nginx proxy forwards to Kestrel at https://localhost:5001 (/etc/nginx/sites-available/default)
         source ~/modelrelief/Tools/StartModelRelief.sh
+        nohup ~/modelrelief/Tools/StartModelRelief.sh
 
     Test
         wget -p --no-check-certificate http://localhost:5000
