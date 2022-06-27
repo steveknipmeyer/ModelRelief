@@ -46,7 +46,11 @@
 
     SSL Configuration
         Let's Encrypt SSL
-        https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
+            https://www.linode.com/docs/guides/secure-website-lets-encrypt-acme-sh/
+            https://www.linode.com/docs/guides/enabling-https-using-certbot-with-nginx-on-ubuntu/
+            https://letsencrypt.org/how-it-works/         
+            https://absolutecommerce.co.uk/blog/auto-renew-letsencrypt-nginx-certbot
+
         HTTPS Redirect
         https://www.linode.com/docs/guides/enable-tls-on-nginx-for-https-connections/        
 ###  Linode Production Server Setup   

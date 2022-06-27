@@ -66,4 +66,5 @@
     // ThunderClient
     // ---------------------------------
         "thunder-client.customLocation": "Test/",
+        "cmake.configureOnOpen": false,
     }
