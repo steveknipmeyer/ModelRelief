@@ -7,7 +7,6 @@
                 "${workspaceFolder}/devenv/include/python3.8",
                 "${workspaceFolder}/Relief/lib/pybind11/include/pybind11"
             ],
-
             "defines": [
                 "_DEBUG",
                 "UNICODE",
@@ -25,9 +24,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4
 }
-

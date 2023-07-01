@@ -3,7 +3,8 @@
     // ---------------------------------
     // CMake
     // ---------------------------------
-    "cmake.configureOnOpen": false,
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "/home/stephen/projects/ModelRelief/Relief",
 
     // ---------------------------------
     // Files

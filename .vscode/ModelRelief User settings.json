@@ -1,34 +1,27 @@
+// ModelRelief VSCode User Settings
+// These settings represent the state of the User Settings during the last active development.
 {
-    // ModelRelief VSCode User Settings
-    // These settings represent the state of the User Settings during the last active development.
-
     // ---------------------------------
     // ActiveFile
     // ---------------------------------
-        // Enable/Disable ActiveFileInStatusBar
-        "ActiveFileInStatusBar.enable": true,
-
-        // Show fullpath or relative path in status bar.
-        "ActiveFileInStatusBar.fullpath": false,
-
-        // Reveal the active file in the file system.
-        "ActiveFileInStatusBar.revealFile": true,
-
+    // Enable/Disable ActiveFileInStatusBar
+    "ActiveFileInStatusBar.enable": true,
+    // Show fullpath or relative path in status bar.
+    "ActiveFileInStatusBar.fullpath": false,
+    // Reveal the active file in the file system.
+    "ActiveFileInStatusBar.revealFile": true,
     // ---------------------------------
     // Breadcrumbs
     // ---------------------------------
-        "breadcrumbs.enabled": true,
-
+    "breadcrumbs.enabled": true,
     // ---------------------------------
     // CSS
     // ---------------------------------
-        "css.validate": true,
-        "css.lint.important": "warning",
-
-        "scss.validate": true,
-        // "scss.lint.important": "warning",
-        "scss.lint.duplicateProperties": "warning",
-
+    "css.validate": true,
+    "css.lint.important": "warning",
+    "scss.validate": true,
+    // "scss.lint.important": "warning",
+    "scss.lint.duplicateProperties": "warning",
     // ---------------------------------
     // CSS Peek
     // ---------------------------------
@@ -40,315 +33,285 @@
         "**/bootstrap-*"
     ],
     "cssPeek.trace.server": "messages",
-        "cssPeek.peekFromLanguages": [
-            "html",
-            "django-html",
-            "laravel-blade",
-            "razor",
-            "vue",
-            "blade",
-            "pug",
-            "jade",
-            "handlebars",
-            "php",
-            "twig",
-            "md",
-            "nunjucks",
-            "javascript",
-            "javascriptreact",
-            "erb",
-            "typescript",
-            "typescriptreact",
-            "HTML (Eex)",
-            "html-eex",
-            "ejs",
-            "aspnetcorerazor"
-        ],
-
+    "cssPeek.peekFromLanguages": [
+        "html",
+        "django-html",
+        "laravel-blade",
+        "razor",
+        "vue",
+        "blade",
+        "pug",
+        "jade",
+        "handlebars",
+        "php",
+        "twig",
+        "md",
+        "nunjucks",
+        "javascript",
+        "javascriptreact",
+        "erb",
+        "typescript",
+        "typescriptreact",
+        "HTML (Eex)",
+        "html-eex",
+        "ejs",
+        "aspnetcorerazor"
+    ],
     // ---------------------------------
     // Debugger
     // ---------------------------------
-        "debug.allowBreakpointsEverywhere": true,
-        "debug.onTaskErrors": "showErrors",
-
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.onTaskErrors": "showErrors",
     // ---------------------------------
     // Debug Console
     // ---------------------------------
     "debug.console.fontFamily": "Consolas",
     "debug.console.fontSize": 11,
-
     // ---------------------------------
     // Difference Editor
     // ---------------------------------
     "diffEditor.ignoreTrimWhitespace": false,
-
     // ---------------------------------
     // Document This (JavaScript and TypeScript)
     // ---------------------------------
-        // When enabled, memberOf information is added to comment tags on class members.
-        "docthis.includeMemberOfOnClassMembers": false,
-
-        // When enabled, memberOf information is added to comment tags on interface members.
-        "docthis.includeMemberOfOnInterfaceMembers": false,
-
-        // When enabled, JSDoc comments for functions and methods will include @description.
-        "docthis.includeDescriptionTag": true,
-
+    // When enabled, memberOf information is added to comment tags on class members.
+    "docthis.includeMemberOfOnClassMembers": false,
+    // When enabled, memberOf information is added to comment tags on interface members.
+    "docthis.includeMemberOfOnInterfaceMembers": false,
+    // When enabled, JSDoc comments for functions and methods will include @description.
+    "docthis.includeDescriptionTag": true,
     // ---------------------------------
     // Doxygen (C++)
     // ---------------------------------
-        "doxdocgen.generic.authorTag": "@author Steve Knipmeyer",
-
+    "doxdocgen.generic.authorTag": "@author Steve Knipmeyer",
+    "doxdocgen.file.fileOrder": [],
     // ---------------------------------
     // Editor
     // ---------------------------------
-        "editor.accessibilitySupport": "off",
-
-        // Controls if the editor shows code lenses
-        "editor.codeLens": true,
-
-        // Controls the font family.
-        "editor.fontFamily": "Consolas",
-
-        // Controls the font size in pixels.
-        "editor.fontSize": 12,
-
-        // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
-        "editor.formatOnPaste": true,
-        "editor.formatOnSave": false,
-
-        "editor.renderWhitespace": "all",
-
-        "editor.mouseWheelZoom": true,
-        "editor.multiCursorModifier": "ctrlCmd",
-
-        // Overrides editor colors and font style from the currently selected color theme.
-        "editor.tokenColorCustomizations": {
-            "functions" : "#da82e6",
-            "variables" : "#ffffff",
-            "comments": "#77f3f3",
-            "types": "#ff00ff",
-            "keywords": "#FFFF00",
-            "numbers": "#ffffff",
-            "strings": "#00ff95"
-        },
-
+    "editor.accessibilitySupport": "off",
+    // Controls if the editor shows code lenses
+    "editor.codeLens": true,
+    // Controls the font family.
+    "editor.fontFamily": "Consolas",
+    // Controls the font size in pixels.
+    "editor.fontSize": 12,
+    // Controls if the editor should automatically format the pasted content. A formatter must be available and the formatter should be able to format a range in a document.
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": false,
+    "editor.inlineSuggest.enabled": true,
+    "editor.renderWhitespace": "all",
+    "editor.mouseWheelZoom": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    // Overrides editor colors and font style from the currently selected color theme.
+    "editor.tokenColorCustomizations": {
+        "functions": "#da82e6",
+        "variables": "#ffffff",
+        "comments": "#77f3f3",
+        "types": "#ff00ff",
+        "keywords": "#FFFF00",
+        "numbers": "#ffffff",
+        "strings": "#00ff95"
+    },
+    "editor.quickSuggestions": {
+        "comments": false, // <- no 24x7 IntelliSense in comments
+        "strings": true, // but in strings and the other parts of source files
+        "other": true
+    },
+    // "editor.defaultFormatter": null,
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false,
+        "editor.wordWrap": "on",
         "editor.quickSuggestions": {
-            "comments": false, // <- no 24x7 IntelliSense in comments
-            "strings": true, // but in strings and the other parts of source files
-            "other": true
-        },
-
-        // "editor.defaultFormatter": null,
-
-        "[cpp]": {
-            "editor.defaultFormatter": "ms-vscode.cpptools"
-        },
-        "[html]": {
-            "editor.defaultFormatter": "vscode.html-language-features"
-        },
-        "[markdown]": {
-            "files.trimTrailingWhitespace": false,
-            "editor.wordWrap": "on",
-            "editor.quickSuggestions": {
-                "comments": "off",
-                "strings": "off",
-                "other": "off"
-            }
-        },
-
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
+    },
+    "[python]": {
+        "editor.formatOnType": true
+    },
     // ---------------------------------
     // Explorer
     // ---------------------------------
-        "explorer.confirmDelete": false,
-        "explorer.confirmDragAndDrop": false,
-
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
     // ---------------------------------
     // Files
     // ---------------------------------
-        "files.associations": {
-            "*.cshtml": "aspnetcorerazor",
-            "iostream": "cpp",
-            "functional": "cpp",
-            "optional": "cpp",
-            "system_error": "cpp",
-            "xlocmon": "cpp",
-            "xtr1common": "cpp",
-            "iomanip": "cpp",
-            "array": "cpp",
-            "ios": "cpp",
-            "xutility": "cpp"
-        },
-        "files.autoSave": "onWindowChange",
-        "files.trimTrailingWhitespace": true,
-
+    "files.associations": {
+        "*.cshtml": "aspnetcorerazor",
+        "iostream": "cpp",
+        "functional": "cpp",
+        "optional": "cpp",
+        "system_error": "cpp",
+        "xlocmon": "cpp",
+        "xtr1common": "cpp",
+        "iomanip": "cpp",
+        "array": "cpp",
+        "ios": "cpp",
+        "xutility": "cpp"
+    },
+    "files.autoSave": "onWindowChange",
+    "files.trimTrailingWhitespace": true,
     // ---------------------------------
     // Git
     // ---------------------------------
     "git.enableSmartCommit": true,
-
     // ---------------------------------
     // GitLens
     // ---------------------------------
-        "gitlens.keymap": "none",
-
+    "gitlens.keymap": "none",
+    // ---------------------------------
+    // HTML
+    // ---------------------------------
+    "html.format.wrapLineLength": 0,
+    "html.validate.styles": false,
     // ---------------------------------
     // LiveServer
     // ---------------------------------
     "liveServer.settings.port": 5501,
-
     // ---------------------------------
-    // HTML
+    // JavaScript
     // ---------------------------------
-        "html.format.wrapLineLength": 0,
-        "html.validate.styles": false,
-
+    "javascript.updateImportsOnFileMove.enabled": "always",
     // ---------------------------------
     // Jupyter
     // ---------------------------------
-        "jupyter.askForKernelRestart": false,
-
+    "jupyter.askForKernelRestart": false,
     // ---------------------------------
     // MultiClip
     // ---------------------------------
-        // Specify if text should be formatted after pasting
-        "multiclip.formatAfterPaste": false,
-
+    // Specify if text should be formatted after pasting
+    "multiclip.formatAfterPaste": false,
+    // ---------------------------------
+    // Notebook
+    // ---------------------------------
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
     // ---------------------------------
     // OmniSharp
     // ---------------------------------
     "omnisharp.enableEditorConfigSupport": true,
     "omnisharp.useEditorFormattingSettings": true,
-
     // ---------------------------------
     // .NET Core Test Explorer
     // ---------------------------------
-        // write diagnotic logs to an output panel
-        "dotnetCoreExplorer.logpanel":false,
-
+    // write diagnotic logs to an output panel
+    "dotnetCoreExplorer.logpanel": false,
     // ---------------------------------
     // Python
     // ---------------------------------
-        "python.formatting.autopep8Path": "",
-        // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
-        "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
-
-        "python.languageServer": "Pylance",
-        "python.linting.enabled": true,
-        "python.analysis.diagnosticSeverityOverrides": {
-            "reportUnboundVariable": "none"
-        },
-
+    "python.formatting.autopep8Path": "",
+    // Path to Python, you can use a custom version of Python by modifying this setting to include the full path.
+    "python.pythonPath": "${workspaceFolder}\\devenv\\python.exe",
+    "python.languageServer": "Pylance",
+    "python.linting.enabled": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnboundVariable": "none"
+    },
     // ---------------------------------
     // Remote
     // ---------------------------------
-        "remote.SSH.remotePlatform": {
-            "192.168.10.154": "linux",
-            "45.79.166.83": "linux",
-            "ModelServer": "linux",
-            "ModelRelief": "linux"
-        },
-
+    "remote.SSH.remotePlatform": {
+        "192.168.10.154": "linux",
+        "45.79.166.83": "linux",
+        "ModelServer": "linux",
+        "ModelRelief": "linux"
+    },
+    // ---------------------------------
+    // Security
+    // ---------------------------------
+    "security.workspace.trust.untrustedFiles": "open",
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
     // ---------------------------------
     // Terminal
     // ---------------------------------
-        "terminal.integrated.profiles.linux": {
-            "bash": {
-                "path": "bash"
-            },
-            "zsh": {
-                "path": "zsh"
-            },
-            "fish": {
-                "path": "fish"
-            },
-            "tmux": {
-                "path": "tmux",
-                "icon": "terminal-tmux"
-            },
-            "pwsh": {
-                "path": "pwsh",
-                "icon": "terminal-powershell"
-            }
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash"
         },
-        "terminal.integrated.profiles.windows": {
-            "cmd": {
-                "path": "C:\\WINDOWS\\System32\\cmd.exe"
-            }
+        "zsh": {
+            "path": "zsh"
         },
-        "terminal.integrated.fontSize": 12,
-        "terminal.integrated.tabs.enabled": true,
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "terminal.integrated.profiles.windows": {
+        "cmd": {
+            "path": "C:\\WINDOWS\\System32\\cmd.exe"
+        }
+    },
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.tabs.enabled": true,
     // ---------------------------------
     // TypeScript
     // ---------------------------------
-        // Defines space handling after opening and before closing non empty braces. Requires TypeScript >= 2.3.0.
-        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-
-        // Controls whether auto detection of tsc tasks is on or off.
-        "typescript.tsc.autoDetect": "off",
-
-        // Preferred path style for auto imports.
-        //  - auto: Infer the shortest path type.
-        //  - relative: Relative to the file location.
-        //  - non-relative: Based on the `baseUrl` configured in your `jsconfig.json` / `tsconfig.json`.
-        "typescript.preferences.importModuleSpecifier": "non-relative",
-
-        // Enable/disable auto import suggestions. Requires using TypeScript 2.6.1 or newer in the workspace.
-        "typescript.suggest.autoImports": true,
-
+    // Defines space handling after opening and before closing non empty braces. Requires TypeScript >= 2.3.0.
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    // Controls whether auto detection of tsc tasks is on or off.
+    "typescript.tsc.autoDetect": "off",
+    // Preferred path style for auto imports.
+    //  - auto: Infer the shortest path type.
+    //  - relative: Relative to the file location.
+    //  - non-relative: Based on the `baseUrl` configured in your `jsconfig.json` / `tsconfig.json`.
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    // Enable/disable auto import suggestions. Requires using TypeScript 2.6.1 or newer in the workspace.
+    "typescript.suggest.autoImports": true,
     // ---------------------------------
     // VSIcons
     // ---------------------------------
-        "vsicons.dontShowNewVersionMessage": true,
-
+    "vsicons.dontShowNewVersionMessage": true,
     // ---------------------------------
     // Window
     // ---------------------------------
-        // "window.zoomLevel": 2,
-        "window.newWindowDimensions": "maximized",
-
-        "workbench.editorAssociations": {
-            "*.obj": "default",
-            "*.ipynb": "jupyter-notebook"
-        },
-
+    // "window.zoomLevel": 2,
+    "window.newWindowDimensions": "maximized",
+    "workbench.editorAssociations": {
+        "*.obj": "default",
+        "*.ipynb": "jupyter-notebook"
+    },
     // ---------------------------------
     // Workbench
     // ---------------------------------
-        // Controls if opened editors show as preview. Preview editors are reused until they are kept (e.g. via double click or editing).
-        "workbench.editor.enablePreview": false,
-
-        // Overrides colors from the currently selected color theme.
-        // https://code.visualstudio.com/docs/getstarted/theme-color-reference
-        "workbench.colorCustomizations": {
-            "editor.background": "#000000",
-            "editor.foreground": "#ffffff",
-            "editor.lineHighlightBorder": "#57f8e333",
-            "editorLineNumber.foreground": "#a6fafa",
-            "editorIndentGuide.background": "#32393f",
-            "editorWhitespace.foreground": "#00383a",
-            "editor.findMatchBackground": "#b65bf3",
-            "editor.findMatchHighlightBackground" : "#d41e67",
-            "peekViewEditor.background": "#000000",
-            "peekViewResult.selectionBackground": "#000000",
-            "peekViewEditor.matchHighlightBackground": "#000000",
-            "sideBar.background": "#131313"
-        },
+    // Controls if opened editors show as preview. Preview editors are reused until they are kept (e.g. via double click or editing).
+    "workbench.editor.enablePreview": false,
+    // Overrides colors from the currently selected color theme.
+    // https://code.visualstudio.com/docs/getstarted/theme-color-reference
+    "workbench.colorCustomizations": {
+        "editor.background": "#000000",
+        "editor.foreground": "#ffffff",
+        "editor.lineHighlightBorder": "#57f8e333",
+        "editorLineNumber.foreground": "#a6fafa",
+        "editorIndentGuide.background": "#32393f",
+        "editorWhitespace.foreground": "#00383a",
+        "editor.findMatchBackground": "#b65bf3",
+        "editor.findMatchHighlightBackground": "#d41e67",
+        "peekViewEditor.background": "#000000",
+        "peekViewResult.selectionBackground": "#000000",
+        "peekViewEditor.matchHighlightBackground": "#000000",
+        "sideBar.background": "#131313"
+    },
     // ---------------------------------
     // Zen Mode
     // ---------------------------------
-        "zenMode.hideLineNumbers": false,
-
-        "javascript.updateImportsOnFileMove.enabled": "always",
-        "notebook.cellToolbarLocation": {
-            "default": "right",
-            "jupyter-notebook": "left"
-        },
-        "security.workspace.trust.untrustedFiles": "open",
-        "omnisharp.useModernNet": false,
-
-        "doxdocgen.file.fileOrder": [
-
-        ]
-
-    }
+    "zenMode.hideLineNumbers": false
+}
