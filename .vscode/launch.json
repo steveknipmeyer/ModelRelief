@@ -18,7 +18,7 @@
             "type": "coreclr",
             "request": "launch",
             "logging": {
-                "engineLogging": false,
+                "logging.diagnosticsLog.protocolMessages": false,
                 "moduleLoad": false,
                 "exceptions": false,
                 "browserStdOut": false,
@@ -54,7 +54,7 @@
             "request": "attach",
             "processId": "${command:pickProcess}",
             "logging": {
-                "engineLogging": false,
+                "logging.diagnosticsLog.protocolMessages": false,
                 "moduleLoad": false,
                 "exceptions": false,
                 "browserStdOut": false,

@@ -175,3 +175,6 @@ Keys/
 #Webpack Build
 **/build/out
 **/build/dist
+
+#local development
+ProjectNotes/LocalDevelopment.md
